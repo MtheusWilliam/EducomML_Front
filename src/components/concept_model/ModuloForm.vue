@@ -6,7 +6,7 @@
       </v-app-bar>
     </div>
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field v-model="name" disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
+      <v-text-field disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
 
       <v-text-field
         v-model="identifierName"
@@ -35,13 +35,12 @@
           <v-col class="d-flex" cols="12" sm="12">
             <v-select
               :menu-props="{ top:true, overflowY: true }"
-              :items="items"
+              :items="newItems"
               dark
               label="Novo"
               class="mr-3"
               background-color="primary"
               solo
-              :menu-prop="top"
             ></v-select>
             <v-btn color="success" @click="validate" dark height="49" large>
               Salvar
@@ -93,7 +92,7 @@ export default {
         "O subtítulo do módulo deve ter no máximo 40 caracteres"
     ],
     select: null,
-    items: ["Módulo", "SubMódulo"],
+    newItems: ["Módulo", "SubMódulo"],
     checkbox: false
   }),
 

@@ -22,11 +22,11 @@ export default {
     treeData: [
       {
         id: 1,
-        name: "Applications :",
+        name: "[Domínio] :",
         children: [
-          { id: 2, name: "Calendar : app" },
-          { id: 3, name: "Chrome : app" },
-          { id: 4, name: "Webstorm : app" }
+          { id: 2, name: "[Módulo] Módulo1" },
+          { id: 3, name: "[Módulo] Módulo2" },
+          { id: 4, name: "[Módulo] Módulo3" }
         ]
       }
     ],

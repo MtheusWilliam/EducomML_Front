@@ -31,7 +31,14 @@
       <v-layout row wrap justify-end>
         <v-flex shrink>
           <v-col class="d-flex" cols="12" sm="12">
-            <v-btn color="success" @click="validate" dark height="49" large>
+            <v-btn
+              color="success"
+              v-on:click.stop="initTree"
+              @click="validate"
+              dark
+              height="49"
+              large
+            >
               Salvar
               <v-icon dark right>mdi-content-save</v-icon>
             </v-btn>
@@ -58,6 +65,7 @@ export default {
     right: false,
     tabs: 3,
     valid: true,
+    controlInitTree: false,
     domainName: "",
     domainNameRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
@@ -80,8 +88,10 @@ export default {
         "Os nomes dos autores devem ter no máximo 60 caracteres"
     ]
   }),
-
   methods: {
+    initTree() {
+      this.$emit("emitInitTree", true);
+    },
     validate() {
       this.$refs.form.validate();
     },

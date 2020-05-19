@@ -9,9 +9,9 @@
     </div>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field
-        v-model="name"
-        :counter="10"
-        :rules="nameRules"
+        v-model="conceptName"
+        :counter="15"
+        :rules="conceptNameRules"
         label="Nome do conceito"
         required
         class="mt-2 mb-4"
@@ -57,8 +57,8 @@
         </v-col>
         <v-col>
           <v-text-field
-            v-model="email"
-            :rules="emailRules"
+            v-model="relacaoName"
+            :rules="relacaoNameRules"
             counter="15"
             label="Nome da Relação"
             required
@@ -85,13 +85,12 @@
           <v-col class="d-flex" cols="12" sm="12">
             <v-select
               :menu-props="{ top:true, overflowY: true }"
-              :items="items"
+              :items="newItems"
               label="Novo"
               dark
               solo
               class="mr-3"
               background-color="primary"
-              :menu-prop="top"
             ></v-select>
             <v-btn color="#63B0B0" @click="validate" dark height="49" large>
               Salvar
@@ -120,6 +119,13 @@ export default {
     right: false,
     tabs: 3,
     valid: true,
+    conceptName: "",
+    conceptNameRules: [
+      v => !!v || "É necessário descrever o nome do conceito",
+      v =>
+        (v && v.length <= 15) ||
+        "Nome do conceito deve ter no máximo 25 caracteres"
+    ],
     relacaoName: "",
     relacaoNameRules: [
       v => !!v || "Necessário descrever o nome da relação",
@@ -127,6 +133,7 @@ export default {
         (v && v.length <= 15) ||
         "O nome da relação deve ter no máximo 15 caracteres"
     ],
+    newItems: ["Conceito", "Subconceito"],
     conceitosList: ["Conceito1", "Conceito2", "Conceito3"],
     select: null,
     relacaoTypes: ["typeOf", "partOf"],

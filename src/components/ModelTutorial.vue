@@ -22,7 +22,11 @@
           </v-card-text>
 
           <v-card-actions class="d-flex flex-row-reverse">
-            <v-btn color="success white--text" large>Criar</v-btn>
+            <v-btn
+              @click="$router.push('/create/conceitual')"
+              color="success white--text"
+              large
+            >Criar</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -83,17 +87,12 @@
         dark
         solo
         class="mr-3 ml-3"
-        background-color="#primary"
+        background-color="primary"
         label="Selecione um modelo para alterar"
         :menu-props="{ top:true, overflowY: true,}"
       ></v-select>
 
-      <v-btn
-        class="mr-3 text-white"
-        color="#63B0B0"
-        @click="validate"
-        height="49"
-      >Gerar conteúdo educacional</v-btn>
+      <v-btn class="mr-3 text-white" dark color="#63B0B0" height="49">Gerar conteúdo educacional</v-btn>
     </v-row>
   </v-container>
 </template>
