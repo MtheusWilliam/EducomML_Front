@@ -21,18 +21,18 @@
 <script>
 /*import ModelTutorial from "./components/ModelTutorial";*/
 /*import TreeView from "./components/TreeView";*/
-/*import DominioForm from "./components/concept_model/DominioForm";*/
-/*import ModuloForm from "./components/concept_model/ModuloForm";*/
-/*import ConceitoForm from "./components/concept_model/ConceitoForm";*/
+/*import DominioDialog from "./components/concept_model/DominioDialog";*/
+/*import ModuloDialog from "./components/concept_model/ModuloDialog";*/
+/*import ConceitoDialog from "./components/concept_model/ConceitoDialog";*/
 
 export default {
   name: "App",
 
   components: {
     /*TreeView,
-    DominioForm,
-    ModuloForm,
-    ConceitoForm
+    DominioDialog,
+    ModuloDialog,
+    ConceitoDialog
     /*ModelTutorial*/
   },
 
