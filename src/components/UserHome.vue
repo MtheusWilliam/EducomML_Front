@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <!-- MENU DO USUÁRIO -->
     <v-navigation-drawer
       class="ml-6 mt-3 mr-3"
       v-model="drawer"
@@ -39,7 +40,7 @@
         </div>
       </template>
     </v-navigation-drawer>
-
+    <!-- FORM DO DOMÍNIO -->
     <v-col class="ml-6 mr-6">
       <v-row>
         <v-app-bar color="#63B0B0" height="60%">
@@ -73,23 +74,23 @@
                 <v-card-text>
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field
-                      v-model="domainName"
-                      :counter="20"
-                      :rules="domainNameRules"
+                      v-model="nameknowledgedomain"
+                      :counter="40"
+                      :rules="nameknowledgedomainRules"
                       label="Dominío modelado"
                       required
                     ></v-text-field>
 
                     <v-text-field
-                      v-model="contentTitle"
-                      :rules="contentTitleRules"
+                      v-model="subtitle"
+                      :rules="subtitleRules"
                       label="Título para o conteúdo modelado"
                       required
                     ></v-text-field>
 
                     <v-text-field
-                      v-model="authorsName"
-                      :rules="authorsNameRules"
+                      v-model="author"
+                      :rules="authorRules"
                       label="Autor(es) da modelagem"
                       required
                     ></v-text-field>
@@ -101,13 +102,7 @@
                     Close
                     <v-icon dark right>mdi-close</v-icon>
                   </v-btn>
-                  <v-btn
-                    color="success"
-                    height="49"
-                    dark
-                    large
-                    @click="validate;$router.push('/Create/Conceitual')"
-                  >
+                  <v-btn color="success" height="49" dark large @click="validate">
                     Save
                     <v-icon dark right>mdi-content-save</v-icon>
                   </v-btn>
@@ -122,27 +117,30 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "UserHome",
   data: () => ({
     valid: true,
     dialog: false,
-    domainName: "",
-    domainNameRules: [
+    lastversion: "versao_teste",
+    idDomain: 0,
+    nameknowledgedomain: "",
+    nameknowledgedomainRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
       v =>
-        (v && v.length <= 25) ||
+        (v && v.length <= 40) ||
         "Nome do domínio deve ter no máximo 25 caracteres"
     ],
-    contentTitle: "",
-    contentTitleRules: [
+    subtitle: "",
+    subtitleRules: [
       v => !!v || "É necessário descrever o título para o conteúdo modelado",
       v =>
-        (v && v.length <= 40) ||
+        (v && v.length <= 60) ||
         "O título do conteúdo modelado deve ter no máximo 40 caracteres"
     ],
-    authorsName: "",
-    authorsNameRules: [
+    author: "",
+    authorRules: [
       v => !!v || "É necessário descrever o(s) autores da modelagem",
       v =>
         (v && v.length <= 60) ||
@@ -158,8 +156,35 @@ export default {
     mini: false
   }),
   methods: {
+    postDominio() {
+      var vm = this;
+      axios
+        .post(
+          `http://127.0.0.1:8000/knowledgedomain/`,
+          {
+            nameknowledgedomain: this.nameknowledgedomain,
+            subtitle: this.subtitle,
+            lastversion: this.lastversion,
+            author: this.author
+          },
+          { auth: { username: "admin", password: "admin" } }
+        )
+        .then(function(resposta) {
+          console.log(resposta.data.idknowledgedomain);
+          vm.idDomain = resposta.data.idknowledgedomain;
+          vm.$router.push({
+            name: "createConceitual",
+            params: {
+              idDomain: resposta.data.idknowledgedomain
+            }
+          });
+        });
+    },
     validate() {
-      this.$refs.form.validate();
+      if (this.$refs.form.validate()) {
+        this.$refs.form.validate();
+        this.postDominio();
+      }
     },
     reset() {
       this.dialog = false;

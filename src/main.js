@@ -2,6 +2,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
+import VueCookies from 'vue-cookies';
+
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
 import CreateConceitual from './components/CreateConceitual';
@@ -9,6 +11,7 @@ import CreateConceitual from './components/CreateConceitual';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter);
+Vue.use(VueCookies);
 
 const router = new VueRouter({
   mode: 'history',
@@ -22,8 +25,7 @@ const router = new VueRouter({
       path: '/create/conceitual',
       name: 'createConceitual',
       component: CreateConceitual
-
-    }
+    },
   ]
 })
 

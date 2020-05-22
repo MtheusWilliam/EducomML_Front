@@ -23,11 +23,7 @@ export default {
       {
         id: 1,
         name: "[Domínio] :",
-        children: [
-          { id: 2, name: "[Módulo] Módulo1" },
-          { id: 3, name: "[Módulo] Módulo2" },
-          { id: 4, name: "[Módulo] Módulo3" }
-        ]
+        children: [{}]
       }
     ],
 
@@ -35,8 +31,7 @@ export default {
       dominio: "Domínio",
       modulo: "Módulo",
       subModulo: "SubMódulo",
-      conceito: "Conceito",
-      subConceito: "SubConceito"
+      conceito: "Conceito"
     },
     open: []
   })

@@ -1,55 +1,65 @@
 <template>
   <v-container>
-    <div style="width:102.5%; position:relative;right:1.2%;margin-top:-1.3%;">
-      <v-app-bar color="#D2A64D" dense dark height="45px">
-        <v-toolbar-title style="font-size:1.2em;">Defina os módulos do domínio do conhecimento.</v-toolbar-title>
-      </v-app-bar>
-    </div>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
+    <v-row>
+      <v-dialog v-model="dialog" persistent max-width="600px">
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="mx-auto"
+            width="50%"
+            x-large
+            color="primary"
+            dark
+            v-on="on"
+          >Criar Novo Domínio</v-btn>
+        </template>
 
-      <v-text-field
-        v-model="identifierName"
-        :counter="25"
-        :rules="identifierNameRules"
-        label="Atribua um identificador para o módulo"
-        required
-      ></v-text-field>
+        <v-card>
+          <v-card-title style="background-color:#63B0B0; color:white;">
+            <span class="headline">
+              <p>Defina o módulo do domínio do conhecimento.</p>
+            </span>
+          </v-card-title>
+          <v-card-text>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
 
-      <v-text-field
-        v-model="moduloTitle"
-        :rules="moduloTitleRules"
-        label="Título do módulo"
-        required
-      ></v-text-field>
+              <v-text-field
+                v-model="identifierName"
+                :counter="25"
+                :rules="identifierNameRules"
+                label="Atribua um identificador para o módulo"
+                required
+              ></v-text-field>
 
-      <v-text-field
-        v-model="moduloSubtitle"
-        :rules="moduloSubtitleRules"
-        label="Subtítulo do módulo"
-        required
-      ></v-text-field>
+              <v-text-field
+                v-model="moduloTitle"
+                :rules="moduloTitleRules"
+                label="Título do módulo"
+                required
+              ></v-text-field>
 
-      <v-layout row wrap justify-end>
-        <v-flex shrink>
-          <v-col class="d-flex" cols="12" sm="12">
-            <v-select
-              :menu-props="{ top:true, overflowY: true }"
-              :items="newItems"
-              dark
-              label="Novo"
-              class="mr-3"
-              background-color="primary"
-              solo
-            ></v-select>
-            <v-btn color="success" @click="validate" dark height="49" large>
-              Salvar
+              <v-text-field
+                v-model="moduloSubtitle"
+                :rules="moduloSubtitleRules"
+                label="Subtítulo do módulo"
+                required
+              ></v-text-field>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red" height="49" dark large @click="reset">
+              Close
+              <v-icon dark right>mdi-close</v-icon>
+            </v-btn>
+            <v-btn color="success" height="49" dark large @click="validate">
+              Save
               <v-icon dark right>mdi-content-save</v-icon>
             </v-btn>
-          </v-col>
-        </v-flex>
-      </v-layout>
-    </v-form>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </v-container>
 </template>
 
@@ -57,17 +67,6 @@
 export default {
   name: "ModuloDialog",
   data: () => ({
-    tab: null,
-    text:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    icons: false,
-    centered: false,
-    grow: false,
-    vertical: false,
-    prevIcon: false,
-    nextIcon: false,
-    right: false,
-    tabs: 3,
     valid: true,
     dominioName: "Estatística Básica",
     identifierName: "",
