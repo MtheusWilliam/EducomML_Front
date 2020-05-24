@@ -16,30 +16,32 @@
         <v-card>
           <v-card-title style="background-color:#63B0B0; color:white;">
             <span class="headline">
-              <p>Defina o domínio do conhecimento a ser modelado</p>
+              <p>Defina o módulo do domínio do conhecimento.</p>
             </span>
           </v-card-title>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
+              <v-text-field disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
+
               <v-text-field
-                v-model="domainName"
-                :counter="20"
-                :rules="domainNameRules"
-                label="Dominío modelado"
+                v-model="identifierName"
+                :counter="25"
+                :rules="identifierNameRules"
+                label="Atribua um identificador para o módulo"
                 required
               ></v-text-field>
 
               <v-text-field
-                v-model="contentTitle"
-                :rules="contentTitleRules"
-                label="Título para o conteúdo modelado"
+                v-model="moduloTitle"
+                :rules="moduloTitleRules"
+                label="Título do módulo"
                 required
               ></v-text-field>
 
               <v-text-field
-                v-model="authorsName"
-                :rules="authorsNameRules"
-                label="Autor(es) da modelagem"
+                v-model="moduloSubtitle"
+                :rules="moduloSubtitleRules"
+                label="Subtítulo do módulo"
                 required
               ></v-text-field>
             </v-form>
@@ -63,38 +65,41 @@
 
 <script>
 export default {
-  name: "DominioDialog",
+  name: "ModuloDialog",
   data: () => ({
     valid: true,
-    dialog: false,
-    domainName: "",
-    domainNameRules: [
-      v => !!v || "É necessário descrever o nome do domínio modelado",
+    dominioName: "Estatística Básica",
+    identifierName: "",
+    identifierNameRules: [
+      v => !!v || "É necessário atribuir um identificador para o módulo",
       v =>
         (v && v.length <= 25) ||
-        "Nome do domínio deve ter no máximo 25 caracteres"
+        "Nome do identificador deve ter no máximo 25 caracteres"
     ],
-    contentTitle: "",
-    contentTitleRules: [
-      v => !!v || "É necessário descrever o título para o conteúdo modelado",
+    moduloTitle: "",
+    moduloTitleRules: [
+      v => !!v || "É necessário descrever o título do módulo",
       v =>
         (v && v.length <= 40) ||
-        "O título do conteúdo modelado deve ter no máximo 40 caracteres"
+        "O título do módulo deve ter no máximo 40 caracteres"
     ],
-    authorsName: "",
-    authorsNameRules: [
-      v => !!v || "É necessário descrever o(s) autores da modelagem",
+    moduloSubtitle: "",
+    moduloSubtitleRules: [
+      v => !!v || "É necessário descrever o subtítulo do módulo",
       v =>
-        (v && v.length <= 60) ||
-        "Os nomes dos autores devem ter no máximo 60 caracteres"
-    ]
+        (v && v.length <= 40) ||
+        "O subtítulo do módulo deve ter no máximo 40 caracteres"
+    ],
+    select: null,
+    newItems: ["Módulo", "SubMódulo"],
+    checkbox: false
   }),
+
   methods: {
     validate() {
       this.$refs.form.validate();
     },
     reset() {
-      this.dialog = false;
       this.$refs.form.reset();
     },
     resetValidation() {

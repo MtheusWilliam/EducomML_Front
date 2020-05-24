@@ -5,8 +5,8 @@
     </v-col>
     <v-col cols="8">
       <div class="mt-3 mr-8 ml-3 mb-0">
-        {{this.dominio.nameknowledgedomain}}
-        <Panels />
+        <!--{{this.dominio.nameknowledgedomain}}-->
+        <Panels :dominio="dominio" />
       </div>
     </v-col>
   </v-row>
@@ -45,6 +45,7 @@ export default {
         vm.dominio = resposta.data;
       });
   },
+  props: [],
   methods: {}
 };
 </script>

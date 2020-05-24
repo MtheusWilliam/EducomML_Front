@@ -71,21 +71,21 @@ export default {
     dominioName: "Estatística Básica",
     identifierName: "",
     identifierNameRules: [
-      v => !!v || "É necessário atribuir um identificador para o módulo",
+      v => !!v || "É necessário atribuir um identificador para o submódulo",
       v =>
         (v && v.length <= 25) ||
         "Nome do identificador deve ter no máximo 25 caracteres"
     ],
     moduloTitle: "",
     moduloTitleRules: [
-      v => !!v || "É necessário descrever o título do módulo",
+      v => !!v || "É necessário descrever o título do submódulo",
       v =>
         (v && v.length <= 40) ||
         "O título do módulo deve ter no máximo 40 caracteres"
     ],
     moduloSubtitle: "",
     moduloSubtitleRules: [
-      v => !!v || "É necessário descrever o subtítulo do módulo",
+      v => !!v || "É necessário descrever o subtítulo do submódulo",
       v =>
         (v && v.length <= 40) ||
         "O subtítulo do módulo deve ter no máximo 40 caracteres"
