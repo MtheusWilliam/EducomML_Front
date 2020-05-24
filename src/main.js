@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import VueRouter from 'vue-router';
-import VueCookies from 'vue-cookies';
+import axios from "axios";
 
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
@@ -11,7 +11,8 @@ import CreateConceitual from './components/CreateConceitual';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter);
-Vue.use(VueCookies);
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 const router = new VueRouter({
   mode: 'history',

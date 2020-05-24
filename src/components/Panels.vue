@@ -199,7 +199,8 @@ export default {
     /*DominioDialog,
     ModuloDialog,
     ConceitoDialog*/
-  }
+  },
+  props: {}
 };
 </script>
 <style>
