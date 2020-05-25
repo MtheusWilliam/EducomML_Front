@@ -29,7 +29,7 @@ export default {
     TreeView,
     Panels
   },
-  created() {
+  beforeCreate() {
     var vm = this;
     var csrftoken = Cookie.get("csrftoken");
     var headers = { "X-CSRFTOKEN": csrftoken };

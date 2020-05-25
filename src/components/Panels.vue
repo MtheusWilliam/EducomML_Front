@@ -5,7 +5,7 @@
         <v-expansion-panel-header color="purple" style="color:white;">
           <v-row>
             <v-col cols="9">
-              <p>[Dominio] {{dominio.nameknowledgedomain}}</p>
+              <p>[Dominio] {{nomeDominioPanel}}</p>
             </v-col>
             <v-col cols="3">
               <v-icon>mdi-plus</v-icon>
@@ -27,7 +27,7 @@
                   <v-card-text>
                     <v-form ref="form" v-model="valid" lazy-validation>
                       <v-text-field
-                        v-bind:value="dominio.nameknowledgedomain"
+                        v-model="domainName"
                         :counter="25"
                         :rules="domainNameRules"
                         label="Dominío modelado"
@@ -35,7 +35,7 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-bind:value="dominio.subtitle"
+                        v-model="domainContentTitle"
                         :rules="domainContentTitleRules"
                         label="Título para o conteúdo modelado"
                         required
@@ -43,7 +43,7 @@
                       ></v-text-field>
 
                       <v-text-field
-                        v-bind:value="dominio.author"
+                        v-model="domainAuthorsName"
                         :rules="domainAuthorsNameRules"
                         label="Autor(es) da modelagem"
                         required
@@ -56,7 +56,14 @@
                       Close
                       <v-icon dark right>mdi-close</v-icon>
                     </v-btn>
-                    <v-btn color="success" height="49" dark large @click="validate">
+                    <v-btn
+                      color="success"
+                      height="49"
+                      dark
+                      large
+                      @click="validate"
+                      :disabled="!valid"
+                    >
                       Save
                       <v-icon dark right>mdi-content-save</v-icon>
                     </v-btn>
@@ -80,7 +87,6 @@ export default {
   name: "Panels",
   props: ["dominio"],
   data: () => ({
-    dominio_data: "",
     valid_modulo: true,
     dialog_modulo: false,
     identifierName: "",
@@ -108,23 +114,25 @@ export default {
     newItems: ["Módulo", "SubMódulo"],
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
+    dominio_data: {},
+    domainName: "",
+    domainContentTitle: "",
+    domainAuthorsName: "",
     valid: true,
     dialog_dominio: false,
-    domainName: "",
+    /*REGRAS PARA VALIDAÇÃO DO FORMULÁRIO DOMÍNIO*/
     domainNameRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
       v =>
         (v && v.length <= 25) ||
         "Nome do domínio deve ter no máximo 25 caracteres"
     ],
-    domainContentTitle: "",
     domainContentTitleRules: [
       v => !!v || "É necessário descrever o título para o conteúdo modelado",
       v =>
         (v && v.length <= 40) ||
         "O título do conteúdo modelado deve ter no máximo 40 caracteres"
     ],
-    domainAuthorsName: "",
     domainAuthorsNameRules: [
       v => !!v || "É necessário descrever o(s) autores da modelagem",
       v =>
@@ -132,35 +140,63 @@ export default {
         "Os nomes dos autores devem ter no máximo 60 caracteres"
     ]
   }),
+  mounted() {
+    /*Função que "atrasa" atualização da variável para conseguir pegar dados do props:[]*/
+    var vm = this;
+    setTimeout(function() {
+      vm.dominio_data = vm.dominio;
+      console.log("TIMEOUT");
+      vm.setDomainVariables();
+    }, 500);
+  },
+  computed: {
+    nomeDominioPanel: function() {
+      return this.domainName;
+    }
+  },
   methods: {
     putDominio() {
       var vm = this;
+      /*var vm = this;*/
       axios
         .put(
           "http://127.0.0.1:8000/knowledgedomain/" +
             this.dominio.idknowledgedomain +
             "/",
           {
-            nameknowledgedomain: this.dominio.nameknowledgedomain,
-            subtitle: this.dominio.subtitle,
-            lastversion: this.dominio.lastversion,
-            author: this.dominio.author
+            nameknowledgedomain: this.domainName,
+            subtitle: this.domainContentTitle,
+            lastversion: this.dominio_data.lastversion,
+            author: this.domainAuthorsName
           },
           { auth: { username: "admin", password: "admin" } }
         )
         .then(function(resposta) {
-          vm.dominio = resposta.data;
+          vm.dominio_data = resposta.data;
+          vm.setDomainVariables();
         });
     },
     validate() {
-      this.putDominio();
-      this.dialog_dominio = false;
+      if (
+        this.domainName &&
+        this.domainContentTitle &&
+        this.domainAuthorsName
+      ) {
+        this.putDominio();
+        this.dialog_dominio = false;
+      }
     },
     resetValidation() {
       this.$refs.form.resetValidation();
     },
     reset() {
       this.dialog_dominio = false;
+      this.setDomainVariables();
+    },
+    setDomainVariables() {
+      this.domainName = this.dominio_data.nameknowledgedomain;
+      this.domainContentTitle = this.dominio_data.subtitle;
+      this.domainAuthorsName = this.dominio_data.author;
     }
   }
 };

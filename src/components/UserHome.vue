@@ -170,7 +170,6 @@ export default {
           { auth: { username: "admin", password: "admin" } }
         )
         .then(function(resposta) {
-          console.log(resposta.data.idknowledgedomain);
           vm.idDomain = resposta.data.idknowledgedomain;
           vm.$router.push({
             name: "createConceitual",
