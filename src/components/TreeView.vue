@@ -18,11 +18,13 @@
 <script>
 export default {
   name: "TreeView",
+  props: ["dominio"],
   data: () => ({
+    dominio_data: "dominaio",
     treeData: [
       {
         id: 1,
-        name: "[Domínio] :",
+        name: "",
         children: [{}]
       }
     ],
@@ -34,6 +36,19 @@ export default {
       conceito: "Conceito"
     },
     open: []
-  })
+  }),
+  mounted() {
+    var vm = this;
+    setTimeout(function() {
+      vm.dominio_data = vm.dominio;
+      console.log("TIMEOUT");
+      vm.setDomainVariables();
+    }, 650);
+  },
+  methods: {
+    setDomainVariables() {
+      this.treeData[0].name = this.dominio_data.nameknowledgedomain;
+    }
+  },
 };
 </script>
