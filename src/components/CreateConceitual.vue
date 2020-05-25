@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="4">
-      <TreeView />
+      <TreeView :dominio="dominio" />
     </v-col>
     <v-col cols="8">
       <div class="mt-3 mr-8 ml-3 mb-0">
