@@ -24,7 +24,6 @@ export default {
   data: () => ({
     dominio: ""
   }),
-
   components: {
     TreeView,
     Panels

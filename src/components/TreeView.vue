@@ -28,7 +28,6 @@ export default {
         children: [{}]
       }
     ],
-
     elementTypes: {
       dominio: "Domínio",
       modulo: "Módulo",
@@ -49,6 +48,6 @@ export default {
     setDomainVariables() {
       this.treeData[0].name = this.dominio_data.nameknowledgedomain;
     }
-  },
+  }
 };
 </script>

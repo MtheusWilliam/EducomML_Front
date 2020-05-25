@@ -1,52 +1,48 @@
 <template>
   <v-container class="pa-0">
-          <v-card >
-          <v-card-title style="background-color:#63B0B0; color:white;">
-            <span class="headline">
-              <p>Defina o módulo do domínio do conhecimento.</p>
-            </span>
-          </v-card-title>
-          <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field
-                v-model="moduloTitle"
-                :rules="moduloTitleRules"
-                label="Título do módulo"
-                required
-              ></v-text-field>
+    <v-card>
+      <v-card-title style="background-color:#63B0B0; color:white;">
+        <span class="headline">
+          <p>Defina o módulo do domínio do conhecimento.</p>
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="moduloTitle"
+            :rules="moduloTitleRules"
+            label="Título do módulo"
+            required
+          ></v-text-field>
 
-              <v-text-field
-                v-model="moduloSubtitle"
-                :rules="moduloSubtitleRules"
-                label="Subtítulo do módulo"
-                required
-              ></v-text-field>
-              
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red" height="49" dark large @click="reset">
-              Close
-              <v-icon dark right>mdi-close</v-icon>
-            </v-btn>
-            <v-btn color="success" height="49" dark large @click="validate">
-              Save
-              <v-icon dark right>mdi-content-save</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+          <v-text-field
+            v-model="moduloSubtitle"
+            :rules="moduloSubtitleRules"
+            label="Subtítulo do módulo"
+            required
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" height="49" dark large @click="reset">
+          Close
+          <v-icon dark right>mdi-close</v-icon>
+        </v-btn>
+        <v-btn color="success" height="49" dark large @click="validate">
+          Save
+          <v-icon dark right>mdi-content-save</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
 <script>
 import axios from "axios";
-
-
-
 export default {
   name: "ModuloDialog",
-  props: ['dialog_modulo'],
+  props: ["idDomain"],
   data: () => ({
     valid: true,
     moduloTitle: "",
@@ -66,18 +62,19 @@ export default {
     select: null,
     newItems: [],
     checkbox: false,
-    modulos: "",
+    modulos: ""
   }),
   methods: {
     postModulo() {
       var vm = this;
       axios
         .post(
-          `http://localhost:8000/Module/`,
+          `http://localhost:8000/module/`,
           {
+            fkidmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.idDomain
+            idknowledgedomain: this.idDomain.url
           },
           { auth: { username: "admin", password: "admin" } }
         )
@@ -87,18 +84,18 @@ export default {
         });
     },
     validate() {
-      if(this.$refs.form.validate()){
+      if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         this.postModulo();
       }
     },
     reset() {
-      this.$emit('dialog_modulo', false);
+      this.$emit("dialog_modulo", false);
       this.$refs.form.reset();
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },
+    }
   }
 };
 </script>
