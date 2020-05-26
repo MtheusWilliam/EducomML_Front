@@ -78,9 +78,9 @@
             domains: ""
         }),
         created() {
-            this.domainName =  this.domain.nameknowledgedomain;
-            this.domainContentTitle =  this.domain.subtitle;
-            this.domainAuthorsName =  this.domain.author;
+            this.domainName = this.domain.nameknowledgedomain;
+            this.domainContentTitle = this.domain.subtitle;
+            this.domainAuthorsName = this.domain.author;
         },
         methods: {
             putDominio() {
