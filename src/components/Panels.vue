@@ -11,6 +11,7 @@
               </p>
             </v-col>
             <v-col cols="3">
+            <!--Formulario para adição do módulo-->
               <v-dialog v-model="dialog_modulo" persistent="persistent" max-width="600px">
                 <template v-slot:activator="{ on }">
                   <v-btn icon="icon" color="white" v-on="on">
@@ -18,7 +19,8 @@
                   </v-btn>
                 </template>
 
-                <ModuloDialog @dialog_modulo="dialog_modulo = !dialog_modulo" :idDomain="dominio" />
+                <ModuloDialog @close_or_save="close_or_save_modulo"  :domain="dominio" />
+                
               </v-dialog>
 
               <!--Formulario para edição do domínio-->
@@ -29,58 +31,10 @@
                   </v-btn>
                 </template>
 
-                <v-card>
-                  <v-card-title style="background-color:#63B0B0; color:white;">
-                    <span class="headline">
-                      <p>Defina o domínio do conhecimento a ser modelado</p>
-                    </span>
-                  </v-card-title>
-                  <v-card-text>
-                    <v-form ref="form" v-model="valid" lazy-validation="lazy-validation">
-                      <v-text-field
-                        v-model="domainName"
-                        :counter="25"
-                        :rules="domainNameRules"
-                        label="Dominío modelado"
-                        required="required"
-                      ></v-text-field>
+                <DominioDialog @close_or_save="close_or_save_dominio" @domain_data="setDomainVariables"  :domain="dominio_data" />
 
-                      <v-text-field
-                        v-model="domainContentTitle"
-                        :rules="domainContentTitleRules"
-                        label="Título para o conteúdo modelado"
-                        required="required"
-                        ref="refSubtitleDominio"
-                      ></v-text-field>
-
-                      <v-text-field
-                        v-model="domainAuthorsName"
-                        :rules="domainAuthorsNameRules"
-                        label="Autor(es) da modelagem"
-                        required="required"
-                      ></v-text-field>
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="red" height="49" dark="dark" large="large" @click="reset">
-                      Close
-                      <v-icon dark="dark" right="right">mdi-close</v-icon>
-                    </v-btn>
-                    <v-btn
-                      color="success"
-                      height="49"
-                      dark="dark"
-                      large="large"
-                      @click="validate"
-                      :disabled="!valid"
-                    >
-                      Save
-                      <v-icon dark="dark" right="right">mdi-content-save</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
               </v-dialog>
+              
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -99,70 +53,28 @@
   </v-row>
 </template>
 <script>
-// import DominioDialog from "./concept_model/DominioDialog";
+import DominioDialog from "./concept_model/DominioDialog";
 import ModuloDialog from "./concept_model/ModuloDialog";
 // import ConceitoDialog from "./concept_model/ConceitoDialog";
 import axios from "axios";
 export default {
   name: "Panels",
   components: {
-    ModuloDialog
+    ModuloDialog,
+    DominioDialog
   },
   props: ["dominio"],
   data: () => ({
     valid_modulo: true,
     dialog_modulo: false,
-    identifierName: "",
-    identifierNameRules: [
-      v => !!v || "É necessário atribuir um identificador para o módulo",
-      v =>
-        (v && v.length <= 25) ||
-        "Nome do identificador deve ter no máximo 25 caracteres"
-    ],
-    moduloTitle: "",
-    moduloTitleRules: [
-      v => !!v || "É necessário descrever o título do módulo",
-      v =>
-        (v && v.length <= 40) ||
-        "O título do módulo deve ter no máximo 40 caracteres"
-    ],
-    moduloSubtitle: "",
-    moduloSubtitleRules: [
-      v => !!v || "É necessário descrever o subtítulo do módulo",
-      v =>
-        (v && v.length <= 40) ||
-        "O subtítulo do módulo deve ter no máximo 40 caracteres"
-    ],
+    dialog_dominio: false,
     select: null,
     newItems: ["Módulo", "SubMódulo"],
     modulos: "",
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
     dominio_data: {},
-    domainName: "a",
-    domainContentTitle: "",
-    domainAuthorsName: "",
-    valid: true,
-    dialog_dominio: false,
-    /*REGRAS PARA VALIDAÇÃO DO FORMULÁRIO DOMÍNIO*/
-    domainNameRules: [
-      v => !!v || "É necessário descrever o nome do domínio modelado",
-      v =>
-        (v && v.length <= 25) ||
-        "Nome do domínio deve ter no máximo 25 caracteres"
-    ],
-    domainContentTitleRules: [
-      v => !!v || "É necessário descrever o título para o conteúdo modelado",
-      v =>
-        (v && v.length <= 40) ||
-        "O título do conteúdo modelado deve ter no máximo 40 caracteres"
-    ],
-    domainAuthorsNameRules: [
-      v => !!v || "É necessário descrever o(s) autores da modelagem",
-      v =>
-        (v && v.length <= 60) ||
-        "Os nomes dos autores devem ter no máximo 60 caracteres"
-    ]
+    
   }),
   mounted() {
     /* Função que "atrasa" atualização da variável para conseguir pegar dados do
@@ -170,9 +82,7 @@ export default {
      */
     var vm = this;
     setTimeout(function() {
-      vm.dominio_data = vm.dominio;
-      console.log("TIMEOUT");
-      vm.setDomainVariables();
+      vm.setDomainVariables(vm.dominio);
     }, 1000);
   },
   computed: {
@@ -181,32 +91,6 @@ export default {
     }
   },
   methods: {
-    putDominio() {
-      var vm = this;
-      /*var vm = this;*/
-      axios
-        .put(
-          "http://127.0.0.1:8000/knowledgedomain/" +
-            this.dominio.idknowledgedomain +
-            "/",
-          {
-            nameknowledgedomain: this.domainName,
-            subtitle: this.domainContentTitle,
-            lastversion: this.dominio_data.lastversion,
-            author: this.domainAuthorsName
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          }
-        )
-        .then(function(resposta) {
-          vm.dominio_data = resposta.data;
-          vm.setDomainVariables();
-        });
-    },
     validate() {
       if (
         this.domainName &&
@@ -224,11 +108,12 @@ export default {
       this.dialog_dominio = false;
       this.setDomainVariables();
     },
-    setDomainVariables() {
+    setDomainVariables(dominio_data) {
+      this.dominio_data = dominio_data;
+      this.getModulos();
+    },
+    getModulos(){
       var vm = this;
-      this.domainName = this.dominio_data.nameknowledgedomain;
-      this.domainContentTitle = this.dominio_data.subtitle;
-      this.domainAuthorsName = this.dominio_data.author;
       axios
         .get("http://127.0.0.1:8000/module/", {
           auth: {
@@ -237,9 +122,25 @@ export default {
           }
         })
         .then(function(resposta) {
-          console.log(resposta.data);
           vm.modulos = resposta.data;
         });
+    },
+    close_or_save_modulo(value){
+      if(value === "save"){
+        this.getModulos();
+        this.dialog_modulo = false;
+      }else{
+        console.log("oi chuchu");
+        this.dialog_modulo = false;
+      }
+    },
+    close_or_save_dominio(value){
+      if(value === "save"){
+        console.log("oi benzinho");
+        this.dialog_dominio = !this.dialog_dominio;
+      }else{
+        this.dialog_dominio = !this.dialog_dominio;
+      }
     }
   }
 };
