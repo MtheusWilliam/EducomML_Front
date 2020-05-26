@@ -31,7 +31,7 @@
                   </v-btn>
                 </template>
 
-                <DominioDialog @close_or_save="close_or_save_dominio" @domain_data="setDomainVariables"  :domain="dominio_data" />
+                <DominioDialog @close_or_save="close_or_save_dominio" @dominio_data="setDomainVariables"  :domain="dominio_data" />
 
               </v-dialog>
               
@@ -80,10 +80,12 @@ export default {
     /* Função que "atrasa" atualização da variável para conseguir pegar dados do
      * props:[]
      */
+    
     var vm = this;
     setTimeout(function() {
       vm.setDomainVariables(vm.dominio);
     }, 1000);
+
   },
   computed: {
     nomeDominioPanel: function() {
@@ -109,7 +111,9 @@ export default {
       this.setDomainVariables();
     },
     setDomainVariables(dominio_data) {
+      console.log("s")
       this.dominio_data = dominio_data;
+      console.log(this.dominio_data);
       this.getModulos();
     },
     getModulos(){
@@ -136,7 +140,7 @@ export default {
     },
     close_or_save_dominio(value){
       if(value === "save"){
-        console.log("oi benzinho");
+
         this.dialog_dominio = !this.dialog_dominio;
       }else{
         this.dialog_dominio = !this.dialog_dominio;
