@@ -42,7 +42,7 @@
 import axios from "axios";
 export default {
   name: "ModuloDialog",
-  props: ["idDomain"],
+  props: ["domain"],
   data: () => ({
     valid: true,
     moduloTitle: "",
@@ -74,7 +74,7 @@ export default {
             fkidmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.idDomain.url
+            idknowledgedomain: this.domain.url
           },
           { auth: { username: "admin", password: "admin" } }
         )
@@ -87,10 +87,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         this.postModulo();
+        this.$emit("close_or_save", "save");
       }
     },
     reset() {
-      this.$emit("dialog_modulo", false);
+      this.$emit("close_or_save", "close");
       this.$refs.form.reset();
     },
     resetValidation() {
