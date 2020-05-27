@@ -115,6 +115,7 @@ export default {
         }
         this.$emit("close_or_save", "save");
       }
+      this.$refs.form.reset();
     },
     reset() {
       this.$emit("close_or_save", "close");

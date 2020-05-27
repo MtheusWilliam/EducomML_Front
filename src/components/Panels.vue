@@ -42,6 +42,7 @@
                             <!--Formulario para criação de submódulo-->
                             <v-dialog v-model="dialog_submodulo" persistent="persistent" max-width="600px">
                                 <SubModuloDialog
+                                    :submodule="submodulo"
                                     :module="modulo"
                                     @close_or_save="close_or_save_submodulo "
                                     :domain="dominio"/>
@@ -56,7 +57,7 @@
                         v-for="(modulo) in dominio_data.modules"
                         :key="modulo.idmodule"
                         class="mt-2 mb-2">
-                        <v-expansion-panel>
+                        <v-expansion-panel v-if="modulo.fk_idmodule === null">
                             <v-expansion-panel-header color="primary" style="color:white;">
                                 <v-row>
                                     <v-col cols="9">
@@ -128,13 +129,13 @@
                                                             <v-list-item>
                                                                 <v-list-item-title>Conceito</v-list-item-title>
                                                             </v-list-item>
-                                                            <v-list-item @click="submodulo(submodulo);dialog_submodulo=true">
+                                                            <v-list-item @click="setsubmodulo(submodulo);dialog_submodulo=true">
                                                                 <v-list-item-title>Submódulo</v-list-item-title>
                                                             </v-list-item>
                                                         </v-list>
                                                     </v-menu>
                                                     <!--Formulario para edição do modulo-->
-                                                    <v-btn icon="icon" color="white" @click="submodulo(submodulo);dialog_modulo=true">
+                                                    <v-btn icon="icon" color="white" @click="setsubmodulo(submodulo);dialog_submodulo=true">
                                                         <v-icon>mdi-view-headline</v-icon>
                                                     </v-btn>
                                                 </v-col>
@@ -181,6 +182,7 @@
                 }
             ],
             modulo: "",
+            submodulo: "",
             valid_modulo: true,
             dialog_modulo: false,
             dialog_submodulo: false,
@@ -197,7 +199,7 @@
             var vm = this;
             setTimeout(function () {
                 vm.setDomainVariables(vm.dominio);
-            }, 1000);
+            }, 1500);
         },
         computed: {
             nomeDominioPanel: function () {
@@ -267,6 +269,9 @@
             setmodulo(value) {
                 this.modulo = value;
             },
+            setsubmodulo(value) {
+                this.submodulo = value;
+            },
             close_or_save_submodulo(value) {
                 var vm = this;
                 if (value === "save") {
@@ -277,6 +282,7 @@
                 } else if (value === "close") {
                     this.dialog_submodulo = false;
                 }
+                this.submodulo = "";
             }
         }
     };
