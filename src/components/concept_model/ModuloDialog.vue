@@ -3,7 +3,10 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>Defina o módulo do domínio do conhecimento.</p>
+          <p>
+            Defina o módulo do domínio do conhecimento.
+            <!--{{module.idmodule}}-->
+          </p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -42,7 +45,7 @@
 import axios from "axios";
 export default {
   name: "ModuloDialog",
-  props: ["domain"],
+  props: ["domain", "module"],
   data: () => ({
     valid: true,
     moduloTitle: "",
@@ -66,7 +69,7 @@ export default {
   }),
   methods: {
     postModulo() {
-      var vm = this;
+      // var vm = this;
       axios
         .post(
           `http://localhost:8000/module/`,
@@ -78,19 +81,43 @@ export default {
           },
           { auth: { username: "admin", password: "admin" } }
         )
-        .then(function(resposta) {
-          vm.moduloTitle = resposta.data.namemodule;
-          vm.subTitle = resposta.data.subtitle;
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
+          vm.subTitle = resposta.data.subtitle;*/
+        });
+    },
+    putModulo() {
+      axios
+        .put(
+          "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
+          {
+            fkidmodule: null,
+            namemodule: this.moduloTitle,
+            subtitle: this.moduloSubtitle,
+            idknowledgedomain: this.domain.url
+          },
+          { auth: { username: "admin", password: "admin" } }
+        )
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
+          vm.subTitle = resposta.data.subtitle;*/
         });
     },
     validate() {
+      console.log("MODULO AQUI:", this.module);
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
-        this.postModulo();
+        if (this.module === "") {
+          this.postModulo();
+        } else {
+          this.putModulo();
+        }
         this.$emit("close_or_save", "save");
+        this.$refs.form.reset();
       }
     },
     reset() {
+      console.log("MODULO AQUI:", this.module);
       this.$emit("close_or_save", "close");
       this.$refs.form.reset();
     },

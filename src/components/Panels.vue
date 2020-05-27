@@ -11,7 +11,7 @@
               </p>
             </v-col>
             <v-col cols="3">
-            <!--Formulario para adição do módulo-->
+              <!--Formulario para adição do módulo-->
               <v-dialog v-model="dialog_modulo" persistent="persistent" max-width="600px">
                 <template v-slot:activator="{ on }">
                   <v-btn icon="icon" color="white" v-on="on">
@@ -19,8 +19,11 @@
                   </v-btn>
                 </template>
 
-                <ModuloDialog @close_or_save="close_or_save_modulo"  :domain="dominio" />
-                
+                <ModuloDialog
+                  :module="modulo"
+                  @close_or_save="close_or_save_modulo"
+                  :domain="dominio"
+                />
               </v-dialog>
 
               <!--Formulario para edição do domínio-->
@@ -31,10 +34,12 @@
                   </v-btn>
                 </template>
 
-                <DominioDialog @close_or_save="close_or_save_dominio" @dominio_data="setDomainVariables"  :domain="dominio_data" />
-
+                <DominioDialog
+                  @close_or_save="close_or_save_dominio"
+                  @dominio_data="setDomainVariables"
+                  :domain="dominio_data"
+                />
               </v-dialog>
-              
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -42,7 +47,24 @@
           {{ dominio_data.subtitle }}
           <v-expansion-panels v-for="(modulo) in modulos" :key="modulo.idmodule">
             <v-expansion-panel>
-              <v-expansion-panel-header>[Modulo] {{ modulo.namemodule }}</v-expansion-panel-header>
+              <v-expansion-panel-header color="primary" style="color:white;">
+                <v-row>
+                  <v-col cols="9">
+                    <p>
+                      [Modulo]
+                      {{ modulo.namemodule }}
+                    </p>
+                  </v-col>
+                  <v-col cols="3">
+                    <!--Formulario para adição de submódulo ou conceito-->
+
+                    <!--Formulario para edição do modulo-->
+                    <v-btn icon="icon" color="white" @click="setmodulo(modulo)">
+                      <v-icon>mdi-view-headline</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-header>
 
               <v-expansion-panel-content>{{ modulo.subtitle }}</v-expansion-panel-content>
             </v-expansion-panel>
@@ -57,6 +79,7 @@ import DominioDialog from "./concept_model/DominioDialog";
 import ModuloDialog from "./concept_model/ModuloDialog";
 // import ConceitoDialog from "./concept_model/ConceitoDialog";
 import axios from "axios";
+import Cookie from "js-cookie";
 export default {
   name: "Panels",
   components: {
@@ -65,27 +88,26 @@ export default {
   },
   props: ["dominio"],
   data: () => ({
+    modulo: "",
     valid_modulo: true,
     dialog_modulo: false,
+    dialog_modulo_edit: false,
     dialog_dominio: false,
     select: null,
     newItems: ["Módulo", "SubMódulo"],
     modulos: "",
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
-    dominio_data: {},
-    
+    dominio_data: {}
   }),
   mounted() {
     /* Função que "atrasa" atualização da variável para conseguir pegar dados do
      * props:[]
      */
-    
     var vm = this;
     setTimeout(function() {
       vm.setDomainVariables(vm.dominio);
     }, 1000);
-
   },
   computed: {
     nomeDominioPanel: function() {
@@ -111,40 +133,52 @@ export default {
       this.setDomainVariables();
     },
     setDomainVariables(dominio_data) {
-      console.log("s")
       this.dominio_data = dominio_data;
-      console.log(this.dominio_data);
-      this.getModulos();
+      this.modulos = this.dominio_data.modules;
     },
-    getModulos(){
+    getDominio() {
       var vm = this;
+      var csrftoken = Cookie.get("csrftoken");
+      var headers = {
+        "X-CSRFTOKEN": csrftoken
+      };
       axios
-        .get("http://127.0.0.1:8000/module/", {
-          auth: {
-            username: "admin",
-            password: "admin"
+        .patch(
+          "http://127.0.0.1:8000/knowledgedomain/" +
+            this.dominio_data.idknowledgedomain +
+            "/",
+          {
+            headers: headers
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
           }
-        })
+        )
         .then(function(resposta) {
-          vm.modulos = resposta.data;
+          vm.setDomainVariables(resposta.data);
         });
     },
-    close_or_save_modulo(value){
-      if(value === "save"){
-        this.getModulos();
+    close_or_save_modulo(value) {
+      var vm = this;
+      if (value === "save") {
+        setTimeout(function() {
+          vm.getDominio();
+        }, 1000);
         this.dialog_modulo = false;
-      }else{
-        console.log("oi chuchu");
+      } else if (value === "close") {
         this.dialog_modulo = false;
       }
+      this.modulo = "";
     },
-    close_or_save_dominio(value){
-      if(value === "save"){
-
-        this.dialog_dominio = !this.dialog_dominio;
-      }else{
-        this.dialog_dominio = !this.dialog_dominio;
-      }
+    close_or_save_dominio() {
+      this.dialog_dominio = !this.dialog_dominio;
+    },
+    setmodulo(value) {
+      this.modulo = value;
+      this.dialog_modulo = !this.dialog_modulo;
     }
   }
 };
