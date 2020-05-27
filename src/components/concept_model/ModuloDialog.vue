@@ -91,7 +91,7 @@ export default {
         .put(
           "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
           {
-            fkidmodule: null,
+            fk_idmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
             idknowledgedomain: this.domain.url

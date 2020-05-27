@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <!--Panel do Domínio-->
     <v-expansion-panels>
       <v-expansion-panel v-for="(item,i) in 1" :key="i">
         <v-expansion-panel-header color="purple" style="color:white;">
@@ -40,12 +41,21 @@
                   :domain="dominio_data"
                 />
               </v-dialog>
+              <!--Formulario para criação de submódulo-->
+              <v-dialog v-model="dialog_submodulo" persistent="persistent" max-width="600px">
+                <SubModuloDialog
+                  :module="modulo"
+                  @close_or_save="close_or_save_submodulo "
+                  :domain="dominio"
+                />
+              </v-dialog>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           {{ dominio_data.subtitle }}
-          <v-expansion-panels v-for="(modulo) in modulos" :key="modulo.idmodule">
+          <!--Panels dos Módulos-->
+          <v-expansion-panels v-for="(modulo) in modulos" :key="modulo.idmodule" class="mt-2 mb-2">
             <v-expansion-panel>
               <v-expansion-panel-header color="primary" style="color:white;">
                 <v-row>
@@ -57,16 +67,39 @@
                   </v-col>
                   <v-col cols="3">
                     <!--Formulario para adição de submódulo ou conceito-->
+                    <v-menu
+                      top
+                      origin="center center"
+                      :offset-y="true"
+                      transition="scale-transition"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon color="white" dark v-on="on">
+                          <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                      </template>
 
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-title>Conceito</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="setmodulo(modulo);dialog_submodulo=true">
+                          <v-list-item-title>Submódulo</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
                     <!--Formulario para edição do modulo-->
-                    <v-btn icon="icon" color="white" @click="setmodulo(modulo)">
+                    <v-btn icon="icon" color="white" @click="setmodulo(modulo);dialog_modulo=true">
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
               </v-expansion-panel-header>
 
-              <v-expansion-panel-content>{{ modulo.subtitle }}</v-expansion-panel-content>
+              <v-expansion-panel-content>
+                {{ modulo.subtitle }}
+                <!--Panels dos SubMódulos-->
+              </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-expansion-panel-content>
@@ -77,24 +110,26 @@
 <script>
 import DominioDialog from "./concept_model/DominioDialog";
 import ModuloDialog from "./concept_model/ModuloDialog";
-// import ConceitoDialog from "./concept_model/ConceitoDialog";
+import SubModuloDialog from "./concept_model/SubModuloDialog";
+
 import axios from "axios";
 import Cookie from "js-cookie";
 export default {
   name: "Panels",
   components: {
     ModuloDialog,
-    DominioDialog
+    DominioDialog,
+    SubModuloDialog
   },
   props: ["dominio"],
   data: () => ({
+    itemsMenuNewModulo: [{ type: "Conceito" }, { type: "Submódulo" }],
     modulo: "",
     valid_modulo: true,
     dialog_modulo: false,
-    dialog_modulo_edit: false,
+    dialog_submodulo: false,
     dialog_dominio: false,
     select: null,
-    newItems: ["Módulo", "SubMódulo"],
     modulos: "",
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -178,7 +213,14 @@ export default {
     },
     setmodulo(value) {
       this.modulo = value;
-      this.dialog_modulo = !this.dialog_modulo;
+    },
+    close_or_save_submodulo(value) {
+      // var vm = this;
+      if (value === "save") {
+        this.dialog_submodulo = false;
+      } else if (value === "close") {
+        this.dialog_submodulo = false;
+      }
     }
   }
 };

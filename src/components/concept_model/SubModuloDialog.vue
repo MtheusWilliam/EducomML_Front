@@ -1,105 +1,126 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <template v-slot:activator="{ on }">
-          <v-btn
-            class="mx-auto"
-            width="50%"
-            x-large
-            color="primary"
-            dark
-            v-on="on"
-          >Criar Novo Domínio</v-btn>
-        </template>
+  <v-container class="pa-0">
+    <v-card>
+      <v-card-title style="background-color:#63B0B0; color:white;">
+        <span class="headline">
+          <p>
+            Defina o submódulo do domínio do conhecimento.
+            <!--{{module.idmodule}}-->
+          </p>
+        </span>
+      </v-card-title>
+      <v-card-text>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-text-field
+            v-model="subModuloTitle"
+            :rules="subModuloTitleRules"
+            label="Título do submódulo"
+            required
+          ></v-text-field>
 
-        <v-card>
-          <v-card-title style="background-color:#63B0B0; color:white;">
-            <span class="headline">
-              <p>Defina o módulo do domínio do conhecimento.</p>
-            </span>
-          </v-card-title>
-          <v-card-text>
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field disabled label="Estatística Básica" required>Etatística Básica</v-text-field>
-
-              <v-text-field
-                v-model="identifierName"
-                :counter="25"
-                :rules="identifierNameRules"
-                label="Atribua um identificador para o módulo"
-                required
-              ></v-text-field>
-
-              <v-text-field
-                v-model="moduloTitle"
-                :rules="moduloTitleRules"
-                label="Título do módulo"
-                required
-              ></v-text-field>
-
-              <v-text-field
-                v-model="moduloSubtitle"
-                :rules="moduloSubtitleRules"
-                label="Subtítulo do módulo"
-                required
-              ></v-text-field>
-            </v-form>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="red" height="49" dark large @click="reset">
-              Close
-              <v-icon dark right>mdi-close</v-icon>
-            </v-btn>
-            <v-btn color="success" height="49" dark large @click="validate">
-              Save
-              <v-icon dark right>mdi-content-save</v-icon>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-row>
+          <v-text-field
+            v-model="subModuloSubtitle"
+            :rules="subModuloSubtitleRules"
+            label="Subtítulo do submódulo"
+            required
+          ></v-text-field>
+        </v-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="red" height="49" dark large @click="reset">
+          Close
+          <v-icon dark right>mdi-close</v-icon>
+        </v-btn>
+        <v-btn color="success" height="49" dark large @click="validate">
+          Save
+          <v-icon dark right>mdi-content-save</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-container>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: "ModuloDialog",
+  name: "SubModuloDialog",
+  props: ["domain", "module"],
   data: () => ({
     valid: true,
-    dominioName: "Estatística Básica",
-    identifierName: "",
-    identifierNameRules: [
-      v => !!v || "É necessário atribuir um identificador para o módulo",
-      v =>
-        (v && v.length <= 25) ||
-        "Nome do identificador deve ter no máximo 25 caracteres"
-    ],
-    moduloTitle: "",
-    moduloTitleRules: [
-      v => !!v || "É necessário descrever o título do módulo",
+    subModuloTitle: "",
+    subModuloTitleRules: [
+      v => !!v || "É necessário descrever o título do submódulo",
       v =>
         (v && v.length <= 40) ||
         "O título do módulo deve ter no máximo 40 caracteres"
     ],
-    moduloSubtitle: "",
-    moduloSubtitleRules: [
-      v => !!v || "É necessário descrever o subtítulo do módulo",
+    subModuloSubtitle: "",
+    subModuloSubtitleRules: [
+      v => !!v || "É necessário descrever o subtítulo do submódulo",
       v =>
         (v && v.length <= 40) ||
         "O subtítulo do módulo deve ter no máximo 40 caracteres"
     ],
     select: null,
-    newItems: ["Módulo", "SubMódulo"],
-    checkbox: false
+    newItems: [],
+    checkbox: false,
+    modulos: ""
   }),
-
   methods: {
-    validate() {
-      this.$refs.form.validate();
+    postSubModulo() {
+      // var vm = this;
+      axios
+        .post(
+          `http://localhost:8000/module/`,
+          {
+            fk_idmodule: this.module.url,
+            namemodule: this.subModuloTitle,
+            subtitle: this.subModuloSubtitle,
+            idknowledgedomain: this.domain.url
+          },
+          { auth: { username: "admin", password: "admin" } }
+        )
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
+          vm.subTitle = resposta.data.subtitle;*/
+        });
     },
+    putSubModulo() {
+      axios
+        .put(
+          "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
+          {
+            fk_idmodule: this.module.url,
+            namemodule: this.subModuloTitle,
+            subtitle: this.subModuloSubtitle,
+            idknowledgedomain: this.domain.url
+          },
+          { auth: { username: "admin", password: "admin" } }
+        )
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
+          vm.subTitle = resposta.data.subtitle;*/
+        });
+    },
+    validate() {
+      console.log("MODULO AQUI:", this.module);
+      if (this.$refs.form.validate()) {
+        this.$refs.form.validate();
+        this.postSubModulo();
+        // if (this.module === "") {
+        //   this.postSubModulo();
+      } else {
+        console.log("PUT NO SUBMÓDULO RAPAZ");
+        // this.putSubModulo();
+      }
+      this.$emit("close_or_save", "save");
+      this.$refs.form.reset();
+    },
+
     reset() {
+      /*console.log("SUBMODULO AQUI:", this.module);*/
+      this.$emit("close_or_save", "close");
       this.$refs.form.reset();
     },
     resetValidation() {
