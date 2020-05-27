@@ -104,14 +104,12 @@ export default {
         });
     },
     validate() {
-      console.log("MODULO AQUI:", this.module);
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         this.postSubModulo();
         // if (this.module === "") {
         //   this.postSubModulo();
       } else {
-        console.log("PUT NO SUBMÓDULO RAPAZ");
         // this.putSubModulo();
       }
       this.$emit("close_or_save", "save");
@@ -119,7 +117,6 @@ export default {
     },
 
     reset() {
-      /*console.log("SUBMODULO AQUI:", this.module);*/
       this.$emit("close_or_save", "close");
       this.$refs.form.reset();
     },

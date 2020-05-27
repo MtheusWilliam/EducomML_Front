@@ -87,6 +87,7 @@ export default {
         });
     },
     putModulo() {
+      var vm = this;
       axios
         .put(
           "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
@@ -98,13 +99,13 @@ export default {
           },
           { auth: { username: "admin", password: "admin" } }
         )
-        .then(function(/*resposta*/) {
-          /*vm.moduloTitle = resposta.data.namemodule;
-          vm.subTitle = resposta.data.subtitle;*/
+        .then(function(resposta) {
+          vm.moduloTitle = resposta.data.namemodule;
+          vm.subTitle = resposta.data.subtitle;
+          console.log(resposta.data);
         });
     },
     validate() {
-      console.log("MODULO AQUI:", this.module);
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         if (this.module === "") {
@@ -113,11 +114,9 @@ export default {
           this.putModulo();
         }
         this.$emit("close_or_save", "save");
-        this.$refs.form.reset();
       }
     },
     reset() {
-      console.log("MODULO AQUI:", this.module);
       this.$emit("close_or_save", "close");
       this.$refs.form.reset();
     },
