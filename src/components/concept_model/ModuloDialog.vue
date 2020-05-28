@@ -69,41 +69,28 @@ export default {
   }),
   methods: {
     postModulo() {
-      // var vm = this;
-      axios
-        .post(
-          `http://localhost:8000/module/`,
-          {
-            fkidmodule: null,
-            namemodule: this.moduloTitle,
-            subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.domain.url
-          },
-          { auth: { username: "admin", password: "admin" } }
-        )
-        .then(function(/*resposta*/) {
-          /*vm.moduloTitle = resposta.data.namemodule;
-          vm.subTitle = resposta.data.subtitle;*/
-        });
+      axios.post(
+        `http://localhost:8000/module/`,
+        {
+          fkidmodule: null,
+          namemodule: this.moduloTitle,
+          subtitle: this.moduloSubtitle,
+          idknowledgedomain: this.domain.url
+        },
+        { auth: { username: "admin", password: "admin" } }
+      );
     },
     putModulo() {
-      var vm = this;
-      axios
-        .put(
-          "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
-          {
-            fk_idmodule: null,
-            namemodule: this.moduloTitle,
-            subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.domain.url
-          },
-          { auth: { username: "admin", password: "admin" } }
-        )
-        .then(function(resposta) {
-          vm.moduloTitle = resposta.data.namemodule;
-          vm.subTitle = resposta.data.subtitle;
-          console.log(resposta.data);
-        });
+      axios.put(
+        "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
+        {
+          fk_idmodule: null,
+          namemodule: this.moduloTitle,
+          subtitle: this.moduloSubtitle,
+          idknowledgedomain: this.domain.url
+        },
+        { auth: { username: "admin", password: "admin" } }
+      );
     },
     validate() {
       if (this.$refs.form.validate()) {

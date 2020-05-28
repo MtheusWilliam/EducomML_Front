@@ -20,12 +20,16 @@ export default {
   name: "TreeView",
   props: ["dominio"],
   data: () => ({
-    dominio_data: "dominaio",
+    dominio_data: "dominio",
     treeData: [
       {
         id: 1,
-        name: "",
-        children: [{}]
+        name: "Applications :",
+        children: [
+          { id: 2, name: "Calendar : app" },
+          { id: 3, name: "Chrome : app" },
+          { id: 4, name: "Webstorm : app" }
+        ]
       }
     ],
     elementTypes: {
@@ -40,13 +44,21 @@ export default {
     var vm = this;
     setTimeout(function() {
       vm.dominio_data = vm.dominio;
-      console.log("TIMEOUT");
+      vm.setDomainVariables();
+    }, 650);
+  },
+  updated() {
+    var vm = this;
+    setTimeout(function() {
+      vm.dominio_data = vm.dominio;
       vm.setDomainVariables();
     }, 650);
   },
   methods: {
     setDomainVariables() {
-      this.treeData[0].name = this.dominio_data.nameknowledgedomain;
+      console.log(this.dominio_data.modules[0].namemodule);
+      /*this.treeData = arrayIOfObj;*/
+      /*console.log(this.treeData);*/
     }
   }
 };
