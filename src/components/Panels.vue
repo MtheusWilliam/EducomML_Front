@@ -219,7 +219,7 @@ export default {
         SubModuloDialog,
         ConceitoDialog
     },
-    props: ["dominio"],
+    props: ["dominio","modulo_dialog"],
     data: () => ({
         itemsMenuNewModulo: [{
                 type: "Conceito"
@@ -242,9 +242,11 @@ export default {
         dominio_data: {}
     }),
     watch: {
-        dominio: function (newVal, oldVal) {
+        dominio: function () {
             this.setDomainVariables(this.dominio);
-            console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+        },
+        modulo_dialog: function () {
+            this.dialog_modulo =  this.modulo_dialog;
         }
     },
     computed: {

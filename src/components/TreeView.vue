@@ -11,7 +11,7 @@
             </v-btn>
         </v-app-bar>
     </div>
-    <v-treeview open-all :items="treeData"></v-treeview>
+    <v-treeview open-all :active="active" @update:active="test" :items="treeData" activatable></v-treeview>
 </v-container>
 </template>
 
@@ -21,13 +21,13 @@ export default {
     props: ["dominio"],
     data: () => ({
         treeData: [],
+        active: [],
         elementTypes: {
             dominio: "Domínio",
             modulo: "Módulo",
             subModulo: "SubMódulo",
             conceito: "Conceito"
         },
-        open: []
     }),
     mounted() {
         var vm = this;
@@ -36,6 +36,9 @@ export default {
         }, 700);
     },
     methods: {
+        test(value) {
+            console.log('TEST', value);
+        },
         setDomainVariables() {
             this.treeData = [];
             var indexmodulo = 0;
@@ -46,48 +49,51 @@ export default {
             })
             if (this.dominio.modules.length) {
                 this.dominio.modules.forEach(modulo => {
-                    console.log("treedata:", this.treeData);
-                    this.treeData[0].children.push({
-                        id: modulo.idmodule,
-                        name: "[MODULO] " + modulo.namemodule,
-                        children: []
-                    })
 
-                    if (modulo.submodules.length) {
-                        var indexsubmodulo = 0;
-                        modulo.submodules.forEach(submodulo => {
-                            console.log("treedata:", this.treeData);
-                            this.treeData[0].children[indexmodulo].children.push({
-                                id: submodulo.idmodule,
-                                name: "[SUBMODULO] " + submodulo.namemodule,
-                                children: []
-                            })
+                    if (modulo.fk_idmodule === null) {
+                        console.log("treedata:", this.treeData);
+                        this.treeData[0].children.push({
+                            id: modulo.idmodule+","+Object.getOwnPropertyNames(modulo)[1],
+                            name: "[MODULO] " + modulo.namemodule,
+                            children: []
+                        })
 
-                            if (submodulo.concepts.length) {
-                                submodulo.concepts.forEach(conceito => {
-                                    console.log("treedata:", this.treeData);
-                                    this.treeData[0].children[indexmodulo].children[indexsubmodulo].children.push({
-                                        id: conceito.idconcept,
-                                        name: "[CONCEITO] " + conceito.nameconcept
-                                    })
-                                });
-                                
-                            }
-                            indexsubmodulo++;
-                        });
-                        
+                        if (modulo.submodules.length) {
+                            var indexsubmodulo = 0;
+                            modulo.submodules.forEach(submodulo => {
+                                console.log("treedata:", this.treeData);
+                                this.treeData[0].children[indexmodulo].children.push({
+                                    id: submodulo.idmodule+","+Object.getOwnPropertyNames(submodulo)[1],
+                                    name: "[SUBMODULO] " + submodulo.namemodule,
+                                    children: []
+                                })
+
+                                if (submodulo.concepts.length) {
+                                    submodulo.concepts.forEach(conceito => {
+                                        console.log("treedata:", this.treeData);
+                                        this.treeData[0].children[indexmodulo].children[indexsubmodulo].children.push({
+                                            id: conceito.idconcept+","+Object.getOwnPropertyNames(conceito)[1],
+                                            name: "[CONCEITO] " + conceito.nameconcept
+                                        })
+                                    });
+
+                                }
+                                indexsubmodulo++;
+                            });
+
+                        }
+                        if (modulo.concepts.length) {
+                            modulo.concepts.forEach(conceito => {
+                                console.log("treedata:", this.treeData);
+                                this.treeData[0].children[indexmodulo].children.push({
+                                    id: conceito.idconcept+","+Object.getOwnPropertyNames(conceito)[1],
+                                    name: "[CONCEITO] " + conceito.nameconcept
+                                })
+                            });
+                        }
+
+                        indexmodulo++;
                     }
-                    if (modulo.concepts.length) {
-                        modulo.concepts.forEach(conceito => {
-                            console.log("treedata:", this.treeData);
-                            this.treeData[0].children[indexmodulo].children.push({
-                                id: conceito.idconcept,
-                                name: "[CONCEITO] " + conceito.nameconcept
-                            })
-                        });
-                    }
-
-                    indexmodulo++;
 
                 });
             }
