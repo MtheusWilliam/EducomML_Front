@@ -1,12 +1,12 @@
 <template>
   <v-row>
     <v-col cols="4">
-      <TreeView :dominio="dominio" />
+      <TreeView @type="typeOfDialog" :dominio="dominio" />
     </v-col>
     <v-col cols="8">
       <div class="mt-3 mr-8 ml-3 mb-0">
         <!--{{this.dominio.nameknowledgedomain}}-->
-        <Panels @dominio_data="atualizatreeview" :dominio="dominio" />
+        <Panels @dominio_data="atualizatreeview" @close="closeType" :objectTreeView="objectTreeView" :dialog_knowledgedomain="dialog_knowledgedomain" :dialog_module="dialog_module" :dialog_concept="dialog_concept"  :dominio="dominio" />
       </div>
     </v-col>
   </v-row>
@@ -22,7 +22,11 @@ import Cookie from "js-cookie";
 export default {
   name: "CreateConceitual",
   data: () => ({
-    dominio: ""
+    dominio: "",
+    objectTreeView: "",
+    dialog_knowledgedomain: false,
+    dialog_module: false,
+    dialog_concept: false
   }),
   components: {
     TreeView,
@@ -48,6 +52,26 @@ export default {
   methods: {
     atualizatreeview(value) {
       this.dominio = value;
+    },
+    typeOfDialog(value){
+      console.log(value);
+      if (value.type === "knowledgedomain") {
+        this.dialog_knowledgedomain = true;
+      } else if(value.type === "module"){
+        this.dialog_module = true;
+      }else if(value.type === "concept"){
+        this.dialog_concept = true;
+      }
+      this.objectTreeView = value;
+    },
+    closeType(value){
+      if (value === "dominio") {
+        this.dialog_knowledgedomain = false;
+      } else if(value === "modulo"){
+        this.dialog_module = false;
+      }else if(value === "conceito"){
+        this.dialog_concept = false;
+      }
     }
   }
 };

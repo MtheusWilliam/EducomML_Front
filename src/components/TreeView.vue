@@ -11,7 +11,7 @@
             </v-btn>
         </v-app-bar>
     </div>
-    <v-treeview open-all :active="active" @update:active="test" :items="treeData" activatable></v-treeview>
+    <v-treeview open-all  @update:active="test" :items="treeData" activatable></v-treeview>
 </v-container>
 </template>
 
@@ -21,7 +21,6 @@ export default {
     props: ["dominio"],
     data: () => ({
         treeData: [],
-        active: [],
         elementTypes: {
             dominio: "Domínio",
             modulo: "Módulo",
@@ -29,31 +28,27 @@ export default {
             conceito: "Conceito"
         },
     }),
-    mounted() {
-        var vm = this;
-        setTimeout(function () {
-            vm.setDomainVariables();
-        }, 700);
-    },
     methods: {
         test(value) {
-            console.log('TEST', value);
+            if (value.length) {
+                this.$emit('type', { type: value[0].split('/')[3], url: value[0]});
+            }
+
         },
         setDomainVariables() {
-            this.treeData = [];
+            this.treeData = []
             var indexmodulo = 0;
             this.treeData.push({
-                id: this.dominio.idknowledgedomain,
+                id: this.dominio.url,
                 name: "[DOMINIO] " + this.dominio.nameknowledgedomain,
                 children: []
             })
-            if (this.dominio.modules.length) {
+            if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
                 this.dominio.modules.forEach(modulo => {
 
                     if (modulo.fk_idmodule === null) {
-                        console.log("treedata:", this.treeData);
                         this.treeData[0].children.push({
-                            id: modulo.idmodule+","+Object.getOwnPropertyNames(modulo)[1],
+                            id: modulo.url,
                             name: "[MODULO] " + modulo.namemodule,
                             children: []
                         })
@@ -61,18 +56,16 @@ export default {
                         if (modulo.submodules.length) {
                             var indexsubmodulo = 0;
                             modulo.submodules.forEach(submodulo => {
-                                console.log("treedata:", this.treeData);
                                 this.treeData[0].children[indexmodulo].children.push({
-                                    id: submodulo.idmodule+","+Object.getOwnPropertyNames(submodulo)[1],
+                                    id: submodulo.url,
                                     name: "[SUBMODULO] " + submodulo.namemodule,
                                     children: []
                                 })
 
                                 if (submodulo.concepts.length) {
                                     submodulo.concepts.forEach(conceito => {
-                                        console.log("treedata:", this.treeData);
                                         this.treeData[0].children[indexmodulo].children[indexsubmodulo].children.push({
-                                            id: conceito.idconcept+","+Object.getOwnPropertyNames(conceito)[1],
+                                            id: conceito.url,
                                             name: "[CONCEITO] " + conceito.nameconcept
                                         })
                                     });
@@ -84,9 +77,8 @@ export default {
                         }
                         if (modulo.concepts.length) {
                             modulo.concepts.forEach(conceito => {
-                                console.log("treedata:", this.treeData);
                                 this.treeData[0].children[indexmodulo].children.push({
-                                    id: conceito.idconcept+","+Object.getOwnPropertyNames(conceito)[1],
+                                    id: conceito.idconcept + "," + Object.getOwnPropertyNames(conceito)[1],
                                     name: "[CONCEITO] " + conceito.nameconcept
                                 })
                             });
@@ -101,9 +93,8 @@ export default {
         },
     },
     watch: {
-        dominio: function (newVal, oldVal) {
+        dominio: function () {
             this.setDomainVariables();
-            console.log('Prop changed: ', newVal, ' | was: ', oldVal);
         }
     }
 };

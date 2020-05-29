@@ -219,7 +219,7 @@ export default {
         SubModuloDialog,
         ConceitoDialog
     },
-    props: ["dominio","modulo_dialog"],
+    props: ["dominio","objectTreeView","dialog_knowledgedomain","dialog_module","dialog_concept"],
     data: () => ({
         itemsMenuNewModulo: [{
                 type: "Conceito"
@@ -244,10 +244,49 @@ export default {
     watch: {
         dominio: function () {
             this.setDomainVariables(this.dominio);
+            
         },
-        modulo_dialog: function () {
-            this.dialog_modulo =  this.modulo_dialog;
-        }
+        dialog_knowledgedomain: function () {
+            this.dialog_dominio =  this.dialog_knowledgedomain;
+        },
+        dialog_module: function () {
+            this.dialog_modulo =  this.dialog_module;
+            var vm = this;
+            var csrftoken = Cookie.get("csrftoken");
+            var headers = {
+                "X-CSRFTOKEN": csrftoken
+            };
+            this.modulo = axios.patch(this.objectTreeView.url, {
+                    headers: headers
+                }, {
+                    auth: {
+                        username: "admin",
+                        password: "admin"
+                    }
+                }).then(function (resposta) {
+                    console.log("caralho");
+                    vm.modulo = resposta.data;
+                });
+        },
+        dialog_concept: function () {
+            var vm = this;
+            var csrftoken = Cookie.get("csrftoken");
+            var headers = {
+                "X-CSRFTOKEN": csrftoken
+            };
+            this.dialog_conceito =  this.dialog_concept;
+            this.concept = axios.patch(this.objectTreeView.url, {
+                    headers: headers
+                }, {
+                    auth: {
+                        username: "admin",
+                        password: "admin"
+                    }
+                }).then(function (resposta) {
+                    vm.concept = resposta.data;
+                });
+        },
+        
     },
     computed: {
         nomeDominioPanel: function () {
@@ -274,6 +313,7 @@ export default {
         },
         setDomainVariables(dominio_data) {
             this.dominio_data = dominio_data;
+            this.$emit("dominio_data", this.dominio_data);
         },
         getDominio() {
             var vm = this;
@@ -296,12 +336,12 @@ export default {
                 )
                 .then(function (resposta) {
                     vm.setDomainVariables(resposta.data);
-                    vm.$emit("dominio_data", resposta.data);
                 });
         },
 
         close_or_save_dominio() {
             this.dialog_dominio = !this.dialog_dominio;
+            this.controlTreeView("dominio");
         },
         setmodulo(value) {
             this.modulo = value;
@@ -324,6 +364,7 @@ export default {
                 this.dialog_modulo = false;
             }
             this.modulo = "";
+            this.controlTreeView("modulo");
         },
         close_or_save_submodulo(value) {
             var vm = this;
@@ -336,6 +377,7 @@ export default {
                 this.dialog_submodulo = false;
             }
             this.submodulo = "";
+            this.controlTreeView("submodulo");
         },
         close_or_save_conceito(value) {
             var vm = this;
@@ -348,6 +390,7 @@ export default {
                 this.dialog_conceito = false;
             }
             this.conceito = "";
+            this.controlTreeView("conceito");
         },
 
         deleteelemento(value) {
@@ -361,6 +404,9 @@ export default {
             setTimeout(function () {
                 vm.getDominio();
             }, 1000);
+        },
+        controlTreeView(value){
+            this.$emit("close",value);
         }
     }
 };

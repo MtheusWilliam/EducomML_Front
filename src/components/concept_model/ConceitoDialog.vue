@@ -49,7 +49,7 @@
               <v-col>
                 <v-select
                   v-model="select"
-                  :items="conceitosList"
+                  :items="this.module.concepts.foreach( resposta => { resposta.idconcept })"
                   label="Conceito"
                   style="margin:0px;"
                 ></v-select>
@@ -114,7 +114,6 @@ export default {
         "O nome da relação deve ter no máximo 15 caracteres"
     ],
     newItems: ["Conceito", "Subconceito"],
-    conceitosList: ["Conceito1", "Conceito2", "Conceito3"],
     select: null,
     relacaoTypes: ["typeOf", "partOf"],
     checkbox: false

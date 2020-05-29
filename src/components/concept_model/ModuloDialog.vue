@@ -101,8 +101,7 @@ export default {
         )
         .then(function(resposta) {
           vm.moduloTitle = resposta.data.namemodule;
-          vm.subTitle = resposta.data.subtitle;
-          console.log(resposta.data);
+          vm.moduloSubtitle = resposta.data.subtitle;
         });
     },
     validate() {
