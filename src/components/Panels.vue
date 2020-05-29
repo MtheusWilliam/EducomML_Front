@@ -219,7 +219,7 @@ export default {
         SubModuloDialog,
         ConceitoDialog
     },
-    props: ["dominio","objectTreeView","dialog_knowledgedomain","dialog_module","dialog_concept"],
+    props: ["dominio", "objectTreeView", "dialog_knowledgedomain", "dialog_module", "dialog_submodule", "dialog_concept"],
     data: () => ({
         itemsMenuNewModulo: [{
                 type: "Conceito"
@@ -244,19 +244,23 @@ export default {
     watch: {
         dominio: function () {
             this.setDomainVariables(this.dominio);
-            
+
         },
         dialog_knowledgedomain: function () {
-            this.dialog_dominio =  this.dialog_knowledgedomain;
+            if (this.dialog_dominio === true) {
+                this.dialog_dominio = this.dialog_knowledgedomain;
+            }
+
         },
         dialog_module: function () {
-            this.dialog_modulo =  this.dialog_module;
-            var vm = this;
-            var csrftoken = Cookie.get("csrftoken");
-            var headers = {
-                "X-CSRFTOKEN": csrftoken
-            };
-            this.modulo = axios.patch(this.objectTreeView.url, {
+            if (this.dialog_module === true) {
+                this.dialog_modulo = this.dialog_module;
+                var vm = this;
+                var csrftoken = Cookie.get("csrftoken");
+                var headers = {
+                    "X-CSRFTOKEN": csrftoken
+                };
+                axios.patch(this.objectTreeView.url, {
                     headers: headers
                 }, {
                     auth: {
@@ -264,18 +268,20 @@ export default {
                         password: "admin"
                     }
                 }).then(function (resposta) {
-                    console.log("caralho");
+                    console.log(resposta.data)
                     vm.modulo = resposta.data;
                 });
+            }
         },
-        dialog_concept: function () {
-            var vm = this;
-            var csrftoken = Cookie.get("csrftoken");
-            var headers = {
-                "X-CSRFTOKEN": csrftoken
-            };
-            this.dialog_conceito =  this.dialog_concept;
-            this.concept = axios.patch(this.objectTreeView.url, {
+        dialog_submodule: function () {
+            if (this.dialog_submodule === true) {
+                this.dialog_submodulo = this.dialog_submodule;
+                var vm = this;
+                var csrftoken = Cookie.get("csrftoken");
+                var headers = {
+                    "X-CSRFTOKEN": csrftoken
+                };
+                axios.patch(this.objectTreeView.url.substr(0,this.objectTreeView.url.length-3), {
                     headers: headers
                 }, {
                     auth: {
@@ -283,10 +289,34 @@ export default {
                         password: "admin"
                     }
                 }).then(function (resposta) {
-                    vm.concept = resposta.data;
+                    console.log(resposta.data)
+                    vm.submodulo = resposta.data;
                 });
+            }
         },
-        
+        dialog_concept: function () {
+            
+            var vm = this;
+            var csrftoken = Cookie.get("csrftoken");
+            var headers = {
+                "X-CSRFTOKEN": csrftoken
+            };
+            console.log(this.objectTreeView.url);
+            this.dialog_conceito = this.dialog_concept;
+            axios.patch(this.objectTreeView.url, {
+                headers: headers
+            }, {
+                auth: {
+                    username: "admin",
+                    password: "admin"
+                }
+            }).then(function (resposta) {
+                console.log(resposta.data)
+                vm.conceito = resposta.data;
+            });
+            console.log(this.conceito);
+        },
+
     },
     computed: {
         nomeDominioPanel: function () {
@@ -405,8 +435,8 @@ export default {
                 vm.getDominio();
             }, 1000);
         },
-        controlTreeView(value){
-            this.$emit("close",value);
+        controlTreeView(value) {
+            this.$emit("close", value);
         }
     }
 };

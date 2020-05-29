@@ -6,7 +6,7 @@
     <v-col cols="8">
       <div class="mt-3 mr-8 ml-3 mb-0">
         <!--{{this.dominio.nameknowledgedomain}}-->
-        <Panels @dominio_data="atualizatreeview" @close="closeType" :objectTreeView="objectTreeView" :dialog_knowledgedomain="dialog_knowledgedomain" :dialog_module="dialog_module" :dialog_concept="dialog_concept"  :dominio="dominio" />
+        <Panels @dominio_data="atualizatreeview" @close="closeType" :objectTreeView="objectTreeView" :dialog_knowledgedomain="dialog_knowledgedomain" :dialog_module="dialog_module" :dialog_submodule="dialog_submodule" :dialog_concept="dialog_concept"  :dominio="dominio" />
       </div>
     </v-col>
   </v-row>
@@ -26,6 +26,7 @@ export default {
     objectTreeView: "",
     dialog_knowledgedomain: false,
     dialog_module: false,
+    dialog_submodule: false,
     dialog_concept: false
   }),
   components: {
@@ -61,16 +62,21 @@ export default {
         this.dialog_module = true;
       }else if(value.type === "concept"){
         this.dialog_concept = true;
+      }else if(value.type === "submodulo"){
+        this.dialog_submodule = true;
       }
       this.objectTreeView = value;
     },
     closeType(value){
+      console.log(value);
       if (value === "dominio") {
         this.dialog_knowledgedomain = false;
       } else if(value === "modulo"){
         this.dialog_module = false;
       }else if(value === "conceito"){
         this.dialog_concept = false;
+      }else if(value === "submodulo"){
+        this.dialog_submodule = false;
       }
     }
   }

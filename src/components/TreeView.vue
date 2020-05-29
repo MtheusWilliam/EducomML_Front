@@ -31,7 +31,16 @@ export default {
     methods: {
         test(value) {
             if (value.length) {
-                this.$emit('type', { type: value[0].split('/')[3], url: value[0]});
+                console.log(value[0].split('/')[5]);
+                if(value[0].split('/')[5] === "sub"){
+                    console.log(value);
+                 this.$emit('type', { type: "submodulo", url: value[0]});
+                }
+                else {
+                    console.log("primeiro ewmit");
+                    this.$emit('type', { type: value[0].split('/')[3], url: value[0]});
+                }
+                
             }
 
         },
@@ -57,7 +66,7 @@ export default {
                             var indexsubmodulo = 0;
                             modulo.submodules.forEach(submodulo => {
                                 this.treeData[0].children[indexmodulo].children.push({
-                                    id: submodulo.url,
+                                    id: submodulo.url+"sub",
                                     name: "[SUBMODULO] " + submodulo.namemodule,
                                     children: []
                                 })
@@ -78,7 +87,7 @@ export default {
                         if (modulo.concepts.length) {
                             modulo.concepts.forEach(conceito => {
                                 this.treeData[0].children[indexmodulo].children.push({
-                                    id: conceito.idconcept + "," + Object.getOwnPropertyNames(conceito)[1],
+                                    id: conceito.url,
                                     name: "[CONCEITO] " + conceito.nameconcept
                                 })
                             });
