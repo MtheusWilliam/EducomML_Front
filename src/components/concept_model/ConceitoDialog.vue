@@ -52,8 +52,7 @@
                 <v-row v-for="(item,i) in relationForControl" :key="i">
                   <v-col>
                     <v-select
-                      v-model="conceptSelect[i]"
-                      @change="teste"
+                      v-model="relationForControl[i].conceptSelect"
                       :items="items"
                       label="Conceito"
                       style="margin:0px;"
@@ -61,7 +60,7 @@
                   </v-col>
                   <v-col>
                     <v-text-field
-                      v-model="relacaoName[i]"
+                      v-model="relationForControl[i].relacaoName"
                       counter="15"
                       label="Nome da Relação"
                       style="margin:0px;"
@@ -69,7 +68,7 @@
                   </v-col>
                   <v-col>
                     <v-select
-                      v-model="relacaoType[i]"
+                      v-model="relationForControl[i].relacaoType"
                       :items="relacaoTypes"
                       label="Tipo da Relação"
                       style="margin:0px;"
@@ -107,12 +106,14 @@ export default {
   name: "ConceitoDialog",
   props: ["domain", "module", "concept"],
   data: () => ({
+    auxSelectTeste: "",
     auxConceito: "",
-    relationForControl: 1,
+    relationForControl: [
+      { conceptSelect: [], relacaoName: [], relacaoType: [] }
+    ],
     valid: true,
     items: [],
     conceptSelect: [""],
-    auxConceptSelect: [""],
     conceptName: "",
     conceptNameRules: [
       v => !!v || "É necessário descrever o nome do conceito",
@@ -132,6 +133,8 @@ export default {
   }),
   watch: {
     module: function() {
+      var vm = this;
+      console.log("WATCH MODULE RFC", vm.relationForControl);
       this.items = [];
       if (this.module.concepts) {
         this.module.concepts.forEach(element => {
@@ -166,24 +169,32 @@ export default {
         });
     },
     postRelacoes() {
+      //console.log("post relacoes", this.auxSelectTeste);
       var i;
-      var vm = this;
-      //console.log("aux referencia", vm.auxReferencia);
-      for (i = 0; i < vm.conceptSelect.length; i++) {
+      for (i = 0; i < this.relationForControl.length; i++) {
         var auxReferencia = 0;
-        if (this.relacaoType[i] == "typeOf") {
+        if (this.relationForControl[i].relacaoType == "typeOf") {
           auxReferencia = 1;
-        } else if (this.relacaoType[i] == "partOf") {
+        } else if (this.relationForControl[i].relacaoType == "partOf") {
           auxReferencia = 2;
         }
-        console.log("AUXCONCEPT URL", auxReferencia);
-        /*
+        console.log(
+          "it1",
+          this.relationForControl[i].relacaoName,
+          "it2",
+          this.auxConceito,
+          "it3",
+          this.relationForControl[i].conceptSelect.url,
+          "it4",
+          "http://localhost:8000/referencetype/" + auxReferencia + "/"
+        );
+
         axios.post(
           `http://localhost:8000/reference/`,
           {
-            namereference: this.relacaoName[i],
+            namereference: this.relationForControl[i].relacaoName,
             sourceconcept: this.auxConceito,
-            targetconcept: this.conceptSelect[i].url,
+            targetconcept: this.relationForControl[i].conceptSelect.url,
             fk_referencetype:
               `http://localhost:8000/referencetype/` + auxReferencia + "/"
           },
@@ -193,7 +204,7 @@ export default {
               password: "admin"
             }
           }
-        )*/
+        );
       }
     },
     putConceito() {
@@ -214,11 +225,9 @@ export default {
     },
     validate() {
       var vm = this;
-      console.log("VALIDADE", vm);
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         if (this.concept === "") {
-          vm.auxConceptSelect = vm.conceptSelect;
           this.postConceito();
           setTimeout(function() {
             vm.postRelacoes();
@@ -228,7 +237,6 @@ export default {
         }
         this.$emit("close_or_save", "save");
       }
-      this.$refs.form.reset();
     },
     reset() {
       this.$emit("close_or_save", "close");
@@ -255,26 +263,20 @@ export default {
       }
     },
     */
-    teste() {
-      console.log("");
-    },
     addRelacao() {
-      this.conceptSelect.push("");
-      this.relacaoName.push("");
-      this.relacaoType.push("");
-      this.relationForControl++;
+      this.relationForControl.push({
+        conceptSelect: [],
+        relacaoName: [],
+        relacaoType: []
+      });
     },
     deletaRelacao(idRelacao) {
-      if (this.relacaoName.length > 1) {
-        this.relationForControl--;
+      console.log(idRelacao);
+      if (this.relationForControl.length > 1) {
         if (idRelacao == 0) {
-          this.conceptSelect.shift();
-          this.relacaoName.shift();
-          this.relacaoType.shift();
+          this.relationForControl.shift();
         } else {
-          this.conceptSelect.splice(idRelacao, 1);
-          this.relacaoName.splice(idRelacao, 1);
-          this.relacaoType.splice(idRelacao, 1);
+          this.relationForControl.splice(idRelacao, 1);
         }
       }
     }
