@@ -315,7 +315,7 @@ export default {
       this.setDomainVariables(this.dominio);
     },
     dialog_knowledgedomain: function() {
-      if (this.dialog_dominio === true) {
+      if (this.dialog_knowledgedomain === true) {
         this.dialog_dominio = this.dialog_knowledgedomain;
       }
     },
@@ -341,7 +341,6 @@ export default {
             }
           )
           .then(function(resposta) {
-            console.log(resposta.data);
             vm.modulo = resposta.data;
           });
       }
@@ -371,37 +370,51 @@ export default {
             }
           )
           .then(function(resposta) {
-            console.log(resposta.data);
             vm.submodulo = resposta.data;
           });
       }
     },
     dialog_concept: function() {
-      var vm = this;
-      var csrftoken = Cookie.get("csrftoken");
-      var headers = {
-        "X-CSRFTOKEN": csrftoken
-      };
-      console.log(this.objectTreeView.url);
-      this.dialog_conceito = this.dialog_concept;
-      axios
-        .patch(
-          this.objectTreeView.url,
-          {
-            headers: headers
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
+      if (this.dialog_concept === true) {
+        var vm = this;
+        var csrftoken = Cookie.get("csrftoken");
+        var headers = {
+          "X-CSRFTOKEN": csrftoken
+        };
+        this.dialog_conceito = this.dialog_concept;
+        axios
+          .patch(
+            this.objectTreeView.url,
+            {
+              headers: headers
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
             }
-          }
-        )
-        .then(function(resposta) {
-          console.log(resposta.data);
-          vm.conceito = resposta.data;
-        });
-      console.log(this.conceito);
+          )
+          .then(function(resposta) {
+            vm.conceito = resposta.data;
+            axios
+              .patch(
+                resposta.data.fk_idmodule,
+                {
+                  headers: headers
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              )
+              .then(function(resposta2) {
+                vm.modulo = resposta2.data;
+              });
+          });
+      }
     }
   },
   computed: {
@@ -508,6 +521,7 @@ export default {
         this.dialog_conceito = false;
       }
       this.conceito = "";
+      this.modulo = "";
       this.controlTreeView("conceito");
     },
 

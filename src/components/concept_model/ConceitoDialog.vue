@@ -52,6 +52,7 @@
                 <v-row v-for="(item,i) in relationForControl" :key="i">
                   <v-col>
                     <v-select
+                      :class="alert"
                       v-model="relationForControl[i].conceptSelect"
                       :items="items"
                       label="Conceito"
@@ -68,6 +69,7 @@
                   </v-col>
                   <v-col>
                     <v-select
+                      :class="alert"
                       v-model="relationForControl[i].relacaoType"
                       :items="relacaoTypes"
                       label="Tipo da Relação"
@@ -106,6 +108,7 @@ export default {
   name: "ConceitoDialog",
   props: ["domain", "module", "concept"],
   data: () => ({
+    alert: "",
     auxSelectTeste: "",
     auxConceito: "",
     relationForControl: [
@@ -133,8 +136,6 @@ export default {
   }),
   watch: {
     module: function() {
-      var vm = this;
-      console.log("WATCH MODULE RFC", vm.relationForControl);
       this.items = [];
       if (this.module.concepts) {
         this.module.concepts.forEach(element => {
@@ -178,16 +179,6 @@ export default {
         } else if (this.relationForControl[i].relacaoType == "partOf") {
           auxReferencia = 2;
         }
-        console.log(
-          "it1",
-          this.relationForControl[i].relacaoName,
-          "it2",
-          this.auxConceito,
-          "it3",
-          this.relationForControl[i].conceptSelect.url,
-          "it4",
-          "http://localhost:8000/referencetype/" + auxReferencia + "/"
-        );
 
         axios.post(
           `http://localhost:8000/reference/`,
@@ -245,24 +236,53 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
+
     /*
     validateRelacao() {
       //VALIDAÇÃO DA CRIAÇÃO DAS RELAÇÕES -REFERENCIAS REPETIDAS -CAMPOS VAZIOS
-
-      var i;
-      for (i = 0; i < this.conceptName.length; i++) {
-        if (this.conceptSelect[i] && this.relacaoType[i]) {
-          console.log("Referencia Nº", i, " Tudo OK!");
+      if (this.relationForControl.length == 1) {
+        if (
+          this.relationForControl[0].conceptSelect != "" &&
+          this.relationForControl[0].relacaoType != ""
+        ) {
+          console.log("tent1");
+          console.log(this.relationForControl[0].conceptSelect);
+          this.postRelacoes();
+        } else if (
+          !(
+            this.relationForControl[0].conceptSelect &&
+            this.relationForControl[0].relacaoName &&
+            this.relationForControl[0].relacaoType
+          )
+        ) {
+          console.log("tent2");
+          console.log(this.relationForControl[0].conceptSelect);
         } else {
-          console.log(
-            "Referencia Nº",
-            i,
-            " deu ERRO! Possui campo(s) vazio(s)"
-          );
+          console.log("tent3");
+          console.log(this.relationForControl[0].conceptSelect);
+          this.alert = "warning";
         }
+      } else {
+        var i;
+        for (i = 0; i < this.relationForControl.length; i++) {
+          if (
+            this.relationForControl[i].conceptSelect !== "" &&
+            this.relationForControl[i].relacaoType !== ""
+          ) {
+            console.log("tent4");
+            console.log("Referencia Nº", i, " Tudo OK!");
+          } else {
+            console.log("tent5");
+            this.alert = "warning";
+            break;
+          }
+        }
+        console.log("final");
+        this.postRelacoes();
       }
     },
     */
+
     addRelacao() {
       this.relationForControl.push({
         conceptSelect: [],
@@ -271,7 +291,6 @@ export default {
       });
     },
     deletaRelacao(idRelacao) {
-      console.log(idRelacao);
       if (this.relationForControl.length > 1) {
         if (idRelacao == 0) {
           this.relationForControl.shift();
