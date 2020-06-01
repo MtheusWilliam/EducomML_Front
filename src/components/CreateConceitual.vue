@@ -68,7 +68,6 @@ export default {
       this.objectTreeView = value;
     },
     closeType(value){
-      console.log(value);
       if (value === "dominio") {
         this.dialog_knowledgedomain = false;
       } else if(value === "modulo"){
