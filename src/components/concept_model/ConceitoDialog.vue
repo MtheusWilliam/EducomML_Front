@@ -149,16 +149,22 @@ export default {
         });
       }
       if (this.concept !== "") {
-        this.concept.targetconcept.forEach(element => {
+        var i = 0;
+        this.concept.sourceconcept.forEach(element => {
           var conceptSelect = this.targetconcepts.find(function(conceito) {
-            console.log(conceito);
-            return conceito.value.url === element.targetconcept;
+            return conceito.value.url === element.sourceconcept;
           });
 
+          console.log("conceptSelect", conceptSelect);
+          var auxConceptTarget = this.targetconcepts.find(function(conceito) {
+            return (
+              conceito.value.url ===
+              conceptSelect.value.sourceconcept[i].targetconcept
+            );
+          });
+          console.log("AUX0", auxConceptTarget);
           var type = "";
 
-          console.log("ll", this.concept.targetconcept);
-          console.log("carlll", this.concept.sourceconcept);
           if (element.fk_referencetype.split("/")[4] == "1") {
             type = "typeOf";
           } else {
@@ -166,21 +172,42 @@ export default {
           }
 
           this.relationForControl.push({
-            conceptSelect: conceptSelect,
+            conceptSelect: auxConceptTarget,
             relacaoName: element.namereference,
             relacaoType: type,
             url: element.url
           });
+          i++;
         });
       }
     }
   },
   methods: {
-    async postConceito() {
+    async altera_Cria_Conceito() {
       var vm = this;
-      await axios
-        .post(
-          `http://localhost:8000/concept/`,
+      if (this.concept === "") {
+        await axios
+          .post(
+            `http://localhost:8000/concept/`,
+            {
+              nameconcept: this.conceptName,
+              fk_idknowledgedomain: this.domain.url,
+              fk_idmodule: this.module.url
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          )
+          .then(function(resposta) {
+            vm.auxConceito = resposta.data.url;
+            console.log("ALTERA CONCEITO", vm.auxConceito);
+          });
+      } else {
+        await axios.put(
+          "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
           {
             nameconcept: this.conceptName,
             fk_idknowledgedomain: this.domain.url,
@@ -192,97 +219,69 @@ export default {
               password: "admin"
             }
           }
-        )
-        .then(function(resposta) {
-          vm.auxConceito = resposta.data.url;
-          console.log(vm.auxConceito);
-        });
-    },
-    async postRelacoes() {
-      var i;
-      for (i = 0; i < this.relationForControl.length; i++) {
-        var auxReferencia = 0;
-        if (this.relationForControl[i].relacaoType == "typeOf") {
-          auxReferencia = 1;
-        } else if (this.relationForControl[i].relacaoType == "partOf") {
-          auxReferencia = 2;
-        }
-        console.log("relation", this.relationForControl[i]);
-        console.log("relation", this.auxConceito);
-
-        await axios.post(
-          `http://localhost:8000/reference/`,
-          {
-            namereference: this.relationForControl[i].relacaoName,
-            sourceconcept: this.auxConceito,
-            targetconcept: this.relationForControl[i].conceptSelect.url,
-            fk_referencetype:
-              `http://localhost:8000/referencetype/` + auxReferencia + "/"
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          }
         );
       }
     },
-    putConceito() {
-      axios.put(
-        "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
-        {
-          nameconcept: this.conceptName,
-          fk_idknowledgedomain: this.domain.url,
-          fk_idmodule: this.module.url
-        },
-        {
-          auth: {
-            username: "admin",
-            password: "admin"
+    async altera_Cria_Relacoes() {
+      this.relationForControl.forEach(async element => {
+        if (element.url === null) {
+          var auxReferencia = 0;
+          if (element.relacaoType == "typeOf") {
+            auxReferencia = 1;
+          } else if (element.relacaoType == "partOf") {
+            auxReferencia = 2;
           }
-        }
-      );
-    },
-    putRelacoes() {
-      var i;
-      for (i = 0; i < this.relationForControl.length; i++) {
-        var auxReferencia = 0;
-        if (this.relationForControl[i].relacaoType == "typeOf") {
-          auxReferencia = 1;
-        } else if (this.relationForControl[i].relacaoType == "partOf") {
-          auxReferencia = 2;
-        }
-
-        axios.put(
-          this.relationForControl[i].url,
-          {
-            namereference: this.relationForControl[i].relacaoName,
-            sourceconcept: this.auxConceito,
-            targetconcept: this.relationForControl[i].conceptSelect.url,
-            fk_referencetype:
-              `http://localhost:8000/referencetype/` + auxReferencia + "/"
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
+          await axios.post(
+            `http://localhost:8000/reference/`,
+            {
+              namereference: element.relacaoName,
+              sourceconcept: this.auxConceito,
+              targetconcept: element.conceptSelect.url,
+              fk_referencetype:
+                `http://localhost:8000/referencetype/` + auxReferencia + "/"
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
             }
+          );
+        } else {
+          auxReferencia = 0;
+          if (element.relacaoType == "typeOf") {
+            auxReferencia = 1;
+          } else if (element.relacaoType == "partOf") {
+            auxReferencia = 2;
           }
-        );
-      }
+
+          await axios.put(
+            element.url,
+            {
+              namereference: element.relacaoName,
+              sourceconcept: this.auxConceito,
+              targetconcept: element.conceptSelect.value.url,
+              fk_referencetype:
+                `http://localhost:8000/referencetype/` + auxReferencia + "/"
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          );
+        }
+      });
     },
+
     async validate() {
       if (this.$refs.form.validate()) {
-        this.$refs.form.validate();
-        if (this.concept === "") {
-          await this.postConceito();
-          await this.postRelacoes();
-        } else {
-          await this.putConceito();
-          await this.putRelacoes();
-        }
-        this.$refs.form.reset();
+        //await this.$refs.form.validate();
+        await this.altera_Cria_Conceito();
+        await this.altera_Cria_Relacoes();
+        //await this.$refs.form.reset();
+        this.relationForControl = [];
         this.$emit("close_or_save", "save");
       }
     },
@@ -303,6 +302,14 @@ export default {
       });
     },
     deletaRelacao(idRelacao) {
+      if (this.relationForControl[idRelacao].url !== null) {
+        axios.delete(this.relationForControl[idRelacao].url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        });
+      }
       if (idRelacao == 0) {
         this.relationForControl.shift();
       } else {
