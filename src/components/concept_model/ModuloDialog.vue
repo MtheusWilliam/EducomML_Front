@@ -3,10 +3,8 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>
-            Defina o módulo do domínio do conhecimento.
-            <!--{{module.idmodule}}-->
-          </p>
+          <p v-if="module">{{moduloDialogHeader1}}</p>
+          <p v-else>{{moduloDialogHeader2}}</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -47,6 +45,8 @@ export default {
   name: "ModuloDialog",
   props: ["domain", "module"],
   data: () => ({
+    moduloDialogHeader1: "Edite o módulo selecionado.",
+    moduloDialogHeader2: "Defina o módulo do domínio do conhecimento.",
     valid: true,
     moduloTitle: "",
     moduloTitleRules: [
