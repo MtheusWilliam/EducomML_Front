@@ -24,6 +24,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_modulo"
                   :domain="dominio"
+                  :dialog="dialog_modulo"
                 />
               </v-dialog>
 
@@ -39,6 +40,7 @@
                   @close_or_save="close_or_save_dominio"
                   @dominio_data="setDomainVariables"
                   :domain="dominio_data"
+                  :dialog="dialog_dominio"
                 />
               </v-dialog>
 
@@ -49,6 +51,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_submodulo "
                   :domain="dominio"
+                  :dialog="dialog_submodulo"
                 />
               </v-dialog>
               <!--Formulario para criação de conceito-->
@@ -64,6 +67,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_conceito"
                   :domain="dominio"
+                  :dialog="dialog_conceito"
                 />
               </v-dialog>
             </v-col>
@@ -229,11 +233,6 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
-                          <!--Formulario para adição de relacionamento-->
-                          <v-btn icon="icon" color="white">
-                            <v-icon>mdi-window-restore</v-icon>
-                          </v-btn>
-
                           <!--Formulario para edição do conceito-->
                           <v-btn
                             icon="icon"
@@ -251,7 +250,28 @@
                     </v-expansion-panel-header>
 
                     <v-expansion-panel-content>
-                      <p>Relacionamentos:</p>
+                      <h3 class="mt-2">Relacionamentos:</h3>
+                      <v-simple-table>
+                        <template v-slot:default>
+                          <thead>
+                            <tr>
+                              <th class="text-left">Conceito Alvo</th>
+                              <th class="text-left">Nome da Relação</th>
+                              <th class="text-left">Tipo da Relação</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              v-for="relacao in conceito.sourceconcept"
+                              :key="relacao.idreference"
+                            >
+                              <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
+                              <td>{{relacao.namereference}}</td>
+                              <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -310,6 +330,7 @@ export default {
     /*ATRIBUTOS DO DOMINIO*/
     dominio_data: {}
   }),
+
   watch: {
     dominio: function() {
       this.setDomainVariables(this.dominio);
@@ -411,6 +432,7 @@ export default {
                 }
               )
               .then(function(resposta2) {
+                console.log("RESPOSTA2");
                 vm.modulo = resposta2.data;
               });
           });
@@ -537,8 +559,25 @@ export default {
         vm.getDominio();
       }, 1000);
     },
+
     controlTreeView(value) {
       this.$emit("close", value);
+    },
+
+    findNameTarget(conceitos, relacao) {
+      var targetconcept = relacao.targetconcept;
+      var conceptSelect = conceitos.find(function(conceitofinded) {
+        return conceitofinded.url === targetconcept;
+      });
+
+      return conceptSelect.nameconcept;
+    },
+    findTipoRelation(typeUrl) {
+      if (typeUrl.split("/")[4] == "1") {
+        return "typeOf";
+      } else if (typeUrl.split("/")[4] == "2") {
+        return "partOf";
+      }
     }
   }
 };

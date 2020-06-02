@@ -3,10 +3,8 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>
-            Defina o submódulo do domínio do conhecimento.
-            <!--{{module.idmodule}}-->
-          </p>
+          <p v-if="submodule">Edite o submódulo selecionado.</p>
+          <p v-else>Defina o submódulo do domínio do conhecimento.</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -45,7 +43,7 @@
 import axios from "axios";
 export default {
   name: "SubModuloDialog",
-  props: ["domain", "module", "submodule"],
+  props: ["domain", "module", "submodule", "dialog"],
   data: () => ({
     valid: true,
     subModuloTitle: "",
@@ -67,6 +65,15 @@ export default {
     checkbox: false,
     modulos: ""
   }),
+  watch: {
+    dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        vm.subModuloTitle = vm.submodule.namemodule;
+        vm.subModuloSubtitle = vm.submodule.subtitle;
+      });
+    }
+  },
   methods: {
     postSubModulo() {
       axios.post(
