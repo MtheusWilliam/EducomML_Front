@@ -43,7 +43,7 @@
 import axios from "axios";
 export default {
   name: "ModuloDialog",
-  props: ["domain", "module"],
+  props: ["domain", "module", "dialog"],
   data: () => ({
     moduloDialogHeader1: "Edite o módulo selecionado.",
     moduloDialogHeader2: "Defina o módulo do domínio do conhecimento.",
@@ -67,6 +67,16 @@ export default {
     checkbox: false,
     modulos: ""
   }),
+  watch: {
+    dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        console.log("module", module);
+        vm.moduloTitle = vm.module.namemodule;
+        vm.moduloSubtitle = vm.module.subtitle;
+      });
+    }
+  },
   methods: {
     postModulo() {
       // var vm = this;

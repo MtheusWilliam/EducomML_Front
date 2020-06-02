@@ -3,8 +3,8 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p v-if="submodule">{{submoduloDialogHeader1}}</p>
-          <p v-else>{{submoduloDialogHeader2}}</p>
+          <p v-if="submodule">Edite o submódulo selecionado.</p>
+          <p v-else>Defina o submódulo do domínio do conhecimento.</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -42,10 +42,8 @@
 <script>
 import axios from "axios";
 export default {
-  submoduloDialogHeader1: "Edite o submódulo selecionado.",
-  submoduloDialogHeader2: "Defina o submódulo do domínio do conhecimento.",
   name: "SubModuloDialog",
-  props: ["domain", "module", "submodule"],
+  props: ["domain", "module", "submodule", "dialog"],
   data: () => ({
     valid: true,
     subModuloTitle: "",
@@ -67,6 +65,15 @@ export default {
     checkbox: false,
     modulos: ""
   }),
+  watch: {
+    dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        vm.subModuloTitle = vm.submodule.namemodule;
+        vm.subModuloSubtitle = vm.submodule.subtitle;
+      });
+    }
+  },
   methods: {
     postSubModulo() {
       axios.post(

@@ -58,7 +58,7 @@
 import axios from "axios";
 export default {
   name: "domainDialog",
-  props: ["domain"],
+  props: ["domain", "dialog"],
   data: () => ({
     domainName: "",
     domainContentTitle: "",
@@ -87,10 +87,15 @@ export default {
     ],
     domains: ""
   }),
-  created() {
-    this.domainName = this.domain.nameknowledgedomain;
-    this.domainContentTitle = this.domain.subtitle;
-    this.domainAuthorsName = this.domain.author;
+  watch: {
+    dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        vm.domainName = vm.domain.nameknowledgedomain;
+        vm.domainContentTitle = vm.domain.subtitle;
+        vm.domainAuthorsName = vm.domain.author;
+      });
+    }
   },
   methods: {
     putDominio() {

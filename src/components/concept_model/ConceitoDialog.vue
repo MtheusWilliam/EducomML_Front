@@ -112,7 +112,7 @@ import axios from "axios";
 
 export default {
   name: "ConceitoDialog",
-  props: ["domain", "module", "concept"],
+  props: ["domain", "module", "concept", "dialog"],
   data: () => ({
     conceitoDialogHeader1: "Edite o conceito selecionado.",
     conceitoDialogHeader2:
@@ -142,6 +142,12 @@ export default {
     relacaoTypes: ["typeOf", "partOf"]
   }),
   watch: {
+    dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        vm.conceptName = vm.concept.nameconcept;
+      });
+    },
     module: function() {
       this.targetconcepts = [];
       if (this.module.concepts) {

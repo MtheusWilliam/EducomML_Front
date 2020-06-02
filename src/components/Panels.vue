@@ -24,6 +24,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_modulo"
                   :domain="dominio"
+                  :dialog="dialog_modulo"
                 />
               </v-dialog>
 
@@ -39,6 +40,7 @@
                   @close_or_save="close_or_save_dominio"
                   @dominio_data="setDomainVariables"
                   :domain="dominio_data"
+                  :dialog="dialog_dominio"
                 />
               </v-dialog>
 
@@ -49,6 +51,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_submodulo "
                   :domain="dominio"
+                  :dialog="dialog_submodulo"
                 />
               </v-dialog>
               <!--Formulario para criação de conceito-->
@@ -64,6 +67,7 @@
                   :module="modulo"
                   @close_or_save="close_or_save_conceito"
                   :domain="dominio"
+                  :dialog="dialog_conceito"
                 />
               </v-dialog>
             </v-col>
