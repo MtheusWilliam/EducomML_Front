@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>Defina o domínio do conhecimento a ser modelado</p>
+          <p>Edite o domínio selecionado.</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -87,6 +87,12 @@ export default {
     ],
     domains: ""
   }),
+  mounted() {
+    var vm = this;
+    vm.domainName = vm.domain.nameknowledgedomain;
+    vm.domainContentTitle = vm.domain.subtitle;
+    vm.domainAuthorsName = vm.domain.author;
+  },
   watch: {
     dialog: function() {
       var vm = this;
