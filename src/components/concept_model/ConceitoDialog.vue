@@ -50,7 +50,6 @@
                                     <v-text-field v-model="relationForControl[i].relacaoName" counter="15" label="Nome da Relação" style="margin:0px;"></v-text-field>
                                 </v-col>
                                 <v-col>
-                                    {{ relationForControl[i].relacaoType  }}
                                     <v-select :class="alert" v-model="relationForControl[i].relacaoType" :items="relacaoTypes" :rules="[v => !!v || 'O tipo do conceito é requerido']" label="Tipo da Relação" style="margin:0px;" required></v-select>
                                 </v-col>
                                 <v-col cols="1" class="mt-2">
@@ -125,6 +124,7 @@ export default {
 
                 this.concept.targetconcept.forEach(element => {
 
+
                     var conceptSelect = this.targetconcepts.find(function(conceito){
                         console.log(conceito);
                         return conceito.value.url === element.targetconcept
@@ -132,7 +132,8 @@ export default {
 
                     var type = "";
 
-                    console.log("carlll", conceptSelect);
+                    console.log("ll", this.concept.targetconcept);
+                    console.log("carlll", this.concept.sourceconcept);
                     if(element.fk_referencetype.split("/")[4] == '1'){
                       type = "typeOf";
                     }else{
@@ -142,16 +143,17 @@ export default {
                     this.relationForControl.push({
                         conceptSelect: conceptSelect,
                         relacaoName: element.namereference,
-                        relacaoType: type
+                        relacaoType: type,
+                        url: element.url
                     });
                 });
             }
         }
     },
     methods: {
-        postConceito() {
+        async postConceito() {
             var vm = this;
-            axios
+            await axios
                 .post(
                     `http://localhost:8000/concept/`, {
                         nameconcept: this.conceptName,
@@ -166,9 +168,10 @@ export default {
                 )
                 .then(function (resposta) {
                     vm.auxConceito = resposta.data.url;
+                    console.log(vm.auxConceito)
                 });
         },
-        postRelacoes() {
+        async postRelacoes() {
             var i;
             for (i = 0; i < this.relationForControl.length; i++) {
                 var auxReferencia = 0;
@@ -177,8 +180,10 @@ export default {
                 } else if (this.relationForControl[i].relacaoType == "partOf") {
                     auxReferencia = 2;
                 }
+                console.log("relation",this.relationForControl[i]);
+                console.log("relation",this.auxConceito);
 
-                axios.post(
+                await axios.post(
                     `http://localhost:8000/reference/`, {
                         namereference: this.relationForControl[i].relacaoName,
                         sourceconcept: this.auxConceito,
@@ -207,12 +212,40 @@ export default {
                 }
             );
         },
+        putRelacoes() {
+            var i;
+            for (i = 0; i < this.relationForControl.length; i++) {
+                var auxReferencia = 0;
+                if (this.relationForControl[i].relacaoType == "typeOf") {
+                    auxReferencia = 1;
+                } else if (this.relationForControl[i].relacaoType == "partOf") {
+                    auxReferencia = 2;
+                }
+
+                axios.put(
+                        this.relationForControl[i].url, {
+                        namereference: this.relationForControl[i].relacaoName,
+                        sourceconcept: this.auxConceito,
+                        targetconcept: this.relationForControl[i].conceptSelect.url,
+                        fk_referencetype: `http://localhost:8000/referencetype/` + auxReferencia + "/"
+                    }, {
+                        auth: {
+                            username: "admin",
+                            password: "admin"
+                        }
+                    }
+                );
+            }
+        },
         async validate() {
             if (this.$refs.form.validate()) {
                 this.$refs.form.validate();
                 if (this.concept === "") {
                     await this.postConceito();
                     await this.postRelacoes();
+                }else{
+                await this.putConceito();
+                await this.putRelacoes();
                 }
                 this.$refs.form.reset();
                 this.$emit("close_or_save", "save");
@@ -230,7 +263,8 @@ export default {
             this.relationForControl.push({
                 conceptSelect: null,
                 relacaoName: null,
-                relacaoType: null
+                relacaoType: null,
+                url: null
             });
         },
         deletaRelacao(idRelacao) {
