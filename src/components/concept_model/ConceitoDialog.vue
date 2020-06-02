@@ -1,10 +1,11 @@
 <template>
   <v-container class="pa-0; ml-0">
     <v-row>
-      <v-card min-height="530px">
+      <v-card min-height="530px" min-width="750px">
         <v-card-title style="background-color:#63B0B0; color:white;">
           <span class="headline">
-            <p>Defina o conceito do módulo, bem como seu(s) relacionamento(s).</p>
+            <p v-if="concept">{{conceitoDialogHeader1}}</p>
+            <p v-else>{{conceitoDialogHeader2}}</p>
           </span>
         </v-card-title>
         <v-card-text>
@@ -113,6 +114,9 @@ export default {
   name: "ConceitoDialog",
   props: ["domain", "module", "concept"],
   data: () => ({
+    conceitoDialogHeader1: "Edite o conceito selecionado.",
+    conceitoDialogHeader2:
+      "Defina o conceito do módulo e seu(s) relacionamento(s).",
     alert: "",
     auxSelectTeste: "",
     auxConceito: "",
@@ -155,14 +159,12 @@ export default {
             return conceito.value.url === element.sourceconcept;
           });
 
-          console.log("conceptSelect", conceptSelect);
           var auxConceptTarget = this.targetconcepts.find(function(conceito) {
             return (
               conceito.value.url ===
               conceptSelect.value.sourceconcept[i].targetconcept
             );
           });
-          console.log("AUX0", auxConceptTarget);
           var type = "";
 
           if (element.fk_referencetype.split("/")[4] == "1") {
@@ -203,7 +205,6 @@ export default {
           )
           .then(function(resposta) {
             vm.auxConceito = resposta.data.url;
-            console.log("ALTERA CONCEITO", vm.auxConceito);
           });
       } else {
         await axios.put(
