@@ -3,8 +3,8 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p v-if="module">{{moduloDialogHeader1}}</p>
-          <p v-else>{{moduloDialogHeader2}}</p>
+          <p v-if="module">Edite o módulo selecionado.</p>
+          <p v-else>Defina o módulo do domínio do conhecimento.</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -45,8 +45,6 @@ export default {
   name: "ModuloDialog",
   props: ["domain", "module", "dialog"],
   data: () => ({
-    moduloDialogHeader1: "Edite o módulo selecionado.",
-    moduloDialogHeader2: "Defina o módulo do domínio do conhecimento.",
     valid: true,
     moduloTitle: "",
     moduloTitleRules: [
@@ -71,10 +69,10 @@ export default {
     dialog: function() {
       var vm = this;
       this.$nextTick(function() {
-        console.log("module", module);
+        console.log("module", vm.module);
         vm.moduloTitle = vm.module.namemodule;
         vm.moduloSubtitle = vm.module.subtitle;
-      });
+      },60);
     }
   },
   methods: {
