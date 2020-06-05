@@ -15,10 +15,14 @@
             required
           ></v-text-field>
         </v-form>
-        <v-btn outlined rounded color="blue" height="150" block="true">
+        <v-btn outlined rounded color="blue" height="150" :block="true">
           <v-spacer></v-spacer>
-          <v-icon size="50" color="blue">mdi-camera</v-icon>
-          <p style="color:blue; font-size: 1.3em;" class="mt-3">Upload image</p>
+         <v-file-input
+           label="File input"
+            filled
+            v-model="imagemObject"
+            prepend-icon="mdi-camera"
+         ></v-file-input>
           <v-spacer></v-spacer>
         </v-btn>
       </v-card-text>
@@ -38,17 +42,29 @@
 </template>
 
 <script>
+import * as firebase from "firebase";
+
 export default {
   name: "ImageDialog",
   data: () => ({
     valid: true,
     imagemDescription: "",
+    imagemObject: {},
     imagemDescriptionRules: [
       v => !!v || "É necessário descrever a imagem a ser inserida",
       v =>
         (v && v.length <= 50) ||
         "A descrição da imagem deve ter no máximo 50 caracteres"
     ]
-  })
+  }),
+  methods: {
+    reset(){},
+    validate(){
+      console.log(this.imagemObject);
+      const storageRef = firebase.storage().ref(this.imagemObject.name).put(this.imagemObject);
+      console.log(storageRef);
+      
+    }
+  }
 };
 </script>
