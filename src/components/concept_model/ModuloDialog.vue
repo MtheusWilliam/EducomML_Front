@@ -69,7 +69,14 @@ export default {
     dialog: function() {
       var vm = this;
       this.$nextTick(function() {
-        console.log("module", vm.module);
+        vm.moduloTitle = vm.module.namemodule;
+        vm.moduloSubtitle = vm.module.subtitle;
+      });
+    },
+    module: function() {
+      this.$refs.form.reset();
+      var vm = this;
+      this.$nextTick(function() {
         vm.moduloTitle = vm.module.namemodule;
         vm.moduloSubtitle = vm.module.subtitle;
       },60);

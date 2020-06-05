@@ -320,7 +320,6 @@ export default {
     modulo: "",
     submodulo: "",
     conceito: "",
-    valid_modulo: true,
     dialog_modulo: false,
     dialog_submodulo: false,
     dialog_conceito: false,
@@ -342,12 +341,12 @@ export default {
     },
     dialog_module: function() {
       if (this.dialog_module === true) {
-        this.dialog_modulo = this.dialog_module;
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
           "X-CSRFTOKEN": csrftoken
         };
+        this.dialog_modulo = this.dialog_module;
         axios
           .patch(
             this.objectTreeView.url,
@@ -368,12 +367,12 @@ export default {
     },
     dialog_submodule: function() {
       if (this.dialog_submodule === true) {
-        this.dialog_submodulo = this.dialog_submodule;
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
           "X-CSRFTOKEN": csrftoken
         };
+        this.dialog_submodulo = this.dialog_submodule;
         axios
           .patch(
             this.objectTreeView.url.substr(
@@ -432,7 +431,6 @@ export default {
                 }
               )
               .then(function(resposta2) {
-                console.log("RESPOSTA2");
                 vm.modulo = resposta2.data;
               });
           });
@@ -529,6 +527,7 @@ export default {
       } else if (value === "close") {
         this.dialog_submodulo = false;
       }
+      this.modulo = "";
       this.submodulo = "";
       this.controlTreeView("submodulo");
     },

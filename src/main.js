@@ -7,7 +7,7 @@ import axios from "axios";
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
 import CreateConceitual from './components/CreateConceitual';
-
+import LinkDialog from './components/instructional_model/LinkDialog';
 
 Vue.config.productionTip = false
 Vue.use(VueRouter);
@@ -26,6 +26,11 @@ const router = new VueRouter({
       path: '/create/conceitual',
       name: 'createConceitual',
       component: CreateConceitual
+    },
+    {
+      path: '/teste',
+      name: 'teste',
+      component: LinkDialog
     },
   ]
 })

@@ -61,12 +61,18 @@ export default {
         "O subtítulo do módulo deve ter no máximo 40 caracteres"
     ],
     select: null,
-    newItems: [],
     checkbox: false,
     modulos: ""
   }),
   watch: {
     dialog: function() {
+      var vm = this;
+      this.$nextTick(function() {
+        vm.subModuloTitle = vm.submodule.namemodule;
+        vm.subModuloSubtitle = vm.submodule.subtitle;
+      });
+    },
+    submodule: function() {
       var vm = this;
       this.$nextTick(function() {
         vm.subModuloTitle = vm.submodule.namemodule;
