@@ -7,7 +7,15 @@ import axios from "axios";
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
 import CreateConceitual from './components/CreateConceitual';
-import LinkDialog from './components/instructional_model/LinkDialog';
+import ImageDialog from './components/instructional_model/ImageDialog';
+import * as firebase from "firebase";
+
+var config = {
+  apiKey: "AIzaSyDX9Xyh5rlSGDTcuUjn1GEIRq-1e5uF5Sw",
+  authDomain: "project-498769410478.firebaseapp.com",
+  storageBucket: "gs://educomml.appspot.com"
+}
+firebase.initializeApp(config);
 
 Vue.config.productionTip = false
 Vue.use(VueRouter);
@@ -30,7 +38,7 @@ const router = new VueRouter({
     {
       path: '/teste',
       name: 'teste',
-      component: LinkDialog
+      component: ImageDialog
     },
   ]
 })

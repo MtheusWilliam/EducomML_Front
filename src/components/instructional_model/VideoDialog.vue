@@ -7,20 +7,15 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-text-field
-            v-model="videoDescription"
-            :rules="videoDescriptionRules"
-            label="Utilize uma descrição para o vídeo"
-            required
-          ></v-text-field>
-        </v-form>
-        <v-btn outlined rounded color="blue" height="150" block="true">
-          <v-spacer></v-spacer>
-          <v-icon size="50" color="blue">mdi-video</v-icon>
-          <p style="color:#2196F3; font-size: 1.3em;" class="mt-4">Upload video</p>
-          <v-spacer></v-spacer>
-        </v-btn>
+        <v-spacer></v-spacer>
+        <v-file-input
+          label="UPLOAD VIDEO"
+          filled
+          v-model="videoObject"
+          accept="video/*"
+          prepend-icon="mdi-video"
+        ></v-file-input>
+        <v-spacer></v-spacer>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -38,17 +33,24 @@
 </template>
 
 <script>
+import * as firebase from "firebase";
+
 export default {
   name: "VideoDialog",
   data: () => ({
     valid: true,
-    videoDescription: "",
-    videoDescriptionRules: [
-      v => !!v || "É necessário descrever a imagem a ser inserida",
-      v =>
-        (v && v.length <= 50) ||
-        "A descrição da imagem deve ter no máximo 50 caracteres"
-    ]
-  })
+    videoObject: {}
+  }),
+  methods: {
+    reset() {},
+    validate() {
+      console.log(this.videoObject);
+      const storageRef = firebase
+        .storage()
+        .ref(this.videoObject.name)
+        .put(this.videoObject);
+      console.log(storageRef);
+    }
+  }
 };
 </script>

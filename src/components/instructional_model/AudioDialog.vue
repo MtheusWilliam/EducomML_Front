@@ -7,12 +7,15 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-btn class="mt-5" outlined rounded color="blue" height="150" block="true">
-          <v-spacer></v-spacer>
-          <v-icon size="50" color="blue">mdi-file-music</v-icon>
-          <p style="color:#2196F3; font-size: 1.3em;" class="mt-4">Upload audio</p>
-          <v-spacer></v-spacer>
-        </v-btn>
+        <v-spacer></v-spacer>
+        <v-file-input
+          label="UPLOAD AUDIO"
+          filled
+          v-model="audioObject"
+          accept="audio/*"
+          prepend-icon="mdi-file-music"
+        ></v-file-input>
+        <v-spacer></v-spacer>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -30,10 +33,24 @@
 </template>
 
 <script>
+import * as firebase from "firebase";
+
 export default {
   name: "AudioDialog",
   data: () => ({
-    valid: true
-  })
+    valid: true,
+    audioObject: {}
+  }),
+  methods: {
+    reset() {},
+    validate() {
+      console.log(this.audioObject);
+      const storageRef = firebase
+        .storage()
+        .ref(this.audioObject.name)
+        .put(this.audioObject);
+      console.log(storageRef);
+    }
+  }
 };
 </script>

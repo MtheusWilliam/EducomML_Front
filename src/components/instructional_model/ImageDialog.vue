@@ -7,6 +7,8 @@
         </span>
       </v-card-title>
       <v-card-text>
+        <!--Formulario para adição de submódulo ou conceito-->
+
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-model="imagemDescription"
@@ -15,16 +17,15 @@
             required
           ></v-text-field>
         </v-form>
-        <v-btn outlined rounded color="blue" height="150" :block="true">
-          <v-spacer></v-spacer>
-         <v-file-input
-           label="File input"
-            filled
-            v-model="imagemObject"
-            prepend-icon="mdi-camera"
-         ></v-file-input>
-          <v-spacer></v-spacer>
-        </v-btn>
+        <v-spacer></v-spacer>
+        <v-file-input
+          label="UPLOAD IMAGE"
+          filled
+          v-model="imagemObject"
+          accept="image/*"
+          prepend-icon="mdi-camera"
+        ></v-file-input>
+        <v-spacer></v-spacer>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -43,7 +44,6 @@
 
 <script>
 import * as firebase from "firebase";
-
 export default {
   name: "ImageDialog",
   data: () => ({
@@ -58,13 +58,17 @@ export default {
     ]
   }),
   methods: {
-    reset(){},
-    validate(){
+    reset() {},
+    validate() {
       console.log(this.imagemObject);
-      const storageRef = firebase.storage().ref(this.imagemObject.name).put(this.imagemObject);
+      const storageRef = firebase
+        .storage()
+        .ref(this.imagemObject.name)
+        .put(this.imagemObject);
       console.log(storageRef);
-      
     }
   }
 };
 </script>
+
+

@@ -12,6 +12,76 @@
               </p>
             </v-col>
             <v-col cols="3">
+              <!-- Menu para criação de arquivos-->
+              <v-menu
+                top="top"
+                origin="center center"
+                :offset-y="true"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                    <v-icon>mdi-dots-horizontal</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-card>
+                  <v-card-title style="background-color:#63B0B0; color:white;">
+                    <span>Item de Informação</span>
+                  </v-card-title>
+                  <v-list>
+                    <v-row>
+                      <v-col cols="4">
+                        <v-list-item>
+                          <v-list-item-icon>
+                            <v-icon color="#63B0B0" large>mdi-file-image</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>Imagem</v-list-item-title>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-list-item>
+                          <v-list-item-icon>
+                            <v-icon large color="black">mdi-file-video</v-icon>
+                          </v-list-item-icon>
+
+                          <v-list-item-title>Video</v-list-item-title>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-list-item>
+                          <v-list-item-icon>
+                            <v-icon large color="purple">mdi-file-music</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>Audio</v-list-item-title>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col cols="6">
+                        <v-list-item>
+                          <v-list-item-icon>
+                            <v-icon large color="#f96400">mdi-file-document</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>Texto</v-list-item-title>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="6">
+                        <v-list-item>
+                          <v-list-item-icon>
+                            <v-icon
+                              color="white"
+                              large
+                              style="background-color:#0080FF; border-radius:4px;"
+                            >mdi-link-variant</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>Link</v-list-item-title>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                  </v-list>
+                </v-card>
+              </v-menu>
               <!--Formulario para adição do módulo-->
               <v-dialog v-model="dialog_modulo" persistent="persistent" max-width="600px">
                 <template v-slot:activator="{ on }">
@@ -70,6 +140,27 @@
                   :dialog="dialog_conceito"
                 />
               </v-dialog>
+              <!--FORMULARIOS PARA CRIAÇÃO DE ARQUIVOS-->
+              <!--Formulario para criação de imagem-->
+              <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="600px">
+                <ImageDialog />
+              </v-dialog>
+              <!--Formulario para criação de video-->
+              <v-dialog v-model="dialog_video" persistent="persistent" max-width="600px">
+                <VideoDialog />
+              </v-dialog>
+              <!--Formulario para criação de audio-->
+              <v-dialog v-model="dialog_audio" persistent="persistent" max-width="600px">
+                <AudioDialog />
+              </v-dialog>
+              <!--Formulario para criação de texto-->
+              <v-dialog v-model="dialog_texto" persistent="persistent" max-width="600px">
+                <TextDialog />
+              </v-dialog>
+              <!--Formulario para criação de link-->
+              <v-dialog v-model="dialog_link" persistent="persistent" max-width="600px">
+                <LinkDialog />
+              </v-dialog>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -91,6 +182,76 @@
                     </p>
                   </v-col>
                   <v-col cols="3">
+                    <!-- Menu para criação de arquivos-->
+                    <v-menu
+                      top="top"
+                      origin="center center"
+                      :offset-y="true"
+                      transition="scale-transition"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                          <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                      </template>
+
+                      <v-card>
+                        <v-card-title style="background-color:#63B0B0; color:white;">
+                          <span>Item de Informação</span>
+                        </v-card-title>
+                        <v-list>
+                          <v-row>
+                            <v-col cols="4">
+                              <v-list-item>
+                                <v-list-item-icon>
+                                  <v-icon color="#63B0B0" large>mdi-file-image</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Imagem</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-list-item>
+                                <v-list-item-icon>
+                                  <v-icon large color="black">mdi-file-video</v-icon>
+                                </v-list-item-icon>
+
+                                <v-list-item-title>Video</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-list-item>
+                                <v-list-item-icon>
+                                  <v-icon large color="purple">mdi-file-music</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Audio</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                          </v-row>
+                          <v-row>
+                            <v-col cols="6">
+                              <v-list-item>
+                                <v-list-item-icon>
+                                  <v-icon large color="#f96400">mdi-file-document</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Texto</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                            <v-col cols="6">
+                              <v-list-item>
+                                <v-list-item-icon>
+                                  <v-icon
+                                    color="white"
+                                    large
+                                    style="background-color:#0080FF; border-radius:4px;"
+                                  >mdi-link-variant</v-icon>
+                                </v-list-item-icon>
+                                <v-list-item-title>Link</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                          </v-row>
+                        </v-list>
+                      </v-card>
+                    </v-menu>
                     <!--Formulario para adição de submódulo ou conceito-->
                     <v-menu
                       top="top"
@@ -143,6 +304,76 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
+                          <!-- Menu para criação de arquivos-->
+                          <v-menu
+                            top="top"
+                            origin="center center"
+                            :offset-y="true"
+                            transition="scale-transition"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-card>
+                              <v-card-title style="background-color:#63B0B0; color:white;">
+                                <span>Item de Informação</span>
+                              </v-card-title>
+                              <v-list>
+                                <v-row>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon color="#63B0B0" large>mdi-file-image</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Imagem</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="black">mdi-file-video</v-icon>
+                                      </v-list-item-icon>
+
+                                      <v-list-item-title>Video</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="purple">mdi-file-music</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Audio</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                </v-row>
+                                <v-row>
+                                  <v-col cols="6">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="#f96400">mdi-file-document</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Texto</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="6">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon
+                                          color="white"
+                                          large
+                                          style="background-color:#0080FF; border-radius:4px;"
+                                        >mdi-link-variant</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Link</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                </v-row>
+                              </v-list>
+                            </v-card>
+                          </v-menu>
                           <!--Formulario para adição de conceito-->
                           <v-btn
                             icon="icon"
@@ -186,10 +417,76 @@
                                 </p>
                               </v-col>
                               <v-col cols="3">
-                                <!--Formulario para adição de relacionamento-->
-                                <v-btn icon="icon" color="white">
-                                  <v-icon>mdi-window-restore</v-icon>
-                                </v-btn>
+                                <!-- Menu para criação de arquivos-->
+                                <v-menu
+                                  top="top"
+                                  origin="center center"
+                                  :offset-y="true"
+                                  transition="scale-transition"
+                                >
+                                  <template v-slot:activator="{ on }">
+                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                      <v-icon>mdi-dots-horizontal</v-icon>
+                                    </v-btn>
+                                  </template>
+
+                                  <v-card>
+                                    <v-card-title style="background-color:#63B0B0; color:white;">
+                                      <span>Item de Informação</span>
+                                    </v-card-title>
+                                    <v-list>
+                                      <v-row>
+                                        <v-col cols="4">
+                                          <v-list-item>
+                                            <v-list-item-icon>
+                                              <v-icon color="#63B0B0" large>mdi-file-image</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-title>Imagem</v-list-item-title>
+                                          </v-list-item>
+                                        </v-col>
+                                        <v-col cols="4">
+                                          <v-list-item>
+                                            <v-list-item-icon>
+                                              <v-icon large color="black">mdi-file-video</v-icon>
+                                            </v-list-item-icon>
+
+                                            <v-list-item-title>Video</v-list-item-title>
+                                          </v-list-item>
+                                        </v-col>
+                                        <v-col cols="4">
+                                          <v-list-item>
+                                            <v-list-item-icon>
+                                              <v-icon large color="purple">mdi-file-music</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-title>Audio</v-list-item-title>
+                                          </v-list-item>
+                                        </v-col>
+                                      </v-row>
+                                      <v-row>
+                                        <v-col cols="6">
+                                          <v-list-item>
+                                            <v-list-item-icon>
+                                              <v-icon large color="#f96400">mdi-file-document</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-title>Texto</v-list-item-title>
+                                          </v-list-item>
+                                        </v-col>
+                                        <v-col cols="6">
+                                          <v-list-item>
+                                            <v-list-item-icon>
+                                              <v-icon
+                                                color="white"
+                                                large
+                                                style="background-color:#0080FF; border-radius:4px;"
+                                              >mdi-link-variant</v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-title>Link</v-list-item-title>
+                                          </v-list-item>
+                                        </v-col>
+                                      </v-row>
+                                    </v-list>
+                                  </v-card>
+                                </v-menu>
 
                                 <!--Formulario para edição do conceito-->
                                 <v-btn
@@ -233,6 +530,76 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
+                          <!-- Menu para criação de arquivos-->
+                          <v-menu
+                            top="top"
+                            origin="center center"
+                            :offset-y="true"
+                            transition="scale-transition"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                <v-icon>mdi-dots-horizontal</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-card>
+                              <v-card-title style="background-color:#63B0B0; color:white;">
+                                <span>Item de Informação</span>
+                              </v-card-title>
+                              <v-list>
+                                <v-row>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon color="#63B0B0" large>mdi-file-image</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Imagem</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="black">mdi-file-video</v-icon>
+                                      </v-list-item-icon>
+
+                                      <v-list-item-title>Video</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="4">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="purple">mdi-file-music</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Audio</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                </v-row>
+                                <v-row>
+                                  <v-col cols="6">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon large color="#f96400">mdi-file-document</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Texto</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                  <v-col cols="6">
+                                    <v-list-item>
+                                      <v-list-item-icon>
+                                        <v-icon
+                                          color="white"
+                                          large
+                                          style="background-color:#0080FF; border-radius:4px;"
+                                        >mdi-link-variant</v-icon>
+                                      </v-list-item-icon>
+                                      <v-list-item-title>Link</v-list-item-title>
+                                    </v-list-item>
+                                  </v-col>
+                                </v-row>
+                              </v-list>
+                            </v-card>
+                          </v-menu>
                           <!--Formulario para edição do conceito-->
                           <v-btn
                             icon="icon"
@@ -250,6 +617,7 @@
                     </v-expansion-panel-header>
 
                     <v-expansion-panel-content>
+                      <!-- Listagem dos relacionamentos do conceito -->
                       <h3 class="mt-2">Relacionamentos:</h3>
                       <v-simple-table>
                         <template v-slot:default>
@@ -289,6 +657,11 @@ import DominioDialog from "./concept_model/DominioDialog";
 import ModuloDialog from "./concept_model/ModuloDialog";
 import SubModuloDialog from "./concept_model/SubModuloDialog";
 import ConceitoDialog from "./concept_model/ConceitoDialog";
+import ImageDialog from "./instructional_model/ImageDialog";
+import VideoDialog from "./instructional_model/VideoDialog";
+import AudioDialog from "./instructional_model/AudioDialog";
+import TextDialog from "./instructional_model/TextDialog";
+import LinkDialog from "./instructional_model/LinkDialog";
 
 import axios from "axios";
 import Cookie from "js-cookie";
@@ -298,7 +671,12 @@ export default {
     ModuloDialog,
     DominioDialog,
     SubModuloDialog,
-    ConceitoDialog
+    ConceitoDialog,
+    ImageDialog,
+    VideoDialog,
+    AudioDialog,
+    TextDialog,
+    LinkDialog
   },
   props: [
     "dominio",
@@ -324,6 +702,11 @@ export default {
     dialog_submodulo: false,
     dialog_conceito: false,
     dialog_dominio: false,
+    dialog_imagem: false,
+    dialog_video: false,
+    dialog_audio: false,
+    dialog_texto: false,
+    dialog_link: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
