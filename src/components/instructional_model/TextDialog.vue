@@ -20,6 +20,7 @@
               <label for="infoItemClassesSelect">Classifique o item de informação</label>
               <v-select
                 id="infoItemClassesSelect"
+                v-model="infoClasse"
                 :items="infoItemClasses"
                 :rules="[v => !!v || 'Conceito é requerido']"
                 label="Classe"
@@ -31,6 +32,7 @@
               <label for="infoItemLevelsSelect">Qual o nível de dificuldade?</label>
               <v-select
                 id="infoItemLevelsSelect"
+                v-model="infoLevel"
                 :items="infoItemLevels"
                 :rules="[v => !!v || 'Conceito é requerido']"
                 label="Nível"
@@ -42,6 +44,7 @@
               <label for="infoItemResumeSelect">É um texto resumido?</label>
               <v-select
                 id="infoItemResumeSelect"
+                v-model="infoResume"
                 :items="infoItemResume"
                 :rules="[v => !!v || 'Conceito é requerido']"
                 label="Resposta"
@@ -60,6 +63,7 @@
             name="input-8-1"
             filled
             auto-grow
+            v-model="infoText"
             value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
           ></v-textarea>
         </v-form>
@@ -80,13 +84,87 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "textDialog",
+  props: ['optionCall', 'type'],
   data: () => ({
     valid: true,
+    infoClasse: "",
+    infoLevel: "",
+    infoResume: "",
+    infoText: "",
     infoItemClasses: ["Conceito", "Princípio", "Fato", "Procedimento"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemResume: ["Não", "Sim"]
-  })
+  }),
+   methods: {
+        reset() {
+            this.$emit("close");
+        },
+        postMobileMedia() {
+            // var vm = this;
+            var mobilemedia = {
+                label: "",
+                fk_idmediatype: "http://localhost:8000/mediatype/4/",
+                difficultyLevel: this.infoLevel,
+                learningStyle: this.  infoClasse,
+                path: "",
+                namefile: "",
+                resolution: "",
+                description: "",
+                time: null,
+                textfull: this.infoText,
+                textshort: this.infoText,
+                urllink: this.linkUrl 
+            }
+            console.log(this.type)
+            if (this.type === "dominio") {
+                Object.assign(mobilemedia, {
+                    fk_idknowledgedomain: this.optionCall.url
+                })
+            } else if (this.type === "modulo") {
+                Object.assign(mobilemedia, {
+                    fk_module: this.optionCall.url
+                })
+            } else if (this.type === "conceito") {
+                Object.assign(mobilemedia, {
+                    fk_concept: this.optionCall.url
+                })
+            }
+
+            console.log(mobilemedia)
+
+            axios
+                .post(
+                    `http://localhost:8000/mobilemedia/`,
+                    mobilemedia, {
+                        auth: {
+                            username: "admin",
+                            password: "admin"
+                        }
+                    }
+                )
+                .then(function ( /*resposta*/ ) {
+                    /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+                });
+        },
+        validate() {
+          var vm = this;
+            this.infoClasse = this.infoItemClasses.findIndex(function(value){
+              return value === vm.infoClasse;
+            })
+            this.infoLevel = this.infoItemLevels.findIndex(function(value){
+              return value === vm.infoLevel;
+            })
+            this.infoResume = this.infoItemResume.findIndex(function(value){
+              return value === vm.infoResume;
+            })
+
+            this.postMobileMedia();
+        },
+    },
 };
 </script>
