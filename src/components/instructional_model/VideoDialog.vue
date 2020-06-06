@@ -34,7 +34,7 @@
 
 <script>
 import * as firebase from "firebase";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "VideoDialog",
@@ -43,67 +43,65 @@ export default {
     videoObject: {}
   }),
   methods: {
-        reset() {
-            this.$emit("close");
-        },
-        postMobileMedia() {
-            // var vm = this;
-            var mobilemedia = {
-                label: this.imagemDescription,
-                fk_idmediatype: "http://localhost:8000/mediatype/1/",
-                difficultyLevel: null,
-                learningStyle: null,
-                path: this.videoObject.name,
-                namefile: this.videoObject.name,
-                resolution: "",
-                description: "",
-                time: null,
-                textfull: "",
-                textshort: "",
-                urllink: ""
-            }
-            console.log(this.type)
-            if (this.type === "dominio") {
-                Object.assign(mobilemedia, {
-                    fk_idknowledgedomain: this.optionCall.url
-                })
-            } else if (this.type === "modulo") {
-                Object.assign(mobilemedia, {
-                    fk_module: this.optionCall.url
-                })
-            } else if (this.type === "conceito") {
-                Object.assign(mobilemedia, {
-                    fk_concept: this.optionCall.url
-                })
-            }
+    reset() {
+      this.$emit("close");
+    },
+    postMobileMedia() {
+      // var vm = this;
+      var mobilemedia = {
+        label: this.imagemDescription,
+        fk_idmediatype: "http://localhost:8000/mediatype/1/",
+        difficultyLevel: null,
+        learningStyle: null,
+        path: this.videoObject.name,
+        namefile: this.videoObject.name,
+        resolution: "",
+        description: "",
+        time: null,
+        textfull: "",
+        textshort: "",
+        urllink: ""
+      };
+      console.log(this.type);
+      if (this.type === "dominio") {
+        Object.assign(mobilemedia, {
+          fk_idknowledgedomain: this.optionCall.url
+        });
+      } else if (this.type === "modulo") {
+        Object.assign(mobilemedia, {
+          fk_module: this.optionCall.url
+        });
+      } else if (this.type === "conceito") {
+        Object.assign(mobilemedia, {
+          fk_concept: this.optionCall.url
+        });
+      }
 
-            console.log(mobilemedia)
+      console.log(mobilemedia);
 
-            axios
-                .post(
-                    `http://localhost:8000/mobilemedia/`,
-                    mobilemedia, {
-                        auth: {
-                            username: "admin",
-                            password: "admin"
-                        }
-                    }
-                )
-                .then(function ( /*resposta*/ ) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
+      axios
+        .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
-                });
-        },
-        validate() {
-            console.log(this.videoObject);
+        });
+    },
+    validate() {
+      console.log(this.videoObject);
 
-            this.postMobileMedia();
+      this.postMobileMedia();
 
-          firebase
-                .storage()
-                .ref(this.videoObject.name)
-                .put(this.videoObject);
-        }
+      firebase
+        .storage()
+        .ref(this.videoObject.name)
+        .put(this.videoObject);
+      this.$emit("close");
     }
+  }
 };
 </script>

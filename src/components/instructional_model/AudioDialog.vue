@@ -34,76 +34,73 @@
 
 <script>
 import * as firebase from "firebase";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "AudioDialog",
-  props: ['optionCall', 'type'],
+  props: ["optionCall", "type"],
   data: () => ({
     valid: true,
     audioObject: {}
   }),
   methods: {
-        reset() {
-            this.$emit("close");
-        },
-        postMobileMedia() {
-            // var vm = this;
-            var mobilemedia = {
-                label: this.imagemDescription,
-                fk_idmediatype: "http://localhost:8000/mediatype/2/",
-                difficultyLevel: null,
-                learningStyle: null,
-                path: this.audioObject.name,
-                namefile: this.audioObject.name,
-                resolution: "",
-                description: "",
-                time: null,
-                textfull: "",
-                textshort: "",
-                urllink: ""
-            }
-            console.log(this.type)
-            if (this.type === "dominio") {
-                Object.assign(mobilemedia, {
-                    fk_idknowledgedomain: this.optionCall.url
-                })
-            } else if (this.type === "modulo") {
-                Object.assign(mobilemedia, {
-                    fk_module: this.optionCall.url
-                })
-            } else if (this.type === "conceito") {
-                Object.assign(mobilemedia, {
-                    fk_concept: this.optionCall.url
-                })
-            }
+    reset() {
+      this.$emit("close");
+    },
+    postMobileMedia() {
+      // var vm = this;
+      var mobilemedia = {
+        label: this.imagemDescription,
+        fk_idmediatype: "http://localhost:8000/mediatype/2/",
+        difficultyLevel: null,
+        learningStyle: null,
+        path: this.audioObject.name,
+        namefile: this.audioObject.name,
+        resolution: null,
+        description: null,
+        time: null,
+        textfull: null,
+        textshort: null,
+        urllink: null
+      };
+      console.log(this.type);
+      if (this.type === "dominio") {
+        Object.assign(mobilemedia, {
+          fk_idknowledgedomain: this.optionCall.url
+        });
+      } else if (this.type === "modulo") {
+        Object.assign(mobilemedia, {
+          fk_module: this.optionCall.url
+        });
+      } else if (this.type === "conceito") {
+        Object.assign(mobilemedia, {
+          fk_concept: this.optionCall.url
+        });
+      }
 
-            console.log(mobilemedia)
+      console.log(mobilemedia);
 
-            axios
-                .post(
-                    `http://localhost:8000/mobilemedia/`,
-                    mobilemedia, {
-                        auth: {
-                            username: "admin",
-                            password: "admin"
-                        }
-                    }
-                )
-                .then(function ( /*resposta*/ ) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
+      axios
+        .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
-                });
-        },
-        validate() {
+        });
+    },
+    validate() {
+      this.postMobileMedia();
 
-            this.postMobileMedia();
-
-          firebase
-                .storage()
-                .ref(this.audioObject.name)
-                .put(this.audioObject);
-        }
+      firebase
+        .storage()
+        .ref(this.audioObject.name)
+        .put(this.audioObject);
+      this.$emit("close");
     }
+  }
 };
 </script>

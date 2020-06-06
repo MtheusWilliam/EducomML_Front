@@ -64,7 +64,6 @@
             filled
             auto-grow
             v-model="infoText"
-            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
           ></v-textarea>
         </v-form>
       </v-card-text>
@@ -84,11 +83,11 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "textDialog",
-  props: ['optionCall', 'type'],
+  props: ["optionCall", "type"],
   data: () => ({
     valid: true,
     infoClasse: "",
@@ -99,72 +98,80 @@ export default {
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemResume: ["Não", "Sim"]
   }),
-   methods: {
-        reset() {
-            this.$emit("close");
-        },
-        postMobileMedia() {
-            // var vm = this;
-            var mobilemedia = {
-                label: "",
-                fk_idmediatype: "http://localhost:8000/mediatype/4/",
-                difficultyLevel: this.infoLevel,
-                learningStyle: this.  infoClasse,
-                path: "",
-                namefile: "",
-                resolution: "",
-                description: "",
-                time: null,
-                textfull: this.infoText,
-                textshort: this.infoText,
-                urllink: this.linkUrl 
-            }
-            console.log(this.type)
-            if (this.type === "dominio") {
-                Object.assign(mobilemedia, {
-                    fk_idknowledgedomain: this.optionCall.url
-                })
-            } else if (this.type === "modulo") {
-                Object.assign(mobilemedia, {
-                    fk_module: this.optionCall.url
-                })
-            } else if (this.type === "conceito") {
-                Object.assign(mobilemedia, {
-                    fk_concept: this.optionCall.url
-                })
-            }
-
-            console.log(mobilemedia)
-
-            axios
-                .post(
-                    `http://localhost:8000/mobilemedia/`,
-                    mobilemedia, {
-                        auth: {
-                            username: "admin",
-                            password: "admin"
-                        }
-                    }
-                )
-                .then(function ( /*resposta*/ ) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
-                    vm.subTitle = resposta.data.subtitle;*/
-                });
-        },
-        validate() {
-          var vm = this;
-            this.infoClasse = this.infoItemClasses.findIndex(function(value){
-              return value === vm.infoClasse;
-            })
-            this.infoLevel = this.infoItemLevels.findIndex(function(value){
-              return value === vm.infoLevel;
-            })
-            this.infoResume = this.infoItemResume.findIndex(function(value){
-              return value === vm.infoResume;
-            })
-
-            this.postMobileMedia();
-        },
+  methods: {
+    reset() {
+      this.$emit("close");
     },
+    postMobileMedia() {
+      // var vm = this;
+      var mobilemedia = {
+        label: "",
+        fk_idmediatype: "http://localhost:8000/mediatype/4/",
+        difficultyLevel: this.infoLevel,
+        learningStyle: this.infoClasse,
+        path: null,
+        namefile: null,
+        resolution: null,
+        description: null,
+        time: null,
+        textfull: this.infoText,
+        urllink: null
+      };
+
+      if (this.infoText.length <= 20) {
+        Object.assign(mobilemedia, {
+          textshort: this.infoText
+        });
+      } else {
+        Object.assign(mobilemedia, {
+          textshort: this.infoText.substr(0, 20)
+        });
+      }
+
+      console.log(this.type);
+      if (this.type === "dominio") {
+        Object.assign(mobilemedia, {
+          fk_idknowledgedomain: this.optionCall.url
+        });
+      } else if (this.type === "modulo") {
+        Object.assign(mobilemedia, {
+          fk_module: this.optionCall.url
+        });
+      } else if (this.type === "conceito") {
+        Object.assign(mobilemedia, {
+          fk_concept: this.optionCall.url
+        });
+      }
+
+      console.log(mobilemedia);
+
+      axios
+        .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+        });
+    },
+    validate() {
+      var vm = this;
+      this.infoClasse = this.infoItemClasses.findIndex(function(value) {
+        return value === vm.infoClasse;
+      });
+      this.infoLevel = this.infoItemLevels.findIndex(function(value) {
+        return value === vm.infoLevel;
+      });
+      this.infoResume = this.infoItemResume.findIndex(function(value) {
+        return value === vm.infoResume;
+      });
+
+      this.postMobileMedia();
+      this.$emit("close");
+    }
+  }
 };
 </script>
