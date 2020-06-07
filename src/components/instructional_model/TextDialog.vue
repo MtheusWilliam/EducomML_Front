@@ -9,64 +9,59 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="1">
-              <label for="enableInfoItems">On</label>
-              <br />
-              <v-btn class="mt-3" icon :color="onIconEnable" @click="enableInfoText">
-                <v-icon large>mdi-eye</v-icon>
-              </v-btn>
-            </v-col>
             <v-col cols="4">
-              <label for="infoItemClassesSelect">Classifique o item de informação</label>
-              <v-select
-                id="infoItemClassesSelect"
-                :disabled="selectsDisabled"
-                v-model="infoClasse"
-                :items="infoItemClasses"
-                :rules="[v => !!v || 'Conceito é requerido']"
-                label="Classe"
-                style="margin:0px;"
-                required
-              ></v-select>
+              <label for="infoItemResumeSelect">Quais formas de texto você quer inserir?</label>
+              <v-switch v-model="switchTextShort" flat :label="Resumido"></v-switch>
+              <v-switch v-model="switchTextFull" flat :label="Não-resumido"></v-switch>
             </v-col>
-            <v-col cols="4">
-              <label for="infoItemLevelsSelect">Qual o nível de dificuldade?</label>
-              <v-select
-                id="infoItemLevelsSelect"
-                :disabled="selectsDisabled"
-                v-model="infoLevel"
-                :items="infoItemLevels"
-                :rules="[v => !!v || 'Conceito é requerido']"
-                label="Nível"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="3">
-              <label for="infoItemResumeSelect">É um texto resumido?</label>
-              <v-select
-                id="infoItemResumeSelect"
-                :disabled="selectsDisabled"
-                v-model="infoResume"
-                :items="infoItemResume"
-                :rules="[v => !!v || 'Conceito é requerido']"
-                label="Resposta"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
+            <div v-if="type==='conceito'">
+              <v-col cols="4">
+                <label for="infoItemClassesSelect">Classifique o item de informação</label>
+                <v-select
+                  id="infoItemClassesSelect"
+                  v-model="infoClasse"
+                  :items="infoItemClasses"
+                  label="Classe"
+                  style="margin:0px;"
+                ></v-select>
+              </v-col>
+              <v-col cols="4">
+                <label for="infoItemLevelsSelect">Qual o nível de dificuldade?</label>
+                <v-select
+                  id="infoItemLevelsSelect"
+                  v-model="infoLevel"
+                  :items="infoItemLevels"
+                  label="Nível"
+                  style="margin:0px;"
+                ></v-select>
+              </v-col>
+            </div>
           </v-row>
-          <label for="textTextArea">Seu texto:</label>
+          <label for="textShortArea">Seu texto na forma resumida:</label>
           <v-textarea
-            id="textTextArea"
+            v-if="switchTextShort"
+            id="textShortArea"
             background-color="#F2F3F3"
             clearable
             clear-icon="mdi-close-circle"
             class="mt-2"
-            name="input-8-1"
+            name="input-6-1"
             filled
             auto-grow
-            v-model="infoText"
+            v-model="infoTextShort"
+          ></v-textarea>
+          <label for="textFullArea">Seu texto na forma não-resumida:</label>
+          <v-textarea
+            v-if="switchTextFull"
+            id="textFullArea"
+            background-color="#F2F3F3"
+            clearable
+            clear-icon="mdi-close-circle"
+            class="mt-2"
+            name="input-14-1"
+            filled
+            auto-grow
+            v-model="infoTextFull"
           ></v-textarea>
         </v-form>
       </v-card-text>
@@ -92,14 +87,15 @@ export default {
   name: "textDialog",
   props: ["optionCall", "type"],
   data: () => ({
-    selectsDisabled: true,
-    onIconEnable: "grey",
     valid: true,
+    switchTextFull: true,
+    switchTextShort: false,
     auxConcept: "",
     infoClasse: "",
     infoLevel: "",
     infoResume: "",
-    infoText: "",
+    infoTextFull: "",
+    infoTextShort: "",
     infoItemClasses: ["Conceito", "Princípio", "Fato", "Procedimento"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemResume: ["Não", "Sim"]
@@ -117,45 +113,44 @@ export default {
       var mobilemedia = {
         label: "",
         fk_idmediatype: "http://localhost:8000/mediatype/4/",
+        difficultyLevel: this.infoLevel,
         path: null,
         namefile: null,
         resolution: null,
         description: null,
         time: null,
-        textfull: this.infoText,
         urllink: null
       };
 
-      if (this.selectsDisabled == true) {
+      if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
           `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/";
+      }
+
+      if (this.switchTextFull) {
         Object.assign(mobilemedia, {
-          difficultyLevel: null
+          textshort: this.infoTextFull
         });
+      }
+      if (this.switchTextShort) {
         Object.assign(mobilemedia, {
-          learningStyle: null
-        });
-      } else {
-        Object.assign(mobilemedia, {
-          difficultyLevel: this.infoLevel
-        });
-        Object.assign(mobilemedia, {
-          learningStyle: this.infoClasse
+          textshort: this.infoTextShort
         });
       }
 
-      if (this.infoText.length <= 20) {
+      if (this.type === "conceito") {
+        var iteminfo = {
+          nameinformationitem: "text_" + mobilemedia.textshort,
+          fk_informationitemtype: auxinformationitem.auxinfo
+        };
         Object.assign(mobilemedia, {
-          textshort: this.infoText
+          fk_idconcept: this.optionCall.url
         });
-      } else {
-        Object.assign(mobilemedia, {
-          textshort: this.infoText.substr(0, 20)
+        Object.assign(iteminfo, {
+          fk_idconcept: mobilemedia.fk_concept
         });
-      }
-      console.log("INFO CLASSE2", this.infoClasse);
-      if (this.type === "dominio") {
+      } else if (this.type === "dominio") {
         Object.assign(mobilemedia, {
           fk_idknowledgedomain: this.optionCall.url
         });
@@ -163,45 +158,45 @@ export default {
         Object.assign(mobilemedia, {
           fk_module: this.optionCall.url
         });
-      } else if (this.type === "conceito") {
-        Object.assign(mobilemedia, {
-          fk_idconcept: this.optionCall.url
-        });
-      }
-      console.log("INFO CLASSE3", this.infoClasse);
-      var iteminfo = {
-        nameinformationitem: "text_" + mobilemedia.textshort,
-        fk_informationitemtype: auxinformationitem.auxinfo
-      };
-      if (this.type === "conceito") {
-        Object.assign(iteminfo, {
-          fk_idconcept: mobilemedia.fk_concept
-        });
       }
 
-      await axios
-        .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-          auth: {
-            username: "admin",
-            password: "admin"
-          }
-        })
-        .then(function(resposta) {
-          Object.assign(mobilemedia, {
-            fk_informationitem: resposta.data.url
-          });
-          axios
-            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-              auth: {
-                username: "admin",
-                password: "admin"
-              }
-            })
-            .then(function(/*resposta*/) {
-              /*vm.moduloTitle = resposta.data.namemodule;
-                    vm.subTitle = resposta.data.subtitle;*/
+      if (this.type === "conceito") {
+        await axios
+          .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          })
+          .then(function(resposta) {
+            Object.assign(mobilemedia, {
+              fk_informationitem: resposta.data.url
             });
-        });
+            axios
+              .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              })
+              .then(function(/*resposta*/) {
+                /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+              });
+          });
+      } else if (this.type === "dominio" || this.type === "modulo") {
+        await axios
+          .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          })
+          .then(function(/*resposta*/) {
+            /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+          });
+      }
     },
     async validate() {
       var vm = this;
@@ -217,10 +212,6 @@ export default {
 
       await this.postMobileMedia();
       await this.$emit("close");
-    },
-    enableInfoText() {
-      this.selectsDisabled = !this.selectsDisabled;
-      this.onIconEnable = this.onIconEnable == "grey" ? "blue" : "grey";
     }
   }
 };
