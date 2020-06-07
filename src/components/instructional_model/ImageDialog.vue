@@ -118,7 +118,6 @@ export default {
         .storage()
         .ref(this.imagemObject.name)
         .put(this.imagemObject);
-      console.log("emit");
       this.$emit("close");
     }
   }

@@ -27,72 +27,69 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "LinkDialog",
-  props: ['optionCall', 'type'],
+  props: ["optionCall", "type"],
   data: () => ({
     valid: true,
     linkUrl: "",
     linkUrlRules: [v => !!v || "É necessário inserir o link a ser inserido"]
   }),
-   methods: {
-        reset() {
-            this.$emit("close");
-        },
-        postMobileMedia() {
-            // var vm = this;
-            var mobilemedia = {
-                label: "",
-                fk_idmediatype: "http://localhost:8000/mediatype/5/",
-                difficultyLevel: null,
-                learningStyle: null,
-                path: "",
-                namefile: "",
-                resolution: "",
-                description: "",
-                time: null,
-                textfull: "",
-                textshort: "",
-                urllink: this.linkUrl 
-            }
-            console.log(this.type)
-            if (this.type === "dominio") {
-                Object.assign(mobilemedia, {
-                    fk_idknowledgedomain: this.optionCall.url
-                })
-            } else if (this.type === "modulo") {
-                Object.assign(mobilemedia, {
-                    fk_module: this.optionCall.url
-                })
-            } else if (this.type === "conceito") {
-                Object.assign(mobilemedia, {
-                    fk_concept: this.optionCall.url
-                })
-            }
+  methods: {
+    reset() {
+      this.$emit("close");
+    },
+    postMobileMedia() {
+      // var vm = this;
+      var mobilemedia = {
+        label: "",
+        fk_idmediatype: "http://localhost:8000/mediatype/5/",
+        difficultyLevel: null,
+        learningStyle: null,
+        path: "",
+        namefile: "",
+        resolution: "",
+        description: "",
+        time: null,
+        textfull: "",
+        textshort: "",
+        urllink: this.linkUrl
+      };
+      console.log(this.type);
+      if (this.type === "dominio") {
+        Object.assign(mobilemedia, {
+          fk_idknowledgedomain: this.optionCall.url
+        });
+      } else if (this.type === "modulo") {
+        Object.assign(mobilemedia, {
+          fk_module: this.optionCall.url
+        });
+      } else if (this.type === "conceito") {
+        Object.assign(mobilemedia, {
+          fk_concept: this.optionCall.url
+        });
+      }
 
-            console.log(mobilemedia)
+      console.log(mobilemedia);
 
-            axios
-                .post(
-                    `http://localhost:8000/mobilemedia/`,
-                    mobilemedia, {
-                        auth: {
-                            username: "admin",
-                            password: "admin"
-                        }
-                    }
-                )
-                .then(function ( /*resposta*/ ) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
+      axios
+        .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function(/*resposta*/) {
+          /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
-                });
-        },
-        validate() {
-
-            this.postMobileMedia();
-        }
+        });
+    },
+    validate() {
+      this.postMobileMedia();
+      this.$emit("close");
     }
-}
+  }
+};
 </script>

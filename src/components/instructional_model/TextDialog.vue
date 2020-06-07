@@ -12,7 +12,7 @@
             <v-col cols="1">
               <label for="enableInfoItems">On</label>
               <br />
-              <v-btn icon color="blue" class="mt-3">
+              <v-btn class="mt-3" icon :color="onIconEnable" @click="enableInfoText">
                 <v-icon large>mdi-eye</v-icon>
               </v-btn>
             </v-col>
@@ -20,6 +20,7 @@
               <label for="infoItemClassesSelect">Classifique o item de informação</label>
               <v-select
                 id="infoItemClassesSelect"
+                :disabled="selectsDisabled"
                 v-model="infoClasse"
                 :items="infoItemClasses"
                 :rules="[v => !!v || 'Conceito é requerido']"
@@ -32,6 +33,7 @@
               <label for="infoItemLevelsSelect">Qual o nível de dificuldade?</label>
               <v-select
                 id="infoItemLevelsSelect"
+                :disabled="selectsDisabled"
                 v-model="infoLevel"
                 :items="infoItemLevels"
                 :rules="[v => !!v || 'Conceito é requerido']"
@@ -44,6 +46,7 @@
               <label for="infoItemResumeSelect">É um texto resumido?</label>
               <v-select
                 id="infoItemResumeSelect"
+                :disabled="selectsDisabled"
                 v-model="infoResume"
                 :items="infoItemResume"
                 :rules="[v => !!v || 'Conceito é requerido']"
@@ -89,7 +92,10 @@ export default {
   name: "textDialog",
   props: ["optionCall", "type"],
   data: () => ({
+    selectsDisabled: true,
+    onIconEnable: "grey",
     valid: true,
+    auxConcept: "",
     infoClasse: "",
     infoLevel: "",
     infoResume: "",
@@ -102,13 +108,15 @@ export default {
     reset() {
       this.$emit("close");
     },
-    postMobileMedia() {
+    async postMobileMedia() {
       // var vm = this;
+      var auxinformationitem = {
+        auxinfo:
+          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/"
+      };
       var mobilemedia = {
         label: "",
         fk_idmediatype: "http://localhost:8000/mediatype/4/",
-        difficultyLevel: this.infoLevel,
-        learningStyle: this.infoClasse,
         path: null,
         namefile: null,
         resolution: null,
@@ -117,6 +125,25 @@ export default {
         textfull: this.infoText,
         urllink: null
       };
+
+      if (this.selectsDisabled == true) {
+        this.infoClasse = 1;
+        auxinformationitem.auxinfo =
+          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/";
+        Object.assign(mobilemedia, {
+          difficultyLevel: null
+        });
+        Object.assign(mobilemedia, {
+          learningStyle: null
+        });
+      } else {
+        Object.assign(mobilemedia, {
+          difficultyLevel: this.infoLevel
+        });
+        Object.assign(mobilemedia, {
+          learningStyle: this.infoClasse
+        });
+      }
 
       if (this.infoText.length <= 20) {
         Object.assign(mobilemedia, {
@@ -127,8 +154,7 @@ export default {
           textshort: this.infoText.substr(0, 20)
         });
       }
-
-      console.log(this.type);
+      console.log("INFO CLASSE2", this.infoClasse);
       if (this.type === "dominio") {
         Object.assign(mobilemedia, {
           fk_idknowledgedomain: this.optionCall.url
@@ -139,25 +165,45 @@ export default {
         });
       } else if (this.type === "conceito") {
         Object.assign(mobilemedia, {
-          fk_concept: this.optionCall.url
+          fk_idconcept: this.optionCall.url
+        });
+      }
+      console.log("INFO CLASSE3", this.infoClasse);
+      var iteminfo = {
+        nameinformationitem: "text_" + mobilemedia.textshort,
+        fk_informationitemtype: auxinformationitem.auxinfo
+      };
+      if (this.type === "conceito") {
+        Object.assign(iteminfo, {
+          fk_idconcept: mobilemedia.fk_concept
         });
       }
 
-      console.log(mobilemedia);
-
-      axios
-        .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+      await axios
+        .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
           auth: {
             username: "admin",
             password: "admin"
           }
         })
-        .then(function(/*resposta*/) {
-          /*vm.moduloTitle = resposta.data.namemodule;
+        .then(function(resposta) {
+          Object.assign(mobilemedia, {
+            fk_informationitem: resposta.data.url
+          });
+          axios
+            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
+            });
         });
     },
-    validate() {
+    async validate() {
       var vm = this;
       this.infoClasse = this.infoItemClasses.findIndex(function(value) {
         return value === vm.infoClasse;
@@ -169,8 +215,12 @@ export default {
         return value === vm.infoResume;
       });
 
-      this.postMobileMedia();
-      this.$emit("close");
+      await this.postMobileMedia();
+      await this.$emit("close");
+    },
+    enableInfoText() {
+      this.selectsDisabled = !this.selectsDisabled;
+      this.onIconEnable = this.onIconEnable == "grey" ? "blue" : "grey";
     }
   }
 };

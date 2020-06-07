@@ -216,9 +216,9 @@
                             </template>
 
                             <MenuFiles
-                              @dialogoption="openFileDialog()"
+                              @dialogoption="openFileDialog"
                               :optionCall="submodulo"
-                              :tipo="'modulo'"
+                              :type="'modulo'"
                             />
                           </v-menu>
                           <!--Formulario para adição de conceito-->
@@ -279,7 +279,7 @@
                                   </template>
 
                                   <MenuFiles
-                                    @dialogoption="openFileDialog()"
+                                    @dialogoption="openFileDialog"
                                     :optionCall="conceito"
                                     :type="'conceito'"
                                   />
@@ -303,7 +303,99 @@
 
                           <v-expansion-panel-content>
                             <p>Relacionamentos:</p>
+                            <!-- Listagem dos relacionamentos do conceito -->
+                            <h3 class="mt-2">Relacionamentos:</h3>
+                            <v-simple-table>
+                              <template v-slot:default>
+                                <thead>
+                                  <tr>
+                                    <th class="text-left">Conceito Alvo</th>
+                                    <th class="text-left">Nome da Relação</th>
+                                    <th class="text-left">Tipo da Relação</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    v-for="relacao in conceito.sourceconcept"
+                                    :key="relacao.idreference"
+                                  >
+                                    <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
+                                    <td>{{relacao.namereference}}</td>
+                                    <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+                            <!-- Listagem dos arquivos dos conceitos -->
+                            <v-expansion-panels
+                              v-for="(mobilemedia) in conceito.mobilemedias"
+                              :key="mobilemedia.idmobilemedia"
+                              class="mt-2 mb-2"
+                            >
+                              <v-expansion-panel>
+                                <v-expansion-panel-header color="orange" style="color:white;">
+                                  <v-row>
+                                    <v-col cols="9">
+                                      <p>
+                                        <v-icon
+                                          color="white"
+                                          large
+                                        >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                                        {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                      </p>
+                                    </v-col>
+                                    <v-col cols="3">
+                                      <!--Formulario para edição do arquivo-->
+                                      <v-btn icon="icon" color="white">
+                                        <v-icon>mdi-eye</v-icon>
+                                      </v-btn>
+                                      <!--Função para excluir arquivo-->
+                                      <v-btn icon="icon" color="white">
+                                        <v-icon>mdi-close</v-icon>
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                </v-expansion-panel-header>
+
+                                <v-expansion-panel-content></v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </v-expansion-panels>
                           </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+
+                      <!-- Listagem dos arquivos dos submodulos-->
+                      <v-expansion-panels
+                        v-for="(mobilemedia) in submodulo.mobilemedias"
+                        :key="mobilemedia.idmobilemedia"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="orange" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>
+                                  <v-icon
+                                    color="white"
+                                    large
+                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                </p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do conceito-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-eye</v-icon>
+                                </v-btn>
+                                <!--Função para excluir conceito-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content></v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!--Panels dos SubMódulos-->
@@ -342,7 +434,7 @@
                             </template>
 
                             <MenuFiles
-                              @dialogoption="openFileDialog()"
+                              @dialogoption="openFileDialog"
                               :optionCall="conceito"
                               :type="'conceito'"
                             />
@@ -387,6 +479,41 @@
                           </tbody>
                         </template>
                       </v-simple-table>
+
+                      <!-- Listagem dos arquivos dos conceitos -->
+                      <v-expansion-panels
+                        v-for="(mobilemedia) in conceito.mobilemedias"
+                        :key="mobilemedia.idmobilemedia"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="orange" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>
+                                  <v-icon
+                                    color="white"
+                                    large
+                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                </p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do conceito-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-eye</v-icon>
+                                </v-btn>
+                                <!--Função para excluir conceito-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content></v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -427,6 +554,40 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
               </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <!-- Listagem dos arquivos do dominio -->
+          <v-expansion-panels
+            v-for="(mobilemedia) in dominio.mobilemedias"
+            :key="mobilemedia.idmobilemedia"
+            class="mt-2 mb-2"
+          >
+            <v-expansion-panel>
+              <v-expansion-panel-header color="orange" style="color:white;">
+                <v-row>
+                  <v-col cols="9">
+                    <p>
+                      <v-icon
+                        color="white"
+                        large
+                      >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                      {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                    </p>
+                  </v-col>
+                  <v-col cols="3">
+                    <!--Formulario para edição do conceito-->
+                    <v-btn icon="icon" color="white">
+                      <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                    <!--Função para excluir conceito-->
+                    <v-btn icon="icon" color="white">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-header>
+
+              <v-expansion-panel-content></v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-expansion-panel-content>
