@@ -81,8 +81,8 @@ export default {
     }
   },
   methods: {
-    postSubModulo() {
-      axios.post(
+    async postSubModulo() {
+      await axios.post(
         `http://localhost:8000/module/`,
         {
           fk_idmodule: this.module.url,
@@ -98,8 +98,8 @@ export default {
         }
       );
     },
-    putSubModulo() {
-      axios.put(
+    async putSubModulo() {
+      await axios.put(
         "http://127.0.0.1:8000/module/" + this.submodule.idmodule + "/",
         {
           fk_idmodule: this.module.url,
@@ -115,13 +115,13 @@ export default {
         }
       );
     },
-    validate() {
+    async validate() {
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
         if (this.submodule === "") {
-          this.postSubModulo();
+          await this.postSubModulo();
         } else {
-          this.putSubModulo();
+          await this.putSubModulo();
         }
         this.$emit("close_or_save", "save");
         this.$refs.form.reset();

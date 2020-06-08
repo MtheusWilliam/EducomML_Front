@@ -89,23 +89,23 @@
               <!--FORMULARIOS PARA CRIAÇÃO DE ARQUIVOS-->
               <!--Formulario para criação de imagem-->
               <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="600px">
-                <ImageDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
+                <ImageDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio" />
               </v-dialog>
               <!--Formulario para criação de video-->
               <v-dialog v-model="dialog_video" persistent="persistent" max-width="600px">
-                <VideoDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
+                <VideoDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
               </v-dialog>
               <!--Formulario para criação de audio-->
               <v-dialog v-model="dialog_audio" persistent="persistent" max-width="600px">
-                <AudioDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
+                <AudioDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
               </v-dialog>
               <!--Formulario para criação de texto-->
               <v-dialog v-model="dialog_texto" persistent="persistent" max-width="600px">
-                <TextDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
+                <TextDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
               </v-dialog>
               <!--Formulario para criação de link-->
               <v-dialog v-model="dialog_link" persistent="persistent" max-width="600px">
-                <LinkDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
+                <LinkDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
               </v-dialog>
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
@@ -623,6 +623,7 @@ import TextDialog from "./instructional_model/TextDialog";
 import LinkDialog from "./instructional_model/LinkDialog";
 import MenuFiles from "./MenuFiles";
 
+import firebase from 'firebase/app';
 import axios from "axios";
 import Cookie from "js-cookie";
 export default {
@@ -860,9 +861,7 @@ export default {
     close_or_save_modulo(value) {
       var vm = this;
       if (value === "save") {
-        setTimeout(function() {
           vm.getDominio();
-        }, 1000);
         this.dialog_modulo = false;
       } else if (value === "close") {
         this.dialog_modulo = false;
@@ -873,9 +872,7 @@ export default {
     close_or_save_submodulo(value) {
       var vm = this;
       if (value === "save") {
-        setTimeout(function() {
           vm.getDominio();
-        }, 1000);
         this.dialog_submodulo = false;
       } else if (value === "close") {
         this.dialog_submodulo = false;
@@ -887,9 +884,7 @@ export default {
     close_or_save_conceito(value) {
       var vm = this;
       if (value === "save") {
-        setTimeout(function() {
           vm.getDominio();
-        }, 1000);
         this.dialog_conceito = false;
       } else if (value === "close") {
         this.dialog_conceito = false;
@@ -899,17 +894,19 @@ export default {
       this.controlTreeView("conceito");
     },
 
-    deleteelemento(value) {
+    async deleteelemento(value) {
       var vm = this;
-      axios.delete(value.url, {
+      console.log(value);
+      if( value.path !== null && value.url.search("mobilemedia") === 22){
+      await firebase.storage().ref().child(value.path).delete();
+      }
+      await axios.delete(value.url, {
         auth: {
           username: "admin",
           password: "admin"
         }
       });
-      setTimeout(function() {
-        vm.getDominio();
-      }, 1000);
+      await vm.getDominio();
     },
 
     controlTreeView(value) {
@@ -947,12 +944,15 @@ export default {
       this.type = value.type;
     },
     dialogclose() {
+      var vm = this;
       this.dialog_imagem = false;
       this.dialog_audio = false;
       this.dialog_video = false;
       this.dialog_texto = false;
       this.dialog_link = false;
-      this.getDominio();
+      this.$nextTick(function() {
+          vm.getDominio();
+        },3);
     }
   }
 };
