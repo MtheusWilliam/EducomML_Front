@@ -80,7 +80,6 @@ export default {
         textshort: null,
         urllink: null
       };
-      console.log(this.type);
       if (this.type === "dominio") {
         Object.assign(mobilemedia, {
           fk_idknowledgedomain: this.optionCall.url
@@ -95,8 +94,6 @@ export default {
         });
       }
 
-      console.log(mobilemedia);
-
       axios
         .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
           auth: {
@@ -110,8 +107,6 @@ export default {
         });
     },
     validate() {
-      console.log(this.imagemObject);
-
       this.postMobileMedia();
 
       firebase

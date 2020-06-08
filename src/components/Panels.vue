@@ -107,6 +107,9 @@
               <v-dialog v-model="dialog_link" persistent="persistent" max-width="600px">
                 <LinkDialog @close="dialogclose" :optionCall="objectFile" :type="type" />
               </v-dialog>
+
+              <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
+              <!--Formulario para criação de procedimento -->
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -929,10 +932,8 @@ export default {
       }
     },
     openFileDialog(value) {
-      console.log(value);
       if (value.name === "Imagem") {
         this.dialog_imagem = true;
-        console.log(this.dialog_imagem);
       } else if (value.name === "Audio") {
         this.dialog_audio = true;
       } else if (value.name === "Video") {
@@ -944,7 +945,6 @@ export default {
       }
       this.objectFile = value.optionCall;
       this.type = value.type;
-      console.log(this.type);
     },
     dialogclose() {
       this.dialog_imagem = false;
