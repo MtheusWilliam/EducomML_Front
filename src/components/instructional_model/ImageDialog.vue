@@ -91,7 +91,7 @@ export default {
         });
       } else if (this.type === "conceito") {
         Object.assign(mobilemedia, {
-          fk_concept: this.optionCall.url
+          fk_idconcept: this.optionCall.url
         });
       }
 

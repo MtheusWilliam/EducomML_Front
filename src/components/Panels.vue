@@ -345,12 +345,16 @@
                                       </p>
                                     </v-col>
                                     <v-col cols="3">
-                                      <!--Formulario para edição do arquivo-->
+                                      <!--Formulario para edição do arquivo/mobilemedia-->
                                       <v-btn icon="icon" color="white">
                                         <v-icon>mdi-eye</v-icon>
                                       </v-btn>
-                                      <!--Função para excluir arquivo-->
-                                      <v-btn icon="icon" color="white">
+                                      <!--Função para excluir arquivo/mobilemedia-->
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="deleteelemento(mobilemedia)"
+                                      >
                                         <v-icon>mdi-close</v-icon>
                                       </v-btn>
                                     </v-col>
@@ -383,12 +387,16 @@
                                 </p>
                               </v-col>
                               <v-col cols="3">
-                                <!--Formulario para edição do conceito-->
+                                <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn icon="icon" color="white">
                                   <v-icon>mdi-eye</v-icon>
                                 </v-btn>
-                                <!--Função para excluir conceito-->
-                                <v-btn icon="icon" color="white">
+                                <!--Função para excluir arquivo/mobilemedia-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(mobilemedia)"
+                                >
                                   <v-icon>mdi-close</v-icon>
                                 </v-btn>
                               </v-col>
@@ -499,12 +507,16 @@
                                 </p>
                               </v-col>
                               <v-col cols="3">
-                                <!--Formulario para edição do conceito-->
+                                <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn icon="icon" color="white">
                                   <v-icon>mdi-eye</v-icon>
                                 </v-btn>
-                                <!--Função para excluir conceito-->
-                                <v-btn icon="icon" color="white">
+                                <!--Função para excluir arquivo/mobilemedia-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(mobilemedia)"
+                                >
                                   <v-icon>mdi-close</v-icon>
                                 </v-btn>
                               </v-col>
@@ -538,12 +550,12 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
-                          <!--Formulario para edição do conceito-->
+                          <!--Formulario para edição do arquivo/mobilemedia-->
                           <v-btn icon="icon" color="white">
                             <v-icon>mdi-eye</v-icon>
                           </v-btn>
-                          <!--Função para excluir conceito-->
-                          <v-btn icon="icon" color="white">
+                          <!--Função para excluir arquivo/mobilemedia-->
+                          <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
                             <v-icon>mdi-close</v-icon>
                           </v-btn>
                         </v-col>
@@ -575,12 +587,12 @@
                     </p>
                   </v-col>
                   <v-col cols="3">
-                    <!--Formulario para edição do conceito-->
+                    <!--Formulario para edição do arquivo/mobilemedia-->
                     <v-btn icon="icon" color="white">
                       <v-icon>mdi-eye</v-icon>
                     </v-btn>
-                    <!--Função para excluir conceito-->
-                    <v-btn icon="icon" color="white">
+                    <!--Função para excluir arquivo/mobilemedia-->
+                    <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
                   </v-col>

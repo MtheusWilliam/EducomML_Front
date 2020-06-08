@@ -9,35 +9,46 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="4">
-              <label for="infoItemResumeSelect">Quais formas de texto você quer inserir?</label>
-              <v-switch v-model="switchTextShort" flat :label="Resumido"></v-switch>
-              <v-switch v-model="switchTextFull" flat :label="Não-resumido"></v-switch>
+            <v-col cols="3">
+              <label>Quais formas de texto você quer inserir?</label>
+              <v-switch v-model="switchTextShort" label="Resumido" style="margin-bottom: -33px;"></v-switch>
+              <v-switch v-model="switchTextFull" label="Não-resumido"></v-switch>
             </v-col>
-            <div v-if="type==='conceito'">
-              <v-col cols="4">
-                <label for="infoItemClassesSelect">Classifique o item de informação</label>
-                <v-select
-                  id="infoItemClassesSelect"
-                  v-model="infoClasse"
-                  :items="infoItemClasses"
-                  label="Classe"
-                  style="margin:0px;"
-                ></v-select>
-              </v-col>
-              <v-col cols="4">
-                <label for="infoItemLevelsSelect">Qual o nível de dificuldade?</label>
-                <v-select
-                  id="infoItemLevelsSelect"
-                  v-model="infoLevel"
-                  :items="infoItemLevels"
-                  label="Nível"
-                  style="margin:0px;"
-                ></v-select>
-              </v-col>
-            </div>
+
+            <v-col cols="3" v-if="type==='conceito'">
+              <label for="infoItemClassesSelect">Classifique o item de informação</label>
+              <v-select
+                id="infoItemClassesSelect"
+                class="mt-5"
+                v-model="infoClasse"
+                :items="infoItemClasses"
+                label="Classe"
+                style="margin:0px;"
+              ></v-select>
+            </v-col>
+
+            <v-col cols="3">
+              <label for="infoItemLevelsSelect">Qual o nível de dificuldade deste conteúdo?</label>
+              <v-select
+                id="infoItemLevelsSelect"
+                v-model="infoLevel"
+                :items="infoItemLevels"
+                label="Nível"
+                style="margin:0px;"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <label for="infoItemLearningStylesSelect">Qual o estilo de aprendizado deste conteúdo?</label>
+              <v-select
+                id="infoItemLearningStylesSelect"
+                v-model="infoLearning"
+                :items="infoItemLearningStyles"
+                label="Nível"
+                style="margin:0px;"
+              ></v-select>
+            </v-col>
           </v-row>
-          <label for="textShortArea">Seu texto na forma resumida:</label>
+          <label v-if="switchTextShort" for="textShortArea">Seu texto na forma resumida:</label>
           <v-textarea
             v-if="switchTextShort"
             id="textShortArea"
@@ -45,12 +56,12 @@
             clearable
             clear-icon="mdi-close-circle"
             class="mt-2"
-            name="input-6-1"
+            rows="5"
             filled
             auto-grow
             v-model="infoTextShort"
           ></v-textarea>
-          <label for="textFullArea">Seu texto na forma não-resumida:</label>
+          <label v-if="switchTextFull" for="textFullArea">Seu texto na forma não-resumida:</label>
           <v-textarea
             v-if="switchTextFull"
             id="textFullArea"
@@ -58,7 +69,7 @@
             clearable
             clear-icon="mdi-close-circle"
             class="mt-2"
-            name="input-14-1"
+            rows="12"
             filled
             auto-grow
             v-model="infoTextFull"
@@ -90,15 +101,15 @@ export default {
     valid: true,
     switchTextFull: true,
     switchTextShort: false,
-    auxConcept: "",
     infoClasse: "",
     infoLevel: "",
+    infoLearning: "",
     infoResume: "",
     infoTextFull: "",
     infoTextShort: "",
-    infoItemClasses: ["Conceito", "Princípio", "Fato", "Procedimento"],
+    infoItemClasses: ["Conceito", "Princípio", "Fato"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
-    infoItemResume: ["Não", "Sim"]
+    infoItemLearningStyles: ["Visual", "Textual"]
   }),
   methods: {
     reset() {
@@ -113,7 +124,6 @@ export default {
       var mobilemedia = {
         label: "",
         fk_idmediatype: "http://localhost:8000/mediatype/4/",
-        difficultyLevel: this.infoLevel,
         path: null,
         namefile: null,
         resolution: null,
@@ -130,7 +140,7 @@ export default {
 
       if (this.switchTextFull) {
         Object.assign(mobilemedia, {
-          textshort: this.infoTextFull
+          textfull: this.infoTextFull
         });
       }
       if (this.switchTextShort) {
@@ -139,16 +149,26 @@ export default {
         });
       }
 
+      if (this.infoLevel > -1) {
+        Object.assign(mobilemedia, {
+          difficultyLevel: this.infoLevel
+        });
+      }
+
+      if (this.infoLearning > -1) {
+        Object.assign(mobilemedia, {
+          learningStyle: this.infoLearning
+        });
+      }
+
       if (this.type === "conceito") {
         var iteminfo = {
           nameinformationitem: "text_" + mobilemedia.textshort,
-          fk_informationitemtype: auxinformationitem.auxinfo
+          fk_informationitemtype: auxinformationitem.auxinfo,
+          fk_idconcept: this.optionCall.url
         };
         Object.assign(mobilemedia, {
           fk_idconcept: this.optionCall.url
-        });
-        Object.assign(iteminfo, {
-          fk_idconcept: mobilemedia.fk_concept
         });
       } else if (this.type === "dominio") {
         Object.assign(mobilemedia, {
@@ -206,8 +226,10 @@ export default {
       this.infoLevel = this.infoItemLevels.findIndex(function(value) {
         return value === vm.infoLevel;
       });
-      this.infoResume = this.infoItemResume.findIndex(function(value) {
-        return value === vm.infoResume;
+      this.infoLearning = this.infoItemLearningStyles.findIndex(function(
+        value
+      ) {
+        return value === vm.infoLearning;
       });
 
       await this.postMobileMedia();
