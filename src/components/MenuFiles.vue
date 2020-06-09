@@ -54,7 +54,6 @@ export default {
   }),
   methods: {
     option(value) {
-      console.log("VALUE", value);
       this.$emit("dialogoption", {
         name: value.name,
         optionCall: this.optionCall,

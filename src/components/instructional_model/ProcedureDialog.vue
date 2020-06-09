@@ -8,11 +8,22 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
-          <label class="pt-2" style="font-size:1.3em;" for="textShortArea">
+          <label class="pt-2" style="font-size:1.3em;" for="procedureNameArea">
+            <strong>Escreva o nome do procedimento:</strong>
+          </label>
+          <v-text-field
+            id="procedureNameArea"
+            v-model="procedureName"
+            :counter="25"
+            :rules="procedureNameRules"
+            required
+            class="mt-2 mb-4"
+          ></v-text-field>
+          <label class="pt-2" style="font-size:1.3em;" for="procedureDescriptionArea">
             <strong>Escreva a descrição do procedimento:</strong>
           </label>
           <v-textarea
-            id="textShortArea"
+            id="procedureDescriptionArea"
             v-model="procedureDescription"
             :rules="procedureDescriptionRules"
             background-color="#F2F3F3"
@@ -62,11 +73,11 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" height="49" dark large @click="reset">
+        <v-btn color="red" height="49" dark large @click="reset()">
           Close
           <v-icon dark right>mdi-close</v-icon>
         </v-btn>
-        <v-btn color="success" height="49" dark large @click="validate">
+        <v-btn color="success" height="49" dark large @click="validate()">
           Save
           <v-icon dark right>mdi-content-save</v-icon>
         </v-btn>
@@ -76,15 +87,24 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "ProcedureDialog",
-  props: ["optionCall", "type"],
+  props: ["concept"],
   data: () => ({
     valid: true,
+    auxItemInfo: "",
     phasesControl: [],
     phasesControlRules: [
       v =>
         !!v || "É necessário inserir algum conteúdo nessa etapa do procedimento"
+    ],
+    procedureName: "",
+    procedureNameRules: [
+      v => !!v || "É necessário descrever o nome do procedimento",
+      v =>
+        (v && v.length <= 25) ||
+        "Nome do procedimento deve ter no máximo 25 caracteres"
     ],
     procedureDescription: "",
     procedureDescriptionRules: [
@@ -94,11 +114,64 @@ export default {
     ]
   }),
   methods: {
+    async altera_Cria_Procedimento() {
+      var vm = this;
+      await axios
+        .post(
+          `http://localhost:8000/informationitem/`,
+          {
+            nameinformationitem: this.procedureName,
+            descriptioninformationitem: this.procedureDescription,
+            fk_informationitemtype: `http://localhost:8000/informationitemtype/4/`,
+            fk_idconcept: this.concept.url
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        )
+        .then(function(resposta) {
+          vm.auxItemInfo = resposta.data.url;
+        });
+    },
+    async altera_Cria_Fases() {
+      var vm = this;
+      this.phasesControl.forEach(async function(element, index) {
+        await axios.post(
+          `http://localhost:8000/phaseprocedure/`,
+          {
+            order: index + 1,
+            description: element.description,
+            fk_informationitem: vm.auxItemInfo
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        );
+      });
+    },
+
+    async validate() {
+      if (this.$refs.form.validate()) {
+        await this.altera_Cria_Procedimento();
+        await this.altera_Cria_Fases();
+        this.phasesControl = [];
+        this.$emit("close");
+      }
+    },
     reset() {
+      this.$refs.form.reset();
+      this.phasesControl = [];
       this.$emit("close");
     },
     addPhase() {
       this.phasesControl.push({
+        id: this.phasesControl.length + 1,
         description: null
       });
     },

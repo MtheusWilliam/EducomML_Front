@@ -135,6 +135,9 @@
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
               <!--Formulario para criação de procedimento -->
+              <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="600px">
+                <ProcedureDialog @close="dialogclose" :concept="conceito" />
+              </v-dialog>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -292,7 +295,7 @@
                                 </p>
                               </v-col>
                               <v-col cols="3">
-                                <!-- Menu para criação de arquivos-->
+                                <!-- Menu para criação de arquivos dos conceitos adicionados dentro de submódulos-->
                                 <v-menu
                                   top="top"
                                   width="300px"
@@ -312,8 +315,29 @@
                                     :type="'conceito'"
                                   />
                                 </v-menu>
+                                <!--Formulario para adição de itens de informação dos conceitos adicionados dentro de submódulos-->
+                                <v-menu
+                                  top="top"
+                                  width="300px"
+                                  origin="center center"
+                                  :offset-y="true"
+                                  transition="scale-transition"
+                                >
+                                  <template v-slot:activator="{ on }">
+                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                      <v-icon>mdi-plus</v-icon>
+                                    </v-btn>
+                                  </template>
 
-                                <!--Formulario para edição do conceito-->
+                                  <v-list>
+                                    <v-list-item
+                                      @click="setconceito(conceito);dialog_procedure=true"
+                                    >
+                                      <v-list-item-title>Procedimento</v-list-item-title>
+                                    </v-list-item>
+                                  </v-list>
+                                </v-menu>
+                                <!--Formulario para edição dos conceitos adicionados dentro de submódulos-->
                                 <v-btn
                                   icon="icon"
                                   color="white"
@@ -331,7 +355,7 @@
 
                           <v-expansion-panel-content>
                             <p>Relacionamentos:</p>
-                            <!-- Listagem dos relacionamentos do conceito -->
+                            <!-- Listagem dos relacionamentos dos conceitos adicionados dentro de submódulos -->
                             <h3 class="mt-2">Relacionamentos:</h3>
                             <v-simple-table>
                               <template v-slot:default>
@@ -373,11 +397,11 @@
                                       </p>
                                     </v-col>
                                     <v-col cols="3">
-                                      <!--Formulario para edição do arquivo/mobilemedia-->
+                                      <!--Formulario para edição do arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn icon="icon" color="white">
                                         <v-icon>mdi-eye</v-icon>
                                       </v-btn>
-                                      <!--Função para excluir arquivo/mobilemedia-->
+                                      <!--Função para excluir arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn
                                         icon="icon"
                                         color="white"
@@ -474,6 +498,26 @@
                               :optionCall="conceito"
                               :type="'conceito'"
                             />
+                          </v-menu>
+                          <!--Formulario para adição de itens de informação-->
+                          <v-menu
+                            top="top"
+                            width="300px"
+                            origin="center center"
+                            :offset-y="true"
+                            transition="scale-transition"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                <v-icon>mdi-plus</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item @click="setconceito(conceito);dialog_procedure=true">
+                                <v-list-item-title>Procedimento</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
                           </v-menu>
                           <!--Formulario para edição do conceito-->
                           <v-btn
@@ -647,6 +691,7 @@ import AudioDialog from "./instructional_model/AudioDialog";
 import TextDialog from "./instructional_model/TextDialog";
 import LinkDialog from "./instructional_model/LinkDialog";
 import MenuFiles from "./MenuFiles";
+import ProcedureDialog from "./instructional_model/ProcedureDialog";
 
 import firebase from "firebase/app";
 import axios from "axios";
@@ -663,7 +708,8 @@ export default {
     AudioDialog,
     TextDialog,
     LinkDialog,
-    MenuFiles
+    MenuFiles,
+    ProcedureDialog
   },
   props: [
     "dominio",
@@ -703,6 +749,7 @@ export default {
     dialog_audio: false,
     dialog_texto: false,
     dialog_link: false,
+    dialog_procedure: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -979,6 +1026,7 @@ export default {
       this.dialog_video = false;
       this.dialog_texto = false;
       this.dialog_link = false;
+      this.dialog_procedure = false;
       this.$nextTick(function() {
         vm.getDominio();
       }, 3);
