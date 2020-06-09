@@ -17,41 +17,41 @@
             required
           ></v-text-field>
         </v-form>
-        <v-row  v-if="type==='conceito'">
+        <v-row>
+          <v-col cols="4" v-if="type==='conceito'">
+            <label for="infoItemClassesSelect">Classifique o item de informação</label>
+            <v-select
+              id="infoItemClassesSelect"
+              class="mt-5"
+              v-model="infoClasse"
+              :items="infoItemClasses"
+              label="Classe"
+              style="margin:0px;"
+            ></v-select>
+          </v-col>
 
-            <v-col cols="4">
-              <label for="infoItemClassesSelect">Classifique o item de informação</label>
-              <v-select
-                id="infoItemClassesSelect"
-                class="mt-5"
-                v-model="infoClasse"
-                :items="infoItemClasses"
-                label="Classe"
-                style="margin:0px;"
-              ></v-select>
-            </v-col>
-
-            <v-col cols="4">
-              <label for="infoItemLevelsSelect">Qual o nível de dificuldade deste conteúdo?</label>
-              <v-select
-                id="infoItemLevelsSelect"
-                v-model="infoLevel"
-                :items="infoItemLevels"
-                label="Nível"
-                style="margin:0px;"
-              ></v-select>
-            </v-col>
-            <v-col cols="4">
-              <label for="infoItemLearningStylesSelect">Qual o estilo de aprendizado deste conteúdo?</label>
-              <v-select
-                id="infoItemLearningStylesSelect"
-                v-model="infoLearning"
-                :items="infoItemLearningStyles"
-                label="Nível"
-                style="margin:0px;"
-              ></v-select>
-            </v-col>
-          </v-row>
+          <v-col cols="4">
+            <label for="infoItemLevelsSelect">Qual o nível de dificuldade deste conteúdo?</label>
+            <v-select
+              class="mt-5"
+              id="infoItemLevelsSelect"
+              v-model="infoLevel"
+              :items="infoItemLevels"
+              label="Nível"
+              style="margin:0px;"
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <label for="infoItemLearningStylesSelect">Qual o estilo de aprendizado deste conteúdo?</label>
+            <v-select
+              id="infoItemLearningStylesSelect"
+              v-model="infoLearning"
+              :items="infoItemLearningStyles"
+              label="Nível"
+              style="margin:0px;"
+            ></v-select>
+          </v-col>
+        </v-row>
         <v-spacer></v-spacer>
         <v-file-input
           label="UPLOAD IMAGE"
@@ -83,16 +83,16 @@ import axios from "axios";
 
 export default {
   name: "ImageDialog",
-  props: ["optionCall", "type","domain"],
+  props: ["optionCall", "type", "domain"],
   data: () => ({
     valid: true,
-        infoLevel: "",
-        infoLearning: "",
-        infoClasse: "",
-        infoItemClasses: ["Conceito", "Princípio", "Fato"],
-        infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
-        infoItemLearningStyles: ["Visual", "Textual"],
-        infoResume: "",
+    infoLevel: "",
+    infoLearning: "",
+    infoClasse: "",
+    infoItemClasses: ["Conceito", "Princípio", "Fato"],
+    infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
+    infoItemLearningStyles: ["Visual", "Textual"],
+    infoResume: "",
     imagemDescription: "",
     imagemObject: {},
     imagemDescriptionRules: [
@@ -107,15 +107,22 @@ export default {
       this.$emit("close");
     },
     async postMobileMedia() {
+      var auxinformationitem = {
+        auxinfo:
+          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/"
+      };
       var vm = this;
       var path = Date.now().toString();
-      await firebase.storage().ref().child(this.domain.idknowledgedomain.toString()).child(path).put(this.imagemObject);
+      await firebase
+        .storage()
+        .ref()
+        .child(this.domain.idknowledgedomain.toString())
+        .child(path)
+        .put(this.imagemObject);
       var mobilemedia = {
         label: this.imagemDescription,
         fk_idmediatype: "http://localhost:8000/mediatype/1/",
-        difficultyLevel: null,
-        learningStyle: null,
-        path: this.domain.idknowledgedomain.toString()+'/'+path,
+        path: this.domain.idknowledgedomain.toString() + "/" + path,
         namefile: this.imagemObject.name,
         resolution: "",
         description: this.imagemDescription,
@@ -124,27 +131,43 @@ export default {
         textshort: null,
         urllink: null
       };
-        if (this.type === "conceito") {
+
+      if (this.infoClasse == -1) {
+        this.infoClasse = 1;
+        auxinformationitem.auxinfo =
+          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/";
+      }
+
+      if (this.infoLevel > -1) {
+        Object.assign(mobilemedia, {
+          difficultyLevel: this.infoLevel
+        });
+      }
+
+      if (this.infoLearning > -1) {
+        Object.assign(mobilemedia, {
+          learningStyle: this.infoLearning
+        });
+      }
+
+      if (this.type === "conceito") {
         var iteminfo = {
           nameinformationitem: "imagem_" + vm.imagemObject.name,
-          fk_informationitemtype:  `http://127.0.0.1:8000/informationitemtype/` + (vm.infoClasse+1) + "/",
+          fk_informationitemtype: auxinformationitem.auxinfo,
           fk_idconcept: this.optionCall.url
         };
-        }
-        console.log(iteminfo);
-        if (this.type === "dominio") {
-                Object.assign(mobilemedia, {
-                    fk_idknowledgedomain: this.optionCall.url
-                });
-            } else if (this.type === "modulo") {
-                Object.assign(mobilemedia, {
-                    fk_module: this.optionCall.url
-                });
-            } else if (this.type === "conceito") {
-                Object.assign(mobilemedia, {
-                    fk_concept: this.optionCall.url
-                });
-            }
+        Object.assign(mobilemedia, {
+          fk_idconcept: this.optionCall.url
+        });
+      } else if (this.type === "dominio") {
+        Object.assign(mobilemedia, {
+          fk_idknowledgedomain: this.optionCall.url
+        });
+      } else if (this.type === "modulo") {
+        Object.assign(mobilemedia, {
+          fk_module: this.optionCall.url
+        });
+      }
 
       if (this.type === "conceito") {
         await axios
@@ -182,11 +205,10 @@ export default {
             /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
           });
-
-            }     
+      }
     },
-    validate() {
-         var vm = this;
+    async validate() {
+      var vm = this;
       this.infoClasse = this.infoItemClasses.findIndex(function(value) {
         return value === vm.infoClasse;
       });
@@ -198,9 +220,9 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
-      
-      this.postMobileMedia();
-      this.$emit("close");
+
+      await this.postMobileMedia();
+      await this.$emit("close");
     }
   }
 };

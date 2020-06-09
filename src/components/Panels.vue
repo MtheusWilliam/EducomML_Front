@@ -89,23 +89,48 @@
               <!--FORMULARIOS PARA CRIAÇÃO DE ARQUIVOS-->
               <!--Formulario para criação de imagem-->
               <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="600px">
-                <ImageDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio" />
+                <ImageDialog
+                  @close="dialogclose"
+                  :optionCall="objectFile"
+                  :type="type"
+                  :domain="dominio"
+                />
               </v-dialog>
               <!--Formulario para criação de video-->
               <v-dialog v-model="dialog_video" persistent="persistent" max-width="600px">
-                <VideoDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
+                <VideoDialog
+                  @close="dialogclose"
+                  :optionCall="objectFile"
+                  :type="type"
+                  :domain="dominio"
+                />
               </v-dialog>
               <!--Formulario para criação de audio-->
               <v-dialog v-model="dialog_audio" persistent="persistent" max-width="600px">
-                <AudioDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
+                <AudioDialog
+                  @close="dialogclose"
+                  :optionCall="objectFile"
+                  :type="type"
+                  :domain="dominio"
+                />
               </v-dialog>
               <!--Formulario para criação de texto-->
               <v-dialog v-model="dialog_texto" persistent="persistent" max-width="600px">
-                <TextDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
+                <TextDialog
+                  @close="dialogclose"
+                  :optionCall="objectFile"
+                  :type="type"
+                  :domain="dominio"
+                />
               </v-dialog>
               <!--Formulario para criação de link-->
               <v-dialog v-model="dialog_link" persistent="persistent" max-width="600px">
-                <LinkDialog @close="dialogclose" :optionCall="objectFile" :type="type" :domain="dominio"/>
+                <LinkDialog
+                  @close="dialogclose"
+                  :optionCall="objectFile"
+                  :type="type"
+                  :domain="dominio"
+                />
               </v-dialog>
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
@@ -623,7 +648,7 @@ import TextDialog from "./instructional_model/TextDialog";
 import LinkDialog from "./instructional_model/LinkDialog";
 import MenuFiles from "./MenuFiles";
 
-import firebase from 'firebase/app';
+import firebase from "firebase/app";
 import axios from "axios";
 import Cookie from "js-cookie";
 export default {
@@ -861,7 +886,7 @@ export default {
     close_or_save_modulo(value) {
       var vm = this;
       if (value === "save") {
-          vm.getDominio();
+        vm.getDominio();
         this.dialog_modulo = false;
       } else if (value === "close") {
         this.dialog_modulo = false;
@@ -872,7 +897,7 @@ export default {
     close_or_save_submodulo(value) {
       var vm = this;
       if (value === "save") {
-          vm.getDominio();
+        vm.getDominio();
         this.dialog_submodulo = false;
       } else if (value === "close") {
         this.dialog_submodulo = false;
@@ -884,7 +909,7 @@ export default {
     close_or_save_conceito(value) {
       var vm = this;
       if (value === "save") {
-          vm.getDominio();
+        vm.getDominio();
         this.dialog_conceito = false;
       } else if (value === "close") {
         this.dialog_conceito = false;
@@ -897,8 +922,12 @@ export default {
     async deleteelemento(value) {
       var vm = this;
       console.log(value);
-      if( value.path !== null && value.url.search("mobilemedia") === 22){
-      await firebase.storage().ref().child(value.path).delete();
+      if (value.path !== null && value.url.search("mobilemedia") === 22) {
+        await firebase
+          .storage()
+          .ref()
+          .child(value.path)
+          .delete();
       }
       await axios.delete(value.url, {
         auth: {
@@ -951,8 +980,8 @@ export default {
       this.dialog_texto = false;
       this.dialog_link = false;
       this.$nextTick(function() {
-          vm.getDominio();
-        },3);
+        vm.getDominio();
+      }, 3);
     }
   }
 };

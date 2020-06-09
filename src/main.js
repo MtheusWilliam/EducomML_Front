@@ -11,9 +11,9 @@ import TextDialog from './components/instructional_model/TextDialog';
 import * as firebase from "firebase";
 
 var config = {
-  apiKey: "AIzaSyCTXLVMfqIhESiv4y0HHGLbaU_U7Lwcyys",
-  authDomain: "project-994496824062.firebaseapp.com",
-  storageBucket: "gs://testeapifiles.appspot.com"
+  apiKey: "AIzaSyDX9Xyh5rlSGDTcuUjn1GEIRq-1e5uF5Sw",
+  authDomain: "project-498769410478.firebaseapp.com",
+  storageBucket: "gs://educomml.appspot.com"
 }
 firebase.initializeApp(config);
 
