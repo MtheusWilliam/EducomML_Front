@@ -46,6 +46,15 @@ export default {
         name: "[DOMINIO] " + this.dominio.nameknowledgedomain,
         children: []
       });
+      if (this.dominio.mobilemedias.length) {
+        this.dominio.mobilemedias.forEach(mobilemedia => {
+          this.treeData[0].children.push({
+            id: mobilemedia.url,
+            name: "[MOBILEMEDIA] " + mobilemedia.label
+          });
+        });
+      }
+
       if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
         this.dominio.modules.forEach(modulo => {
           if (modulo.fk_idmodule === null) {
