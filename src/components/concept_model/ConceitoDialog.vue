@@ -148,6 +148,7 @@ export default {
       });
     },
     module: function() {
+      this.$refs.form.reset();
       this.targetconcepts = [];
       if (this.module.concepts) {
         this.module.concepts.forEach(element => {

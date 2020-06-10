@@ -395,6 +395,7 @@
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
+                                <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
                                 <v-expansion-panel-header color="orange" style="color:white;">
                                   <!--HEADER DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS-->
                                   <v-row>
@@ -426,6 +427,67 @@
 
                                 <v-expansion-panel-content></v-expansion-panel-content>
                               </v-expansion-panel>
+                              <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
+                              <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                              <v-expansion-panels
+                                v-for="(procedure) in proceduresUnderConcept(conceito)"
+                                :key="procedure.idinformationitem"
+                                class="mt-2 mb-2"
+                              >
+                                <v-expansion-panel>
+                                  <v-expansion-panel-header color="#737374" style="color:white;">
+                                    <v-row>
+                                      <v-col cols="9">
+                                        <p>[Procedimento] {{procedure.nameinformationitem}}</p>
+                                      </v-col>
+                                      <v-col cols="3">
+                                        <!--Formulario para edição do procedure-->
+                                        <v-btn icon="icon" color="white">
+                                          <v-icon>mdi-eye</v-icon>
+                                        </v-btn>
+                                        <!--Função para excluir arquivo/mobilemedia-->
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="deleteelemento(procedure)"
+                                        >
+                                          <v-icon>mdi-close</v-icon>
+                                        </v-btn>
+                                      </v-col>
+                                    </v-row>
+                                  </v-expansion-panel-header>
+
+                                  <v-expansion-panel-content>
+                                    <p class="mt-2">{{procedure.descriptioninformationitem}}</p>
+                                    <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                                    <h3 class="mt-2">Fases do procedimento:</h3>
+                                    <v-simple-table>
+                                      <template v-slot:default>
+                                        <thead>
+                                          <tr>
+                                            <th
+                                              class="text-left"
+                                              style="margin-right:-20px"
+                                            >Ordem da fase</th>
+                                            <th class="text-left">Descrição</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr
+                                            v-for="fase in procedure.phaseprocedures"
+                                            :key="fase.idphaseprocedure"
+                                          >
+                                            <td style="margin-right:-20px">{{fase.order}}</td>
+                                            <td>{{fase.description}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </template>
+                                    </v-simple-table>
+                                    <!--FIM DA LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                                  </v-expansion-panel-content>
+                                </v-expansion-panel>
+                              </v-expansion-panels>
+                              <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                             </v-expansion-panels>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -576,7 +638,7 @@
                         </template>
                       </v-simple-table>
 
-                      <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS -->
+                      <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in conceito.mobilemedias"
                         :key="mobilemedia.idmobilemedia"
@@ -615,6 +677,60 @@
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS -->
+
+                      <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                      <v-expansion-panels
+                        v-for="(procedure) in proceduresUnderConcept(conceito)"
+                        :key="procedure.idinformationitem"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="#737374" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>[Procedimento]{{procedure.nameinformationitem}}</p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do procedure-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-eye</v-icon>
+                                </v-btn>
+                                <!--Função para excluir arquivo/mobilemedia-->
+                                <v-btn icon="icon" color="white" @click="deleteelemento(procedure)">
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content>
+                            <p>{{procedure.descriptioninformationitem}}</p>
+                            <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                            <h3 class="mt-2">Fases do procedimento:</h3>
+                            <v-simple-table>
+                              <template v-slot:default>
+                                <thead>
+                                  <tr>
+                                    <th class="text-left">Ordem da fase</th>
+                                    <th class="text-left">Descrição</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr
+                                    v-for="fase in procedure.phaseprocedures"
+                                    :key="fase.idphaseprocedure"
+                                  >
+                                    <td>{{fase.order}}</td>
+                                    <td>{{fase.description}}</td>
+                                  </tr>
+                                </tbody>
+                              </template>
+                            </v-simple-table>
+                            <!--FIM DA LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                      <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -1052,12 +1168,16 @@ export default {
       }, 3);
     },
     proceduresUnderConcept(concept) {
-      console.log("FUNCTION PROCEDURE ITEMS", concept.informationitems);
-      return concept.informationitems.filter(
-        procedure =>
-          procedure.fk_informationitemtype ==
-          `http://localhost:8000/informationitemtype/4/`
-      );
+      function checkProcedure(proc) {
+        return (
+          proc.fk_informationitemtype ===
+          "http://127.0.0.1:8000/informationitemtype/4/"
+        );
+      }
+
+      var proceduresfinded = concept.informationitems.filter(checkProcedure);
+
+      return proceduresfinded;
     }
   }
 };

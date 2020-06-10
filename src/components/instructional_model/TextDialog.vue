@@ -180,6 +180,8 @@ export default {
         });
       }
 
+      console.log("tratando erro information item", iteminfo);
+
       if (this.type === "conceito") {
         await axios
           .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
