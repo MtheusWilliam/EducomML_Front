@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>Descreva o procedimento a ser criado.</p>
+          <p>Descreva o procedimento a ser criado.{{procedure.nameinformationitem}}</p>
         </span>
       </v-card-title>
       <v-card-text>
@@ -115,7 +115,23 @@ export default {
   }),
   watch: {
     dialog: function() {
-      console.log("procedure: ", this.procedure);
+      var vm = this;
+      this.$nextTick(function() {
+        vm.procedureName = vm.procedure.nameinformationitem;
+        vm.procedureDescription = vm.procedure.descriptioninformationitem;
+      });
+      this.phasesControl = [];
+      if (this.procedure !== "") {
+        this.procedure.phaseprocedures.forEach(element => {
+          console.log("foreach", this.phasesControl);
+          this.phasesControl.push({
+            description: element.description,
+            url: element.url
+          });
+        });
+      }
+    },
+    procedure: function() {
       var vm = this;
       this.$nextTick(function() {
         vm.procedureName = vm.procedure.nameinformationitem;

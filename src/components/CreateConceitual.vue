@@ -14,6 +14,7 @@
           :dialog_module="dialog_module"
           :dialog_submodule="dialog_submodule"
           :dialog_concept="dialog_concept"
+          :dialog_proceduretree="dialog_procedure"
           :dominio="dominio"
         />
       </div>
@@ -36,7 +37,8 @@ export default {
     dialog_knowledgedomain: false,
     dialog_module: false,
     dialog_submodule: false,
-    dialog_concept: false
+    dialog_concept: false,
+    dialog_procedure: false
   }),
   components: {
     TreeView,
@@ -72,6 +74,8 @@ export default {
         this.dialog_concept = true;
       } else if (value.type === "submodulo") {
         this.dialog_submodule = true;
+      } else if (value.type === "informationitem") {
+        this.dialog_procedure = true;
       }
       this.objectTreeView = value;
     },
@@ -84,6 +88,8 @@ export default {
         this.dialog_concept = false;
       } else if (value === "submodulo") {
         this.dialog_submodule = false;
+      } else if (value === "procedimento") {
+        this.dialog_procedure = false;
       }
     }
   }

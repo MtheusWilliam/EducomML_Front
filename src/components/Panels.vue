@@ -172,14 +172,7 @@
                   </v-col>
                   <v-col cols="3">
                     <!--Formulario para edição do arquivo/mobilemedia-->
-                    <v-btn
-                      icon="icon"
-                      color="white"
-                      @close="dialogclose"
-                      :optionCall="objectFile"
-                      :type="type"
-                      :domain="dominio"
-                    >
+                    <v-btn icon="icon" color="white">
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
@@ -290,14 +283,7 @@
                         </v-col>
                         <v-col cols="3">
                           <!--Formulario para edição do arquivo/mobilemedia-->
-                          <v-btn
-                            icon="icon"
-                            color="white"
-                            @close="dialogclose"
-                            :optionCall="objectFile"
-                            :type="type"
-                            :domain="dominio"
-                          >
+                          <v-btn icon="icon" color="white">
                             <v-icon>mdi-view-headline</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
@@ -399,14 +385,7 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @close="dialogclose"
-                                  :optionCall="objectFile"
-                                  :type="type"
-                                  :domain="dominio"
-                                >
+                                <v-btn icon="icon" color="white">
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
@@ -759,14 +738,7 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @close="dialogclose"
-                                  :optionCall="objectFile"
-                                  :type="type"
-                                  :domain="dominio"
-                                >
+                                <v-btn icon="icon" color="white">
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
@@ -895,7 +867,8 @@ export default {
     "dialog_knowledgedomain",
     "dialog_module",
     "dialog_submodule",
-    "dialog_concept"
+    "dialog_concept",
+    "dialog_proceduretree"
   ],
   data: () => ({
     itemsMenuNewModulo: [
@@ -1038,6 +1011,66 @@ export default {
               )
               .then(function(resposta2) {
                 vm.modulo = resposta2.data;
+              });
+          });
+      }
+    },
+    dialog_proceduretree: function() {
+      console.log("watch panels");
+      if (this.dialog_proceduretree === true) {
+        console.log("OIR");
+        var vm = this;
+        var csrftoken = Cookie.get("csrftoken");
+        var headers = {
+          "X-CSRFTOKEN": csrftoken
+        };
+        this.dialog_procedure = this.dialog_proceduretree;
+        axios
+          .patch(
+            this.objectTreeView.url,
+            {
+              headers: headers
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          )
+          .then(function(resposta) {
+            vm.procedimento = resposta.data;
+            axios
+              .patch(
+                resposta.data.fk_idconcept,
+                {
+                  headers: headers
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              )
+              .then(function(resposta2) {
+                vm.conceito = resposta2.data;
+                axios
+                  .patch(
+                    resposta2.data.fk_idmodule,
+                    {
+                      headers: headers
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(function(resposta3) {
+                    vm.modulo = resposta3.data;
+                  });
               });
           });
       }
@@ -1215,6 +1248,8 @@ export default {
       this.modulo = "";
       this.submodulo = "";
       this.procedimento = "";
+
+      this.controlTreeView("procedimento");
 
       await this.$nextTick(function() {
         vm.getDominio();
