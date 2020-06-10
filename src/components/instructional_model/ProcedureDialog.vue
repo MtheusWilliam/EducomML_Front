@@ -90,7 +90,7 @@
 import axios from "axios";
 export default {
   name: "ProcedureDialog",
-  props: ["concept"],
+  props: ["dialog", "procedure", "concept", "module"],
   data: () => ({
     valid: true,
     auxItemInfo: "",
@@ -113,55 +113,118 @@ export default {
         "É necessário inserir uma descrição do procedimento a ser inserido"
     ]
   }),
+  watch: {
+    dialog: function() {
+      console.log("procedure: ", this.procedure);
+      var vm = this;
+      this.$nextTick(function() {
+        vm.procedureName = vm.procedure.nameinformationitem;
+        vm.procedureDescription = vm.procedure.descriptioninformationitem;
+      });
+      this.phasesControl = [];
+      if (this.procedure !== "") {
+        this.procedure.phaseprocedures.forEach(element => {
+          console.log("foreach", this.phasesControl);
+          this.phasesControl.push({
+            description: element.description,
+            url: element.url
+          });
+        });
+      }
+    }
+  },
   methods: {
     async altera_Cria_Procedimento() {
       var vm = this;
-      await axios
-        .post(
-          `http://localhost:8000/informationitem/`,
-          {
-            nameinformationitem: this.procedureName,
-            descriptioninformationitem: this.procedureDescription,
-            fk_informationitemtype: `http://localhost:8000/informationitemtype/4/`,
-            fk_idconcept: this.concept.url
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
+      if (this.procedure === "") {
+        await axios
+          .post(
+            `http://localhost:8000/informationitem/`,
+            {
+              nameinformationitem: this.procedureName,
+              descriptioninformationitem: this.procedureDescription,
+              fk_informationitemtype: `http://localhost:8000/informationitemtype/4/`,
+              fk_idconcept: this.concept.url
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
             }
-          }
-        )
-        .then(function(resposta) {
-          vm.auxItemInfo = resposta.data.url;
-        });
+          )
+          .then(function(resposta) {
+            vm.auxItemInfo = resposta.data.url;
+          });
+      } else {
+        await axios
+          .put(
+            `http://localhost:8000/informationitem/` +
+              this.procedure.idinformationitem +
+              `/`,
+            {
+              nameinformationitem: this.procedureName,
+              descriptioninformationitem: this.procedureDescription,
+              fk_informationitemtype: `http://localhost:8000/informationitemtype/4/`,
+              fk_idconcept: this.concept.url
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          )
+          .then(function(resposta) {
+            vm.auxItemInfo = resposta.data.url;
+          });
+      }
     },
     async altera_Cria_Fases() {
       var vm = this;
       this.phasesControl.forEach(async function(element, index) {
-        await axios.post(
-          `http://localhost:8000/phaseprocedure/`,
-          {
-            order: index + 1,
-            description: element.description,
-            fk_informationitem: vm.auxItemInfo
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
+        if (element.url === null) {
+          await axios.post(
+            `http://localhost:8000/phaseprocedure/`,
+            {
+              order: index + 1,
+              description: element.description,
+              fk_informationitem: vm.auxItemInfo
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
             }
-          }
-        );
+          );
+        } else {
+          await axios.put(
+            element.url,
+            {
+              order: index + 1,
+              description: element.description,
+              fk_informationitem: vm.auxItemInfo
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          );
+        }
       });
     },
 
     async validate() {
       if (this.$refs.form.validate()) {
+        var i = this.phasesControl.length;
+        console.log("i", i);
         await this.altera_Cria_Procedimento();
         await this.altera_Cria_Fases();
         this.phasesControl = [];
-        this.$emit("close");
+        await this.$emit("close", i);
       }
     },
     reset() {
@@ -171,11 +234,20 @@ export default {
     },
     addPhase() {
       this.phasesControl.push({
-        id: this.phasesControl.length + 1,
-        description: null
+        description: null,
+        url: null
       });
     },
-    deletaPhase(idPhase) {
+    async deletaPhase(idPhase) {
+      if (this.phasesControl[idPhase].url !== null) {
+        await axios.delete(this.phasesControl[idPhase].url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        });
+        await this.altera_Cria_Fases();
+      }
       if (idPhase == 0) {
         this.phasesControl.shift();
       } else {

@@ -137,7 +137,13 @@
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
               <!--Formulario para criação de procedimento -->
               <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="600px">
-                <ProcedureDialog @close="dialogclose" :concept="conceito" />
+                <ProcedureDialog
+                  @close="dialogclose"
+                  :dialog="dialog_procedure"
+                  :procedure="procedimento"
+                  :concept="conceito"
+                  :module="modulo"
+                />
               </v-dialog>
             </v-col>
           </v-row>
@@ -166,8 +172,15 @@
                   </v-col>
                   <v-col cols="3">
                     <!--Formulario para edição do arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white">
-                      <v-icon>mdi-eye</v-icon>
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @close="dialogclose"
+                      :optionCall="objectFile"
+                      :type="type"
+                      :domain="dominio"
+                    >
+                      <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
                     <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
@@ -277,8 +290,15 @@
                         </v-col>
                         <v-col cols="3">
                           <!--Formulario para edição do arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white">
-                            <v-icon>mdi-eye</v-icon>
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @close="dialogclose"
+                            :optionCall="objectFile"
+                            :type="type"
+                            :domain="dominio"
+                          >
+                            <v-icon>mdi-view-headline</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
                           <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
@@ -379,8 +399,15 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white">
-                                  <v-icon>mdi-eye</v-icon>
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @close="dialogclose"
+                                  :optionCall="objectFile"
+                                  :type="type"
+                                  :domain="dominio"
+                                >
+                                  <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
@@ -522,7 +549,7 @@
                                     <v-col cols="3">
                                       <!--Formulario para edição do arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn icon="icon" color="white">
-                                        <v-icon>mdi-eye</v-icon>
+                                        <v-icon>mdi-view-headline</v-icon>
                                       </v-btn>
                                       <!--Função para excluir arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn
@@ -539,7 +566,7 @@
                                 <v-expansion-panel-content></v-expansion-panel-content>
                               </v-expansion-panel>
                               <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
-                              <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
+                              <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                               <v-expansion-panels
                                 v-for="(procedure) in proceduresUnderConcept(conceito)"
                                 :key="procedure.idinformationitem"
@@ -553,9 +580,11 @@
                                       </v-col>
                                       <v-col cols="3">
                                         <!--Formulario para edição do procedure-->
-                                        <v-btn icon="icon" color="white">
-                                          <v-icon>mdi-eye</v-icon>
-                                        </v-btn>
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
+                                        ></v-btn>
                                         <!--Função para excluir arquivo/mobilemedia-->
                                         <v-btn
                                           icon="icon"
@@ -730,8 +759,15 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white">
-                                  <v-icon>mdi-eye</v-icon>
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @close="dialogclose"
+                                  :optionCall="objectFile"
+                                  :type="type"
+                                  :domain="dominio"
+                                >
+                                  <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
@@ -764,8 +800,12 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do procedure-->
-                                <v-btn icon="icon" color="white">
-                                  <v-icon>mdi-eye</v-icon>
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
+                                >
+                                  <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn icon="icon" color="white" @click="deleteelemento(procedure)">
@@ -878,6 +918,8 @@ export default {
     modulo: "",
     submodulo: "",
     conceito: "",
+    arquivo_texto: "",
+    procedimento: "",
     dialog_modulo: false,
     dialog_submodulo: false,
     dialog_conceito: false,
@@ -1068,6 +1110,12 @@ export default {
       this.modulo = value2;
       this.conceito = value;
     },
+    setprocedimento(value, value2, value3) {
+      this.procedimento = value;
+      this.conceito = value2;
+      this.modulo = value3;
+    },
+
     close_or_save_modulo(value) {
       var vm = this;
       if (value === "save") {
@@ -1103,10 +1151,8 @@ export default {
       this.modulo = "";
       this.controlTreeView("conceito");
     },
-
     async deleteelemento(value) {
       var vm = this;
-      console.log(value);
       if (value.path !== null && value.url.search("mobilemedia") === 22) {
         await firebase
           .storage()
@@ -1157,7 +1203,7 @@ export default {
       this.objectFile = value.optionCall;
       this.type = value.type;
     },
-    dialogclose() {
+    async dialogclose(rounds) {
       var vm = this;
       this.dialog_imagem = false;
       this.dialog_audio = false;
@@ -1165,9 +1211,19 @@ export default {
       this.dialog_texto = false;
       this.dialog_link = false;
       this.dialog_procedure = false;
-      this.$nextTick(function() {
+      this.conceito = "";
+      this.modulo = "";
+      this.submodulo = "";
+      this.procedimento = "";
+
+      await this.$nextTick(function() {
         vm.getDominio();
-      }, 3);
+      }, 3 + rounds);
+      if (rounds > 5) {
+        await setTimeout(function() {
+          vm.getDominio();
+        }, 600);
+      }
     },
     proceduresUnderConcept(concept) {
       function checkProcedure(proc) {
