@@ -146,6 +146,41 @@
         <v-expansion-panel-content>
           <!--CONTENT DO DOMÍNIO-->
           {{ dominio_data.subtitle }}
+          <!-- PANELS DOS ARQUIVOS DO DOMÍNIO-->
+          <v-expansion-panels
+            v-for="(mobilemedia) in dominio.mobilemedias"
+            :key="mobilemedia.idmobilemedia"
+            class="mt-2 mb-2"
+          >
+            <v-expansion-panel>
+              <v-expansion-panel-header color="orange" style="color:white;">
+                <v-row>
+                  <v-col cols="9">
+                    <p>
+                      <v-icon
+                        color="white"
+                        large
+                      >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                      {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                    </p>
+                  </v-col>
+                  <v-col cols="3">
+                    <!--Formulario para edição do arquivo/mobilemedia-->
+                    <v-btn icon="icon" color="white">
+                      <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                    <!--Função para excluir arquivo/mobilemedia-->
+                    <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-header>
+
+              <v-expansion-panel-content></v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
           <!--Panels dos Módulos-->
           <v-expansion-panels
             v-for="(modulo) in dominio_data.modules"
@@ -222,6 +257,42 @@
               <v-expansion-panel-content>
                 <!--CONTENT DO MÓDULO-->
                 {{ modulo.subtitle }}
+                <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
+                <v-expansion-panels
+                  v-for="(mobilemedia) in modulo.mobilemedias"
+                  :key="mobilemedia.idmobilemedia"
+                  class="mt-2 mb-2"
+                >
+                  <v-expansion-panel>
+                    <v-expansion-panel-header color="orange" style="color:white;">
+                      <v-row>
+                        <v-col cols="9">
+                          <p>
+                            <v-icon
+                              color="white"
+                              large
+                            >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                            {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                          </p>
+                        </v-col>
+                        <v-col cols="3">
+                          <!--Formulario para edição do arquivo/mobilemedia-->
+                          <v-btn icon="icon" color="white">
+                            <v-icon>mdi-eye</v-icon>
+                          </v-btn>
+                          <!--Função para excluir arquivo/mobilemedia-->
+                          <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-expansion-panel-header>
+
+                    <v-expansion-panel-content></v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+                <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
+
                 <!--Panels dos SubMódulos-->
                 <v-expansion-panels
                   v-for="(submodulo) in modulo.submodules"
@@ -286,7 +357,47 @@
                     <!--FIM DO HEADER DO SUBMÓDULO-->
 
                     <v-expansion-panel-content>
+                      <!--CONTENT DO SUBMODULO-->
                       {{ submodulo.subtitle }}
+                      <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
+                      <v-expansion-panels
+                        v-for="(mobilemedia) in submodulo.mobilemedias"
+                        :key="mobilemedia.idmobilemedia"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="orange" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>
+                                  <v-icon
+                                    color="white"
+                                    large
+                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                </p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do arquivo/mobilemedia-->
+                                <v-btn icon="icon" color="white">
+                                  <v-icon>mdi-eye</v-icon>
+                                </v-btn>
+                                <!--Função para excluir arquivo/mobilemedia-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(mobilemedia)"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content></v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                      <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
                       <v-expansion-panels
                         v-for="(conceito) in submodulo.concepts"
@@ -493,45 +604,6 @@
                         </v-expansion-panel>
                       </v-expansion-panels>
 
-                      <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
-                      <v-expansion-panels
-                        v-for="(mobilemedia) in submodulo.mobilemedias"
-                        :key="mobilemedia.idmobilemedia"
-                        class="mt-2 mb-2"
-                      >
-                        <v-expansion-panel>
-                          <v-expansion-panel-header color="orange" style="color:white;">
-                            <v-row>
-                              <v-col cols="9">
-                                <p>
-                                  <v-icon
-                                    color="white"
-                                    large
-                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
-                                </p>
-                              </v-col>
-                              <v-col cols="3">
-                                <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white">
-                                  <v-icon>mdi-eye</v-icon>
-                                </v-btn>
-                                <!--Função para excluir arquivo/mobilemedia-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="deleteelemento(mobilemedia)"
-                                >
-                                  <v-icon>mdi-close</v-icon>
-                                </v-btn>
-                              </v-col>
-                            </v-row>
-                          </v-expansion-panel-header>
-
-                          <v-expansion-panel-content></v-expansion-panel-content>
-                        </v-expansion-panel>
-                      </v-expansion-panels>
-                      <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--FIM DO CONTENT PANELS DOS SUBMÓDULOS-->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -735,80 +807,10 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
                 <!-- FIM DOS PANELS DOS CONCEITOS DOS MÓDULOS-->
-                <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
-                <v-expansion-panels
-                  v-for="(mobilemedia) in modulo.mobilemedias"
-                  :key="mobilemedia.idmobilemedia"
-                  class="mt-2 mb-2"
-                >
-                  <v-expansion-panel>
-                    <v-expansion-panel-header color="orange" style="color:white;">
-                      <v-row>
-                        <v-col cols="9">
-                          <p>
-                            <v-icon
-                              color="white"
-                              large
-                            >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                            {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
-                          </p>
-                        </v-col>
-                        <v-col cols="3">
-                          <!--Formulario para edição do arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white">
-                            <v-icon>mdi-eye</v-icon>
-                          </v-btn>
-                          <!--Função para excluir arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
-                            <v-icon>mdi-close</v-icon>
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </v-expansion-panel-header>
-
-                    <v-expansion-panel-content></v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-                <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
               </v-expansion-panel-content>
               <!--FIM DO CONTENT DO MÓDULO-->
             </v-expansion-panel>
           </v-expansion-panels>
-          <!-- PANELS DOS ARQUIVOS DO DOMÍNIO-->
-          <v-expansion-panels
-            v-for="(mobilemedia) in dominio.mobilemedias"
-            :key="mobilemedia.idmobilemedia"
-            class="mt-2 mb-2"
-          >
-            <v-expansion-panel>
-              <v-expansion-panel-header color="orange" style="color:white;">
-                <v-row>
-                  <v-col cols="9">
-                    <p>
-                      <v-icon
-                        color="white"
-                        large
-                      >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                      {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
-                    </p>
-                  </v-col>
-                  <v-col cols="3">
-                    <!--Formulario para edição do arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white">
-                      <v-icon>mdi-eye</v-icon>
-                    </v-btn>
-                    <!--Função para excluir arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
-                      <v-icon>mdi-close</v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-header>
-
-              <v-expansion-panel-content></v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-          <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
         </v-expansion-panel-content>
         <!--FIM DO CONTENT DO DOMÍNIO-->
       </v-expansion-panel>

@@ -103,9 +103,6 @@ export default {
     ]
   }),
   methods: {
-    reset() {
-      this.$emit("close");
-    },
     async postMobileMedia() {
       var auxinformationitem = {
         auxinfo:
@@ -223,6 +220,11 @@ export default {
 
       await this.postMobileMedia();
       await this.$emit("close");
+      await this.$refs.form.reset();
+    },
+    reset() {
+      this.$emit("close");
+      this.$refs.form.reset();
     }
   }
 };

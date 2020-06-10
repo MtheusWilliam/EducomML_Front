@@ -112,9 +112,6 @@ export default {
     infoItemLearningStyles: ["Visual", "Textual"]
   }),
   methods: {
-    reset() {
-      this.$emit("close");
-    },
     async postMobileMedia() {
       // var vm = this;
       var auxinformationitem = {
@@ -236,6 +233,12 @@ export default {
 
       await this.postMobileMedia();
       await this.$emit("close");
+      await this.$refs.form.reset();
+    },
+
+    reset() {
+      this.$emit("close");
+      this.$refs.form.reset();
     }
   }
 };

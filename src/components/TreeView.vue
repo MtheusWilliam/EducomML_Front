@@ -52,12 +52,14 @@ export default {
             id: mobilemedia.url,
             name: "[MOBILEMEDIA] " + mobilemedia.label
           });
+          indexmodulo++;
         });
       }
 
       if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
         this.dominio.modules.forEach(modulo => {
           if (modulo.fk_idmodule === null) {
+            var indexsubmodulo = 0;
             this.treeData[0].children.push({
               id: modulo.url,
               name: "[MODULO] " + modulo.namemodule,
@@ -70,11 +72,12 @@ export default {
                   id: mobilemedia.url,
                   name: "[MOBILEMEDIA] " + mobilemedia.label
                 });
+                indexsubmodulo++;
               });
             }
 
             if (modulo.submodules.length) {
-              var indexsubmodulo = 0;
+              var indexconceito = 0;
               modulo.submodules.forEach(submodulo => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: submodulo.url + "sub",
@@ -90,11 +93,11 @@ export default {
                       id: mobilemedia.url,
                       name: "[MOBILEMEDIA] " + mobilemedia.label
                     });
+                    indexconceito++;
                   });
                 }
 
                 if (submodulo.concepts.length) {
-                  var indexconceito = 0;
                   submodulo.concepts.forEach(conceito => {
                     this.treeData[0].children[indexmodulo].children[
                       indexsubmodulo
@@ -139,14 +142,17 @@ export default {
               });
             }
             if (modulo.concepts.length) {
-              var indexconceito = 0;
+              if (indexsubmodulo > 0) {
+                indexconceito = indexsubmodulo;
+              } else {
+                indexconceito = 0;
+              }
               modulo.concepts.forEach(conceito => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: conceito.url,
                   name: "[CONCEITO] " + conceito.nameconcept,
                   children: []
                 });
-
                 if (conceito.mobilemedias.length) {
                   conceito.mobilemedias.forEach(mobilemedia => {
                     this.treeData[0].children[indexmodulo].children[
@@ -173,7 +179,6 @@ export default {
                     }
                   });
                 }
-
                 indexconceito++;
               });
             }
