@@ -4,6 +4,7 @@
     <v-expansion-panels>
       <v-expansion-panel v-for="(item,i) in 1" :key="i">
         <v-expansion-panel-header color="purple" style="color:white;">
+          <!--HEADER DO DOMÍNIO-->
           <v-row>
             <v-col cols="9">
               <p>
@@ -141,7 +142,9 @@
             </v-col>
           </v-row>
         </v-expansion-panel-header>
+        <!--FIM DO HEADER DO DOMÍNIO-->
         <v-expansion-panel-content>
+          <!--CONTENT DO DOMÍNIO-->
           {{ dominio_data.subtitle }}
           <!--Panels dos Módulos-->
           <v-expansion-panels
@@ -151,6 +154,7 @@
           >
             <v-expansion-panel v-if="modulo.fk_idmodule === null">
               <v-expansion-panel-header color="primary" style="color:white;">
+                <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col cols="9">
                     <p>
@@ -213,8 +217,10 @@
                   </v-col>
                 </v-row>
               </v-expansion-panel-header>
+              <!--FIM DO HEADER DO MÓDULO-->
 
               <v-expansion-panel-content>
+                <!--CONTENT DO MÓDULO-->
                 {{ modulo.subtitle }}
                 <!--Panels dos SubMódulos-->
                 <v-expansion-panels
@@ -224,6 +230,7 @@
                 >
                   <v-expansion-panel>
                     <v-expansion-panel-header color="pink" style="color:white;">
+                      <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col cols="9">
                           <p>
@@ -276,6 +283,7 @@
                         </v-col>
                       </v-row>
                     </v-expansion-panel-header>
+                    <!--FIM DO HEADER DO SUBMÓDULO-->
 
                     <v-expansion-panel-content>
                       {{ submodulo.subtitle }}
@@ -287,6 +295,7 @@
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#00C853" style="color:white;">
+                            <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-row>
                               <v-col cols="9">
                                 <p>
@@ -331,7 +340,7 @@
 
                                   <v-list>
                                     <v-list-item
-                                      @click="setconceito(conceito);dialog_procedure=true"
+                                      @click="setconceito(conceito, modulo);dialog_procedure=true"
                                     >
                                       <v-list-item-title>Procedimento</v-list-item-title>
                                     </v-list-item>
@@ -352,6 +361,7 @@
                               </v-col>
                             </v-row>
                           </v-expansion-panel-header>
+                          <!--FIM DO HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
 
                           <v-expansion-panel-content>
                             <p>Relacionamentos:</p>
@@ -386,6 +396,7 @@
                             >
                               <v-expansion-panel>
                                 <v-expansion-panel-header color="orange" style="color:white;">
+                                  <!--HEADER DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS-->
                                   <v-row>
                                     <v-col cols="9">
                                       <p>
@@ -420,7 +431,7 @@
                         </v-expansion-panel>
                       </v-expansion-panels>
 
-                      <!-- Listagem dos arquivos dos submodulos-->
+                      <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in submodulo.mobilemedias"
                         :key="mobilemedia.idmobilemedia"
@@ -458,7 +469,8 @@
                           <v-expansion-panel-content></v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
-                      <!--Panels dos SubMódulos-->
+                      <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
+                      <!--FIM DO CONTENT PANELS DOS SUBMÓDULOS-->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -471,6 +483,7 @@
                 >
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#00C853" style="color:white;">
+                      <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col cols="9">
                           <p>
@@ -514,7 +527,9 @@
                             </template>
 
                             <v-list>
-                              <v-list-item @click="setconceito(conceito);dialog_procedure=true">
+                              <v-list-item
+                                @click="setconceito(conceito, modulo);dialog_procedure=true"
+                              >
                                 <v-list-item-title>Procedimento</v-list-item-title>
                               </v-list-item>
                             </v-list>
@@ -534,6 +549,7 @@
                         </v-col>
                       </v-row>
                     </v-expansion-panel-header>
+                    <!--FIM DO HEADER DOS CONCEITOS DOS MÓDULOS-->
 
                     <v-expansion-panel-content>
                       <!-- Listagem dos relacionamentos do conceito -->
@@ -560,7 +576,7 @@
                         </template>
                       </v-simple-table>
 
-                      <!-- Listagem dos arquivos dos conceitos -->
+                      <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS -->
                       <v-expansion-panels
                         v-for="(mobilemedia) in conceito.mobilemedias"
                         :key="mobilemedia.idmobilemedia"
@@ -598,12 +614,12 @@
                           <v-expansion-panel-content></v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
+                      <!-- FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS -->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
-
-                <!-- Listagem dos mobilemedias dos módulos-->
-
+                <!-- FIM DOS PANELS DOS CONCEITOS DOS MÓDULOS-->
+                <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
                   v-for="(mobilemedia) in modulo.mobilemedias"
                   :key="mobilemedia.idmobilemedia"
@@ -637,10 +653,12 @@
                     <v-expansion-panel-content></v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
+                <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
               </v-expansion-panel-content>
+              <!--FIM DO CONTENT DO MÓDULO-->
             </v-expansion-panel>
           </v-expansion-panels>
-          <!-- Listagem dos arquivos do dominio -->
+          <!-- PANELS DOS ARQUIVOS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(mobilemedia) in dominio.mobilemedias"
             :key="mobilemedia.idmobilemedia"
@@ -674,7 +692,9 @@
               <v-expansion-panel-content></v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+          <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
         </v-expansion-panel-content>
+        <!--FIM DO CONTENT DO DOMÍNIO-->
       </v-expansion-panel>
     </v-expansion-panels>
   </v-row>
@@ -1030,6 +1050,14 @@ export default {
       this.$nextTick(function() {
         vm.getDominio();
       }, 3);
+    },
+    proceduresUnderConcept(concept) {
+      console.log("FUNCTION PROCEDURE ITEMS", concept.informationitems);
+      return concept.informationitems.filter(
+        procedure =>
+          procedure.fk_informationitemtype ==
+          `http://localhost:8000/informationitemtype/4/`
+      );
     }
   }
 };
