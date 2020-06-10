@@ -55,6 +55,15 @@ export default {
               children: []
             });
 
+            if (modulo.mobilemedias.length) {
+              modulo.mobilemedias.forEach(mobilemedia => {
+                this.treeData[0].children[indexmodulo].children.push({
+                  id: mobilemedia.url,
+                  name: "[MOBILEMEDIA] " + mobilemedia.label
+                });
+              });
+            }
+
             if (modulo.submodules.length) {
               var indexsubmodulo = 0;
               modulo.submodules.forEach(submodulo => {
@@ -64,28 +73,101 @@ export default {
                   children: []
                 });
 
+                if (submodulo.mobilemedias.length) {
+                  submodulo.mobilemedias.forEach(mobilemedia => {
+                    this.treeData[0].children[indexmodulo].children[
+                      indexsubmodulo
+                    ].children.push({
+                      id: mobilemedia.url,
+                      name: "[MOBILEMEDIA] " + mobilemedia.label
+                    });
+                  });
+                }
+
                 if (submodulo.concepts.length) {
+                  var indexconceito = 0;
                   submodulo.concepts.forEach(conceito => {
                     this.treeData[0].children[indexmodulo].children[
                       indexsubmodulo
                     ].children.push({
                       id: conceito.url,
-                      name: "[CONCEITO] " + conceito.nameconcept
+                      name: "[CONCEITO] " + conceito.nameconcept,
+                      children: []
                     });
+
+                    if (conceito.mobilemedias.length) {
+                      conceito.mobilemedias.forEach(mobilemedia => {
+                        this.treeData[0].children[indexmodulo].children[
+                          indexsubmodulo
+                        ].children[indexconceito].children.push({
+                          id: mobilemedia.url,
+                          name: "[MOBILEMEDIA] " + mobilemedia.label
+                        });
+                      });
+                    }
+
+                    if (conceito.informationitems.length) {
+                      conceito.informationitems.forEach(procedure => {
+                        if (
+                          procedure.fk_informationitemtype ===
+                          "http://127.0.0.1:8000/informationitemtype/4/"
+                        ) {
+                          this.treeData[0].children[indexmodulo].children[
+                            indexsubmodulo
+                          ].children[indexconceito].children.push({
+                            id: procedure.url,
+                            name:
+                              "[PROCEDIMENTO] " + procedure.nameinformationitem
+                          });
+                        }
+                      });
+                    }
+
+                    indexconceito++;
                   });
                 }
                 indexsubmodulo++;
               });
             }
             if (modulo.concepts.length) {
+              var indexconceito = 0;
               modulo.concepts.forEach(conceito => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: conceito.url,
-                  name: "[CONCEITO] " + conceito.nameconcept
+                  name: "[CONCEITO] " + conceito.nameconcept,
+                  children: []
                 });
+
+                if (conceito.mobilemedias.length) {
+                  conceito.mobilemedias.forEach(mobilemedia => {
+                    this.treeData[0].children[indexmodulo].children[
+                      indexconceito
+                    ].children.push({
+                      id: mobilemedia.url,
+                      name: "[MOBILEMEDIA] " + mobilemedia.label
+                    });
+                  });
+                }
+
+                if (conceito.informationitems.length) {
+                  conceito.informationitems.forEach(procedure => {
+                    if (
+                      procedure.fk_informationitemtype ===
+                      "http://127.0.0.1:8000/informationitemtype/4/"
+                    ) {
+                      this.treeData[0].children[indexmodulo].children[
+                        indexconceito
+                      ].children.push({
+                        id: procedure.url,
+                        name: "[PROCEDIMENTO] " + procedure.nameinformationitem
+                      });
+                    }
+                  });
+                }
+
+                indexconceito++;
               });
             }
-
             indexmodulo++;
           }
         });
