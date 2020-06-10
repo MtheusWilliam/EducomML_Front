@@ -148,9 +148,9 @@ export default {
       });
     },
     module: function() {
-      this.$refs.form.reset();
       this.targetconcepts = [];
       if (this.module.concepts) {
+        this.conceptName = this.concept.nameconcept;
         this.module.concepts.forEach(element => {
           this.targetconcepts.push({
             text: element.nameconcept,
