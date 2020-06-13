@@ -9,7 +9,7 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
           <label class="pt-2" style="font-size:1.3em;" for="procedureNameArea">
-            <strong>Escreva o nome do procedimento:</strong>
+            <strong>Identificador do procedimento:</strong>
           </label>
           <v-text-field
             id="procedureNameArea"
@@ -42,27 +42,38 @@
           </v-app-bar>
           <v-container>
             <v-row style="height:50px;">
-              <v-col>
+              <v-col cols="3">
+                <strong>
+                  <p style="font-size:1.2em;">Ordem da fase</p>
+                </strong>
+              </v-col>
+              <v-col cols="8">
                 <strong>
                   <p style="font-size:1.2em;">Descrição da fase</p>
                 </strong>
               </v-col>
               <v-col cols="1">
-                <v-btn icon="icon" class="mb-1">
+                <v-btn icon="icon">
                   <v-icon large class="mb-3" color="primary" @click="addPhase()">mdi-plus-box</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
 
             <v-row v-for="(item,i) in phasesControl" :key="i">
-              <v-text-field
-                class="ml-3"
-                v-model="phasesControl[i].description"
-                :rules="phasesControlRules"
-                label="Fase do procedimento"
-                required
-              ></v-text-field>
-              <v-col cols="1" class="mt-2">
+              <v-cols
+                cols="3"
+                style="width: 25%; margin-left:10px; padding: 20px 0; text-align:center; font-size: 1.8em;"
+              >{{i+1}}º</v-cols>
+              <v-cols cols="8" style="width: 64.6%;">
+                <v-textarea
+                  v-model="phasesControl[i].description"
+                  :rules="phasesControlRules"
+                  label="Fase do procedimento"
+                  rows="2"
+                  required
+                ></v-textarea>
+              </v-cols>
+              <v-col cols="1" style="width: 10%;">
                 <v-btn icon="icon" class="mb-1">
                   <v-icon large class="mb-1" color="red" @click="deletaPhase(i)">mdi-minus-box</v-icon>
                 </v-btn>
@@ -123,7 +134,6 @@ export default {
       this.phasesControl = [];
       if (this.procedure !== "") {
         this.procedure.phaseprocedures.forEach(element => {
-          console.log("foreach", this.phasesControl);
           this.phasesControl.push({
             description: element.description,
             url: element.url

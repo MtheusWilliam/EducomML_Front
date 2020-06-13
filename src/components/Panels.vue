@@ -95,6 +95,8 @@
                   :optionCall="objectFile"
                   :type="type"
                   :domain="dominio"
+                  :dialog="dialog_imagem"
+                  :mobilemedia="mobilemedia"
                 />
               </v-dialog>
               <!--Formulario para criação de video-->
@@ -104,6 +106,8 @@
                   :optionCall="objectFile"
                   :type="type"
                   :domain="dominio"
+                  :dialog="dialog_video"
+                  :mobilemedia="mobilemedia"
                 />
               </v-dialog>
               <!--Formulario para criação de audio-->
@@ -113,6 +117,8 @@
                   :optionCall="objectFile"
                   :type="type"
                   :domain="dominio"
+                  :dialog="dialog_audio"
+                  :mobilemedia="mobilemedia"
                 />
               </v-dialog>
               <!--Formulario para criação de texto-->
@@ -122,6 +128,8 @@
                   :optionCall="objectFile"
                   :type="type"
                   :domain="dominio"
+                  :dialog="dialog_texto"
+                  :mobilemedia="mobilemedia"
                 />
               </v-dialog>
               <!--Formulario para criação de link-->
@@ -131,6 +139,8 @@
                   :optionCall="objectFile"
                   :type="type"
                   :domain="dominio"
+                  :dialog="dialog_link"
+                  :mobilemedia="mobilemedia"
                 />
               </v-dialog>
 
@@ -172,7 +182,7 @@
                   </v-col>
                   <v-col cols="3">
                     <!--Formulario para edição do arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white">
+                    <v-btn icon="icon" color="white" @click="setmobilemedia(mobilemedia)">
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
@@ -283,7 +293,7 @@
                         </v-col>
                         <v-col cols="3">
                           <!--Formulario para edição do arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white">
+                          <v-btn icon="icon" color="white" @click="setmobilemedia(mobilemedia)">
                             <v-icon>mdi-view-headline</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
@@ -385,7 +395,11 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white">
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="setmobilemedia(mobilemedia)"
+                                >
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
@@ -527,7 +541,11 @@
                                     </v-col>
                                     <v-col cols="3">
                                       <!--Formulario para edição do arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
-                                      <v-btn icon="icon" color="white">
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="setmobilemedia(mobilemedia)"
+                                      >
                                         <v-icon>mdi-view-headline</v-icon>
                                       </v-btn>
                                       <!--Função para excluir arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
@@ -738,7 +756,11 @@
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white">
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="setmobilemedia(mobilemedia)"
+                                >
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
@@ -891,7 +913,7 @@ export default {
     modulo: "",
     submodulo: "",
     conceito: "",
-    arquivo_texto: "",
+    mobilemedia: "",
     procedimento: "",
     dialog_modulo: false,
     dialog_submodulo: false,
@@ -1016,9 +1038,7 @@ export default {
       }
     },
     dialog_proceduretree: function() {
-      console.log("watch panels");
       if (this.dialog_proceduretree === true) {
-        console.log("OIR");
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
@@ -1148,7 +1168,28 @@ export default {
       this.conceito = value2;
       this.modulo = value3;
     },
-
+    setmobilemedia(value) {
+      this.mobilemedia = value;
+      if (value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/`) {
+        this.dialog_imagem = true;
+      } else if (
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/`
+      ) {
+        this.dialog_video = true;
+      } else if (
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
+      ) {
+        this.dialog_audio = true;
+      } else if (
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/4/`
+      ) {
+        this.dialog_texto = true;
+      } else if (
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/5/`
+      ) {
+        this.dialog_link = true;
+      }
+    },
     close_or_save_modulo(value) {
       var vm = this;
       if (value === "save") {
@@ -1247,6 +1288,7 @@ export default {
       this.conceito = "";
       this.modulo = "";
       this.submodulo = "";
+      this.mobilemedia = "";
       this.procedimento = "";
 
       this.controlTreeView("procedimento");

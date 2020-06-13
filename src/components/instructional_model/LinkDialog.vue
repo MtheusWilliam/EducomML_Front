@@ -63,10 +63,10 @@
 
 <script>
 import axios from "axios";
-
+import Cookie from "js-cookie";
 export default {
   name: "LinkDialog",
-  props: ["optionCall", "type"],
+  props: ["optionCall", "type", "dialog", "mobilemedia"],
   data: () => ({
     valid: true,
     linkUrl: "",
@@ -78,8 +78,54 @@ export default {
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemLearningStyles: ["Visual", "Textual"]
   }),
+  watch: {
+    dialog: function() {
+      console.log("oi watch");
+      console.log("oi watch222", this.mobilemedia);
+      if (this.mobilemedia) {
+        var vm = this;
+        this.$nextTick(function() {
+          if (vm.mobilemedia.urllink !== null) {
+            vm.linkUrl = this.mobilemedia.urllink;
+          }
+          if (vm.mobilemedia.difficultyLevel !== null) {
+            vm.infoLevel = vm.infoItemLevels[vm.mobilemedia.difficultyLevel];
+          }
+          if (vm.mobilemedia.learningStyle !== null) {
+            vm.infoLearning =
+              vm.infoItemLearningStyles[vm.mobilemedia.learningStyle];
+          }
+          if (vm.mobilemedia.fk_informationitem) {
+            var csrftoken = Cookie.get("csrftoken");
+            var headers = {
+              "X-CSRFTOKEN": csrftoken
+            };
+            axios
+              .patch(
+                vm.mobilemedia.fk_informationitem,
+                {
+                  headers: headers
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              )
+              .then(function(resposta) {
+                vm.infoClasse =
+                  vm.infoItemClasses[
+                    resposta.data.fk_informationitemtype.split("/")[4]
+                  ];
+              });
+          }
+        });
+      }
+    }
+  },
   methods: {
-    async postMobileMedia() {
+    async putOrPostMobileMedia() {
       var auxinformationitem = {
         auxinfo:
           `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/"
@@ -133,67 +179,116 @@ export default {
           fk_module: this.optionCall.url
         });
       }
-
-      if (this.type === "conceito") {
-        await axios
-          .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          })
-          .then(function(resposta) {
-            Object.assign(mobilemedia, {
-              fk_informationitem: resposta.data.url
-            });
-            axios
-              .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              })
-              .then(function(/*resposta*/) {
-                /*vm.moduloTitle = resposta.data.namemodule;
-                    vm.subTitle = resposta.data.subtitle;*/
+      if (this.mobilemedia) {
+        if (this.type === "conceito") {
+          await axios
+            .put(this.mobilemedia.fk_informationitem, iteminfo, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_informationitem: resposta.data.url
               });
-          });
-      } else if (this.type === "dominio" || this.type === "modulo") {
-        await axios
-          .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          })
-          .then(function(/*resposta*/) {
-            /*vm.moduloTitle = resposta.data.namemodule;
+              axios
+                .put(this.mobilemedia.url, mobilemedia, {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                })
+                .then(function(/*resposta*/) {
+                  /*vm.moduloTitle = resposta.data.namemodule;
                     vm.subTitle = resposta.data.subtitle;*/
-          });
+                });
+            });
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          await axios
+            .put(this.mobilemedia.url, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+            });
+        }
+      } else {
+        if (this.type === "conceito") {
+          await axios
+            .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_informationitem: resposta.data.url
+              });
+              axios
+                .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                })
+                .then(function(/*resposta*/) {
+                  /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+                });
+            });
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          await axios
+            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
+                    vm.subTitle = resposta.data.subtitle;*/
+            });
+        }
       }
     },
     async validate() {
       var vm = this;
-      this.infoClasse = this.infoItemClasses.findIndex(function(value) {
-        return value === vm.infoClasse;
-      });
-      this.infoLevel = this.infoItemLevels.findIndex(function(value) {
-        return value === vm.infoLevel;
-      });
-      this.infoLearning = this.infoItemLearningStyles.findIndex(function(
-        value
-      ) {
-        return value === vm.infoLearning;
-      });
+      if (this.$refs.form.validate()) {
+        await this.$refs.form.validate();
+        this.infoClasse = this.infoItemClasses.findIndex(function(value) {
+          return value === vm.infoClasse;
+        });
+        this.infoLevel = this.infoItemLevels.findIndex(function(value) {
+          return value === vm.infoLevel;
+        });
+        this.infoLearning = this.infoItemLearningStyles.findIndex(function(
+          value
+        ) {
+          return value === vm.infoLearning;
+        });
 
-      await this.postMobileMedia();
+        await this.putOrPostMobileMedia();
+        await this.$emit("close");
+        await this.$refs.form.reset();
+        await this.resetVariables();
+      }
+    },
+    resetVariables() {
+      this.linkUrl = "";
+      this.infoClasse = "";
+      this.infoLevel = "";
+      this.infoLearning = "";
+    },
+    async reset() {
       await this.$emit("close");
       await this.$refs.form.reset();
-    },
-
-    reset() {
-      this.$emit("close");
-      this.$refs.form.reset();
+      await this.resetVariables();
     }
   }
 };
