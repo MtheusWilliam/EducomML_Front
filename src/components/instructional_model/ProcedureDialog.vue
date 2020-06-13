@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>Descreva o procedimento a ser criado.{{procedure.nameinformationitem}}</p>
+          <p>Descreva o procedimento a ser criado.</p>
         </span>
       </v-card-title>
       <v-card-text>

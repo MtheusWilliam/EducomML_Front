@@ -7,6 +7,7 @@ import axios from "axios";
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
 import CreateConceitual from './components/CreateConceitual';
+import AvaliacaoDialog from './components/instructional_model/AvaliacaoDialog';
 import * as firebase from "firebase";
 
 var config = {
@@ -33,6 +34,11 @@ const router = new VueRouter({
       path: '/create/conceitual',
       name: 'createConceitual',
       component: CreateConceitual
+    },
+    {
+      path: '/teste',
+      name: 'teste',
+      component: AvaliacaoDialog
     },
   ]
 })

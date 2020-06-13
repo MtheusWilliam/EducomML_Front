@@ -790,7 +790,7 @@
                           <v-expansion-panel-header color="#737374" style="color:white;">
                             <v-row>
                               <v-col cols="9">
-                                <p>[Procedimento]{{procedure.nameinformationitem}}</p>
+                                <p>[Procedimento] {{procedure.nameinformationitem}}</p>
                               </v-col>
                               <v-col cols="3">
                                 <!--Formulario para edição do procedure-->
