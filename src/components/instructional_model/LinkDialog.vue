@@ -80,8 +80,6 @@ export default {
   }),
   watch: {
     dialog: function() {
-      console.log("oi watch");
-      console.log("oi watch222", this.mobilemedia);
       if (this.mobilemedia) {
         var vm = this;
         this.$nextTick(function() {

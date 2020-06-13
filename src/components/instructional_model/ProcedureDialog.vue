@@ -60,22 +60,23 @@
             </v-row>
 
             <v-row v-for="(item,i) in phasesControl" :key="i">
-              <v-cols
-                cols="3"
-                style="width: 25%; margin-left:10px; padding: 20px 0; text-align:center; font-size: 1.8em;"
-              >{{i+1}}º</v-cols>
-              <v-cols cols="8" style="width: 64.6%;">
+              <v-col cols="3" style="text-align:center; font-size: 1.8em; margin-top:20px;">{{i+1}}º</v-col>
+              <v-col cols="8">
                 <v-textarea
                   v-model="phasesControl[i].description"
+                  background-color="#F2F3F3"
                   :rules="phasesControlRules"
-                  label="Fase do procedimento"
                   rows="2"
+                  clearable
+                  clear-icon="mdi-close-circle"
+                  filled
+                  auto-grow
                   required
                 ></v-textarea>
-              </v-cols>
-              <v-col cols="1" style="width: 10%;">
-                <v-btn icon="icon" class="mb-1">
-                  <v-icon large class="mb-1" color="red" @click="deletaPhase(i)">mdi-minus-box</v-icon>
+              </v-col>
+              <v-col cols="1">
+                <v-btn icon="icon">
+                  <v-icon large color="red" @click="deletaPhase(i)">mdi-minus-box</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -94,6 +95,22 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <div class="text-center">
+      <v-dialog v-model="dialog_alert" width="500">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text
+            class="mt-3"
+            style="font-size: 1.3em;"
+          >Para criar um procedimento, é necessário criar pelo menos uma etapa.</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialog_alert = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
@@ -104,6 +121,7 @@ export default {
   props: ["dialog", "procedure", "concept", "module"],
   data: () => ({
     valid: true,
+    dialog_alert: false,
     auxItemInfo: "",
     phasesControl: [],
     phasesControlRules: [
@@ -150,7 +168,6 @@ export default {
       this.phasesControl = [];
       if (this.procedure !== "") {
         this.procedure.phaseprocedures.forEach(element => {
-          console.log("foreach", this.phasesControl);
           this.phasesControl.push({
             description: element.description,
             url: element.url
@@ -245,12 +262,15 @@ export default {
 
     async validate() {
       if (this.$refs.form.validate()) {
-        var i = this.phasesControl.length;
-        console.log("i", i);
-        await this.altera_Cria_Procedimento();
-        await this.altera_Cria_Fases();
-        this.phasesControl = [];
-        await this.$emit("close", i);
+        if (this.phasesControl.length > 0) {
+          var i = this.phasesControl.length;
+          await this.altera_Cria_Procedimento();
+          await this.altera_Cria_Fases();
+          this.phasesControl = [];
+          await this.$emit("close", i);
+        } else {
+          this.dialog_alert = true;
+        }
       }
     },
     reset() {
