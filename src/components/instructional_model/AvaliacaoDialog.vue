@@ -53,9 +53,18 @@
           </v-app-bar>
           <v-container>
             <v-row v-for="(item,i) in questionsControl" :key="i">
+              <v-col cols="11" style="background-color:grey;color:white;">
+                <h3>Questão {{i+1}}</h3>
+              </v-col>
+              <v-col cols="1" style="margin-bottom:-10px;">
+                <v-btn icon @click="deleteQuestion(i)">
+                  <v-icon class="ml-8 mb-2" x-large color="red">mdi-close-box</v-icon>
+                </v-btn>
+              </v-col>
               <v-row>
                 <v-col>
                   <v-text-field
+                    class="ml-3"
                     v-model="questionsControl[i].descriptionQuestion"
                     label="Descrição da questão"
                     required
@@ -63,20 +72,15 @@
                 </v-col>
                 <v-col
                   cols="3"
-                  class="ml-2 mt-3"
+                  class="mt-3"
                   v-if="item.typeQuestion === 1"
-                  style=" margin-right:-55px;"
+                  style=" margin-right:-35px;"
                 >
                   <v-btn
                     color="primary"
                     style="color:white;"
                     @click="addAlternative(i)"
                   >Adicionar Alternativa</v-btn>
-                </v-col>
-                <v-col cols="1" class="mt-3" style="margin-right:-30px;">
-                  <v-btn icon @click="deleteQuestion(i)">
-                    <v-icon class="ml-2" x-large color="red">mdi-close-box</v-icon>
-                  </v-btn>
                 </v-col>
               </v-row>
               <div
@@ -141,22 +145,6 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <div class="text-center">
-      <v-dialog v-model="dialog_alert" width="500">
-        <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
-          <v-card-text
-            class="mt-3"
-            style="font-size: 1.3em;"
-          >Para criar um procedimento, é necessário criar pelo menos uma etapa.</v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog_alert = false">Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
   </v-container>
 </template>
 
