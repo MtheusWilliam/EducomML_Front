@@ -1170,11 +1170,10 @@ export default {
     },
     setmobilemedia(value) {
       this.mobilemedia = value;
-      console.log(value);
       if (value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/`) {
         this.dialog_imagem = true;
       } else if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/` 
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/`
       ) {
         this.dialog_video = true;
       } else if (

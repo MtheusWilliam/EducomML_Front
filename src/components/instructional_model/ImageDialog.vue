@@ -61,7 +61,7 @@
           prepend-icon="mdi-camera"
         ></v-file-input>
         <v-spacer></v-spacer>
-        <label class="mr-2" for="viewImageIconId">Visualizar Imagem</label>
+        <label v-if="mobilemedia" class="mr-2" for="viewImageIconId">Visualizar Imagem</label>
         <v-icon
           id="viewImageIconId"
           :color="iconViewImageColor"
@@ -99,7 +99,7 @@ export default {
     valid: true,
     viewImage: false,
     viewImageSrc: "",
-    iconViewImageColor: "grey",
+    iconViewImageColor: "blue",
     urlDownload: "",
     infoLevel: "",
     infoLearning: "",
@@ -153,36 +153,47 @@ export default {
               .then(function(resposta) {
                 vm.infoClasse =
                   vm.infoItemClasses[
-                    resposta.data.fk_informationitemtype.split("/")[4]
+                    resposta.data.fk_informationitemtype.split("/")[4] - 1
                   ];
               });
           }
         });
         vm.getSrcImage();
+        vm.viewImage = true;
       } else {
-        vm.viewImageSrc = "";
+        this.viewImageSrc = "";
       }
     }
   },
   methods: {
-    async postMobileMedia() {
+    async postOrPutMobilemedia() {
       var auxinformationitem = {
         auxinfo:
-          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/"
+          `http://127.0.0.1:8000/informationitemtype/` +
+          (this.infoClasse + 1) +
+          "/"
       };
       var vm = this;
-      var path = Date.now().toString();
+      var path = "";
+      if (this.mobilemedia) {
+        path = this.mobilemedia.path;
+      } else {
+        path =
+          this.domain.idknowledgedomain.toString() +
+          "/" +
+          Date.now().toString();
+      }
+
       await firebase
         .storage()
         .ref()
-        .child(this.domain.idknowledgedomain.toString())
         .child(path)
         .put(this.imagemObject);
       var mobilemedia = {
         label: this.imagemDescription,
         fk_idmediatype: "http://localhost:8000/mediatype/1/",
-        path: this.domain.idknowledgedomain.toString() + "/" + path,
-        namefile: this.imagemObject.name,
+        path: path,
+        namefile: path.split("/")[1],
         resolution: "",
         description: this.imagemDescription,
         time: null,
@@ -228,42 +239,83 @@ export default {
         });
       }
 
-      if (this.type === "conceito") {
-        await axios
-          .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          })
-          .then(function(resposta) {
-            Object.assign(mobilemedia, {
-              fk_informationitem: resposta.data.url
-            });
-            axios
-              .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              })
-              .then(function(/*resposta*/) {
-                /*vm.moduloTitle = resposta.data.namemodule;
-                                    vm.subTitle = resposta.data.subtitle;*/
+      if (this.mobilemedia) {
+        vm = this;
+        if (this.type === "conceito") {
+          await axios
+            .put(vm.mobilemedia.fk_informationitem, iteminfo, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_informationitem: resposta.data.url
               });
-          });
-      } else if (this.type === "dominio" || this.type === "modulo") {
-        await axios
-          .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          })
-          .then(function(/*resposta*/) {
-            /*vm.moduloTitle = resposta.data.namemodule;
+              axios
+                .put(vm.mobilemedia.url, mobilemedia, {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                })
+                .then(function(/*resposta*/) {
+                  /*vm.moduloTitle = resposta.data.namemodule;
+                                    vm.subTitle = resposta.data.subtitle;*/
+                });
+            });
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          await axios
+            .put(this.mobilemedia.url, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
                                 vm.subTitle = resposta.data.subtitle;*/
-          });
+            });
+        }
+      } else {
+        if (this.type === "conceito") {
+          await axios
+            .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_informationitem: resposta.data.url
+              });
+              axios
+                .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                })
+                .then(function(/*resposta*/) {
+                  /*vm.moduloTitle = resposta.data.namemodule;
+                                    vm.subTitle = resposta.data.subtitle;*/
+                });
+            });
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          await axios
+            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
+                                vm.subTitle = resposta.data.subtitle;*/
+            });
+        }
       }
     },
     async validate() {
@@ -279,15 +331,24 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
-
-      await this.postMobileMedia();
+      await this.postOrPutMobilemedia();
       await this.$emit("close");
+      await this.resetVariables();
+      this.viewImage = false;
+      this.imagemObject = {};
       await this.$refs.form.reset();
     },
-    reset() {
-      this.$emit("close");
+    async reset() {
+      await this.$emit("close");
+      await this.resetVariables();
+      this.viewImage = false;
       this.imagemObject = {};
-      this.$refs.form.reset();
+      await this.$refs.form.reset();
+    },
+    resetVariables() {
+      this.infoLevel = "";
+      this.infoLearning = "";
+      this.infoClasse = "";
     },
     getSrcImage() {
       if (this.mobilemedia.path) {
@@ -298,6 +359,17 @@ export default {
           .getDownloadURL()
           .then(function(url) {
             vm.viewImageSrc = url;
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              const file = new File([blob], vm.mobilemedia.namefile, {
+                type: blob.type
+              });
+              vm.imagemObject = file;
+            };
+            xhr.open("GET", url);
+            xhr.send();
           });
       }
     },
