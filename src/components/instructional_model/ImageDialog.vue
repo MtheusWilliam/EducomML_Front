@@ -70,7 +70,7 @@
           v-if="mobilemedia"
         >mdi-eye</v-icon>
 
-        <v-img class="mt-3" v-bind:src="viewImageSrc" v-if="viewImage"></v-img>
+        <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc" v-if="imagemObject"></v-img>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -84,6 +84,19 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <div class="text-center">
+      <v-dialog v-model="dialog_alert" width="500">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">É necessário importar alguma imagem.</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialog_alert = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
@@ -91,16 +104,17 @@
 import * as firebase from "firebase";
 import axios from "axios";
 import Cookie from "js-cookie";
-
 export default {
   name: "ImageDialog",
   props: ["optionCall", "type", "domain", "dialog", "mobilemedia"],
   data: () => ({
     valid: true,
+    dialog_alert: false,
     viewImage: false,
     viewImageSrc: "",
     iconViewImageColor: "blue",
     urlDownload: "",
+    resolution: "",
     infoLevel: "",
     infoLearning: "",
     infoClasse: "",
@@ -109,7 +123,7 @@ export default {
     infoItemLearningStyles: ["Visual", "Textual"],
     infoResume: "",
     imagemDescription: "",
-    imagemObject: {},
+    imagemObject: null,
     imagemDescriptionRules: [
       v => !!v || "É necessário descrever a imagem a ser inserida",
       v =>
@@ -118,6 +132,16 @@ export default {
     ]
   }),
   watch: {
+    imagemObject: function() {
+      if (this.imagemObject) {
+        var vm = this;
+        var img = new Image();
+        img.src = URL.createObjectURL(this.imagemObject);
+        img.onload = function() {
+          vm.resolution = img.width + "X" + img.height;
+        };
+      }
+    },
     dialog: function() {
       if (this.mobilemedia) {
         var vm = this;
@@ -183,43 +207,38 @@ export default {
           "/" +
           Date.now().toString();
       }
-
-      await firebase
-        .storage()
-        .ref()
-        .child(path)
-        .put(this.imagemObject);
       var mobilemedia = {
         label: this.imagemDescription,
         fk_idmediatype: "http://localhost:8000/mediatype/1/",
         path: path,
+        resolution: this.resolution,
         namefile: path.split("/")[1],
-        resolution: "",
         description: this.imagemDescription,
         time: null,
         textfull: null,
         textshort: null,
         urllink: null
       };
-
+      await firebase
+        .storage()
+        .ref()
+        .child(path)
+        .put(this.imagemObject);
       if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
           `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/";
       }
-
       if (this.infoLevel > -1) {
         Object.assign(mobilemedia, {
           difficultyLevel: this.infoLevel
         });
       }
-
       if (this.infoLearning > -1) {
         Object.assign(mobilemedia, {
           learningStyle: this.infoLearning
         });
       }
-
       if (this.type === "conceito") {
         var iteminfo = {
           nameinformationitem: "imagem_" + vm.imagemObject.name,
@@ -238,7 +257,6 @@ export default {
           fk_module: this.optionCall.url
         });
       }
-
       if (this.mobilemedia) {
         vm = this;
         if (this.type === "conceito") {
@@ -249,11 +267,11 @@ export default {
                 password: "admin"
               }
             })
-            .then(function(resposta) {
+            .then(async function(resposta) {
               Object.assign(mobilemedia, {
                 fk_informationitem: resposta.data.url
               });
-              axios
+              await axios
                 .put(vm.mobilemedia.url, mobilemedia, {
                   auth: {
                     username: "admin",
@@ -287,11 +305,11 @@ export default {
                 password: "admin"
               }
             })
-            .then(function(resposta) {
+            .then(async function(resposta) {
               Object.assign(mobilemedia, {
                 fk_informationitem: resposta.data.url
               });
-              axios
+              await axios
                 .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
                   auth: {
                     username: "admin",
@@ -331,18 +349,22 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
-      await this.postOrPutMobilemedia();
-      await this.$emit("close");
-      await this.resetVariables();
-      this.viewImage = false;
-      this.imagemObject = {};
-      await this.$refs.form.reset();
+      if (this.imagemObject) {
+        await this.postOrPutMobilemedia();
+        await this.$emit("close");
+        await this.resetVariables();
+        this.viewImage = false;
+        this.imagemObject = null;
+        await this.$refs.form.reset();
+      } else {
+        this.dialog_alert = true;
+      }
     },
     async reset() {
       await this.$emit("close");
       await this.resetVariables();
       this.viewImage = false;
-      this.imagemObject = {};
+      this.imagemObject = null;
       await this.$refs.form.reset();
     },
     resetVariables() {

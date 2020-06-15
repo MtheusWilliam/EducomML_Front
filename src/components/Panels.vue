@@ -903,8 +903,8 @@ export default {
     ],
     fileTypesIcon: [
       "mdi-file-image",
-      "mdi-file-music",
       "mdi-file-video",
+      "mdi-file-music",
       "mdi-file-document",
       "mdi-link-variant"
     ],

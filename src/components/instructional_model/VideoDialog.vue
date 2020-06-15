@@ -76,6 +76,19 @@
         </v-card-actions>
       </v-form>
     </v-card>
+    <div class="text-center">
+      <v-dialog v-model="dialog_alert" width="500">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">É necessário importar algum vídeo.</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialog_alert = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
@@ -93,9 +106,12 @@ export default {
   props: ["optionCall", "type", "domain", "dialog", "mobilemedia"],
   data: () => ({
     valid: true,
+    dialog_alert: false,
     viewVideo: false,
     viewVideoSrc: "",
     iconViewVideoColor: "blue",
+    resolution: "",
+    time: "",
     infoLevel: "",
     infoLearning: "",
     infoClasse: "",
@@ -106,6 +122,19 @@ export default {
     videoObject: {}
   }),
   watch: {
+    videoObject: function() {
+      if (this.videoObject) {
+        var vm = this;
+        var video = document.createElement("video");
+        var source = document.createElement("source");
+        source.setAttribute("src", URL.createObjectURL(vm.videoObject));
+        video.appendChild(source);
+        video.oncanplay = function() {
+          vm.resolution = video.videoWidth + "X" + video.videoHeight;
+          vm.time = video.duration + "s";
+        };
+      }
+    },
     dialog: function() {
       if (this.mobilemedia) {
         var vm = this;
@@ -177,14 +206,13 @@ export default {
         fk_idmediatype: "http://localhost:8000/mediatype/2/",
         path: path,
         namefile: path.split("/")[1],
-        resolution: "",
+        resolution: this.resolution,
         description: "",
-        time: null,
+        time: this.time,
         textfull: "",
         textshort: "",
         urllink: ""
       };
-
       if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
@@ -313,19 +341,23 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
-
-      await this.postMobileMedia();
-      await this.$emit("close");
-      await this.resetVariables();
-      this.viewVideo = false;
-      this.videoObject = {};
-      await this.$refs.form.reset();
+      if (this.videoObject) {
+        await this.postMobileMedia();
+        await this.$emit("close");
+        await this.resetVariables();
+        this.viewVideo = false;
+        this.videoObject = null;
+        await this.$refs.form.reset();
+      } else {
+        this.dialog_alert = true;
+      }
     },
 
     async reset() {
       await this.$emit("close");
       await this.resetVariables();
-      this.videoObject = {};
+      this.viewVideo = false;
+      this.videoObject = null;
       await this.$refs.form.reset();
     },
     resetVariables() {
