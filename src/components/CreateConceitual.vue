@@ -15,6 +15,7 @@
           :dialog_submodule="dialog_submodule"
           :dialog_concept="dialog_concept"
           :dialog_proceduretree="dialog_procedure"
+          :dialog_mobilemediatree="dialog_mobilemedia"
           :dominio="dominio"
         />
       </div>
@@ -38,7 +39,8 @@ export default {
     dialog_module: false,
     dialog_submodule: false,
     dialog_concept: false,
-    dialog_procedure: false
+    dialog_procedure: false,
+    dialog_mobilemedia: false
   }),
   components: {
     TreeView,
@@ -76,6 +78,8 @@ export default {
         this.dialog_submodule = true;
       } else if (value.type === "informationitem") {
         this.dialog_procedure = true;
+      } else if (value.type === "mobilemedia") {
+        this.dialog_mobilemedia = true;
       }
       this.objectTreeView = value;
     },
@@ -90,6 +94,8 @@ export default {
         this.dialog_submodule = false;
       } else if (value === "procedimento") {
         this.dialog_procedure = false;
+      } else if (value === "mobilemedia") {
+        this.dialog_mobilemedia = false;
       }
     }
   }

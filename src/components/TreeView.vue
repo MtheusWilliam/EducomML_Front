@@ -31,12 +31,12 @@ export default {
   methods: {
     test(value) {
       if (value.length) {
-        console.log("type: ", value);
         if (value[0].split("/")[5] === "sub") {
           this.$emit("type", { type: "submodulo", url: value[0] });
         } else {
           this.$emit("type", { type: value[0].split("/")[3], url: value[0] });
         }
+        console.log("value treeview", value);
       }
     },
     setDomainVariables() {

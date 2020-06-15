@@ -131,7 +131,7 @@ export default {
         video.appendChild(source);
         video.oncanplay = function() {
           vm.resolution = video.videoWidth + "X" + video.videoHeight;
-          vm.time = video.duration + "s";
+          vm.time = video.duration;
         };
       }
     },

@@ -182,7 +182,11 @@
                   </v-col>
                   <v-col cols="3">
                     <!--Formulario para edição do arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white" @click="setmobilemedia(mobilemedia)">
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                    >
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
@@ -293,7 +297,11 @@
                         </v-col>
                         <v-col cols="3">
                           <!--Formulario para edição do arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white" @click="setmobilemedia(mobilemedia)">
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @click="setmobilemedia(mobilemedia, modulo, 'modulo')"
+                          >
                             <v-icon>mdi-view-headline</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
@@ -398,7 +406,7 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="setmobilemedia(mobilemedia)"
+                                  @click="setmobilemedia(mobilemedia, submodulo, 'modulo')"
                                 >
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
@@ -544,7 +552,7 @@
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="setmobilemedia(mobilemedia)"
+                                        @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
                                       >
                                         <v-icon>mdi-view-headline</v-icon>
                                       </v-btn>
@@ -759,7 +767,7 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="setmobilemedia(mobilemedia)"
+                                  @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
                                 >
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
@@ -890,7 +898,8 @@ export default {
     "dialog_module",
     "dialog_submodule",
     "dialog_concept",
-    "dialog_proceduretree"
+    "dialog_proceduretree",
+    "dialog_mobilemediatree"
   ],
   data: () => ({
     itemsMenuNewModulo: [
@@ -1094,6 +1103,67 @@ export default {
               });
           });
       }
+    },
+    dialog_mobilemediatree: function() {
+      if (this.dialog_mobilemediatree === true) {
+        var vm = this;
+        var csrftoken = Cookie.get("csrftoken");
+        var headers = {
+          "X-CSRFTOKEN": csrftoken
+        };
+        axios
+          .patch(
+            this.objectTreeView.url,
+            {
+              headers: headers
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          )
+          .then(function(resposta) {
+            if (resposta.data.fk_idknowledgedomain) {
+              vm.setmobilemedia(resposta.data, vm.dominio, "dominio");
+            } else if (resposta.data.fk_module) {
+              axios
+                .patch(
+                  resposta.data.fk_module,
+                  {
+                    headers: headers
+                  },
+                  {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  }
+                )
+                .then(function(resposta2) {
+                  vm.setmobilemedia(resposta.data, resposta2.data, "modulo");
+                });
+            } else if (resposta.data.fk_idconcept) {
+              axios
+                .patch(
+                  resposta.data.fk_idconcept,
+                  {
+                    headers: headers
+                  },
+                  {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  }
+                )
+                .then(function(resposta2) {
+                  vm.setmobilemedia(resposta.data, resposta2.data, "conceito");
+                });
+            }
+          });
+      }
     }
   },
   computed: {
@@ -1168,24 +1238,29 @@ export default {
       this.conceito = value2;
       this.modulo = value3;
     },
-    setmobilemedia(value) {
-      this.mobilemedia = value;
-      if (value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/`) {
+    setmobilemedia(valueMobileMedia, valueOptionCall, valueType) {
+      this.mobilemedia = valueMobileMedia;
+      this.objectFile = valueOptionCall;
+      this.type = valueType;
+
+      if (
+        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/`
+      ) {
         this.dialog_imagem = true;
       } else if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/`
+        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/`
       ) {
         this.dialog_video = true;
       } else if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
+        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
       ) {
         this.dialog_audio = true;
       } else if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/4/`
+        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/4/`
       ) {
         this.dialog_texto = true;
       } else if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/5/`
+        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/5/`
       ) {
         this.dialog_link = true;
       }
@@ -1290,8 +1365,11 @@ export default {
       this.submodulo = "";
       this.mobilemedia = "";
       this.procedimento = "";
+      this.objectFile = "";
+      this.type = "";
 
       this.controlTreeView("procedimento");
+      this.controlTreeView("mobilemedia");
 
       await this.$nextTick(function() {
         vm.getDominio();
