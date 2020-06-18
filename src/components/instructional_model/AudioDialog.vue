@@ -10,7 +10,7 @@
 
         <v-card-text>
           <v-row>
-            <v-col cols="4" v-if="type==='conceito'">
+            <v-col cols="3" v-if="type==='conceito'">
               <label for="infoItemClassesSelect">Classifique o item de informação</label>
               <v-select
                 id="infoItemClassesSelect"
@@ -22,7 +22,19 @@
               ></v-select>
             </v-col>
 
-            <v-col cols="4">
+            <v-col cols="3">
+              <label for="infoItemExemplosSelect">Esse conteúdo se trata de um exemplo?</label>
+              <v-select
+                class="mt-5"
+                id="infoItemExemplosSelect"
+                v-model="infoExemplo"
+                :items="infoItemExemplos"
+                label="Nível"
+                style="margin:0px;"
+              ></v-select>
+            </v-col>
+
+            <v-col cols="3">
               <label for="infoItemLevelsSelect">Qual o nível de dificuldade deste conteúdo?</label>
               <v-select
                 class="mt-5"
@@ -33,7 +45,7 @@
                 style="margin:0px;"
               ></v-select>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="3">
               <label for="infoItemLearningStylesSelect">Qual o estilo de aprendizado deste conteúdo?</label>
               <v-select
                 id="infoItemLearningStylesSelect"
@@ -113,6 +125,8 @@ export default {
     infoClasse: "",
     infoLevel: "",
     infoLearning: "",
+    infoExemplo: "",
+    infoItemExemplos: ["Sim", "Não"],
     infoItemClasses: ["Conceito", "Princípio", "Fato"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemLearningStyles: ["Visual", "Textual"],

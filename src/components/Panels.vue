@@ -116,7 +116,7 @@
               </v-dialog>
               <!--FORMULARIOS PARA CRIAÇÃO DE ARQUIVOS-->
               <!--Formulario para criação de imagem-->
-              <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="800px">
                 <ImageDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -127,7 +127,7 @@
                 />
               </v-dialog>
               <!--Formulario para criação de video-->
-              <v-dialog v-model="dialog_video" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_video" persistent="persistent" max-width="800px">
                 <VideoDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -138,7 +138,7 @@
                 />
               </v-dialog>
               <!--Formulario para criação de audio-->
-              <v-dialog v-model="dialog_audio" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_audio" persistent="persistent" max-width="800px">
                 <AudioDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -149,7 +149,7 @@
                 />
               </v-dialog>
               <!--Formulario para criação de texto-->
-              <v-dialog v-model="dialog_texto" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_texto" persistent="persistent" max-width="800px">
                 <TextDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -160,7 +160,7 @@
                 />
               </v-dialog>
               <!--Formulario para criação de link-->
-              <v-dialog v-model="dialog_link" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_link" persistent="persistent" max-width="800px">
                 <LinkDialog
                   @close="dialogclose"
                   :optionCall="objectFile"

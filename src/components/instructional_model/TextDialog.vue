@@ -9,7 +9,7 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-row>
-            <v-col cols="4" v-if="type==='conceito'">
+            <v-col cols="3" v-if="type==='conceito'">
               <label for="infoItemClassesSelect">Classifique o item de informação</label>
               <v-select
                 id="infoItemClassesSelect"
@@ -20,8 +20,18 @@
                 style="margin:0px;"
               ></v-select>
             </v-col>
-
-            <v-col cols="4">
+            <v-col cols="3">
+              <label for="infoItemExemplosSelect">Esse conteúdo se trata de um exemplo?</label>
+              <v-select
+                class="mt-5"
+                id="infoItemExemplosSelect"
+                v-model="infoExemplo"
+                :items="infoItemExemplos"
+                label="Resposta"
+                style="margin:0px;"
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
               <label for="infoItemLevelsSelect">Qual o nível de dificuldade deste conteúdo?</label>
               <v-select
                 class="mt-5"
@@ -32,7 +42,7 @@
                 style="margin:0px;"
               ></v-select>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="3">
               <label for="infoItemLearningStylesSelect">Qual o estilo de aprendizado deste conteúdo?</label>
               <v-select
                 id="infoItemLearningStylesSelect"
@@ -43,45 +53,44 @@
               ></v-select>
             </v-col>
           </v-row>
-          <v-row class="ml-1">
-            <v-row>
-              <v-col cols="10">
-                <label for="textShortArea">Seu texto na forma resumida:</label>
-                <v-textarea
-                  id="textShortArea"
-                  background-color="#F2F3F3"
-                  clearable
-                  clear-icon="mdi-close-circle"
-                  class="mt-2"
-                  rows="5"
-                  filled
-                  auto-grow
-                  v-model="infoTextShort"
-                ></v-textarea>
-              </v-col>
-              <v-col cols="1" style="padding-top: 70px;">
-                <v-switch v-model="switchTextShort"></v-switch>
-              </v-col>
-            </v-row>
-            <br />
-            <v-row>
-              <v-col cols="10">
-                <label for="textFullArea">Seu texto na forma não-resumida:</label>
-                <v-textarea
-                  id="textFullArea"
-                  background-color="#F2F3F3"
-                  clearable
-                  clear-icon="mdi-close-circle"
-                  rows="12"
-                  filled
-                  auto-grow
-                  v-model="infoTextFull"
-                ></v-textarea>
-              </v-col>
-              <v-col cols="1" style="red; padding-top: 25%;">
-                <v-switch v-model="switchTextFull"></v-switch>
-              </v-col>
-            </v-row>
+
+          <v-row style="margin-bottom: -30px;">
+            <v-col cols="11">
+              <label for="textShortArea">Seu texto na forma resumida:</label>
+              <v-textarea
+                id="textShortArea"
+                background-color="#F2F3F3"
+                clearable
+                clear-icon="mdi-close-circle"
+                class="mt-2"
+                rows="5"
+                filled
+                auto-grow
+                v-model="infoTextShort"
+              ></v-textarea>
+            </v-col>
+            <v-col cols="1" style="padding-top: 70px;">
+              <v-switch v-model="switchTextShort"></v-switch>
+            </v-col>
+          </v-row>
+          <br />
+          <v-row style="margin-bottom: -35px;">
+            <v-col cols="11">
+              <label for="textFullArea">Seu texto na forma não-resumida:</label>
+              <v-textarea
+                id="textFullArea"
+                background-color="#F2F3F3"
+                clearable
+                clear-icon="mdi-close-circle"
+                rows="12"
+                filled
+                auto-grow
+                v-model="infoTextFull"
+              ></v-textarea>
+            </v-col>
+            <v-col cols="1" style="red; padding-top: 20%;">
+              <v-switch v-model="switchTextFull"></v-switch>
+            </v-col>
           </v-row>
         </v-form>
       </v-card-text>
@@ -134,6 +143,8 @@ export default {
     infoResume: "",
     infoTextFull: "",
     infoTextShort: "",
+    infoExemplo: "",
+    infoItemExemplos: ["Sim", "Não"],
     infoItemClasses: ["Conceito", "Princípio", "Fato"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemLearningStyles: ["Visual", "Textual"]
