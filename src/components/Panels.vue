@@ -1065,6 +1065,7 @@ export default {
     dialog_audio: false,
     dialog_texto: false,
     dialog_link: false,
+    dialog_procedure: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -1433,12 +1434,18 @@ export default {
     },
     async deleteelemento(value) {
       var vm = this;
-      if (value.path !== null && value.url.search("mobilemedia") === 22) {
-        await firebase
-          .storage()
-          .ref()
-          .child(value.path)
-          .delete();
+      if (
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/` ||
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/` ||
+        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
+      ) {
+        if (value.path !== null && value.url.search("mobilemedia") === 22) {
+          await firebase
+            .storage()
+            .ref()
+            .child(value.path)
+            .delete();
+        }
       }
       await axios.delete(value.url, {
         auth: {

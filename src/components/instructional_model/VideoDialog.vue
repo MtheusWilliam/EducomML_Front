@@ -158,6 +158,9 @@ export default {
             vm.infoLearning =
               vm.infoItemLearningStyles[vm.mobilemedia.learningStyle];
           }
+          if (vm.mobilemedia.fk_idinstructionalelement) {
+            vm.infoExemplo = vm.infoItemExemplos[0];
+          }
           if (vm.mobilemedia.fk_informationitem) {
             var csrftoken = Cookie.get("csrftoken");
             var headers = {
@@ -209,11 +212,13 @@ export default {
           "/" +
           Date.now().toString();
       }
+
       await firebase
         .storage()
         .ref()
         .child(path)
         .put(this.videoObject);
+
       var mobilemedia = {
         fk_idmediatype: "http://localhost:8000/mediatype/2/",
         path: path,
@@ -225,6 +230,12 @@ export default {
         textshort: "",
         urllink: ""
       };
+
+      var instructionalelement = {
+        label: "Exemplo",
+        fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/4/`
+      };
+
       if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
@@ -249,20 +260,63 @@ export default {
           fk_informationitemtype: auxinformationitem.auxinfo,
           fk_idconcept: this.optionCall.url
         };
+        if (this.infoExemplo) {
+          Object.assign(instructionalelement, {
+            fk_idconcept: this.optionCall.url
+          });
+        }
         Object.assign(mobilemedia, {
           fk_idconcept: this.optionCall.url
         });
       } else if (this.type === "dominio") {
+        if (this.infoExemplo) {
+          Object.assign(instructionalelement, {
+            fk_idknowledgedomain: this.optionCall.url
+          });
+        }
         Object.assign(mobilemedia, {
           fk_idknowledgedomain: this.optionCall.url
         });
       } else if (this.type === "modulo") {
+        if (this.infoExemplo) {
+          Object.assign(instructionalelement, {
+            fk_idmodule: this.optionCall.url
+          });
+        }
         Object.assign(mobilemedia, {
           fk_module: this.optionCall.url
         });
       }
 
+      /* CÓDIGO PARA EDIÇÃO DO MOBILEMEDIA */
       if (this.mobilemedia) {
+        vm = this;
+        if (vm.mobilemedia.fk_idinstructionalelement && !vm.infoExemplo) {
+          await Object.assign(mobilemedia, {
+            fk_idinstructionalelement: null
+          });
+        }
+        if (
+          !vm.mobilemedia.fk_idinstructionalelement &&
+          vm.infoExemplo === vm.infoItemExemplos[0]
+        ) {
+          await axios
+            .post(
+              `http://127.0.0.1:8000/instructionalelement/`,
+              instructionalelement,
+              {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              }
+            )
+            .then(async function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_idinstructionalelement: resposta.data.url
+              });
+            });
+        }
         if (this.type === "conceito") {
           await axios
             .put(vm.mobilemedia.fk_informationitem, iteminfo, {
@@ -271,20 +325,32 @@ export default {
                 password: "admin"
               }
             })
-            .then(function(resposta) {
+            .then(async function(resposta) {
               Object.assign(mobilemedia, {
                 fk_informationitem: resposta.data.url
               });
-              axios
+              await axios
                 .put(vm.mobilemedia.url, mobilemedia, {
                   auth: {
                     username: "admin",
                     password: "admin"
                   }
                 })
-                .then(function(/*resposta*/) {
-                  /*vm.moduloTitle = resposta.data.namemodule;
-                                    vm.subTitle = resposta.data.subtitle;*/
+                .then(async function(/*resposta*/) {
+                  if (
+                    vm.mobilemedia.fk_idinstructionalelement &&
+                    !vm.infoExemplo
+                  ) {
+                    await axios.delete(
+                      vm.mobilemedia.fk_idinstructionalelement,
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  }
                 });
             });
         } else if (this.type === "dominio" || this.type === "modulo") {
@@ -295,48 +361,135 @@ export default {
                 password: "admin"
               }
             })
-            .then(function(/*resposta*/) {
-              /*vm.moduloTitle = resposta.data.namemodule;
-                                vm.subTitle = resposta.data.subtitle;*/
-            });
-        }
-      } else {
-        if (this.type === "conceito") {
-          await axios
-            .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-              auth: {
-                username: "admin",
-                password: "admin"
-              }
-            })
-            .then(function(resposta) {
-              Object.assign(mobilemedia, {
-                fk_informationitem: resposta.data.url
-              });
-              axios
-                .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+            .then(async function(/*resposta*/) {
+              if (vm.mobilemedia.fk_idinstructionalelement && !vm.infoExemplo) {
+                await axios.delete(vm.mobilemedia.fk_idinstructionalelement, {
                   auth: {
                     username: "admin",
                     password: "admin"
                   }
-                })
-                .then(function(/*resposta*/) {
-                  /*vm.moduloTitle = resposta.data.namemodule;
-                                    vm.subTitle = resposta.data.subtitle;*/
                 });
-            });
-        } else if (this.type === "dominio" || this.type === "modulo") {
-          await axios
-            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-              auth: {
-                username: "admin",
-                password: "admin"
               }
-            })
-            .then(function(/*resposta*/) {
-              /*vm.moduloTitle = resposta.data.namemodule;
-                                vm.subTitle = resposta.data.subtitle;*/
             });
+        }
+      } else {
+        /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA */
+        if (this.type === "conceito") {
+          /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEMINFO*/
+          if (this.infoExemplo) {
+            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
+            await axios
+              .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              })
+              .then(async function(resposta) {
+                Object.assign(instructionalelement, {
+                  fk_informationitem: resposta.data.url
+                });
+                await axios
+                  .post(
+                    `http://127.0.0.1:8000/instructionalelement/`,
+                    instructionalelement,
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(async function(resposta2) {
+                    Object.assign(mobilemedia, {
+                      fk_informationitem: resposta.data.url,
+                      fk_idinstructionalelement: resposta2.data.url
+                    });
+                    await axios
+                      .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      })
+                      .then(function(/*resposta*/) {
+                        /*vm.moduloTitle = resposta.data.namemodule;
+                                    vm.subTitle = resposta.data.subtitle;*/
+                      });
+                  });
+              });
+          } else {
+            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEM INFO E SEM ELEMENTO INSTRUCIONAL*/
+            await axios
+              .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              })
+              .then(async function(resposta) {
+                Object.assign(mobilemedia, {
+                  fk_informationitem: resposta.data.url
+                });
+                await axios
+                  .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  })
+                  .then(function(/*resposta*/) {
+                    /*vm.moduloTitle = resposta.data.namemodule;
+                                    vm.subTitle = resposta.data.subtitle;*/
+                  });
+              });
+          }
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
+          if (this.infoExemplo) {
+            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
+            console.log("INSTRUCTIONAL: ", instructionalelement);
+            await axios
+              .post(
+                `http://127.0.0.1:8000/instructionalelement/`,
+                instructionalelement,
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              )
+              .then(async function(resposta) {
+                Object.assign(mobilemedia, {
+                  fk_idinstructionalelement: resposta.data.url
+                });
+                await axios
+                  .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  })
+                  .then(function(/*resposta*/) {
+                    /*vm.moduloTitle = resposta.data.namemodule;
+                                vm.subTitle = resposta.data.subtitle;*/
+                  });
+              });
+          } else {
+            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E SEM ELEMENTO INSTRUCIONAL*/
+            await axios
+              .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              })
+              .then(function(/*resposta*/) {
+                /*vm.moduloTitle = resposta.data.namemodule;
+                                vm.subTitle = resposta.data.subtitle;*/
+              });
+          }
         }
       }
     },
@@ -353,6 +506,9 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
+      if (this.infoExemplo === this.infoItemExemplos[1]) {
+        this.infoExemplo = "";
+      }
       if (this.videoObject) {
         await this.postMobileMedia();
         await this.$emit("close");
@@ -376,6 +532,7 @@ export default {
       this.infoLevel = "";
       this.infoLearning = "";
       this.infoClasse = "";
+      this.infoExemplo = "";
     },
     getSrcVideo() {
       if (this.mobilemedia.path) {

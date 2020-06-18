@@ -36,7 +36,7 @@
               id="infoItemExemplosSelect"
               v-model="infoExemplo"
               :items="infoItemExemplos"
-              label="Nível"
+              label="Resposta"
               style="margin:0px;"
             ></v-select>
           </v-col>
@@ -307,7 +307,6 @@ export default {
           !vm.mobilemedia.fk_idinstructionalelement &&
           vm.infoExemplo === vm.infoItemExemplos[0]
         ) {
-          console.log("oi edit 2");
           await axios
             .post(
               `http://127.0.0.1:8000/instructionalelement/`,
@@ -456,7 +455,6 @@ export default {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
           if (this.infoExemplo) {
             /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
-            console.log("INSTRUCTIONAL: ", instructionalelement);
             await axios
               .post(
                 `http://127.0.0.1:8000/instructionalelement/`,
