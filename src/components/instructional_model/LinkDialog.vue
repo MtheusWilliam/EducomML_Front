@@ -70,7 +70,7 @@ export default {
   data: () => ({
     valid: true,
     linkUrl: "",
-    linkUrlRules: [v => !!v || "É necessário inserir o link a ser inserido"],
+    linkUrlRules: [v => !!v || "É necessário inserir a url do seu link"],
     infoLevel: "",
     infoLearning: "",
     infoClasse: "",

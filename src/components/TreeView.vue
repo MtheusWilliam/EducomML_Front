@@ -36,7 +36,6 @@ export default {
         } else {
           this.$emit("type", { type: value[0].split("/")[3], url: value[0] });
         }
-        console.log("value treeview", value);
       }
     },
     setDomainVariables() {
