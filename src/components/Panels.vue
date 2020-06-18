@@ -13,6 +13,33 @@
               </p>
             </v-col>
             <v-col cols="3">
+              <!--Menu para criação de elementos instrucionais do Domínio-->
+              <v-menu
+                top="top"
+                width="300px"
+                origin="center center"
+                :offset-y="true"
+                transition="scale-transition"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                    <v-icon>mdi-text-box-plus-outline</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title>Exercício</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title>Avaliação</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title>Atividade Colaborativa</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
               <!-- Menu para criação de arquivos-->
               <v-menu
                 top="top"
@@ -218,6 +245,32 @@
                     </p>
                   </v-col>
                   <v-col cols="3">
+                    <!--Menu para criação de elementos instrucionais do Módulo-->
+                    <v-menu
+                      top="top"
+                      width="300px"
+                      origin="center center"
+                      :offset-y="true"
+                      transition="scale-transition"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                          <v-icon>mdi-text-box-plus-outline</v-icon>
+                        </v-btn>
+                      </template>
+
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-title>Exercício</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item>
+                          <v-list-item-title>Avaliação</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item>
+                          <v-list-item-title>Atividade Colaborativa</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
                     <!-- Menu para criação de arquivos-->
                     <v-menu
                       top="top"
@@ -334,6 +387,32 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
+                          <!--Menu para criação de elementos instrucionais dos submodulos-->
+                          <v-menu
+                            top="top"
+                            width="300px"
+                            origin="center center"
+                            :offset-y="true"
+                            transition="scale-transition"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                <v-icon>mdi-text-box-plus-outline</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item>
+                                <v-list-item-title>Exercício</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Avaliação</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Atividade Colaborativa</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
                           <!-- Menu para criação de arquivos-->
                           <v-menu
                             top="top"
@@ -443,6 +522,33 @@
                                 </p>
                               </v-col>
                               <v-col cols="3">
+                                <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
+                                <v-menu
+                                  top="top"
+                                  width="300px"
+                                  origin="center center"
+                                  :offset-y="true"
+                                  transition="scale-transition"
+                                >
+                                  <template v-slot:activator="{ on }">
+                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                      <v-icon>mdi-text-box-plus-outline</v-icon>
+                                    </v-btn>
+                                  </template>
+
+                                  <v-list>
+                                    <v-list-item>
+                                      <v-list-item-title>Exercício</v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item>
+                                      <v-list-item-title>Avaliação</v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item>
+                                      <v-list-item-title>Atividade Colaborativa</v-list-item-title>
+                                    </v-list-item>
+                                  </v-list>
+                                </v-menu>
+
                                 <!-- Menu para criação de arquivos dos conceitos adicionados dentro de submódulos-->
                                 <v-menu
                                   top="top"
@@ -660,7 +766,33 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
-                          <!-- Menu para criação de arquivos-->
+                          <!--Menu para criação de elementos instrucionais dos conceitos dos modulos-->
+                          <v-menu
+                            top="top"
+                            width="300px"
+                            origin="center center"
+                            :offset-y="true"
+                            transition="scale-transition"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                <v-icon>mdi-text-box-plus-outline</v-icon>
+                              </v-btn>
+                            </template>
+
+                            <v-list>
+                              <v-list-item>
+                                <v-list-item-title>Exercício</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Avaliação</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item>
+                                <v-list-item-title>Atividade Colaborativa</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                          <!-- Menu para criação de arquivos dos conceitos dos modulos-->
                           <v-menu
                             top="top"
                             width="300px"
@@ -680,7 +812,7 @@
                               :type="'conceito'"
                             />
                           </v-menu>
-                          <!--Formulario para adição de itens de informação-->
+                          <!--Formulario para adição de itens de informação dos conceitos dos modulos-->
                           <v-menu
                             top="top"
                             width="300px"
@@ -933,7 +1065,6 @@ export default {
     dialog_audio: false,
     dialog_texto: false,
     dialog_link: false,
-    dialog_procedure: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
