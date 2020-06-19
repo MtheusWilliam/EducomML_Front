@@ -184,6 +184,7 @@
                   @instrucclose="instrucdialogclose"
                   :instrucOptionCall="instrucObjectFile"
                   :instrucType="instrucType"
+                  :instrucValueType="instrucValueType"
                   :domain="dominio"
                   :dialog="dialog_avaliacao"
                   :instructionalelement="elementoinstrucional"
@@ -1059,6 +1060,7 @@ export default {
     type: "",
     instrucObjectFile: {},
     instrucType: "",
+    instrucValueType: "",
     modulo: "",
     submodulo: "",
     conceito: "",
@@ -1539,8 +1541,9 @@ export default {
       }
       this.instrucObjectFile = value.optionCall;
       this.instrucType = value.type;
+      this.instrucValueType = value.valueType;
     },
-    async instrucdialogclose(rounds) {
+    async instrucdialogclose(numberQuestions) {
       var vm = this;
       this.dialog_avaliacao = false;
       this.dialog_atividadecolaborativa = false;
@@ -1549,14 +1552,19 @@ export default {
       this.submodulo = "";
       this.instrucObjectFile = "";
       this.instrucType = "";
+      this.instrucValueType = "";
 
       await this.$nextTick(function() {
         vm.getDominio();
-      }, 3 + rounds);
-      if (rounds > 5) {
+      }, 3 + numberQuestions);
+      if (numberQuestions > 5) {
         await setTimeout(function() {
           vm.getDominio();
         }, 600);
+      } else if (numberQuestions > 10) {
+        await setTimeout(function() {
+          vm.getDominio();
+        }, 1200);
       }
     },
     proceduresUnderConcept(concept) {

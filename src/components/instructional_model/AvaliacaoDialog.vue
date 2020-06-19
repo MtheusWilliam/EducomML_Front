@@ -3,13 +3,13 @@
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
         <span class="headline">
-          <p>Descreva a avaliação a ser criada.</p>
+          <p>{{labelMessage[instrucValueType - 1]}}</p>
         </span>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
           <label class="pt-2" style="font-size:1.3em;" for="procedureNameArea">
-            <strong>Identificador da avaliação:</strong>
+            <strong>Identificador d{{labelMessage2[instrucValueType - 1]}}:</strong>
           </label>
           <v-text-field
             id="avaliacaoNameArea"
@@ -22,7 +22,7 @@
           <v-app-bar color="#D2A64D" dense dark height="45px" style="margin-bottom: -15px;">
             <v-col cols="8">
               <v-toolbar-title style="font-size:1.2em;">
-                <strong>Lista de questões da avaliação</strong>
+                <strong>Lista de questões d{{labelMessage2[instrucValueType - 1]}}</strong>
               </v-toolbar-title>
             </v-col>
             <v-col cols="2" class="ml-8">
@@ -207,6 +207,7 @@ export default {
   props: [
     "instrucOptionCall",
     "instrucType",
+    "instrucValueType",
     "domain",
     "dialog",
     "concept",
@@ -218,6 +219,11 @@ export default {
     dialog_alert: false,
     dialog_alert2: false,
     dialog_alert3: false,
+    labelMessage: [
+      "Descreva o exercício a ser criado.",
+      "Descreva a avaliação a ser criada."
+    ],
+    labelMessage2: ["o exercício", "a avaliação"],
     questionAjust: "",
     idObjAnswerItems: [
       "A",
@@ -264,7 +270,10 @@ export default {
     async postQuestions() {
       var instructionalelement = {
         label: "Exemplo",
-        fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/2/`
+        fk_instructionalelementtype:
+          `http://127.0.0.1:8000/instrucelementtype/` +
+          this.instrucValueType +
+          `/`
       };
       var vm = this;
 
@@ -441,9 +450,10 @@ export default {
             }
           }
           if (aux === 1) {
+            var auxNumberQuestions = this.questionsControl.length;
             await this.postQuestions();
             this.questionsControl = [];
-            await this.$emit("instrucclose");
+            await this.$emit("instrucclose", auxNumberQuestions);
           }
         } else {
           this.dialog_alert = true;

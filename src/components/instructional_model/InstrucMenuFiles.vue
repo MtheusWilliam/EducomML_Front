@@ -29,15 +29,18 @@ export default {
     items: [
       {
         icon: "mdi-clipboard-text",
-        name: "Exercício"
+        name: "Exercício",
+        valueType: 1
       },
       {
         icon: "mdi-clipboard-check",
-        name: "Avaliação"
+        name: "Avaliação",
+        valueType: 2
       },
       {
         icon: "mdi-account-switch",
-        name: "Atividade Colaborativa"
+        name: "Atividade Colaborativa",
+        valueType: 3
       }
     ]
   }),
@@ -46,7 +49,8 @@ export default {
       this.$emit("instrucdialogoption", {
         name: value.name,
         optionCall: this.instrucOptionCall,
-        type: this.instrucType
+        type: this.instrucType,
+        valueType: value.valueType
       });
     }
   }
