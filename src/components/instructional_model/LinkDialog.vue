@@ -374,7 +374,6 @@ export default {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
           if (this.infoExemplo) {
             /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
-            console.log("INSTRUCTIONAL: ", instructionalelement);
             await axios
               .post(
                 `http://127.0.0.1:8000/instructionalelement/`,

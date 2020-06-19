@@ -27,17 +27,11 @@
                   </v-btn>
                 </template>
 
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-title>Exercício</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title>Avaliação</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title>Atividade Colaborativa</v-list-item-title>
-                  </v-list-item>
-                </v-list>
+                <InstrucMenuFiles
+                  @instrucdialogoption="instrucOpenFileDialog"
+                  :instrucOptionCall="dominio"
+                  :instrucType="'dominio'"
+                />
               </v-menu>
 
               <!-- Menu para criação de arquivos-->
@@ -173,13 +167,41 @@
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
               <!--Formulario para criação de procedimento -->
-              <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="600px">
+              <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="800px">
                 <ProcedureDialog
                   @close="dialogclose"
                   :dialog="dialog_procedure"
                   :procedure="procedimento"
                   :concept="conceito"
                   :module="modulo"
+                />
+              </v-dialog>
+
+              <!--FORMULARIOS PARA CRIAÇÃO DE ELEMENTOS INSTRUCIONAIS -->
+              <!--Formulario para criação de exercício e avaliação -->
+              <v-dialog v-model="dialog_avaliacao" persistent="persistent" max-width="1000px">
+                <AvaliacaoDialog
+                  @instrucclose="instrucdialogclose"
+                  :instrucOptionCall="instrucObjectFile"
+                  :instrucType="instrucType"
+                  :domain="dominio"
+                  :dialog="dialog_avaliacao"
+                  :instructionalelement="elementoinstrucional"
+                />
+              </v-dialog>
+              <!--Formulario para criação de atividade colaborativa -->
+              <v-dialog
+                v-model="dialog_atividadecolaborativa"
+                persistent="persistent"
+                max-width="1000px"
+              >
+                <AtividadeColaborativaDialog
+                  @instrucclose="instrucdialogclose"
+                  :instrucOptionCall="instrucObjectFile"
+                  :instrucType="instrucType"
+                  :domain="dominio"
+                  :dialog="dialog_atividadecolaborativa"
+                  :instructionalelement="elementoinstrucional"
                 />
               </v-dialog>
             </v-col>
@@ -259,18 +281,13 @@
                         </v-btn>
                       </template>
 
-                      <v-list>
-                        <v-list-item>
-                          <v-list-item-title>Exercício</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item>
-                          <v-list-item-title>Avaliação</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item>
-                          <v-list-item-title>Atividade Colaborativa</v-list-item-title>
-                        </v-list-item>
-                      </v-list>
+                      <InstrucMenuFiles
+                        @instrucdialogoption="instrucOpenFileDialog"
+                        :instrucOptionCall="modulo"
+                        :instrucType="'modulo'"
+                      />
                     </v-menu>
+
                     <!-- Menu para criação de arquivos-->
                     <v-menu
                       top="top"
@@ -387,7 +404,7 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
-                          <!--Menu para criação de elementos instrucionais dos submodulos-->
+                          <!--Menu para criação de elementos instrucionais do SubMódulo-->
                           <v-menu
                             top="top"
                             width="300px"
@@ -401,17 +418,11 @@
                               </v-btn>
                             </template>
 
-                            <v-list>
-                              <v-list-item>
-                                <v-list-item-title>Exercício</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Avaliação</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Atividade Colaborativa</v-list-item-title>
-                              </v-list-item>
-                            </v-list>
+                            <InstrucMenuFiles
+                              @instrucdialogoption="instrucOpenFileDialog"
+                              :instrucOptionCall="submodulo"
+                              :instrucType="'modulo'"
+                            />
                           </v-menu>
                           <!-- Menu para criação de arquivos-->
                           <v-menu
@@ -536,17 +547,11 @@
                                     </v-btn>
                                   </template>
 
-                                  <v-list>
-                                    <v-list-item>
-                                      <v-list-item-title>Exercício</v-list-item-title>
-                                    </v-list-item>
-                                    <v-list-item>
-                                      <v-list-item-title>Avaliação</v-list-item-title>
-                                    </v-list-item>
-                                    <v-list-item>
-                                      <v-list-item-title>Atividade Colaborativa</v-list-item-title>
-                                    </v-list-item>
-                                  </v-list>
+                                  <InstrucMenuFiles
+                                    @instrucdialogoption="instrucOpenFileDialog"
+                                    :instrucOptionCall="conceito"
+                                    :instrucType="'conceito'"
+                                  />
                                 </v-menu>
 
                                 <!-- Menu para criação de arquivos dos conceitos adicionados dentro de submódulos-->
@@ -766,7 +771,7 @@
                           </p>
                         </v-col>
                         <v-col cols="3">
-                          <!--Menu para criação de elementos instrucionais dos conceitos dos modulos-->
+                          <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
                           <v-menu
                             top="top"
                             width="300px"
@@ -780,17 +785,11 @@
                               </v-btn>
                             </template>
 
-                            <v-list>
-                              <v-list-item>
-                                <v-list-item-title>Exercício</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Avaliação</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item>
-                                <v-list-item-title>Atividade Colaborativa</v-list-item-title>
-                              </v-list-item>
-                            </v-list>
+                            <InstrucMenuFiles
+                              @instrucdialogoption="instrucOpenFileDialog"
+                              :instrucOptionCall="conceito"
+                              :instrucType="'conceito'"
+                            />
                           </v-menu>
                           <!-- Menu para criação de arquivos dos conceitos dos modulos-->
                           <v-menu
@@ -1004,6 +1003,9 @@ import TextDialog from "./instructional_model/TextDialog";
 import LinkDialog from "./instructional_model/LinkDialog";
 import MenuFiles from "./MenuFiles";
 import ProcedureDialog from "./instructional_model/ProcedureDialog";
+import InstrucMenuFiles from "./instructional_model/InstrucMenuFiles";
+import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
+import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
 
 import firebase from "firebase/app";
 import axios from "axios";
@@ -1021,7 +1023,10 @@ export default {
     TextDialog,
     LinkDialog,
     MenuFiles,
-    ProcedureDialog
+    ProcedureDialog,
+    InstrucMenuFiles,
+    AvaliacaoDialog,
+    AtividadeColaborativaDialog
   },
   props: [
     "dominio",
@@ -1031,7 +1036,8 @@ export default {
     "dialog_submodule",
     "dialog_concept",
     "dialog_proceduretree",
-    "dialog_mobilemediatree"
+    "dialog_mobilemediatree",
+    "dialog_elementoinstrucionaltree"
   ],
   data: () => ({
     itemsMenuNewModulo: [
@@ -1051,11 +1057,14 @@ export default {
     ],
     objectFile: {},
     type: "",
+    instrucObjectFile: {},
+    instrucType: "",
     modulo: "",
     submodulo: "",
     conceito: "",
     mobilemedia: "",
     procedimento: "",
+    elementoinstrucional: "",
     dialog_modulo: false,
     dialog_submodulo: false,
     dialog_conceito: false,
@@ -1066,6 +1075,8 @@ export default {
     dialog_texto: false,
     dialog_link: false,
     dialog_procedure: false,
+    dialog_avaliacao: false,
+    dialog_atividadecolaborativa: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -1518,6 +1529,36 @@ export default {
         }, 600);
       }
     },
+    instrucOpenFileDialog(value) {
+      if (value.name === "Exercício") {
+        this.dialog_avaliacao = true;
+      } else if (value.name === "Avaliação") {
+        this.dialog_avaliacao = true;
+      } else if (value.name === "Atividade Colaborativa") {
+        this.dialog_atividadecolaborativa = true;
+      }
+      this.instrucObjectFile = value.optionCall;
+      this.instrucType = value.type;
+    },
+    async instrucdialogclose(rounds) {
+      var vm = this;
+      this.dialog_avaliacao = false;
+      this.dialog_atividadecolaborativa = false;
+      this.conceito = "";
+      this.modulo = "";
+      this.submodulo = "";
+      this.instrucObjectFile = "";
+      this.instrucType = "";
+
+      await this.$nextTick(function() {
+        vm.getDominio();
+      }, 3 + rounds);
+      if (rounds > 5) {
+        await setTimeout(function() {
+          vm.getDominio();
+        }, 600);
+      }
+    },
     proceduresUnderConcept(concept) {
       function checkProcedure(proc) {
         return (
@@ -1529,6 +1570,24 @@ export default {
       var proceduresfinded = concept.informationitems.filter(checkProcedure);
 
       return proceduresfinded;
+    },
+    instrucElementsSearch(element) {
+      function checkInstrucElements(instruc) {
+        return (
+          instruc.fk_instructionalelementtype ===
+            "http://127.0.0.1:8000/instrucelementtype/1/" ||
+          instruc.fk_instructionalelementtype ===
+            "http://127.0.0.1:8000/instrucelementtype/2/" ||
+          instruc.fk_instructionalelementtype ===
+            "http://127.0.0.1:8000/instrucelementtype/3/"
+        );
+      }
+
+      var instrucsfinded = element.instructionalelements.filter(
+        checkInstrucElements
+      );
+
+      return instrucsfinded;
     }
   }
 };

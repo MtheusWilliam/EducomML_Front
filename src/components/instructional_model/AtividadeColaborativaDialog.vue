@@ -281,11 +281,11 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" height="49" dark large>
+        <v-btn color="red" height="49" dark large @click="reset()">
           Close
           <v-icon dark right>mdi-close</v-icon>
         </v-btn>
-        <v-btn color="success" height="49" dark large>
+        <v-btn color="success" height="49" dark large @click="validate()">
           Save
           <v-icon dark right>mdi-content-save</v-icon>
         </v-btn>
@@ -297,7 +297,16 @@
 <script>
 export default {
   name: "AtividadeColaborativaDialog",
-  props: ["dialog", "procedure", "concept", "module"],
+  props: [
+    "instrucOptionCall",
+    "instrucType",
+    "domain",
+    "dialog",
+    "procedure",
+    "concept",
+    "module",
+    "instructionalelement"
+  ],
   data: () => ({
     valid: true,
     dialog_alert: false,
@@ -421,6 +430,10 @@ export default {
           1
         );
       }
+    },
+    async reset() {
+      await this.$emit("instrucclose");
+      await this.$refs.form.reset();
     }
   }
 };
