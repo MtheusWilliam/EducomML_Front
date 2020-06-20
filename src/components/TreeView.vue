@@ -55,7 +55,19 @@ export default {
           indexmodulo++;
         });
       }
-
+      if (this.dominio.instructionalelements.length) {
+        this.dominio.instructionalelements.forEach(instructionalelement => {
+          if (
+            instructionalelement.fk_instructionalelementtype.split("/")[4] !== 4
+          ) {
+            this.treeData[0].children.push({
+              id: instructionalelement.url,
+              name: "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label
+            });
+            indexmodulo++;
+          }
+        });
+      }
       if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
         this.dominio.modules.forEach(modulo => {
           if (modulo.fk_idmodule === null) {
@@ -73,6 +85,23 @@ export default {
                   name: "[MOBILEMEDIA] " + mobilemedia.label
                 });
                 indexsubmodulo++;
+              });
+            }
+
+            if (modulo.instructionalelements.length) {
+              modulo.instructionalelements.forEach(instructionalelement => {
+                if (
+                  instructionalelement.fk_instructionalelementtype.split(
+                    "/"
+                  )[4] !== 4
+                ) {
+                  this.treeData[0].children[indexmodulo].children.push({
+                    id: instructionalelement.url,
+                    name:
+                      "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label
+                  });
+                  indexsubmodulo++;
+                }
               });
             }
 
@@ -97,6 +126,22 @@ export default {
                   });
                 }
 
+                if (submodulo.instructionalelements.length) {
+                  submodulo.instructionalelements.forEach(
+                    instructionalelement => {
+                      this.treeData[0].children[indexmodulo].children[
+                        indexsubmodulo
+                      ].children.push({
+                        id: instructionalelement.url,
+                        name:
+                          "[INSTRUCTIONAL ELEMENT] " +
+                          instructionalelement.label
+                      });
+                      indexconceito++;
+                    }
+                  );
+                }
+
                 if (submodulo.concepts.length) {
                   submodulo.concepts.forEach(conceito => {
                     this.treeData[0].children[indexmodulo].children[
@@ -116,6 +161,21 @@ export default {
                           name: "[MOBILEMEDIA] " + mobilemedia.label
                         });
                       });
+                    }
+
+                    if (conceito.instructionalelements.length) {
+                      conceito.instructionalelements.forEach(
+                        instructionalelement => {
+                          this.treeData[0].children[indexmodulo].children[
+                            indexsubmodulo
+                          ].children[indexconceito].children.push({
+                            id: instructionalelement.url,
+                            name:
+                              "[INSTRUCTIONAL ELEMENT] " +
+                              instructionalelement.label
+                          });
+                        }
+                      );
                     }
 
                     if (conceito.informationitems.length) {
@@ -162,6 +222,21 @@ export default {
                       name: "[MOBILEMEDIA] " + mobilemedia.label
                     });
                   });
+                }
+
+                if (conceito.instructionalelements.length) {
+                  conceito.instructionalelements.forEach(
+                    instructionalelement => {
+                      this.treeData[0].children[indexmodulo].children[
+                        indexconceito
+                      ].children.push({
+                        id: instructionalelement.url,
+                        name:
+                          "[INSTRUCTIONAL ELEMENT] " +
+                          instructionalelement.label
+                      });
+                    }
+                  );
                 }
 
                 if (conceito.informationitems.length) {

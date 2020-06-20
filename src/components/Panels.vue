@@ -212,7 +212,7 @@
         <v-expansion-panel-content>
           <!--CONTENT DO DOMÍNIO-->
           {{ dominio_data.subtitle }}
-          <!-- PANELS DOS ARQUIVOS DO DOMÍNIO-->
+          <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(mobilemedia) in dominio.mobilemedias"
             :key="mobilemedia.idmobilemedia"
@@ -251,6 +251,39 @@
             </v-expansion-panel>
           </v-expansion-panels>
           <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
+          <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
+          <v-expansion-panels
+            v-for="(instrucelement) in instrucElementsSearch(dominio)"
+            :key="instrucelement.idinstructionalelement"
+            class="mt-2 mb-2"
+          >
+            <v-expansion-panel>
+              <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                <v-row>
+                  <v-col cols="9">
+                    <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                  </v-col>
+                  <v-col cols="3">
+                    <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                    >
+                      <v-icon>mdi-view-headline</v-icon>
+                    </v-btn>
+                    <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                    <v-btn icon="icon" color="white" @click="deleteelemento(instrucelement)">
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-expansion-panel-header>
+
+              <v-expansion-panel-content></v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <!--Panels dos Módulos-->
           <v-expansion-panels
             v-for="(modulo) in dominio_data.modules"
@@ -309,7 +342,7 @@
                         :type="'modulo'"
                       />
                     </v-menu>
-                    <!--Formulario para adição de submódulo ou conceito-->
+                    <!--Formulario para adição de submódulo ou conceitos-->
                     <v-menu
                       top="top"
                       width="300px"
@@ -387,7 +420,39 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
+                <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
+                <v-expansion-panels
+                  v-for="(instrucelement) in instrucElementsSearch(modulo)"
+                  :key="instrucelement.idinstructionalelement"
+                  class="mt-2 mb-2"
+                >
+                  <v-expansion-panel>
+                    <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                      <v-row>
+                        <v-col cols="9">
+                          <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                        </v-col>
+                        <v-col cols="3">
+                          <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do módulo-->
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @click="setinstructionalelement(instrucelement, modulo, 'modulo')"
+                          >
+                            <v-icon>mdi-view-headline</v-icon>
+                          </v-btn>
+                          <!--Função para excluir ELEMENTOS INSTRUCIONAIS do módulo-->
+                          <v-btn icon="icon" color="white" @click="deleteelemento(instrucelement)">
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </v-expansion-panel-header>
 
+                    <v-expansion-panel-content></v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+                <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <!--Panels dos SubMódulos-->
                 <v-expansion-panels
                   v-for="(submodulo) in modulo.submodules"
@@ -517,6 +582,43 @@
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
+                      <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
+                      <v-expansion-panels
+                        v-for="(instrucelement) in instrucElementsSearch(submodulo)"
+                        :key="instrucelement.idinstructionalelement"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="setinstructionalelement(instrucelement, submodulo, 'modulo')"
+                                >
+                                  <v-icon>mdi-view-headline</v-icon>
+                                </v-btn>
+                                <!--Função para excluir ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(instrucelement)"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content></v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                      <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
                       <v-expansion-panels
                         v-for="(conceito) in submodulo.concepts"
@@ -588,7 +690,6 @@
                                       <v-icon>mdi-plus</v-icon>
                                     </v-btn>
                                   </template>
-
                                   <v-list>
                                     <v-list-item
                                       @click="setconceito(conceito, modulo);dialog_procedure=true"
@@ -615,6 +716,7 @@
                           <!--FIM DO HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
 
                           <v-expansion-panel-content>
+                            <!--INÍCIO DO CONTENT DOS CONCEITOS DOS SUBMÓDULOS-->
                             <p>Relacionamentos:</p>
                             <!-- Listagem dos relacionamentos dos conceitos adicionados dentro de submódulos -->
                             <h3 class="mt-2">Relacionamentos:</h3>
@@ -639,7 +741,7 @@
                                 </tbody>
                               </template>
                             </v-simple-table>
-                            <!-- Listagem dos arquivos dos conceitos -->
+                            <!-- Listagem dos arquivos dos conceitos DOS SUBMÓDULOS-->
                             <v-expansion-panels
                               v-for="(mobilemedia) in conceito.mobilemedias"
                               :key="mobilemedia.idmobilemedia"
@@ -682,71 +784,111 @@
 
                                 <v-expansion-panel-content></v-expansion-panel-content>
                               </v-expansion-panel>
-                              <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
-                              <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
-                              <v-expansion-panels
-                                v-for="(procedure) in proceduresUnderConcept(conceito)"
-                                :key="procedure.idinformationitem"
-                                class="mt-2 mb-2"
-                              >
-                                <v-expansion-panel>
-                                  <v-expansion-panel-header color="#737374" style="color:white;">
-                                    <v-row>
-                                      <v-col cols="9">
-                                        <p>[Procedimento] {{procedure.nameinformationitem}}</p>
-                                      </v-col>
-                                      <v-col cols="3">
-                                        <!--Formulario para edição do procedure-->
-                                        <v-btn
-                                          icon="icon"
-                                          color="white"
-                                          @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
-                                        ></v-btn>
-                                        <!--Função para excluir arquivo/mobilemedia-->
-                                        <v-btn
-                                          icon="icon"
-                                          color="white"
-                                          @click="deleteelemento(procedure)"
-                                        >
-                                          <v-icon>mdi-close</v-icon>
-                                        </v-btn>
-                                      </v-col>
-                                    </v-row>
-                                  </v-expansion-panel-header>
-
-                                  <v-expansion-panel-content>
-                                    <p class="mt-2">{{procedure.descriptioninformationitem}}</p>
-                                    <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
-                                    <h3 class="mt-2">Fases do procedimento:</h3>
-                                    <v-simple-table>
-                                      <template v-slot:default>
-                                        <thead>
-                                          <tr>
-                                            <th
-                                              class="text-left"
-                                              style="margin-right:-20px"
-                                            >Ordem da fase</th>
-                                            <th class="text-left">Descrição</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          <tr
-                                            v-for="fase in procedure.phaseprocedures"
-                                            :key="fase.idphaseprocedure"
-                                          >
-                                            <td style="margin-right:-20px">{{fase.order}}</td>
-                                            <td>{{fase.description}}</td>
-                                          </tr>
-                                        </tbody>
-                                      </template>
-                                    </v-simple-table>
-                                    <!--FIM DA LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
-                                  </v-expansion-panel-content>
-                                </v-expansion-panel>
-                              </v-expansion-panels>
-                              <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                             </v-expansion-panels>
+                            <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
+                            <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
+                            <v-expansion-panels
+                              v-for="(procedure) in proceduresUnderConcept(conceito)"
+                              :key="procedure.idinformationitem"
+                              class="mt-2 mb-2"
+                            >
+                              <v-expansion-panel>
+                                <v-expansion-panel-header color="#737374" style="color:white;">
+                                  <v-row>
+                                    <v-col cols="9">
+                                      <p>[Procedimento] {{procedure.nameinformationitem}}</p>
+                                    </v-col>
+                                    <v-col cols="3">
+                                      <!--Formulario para edição do procedure-->
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
+                                      >
+                                        <v-icon>mdi-view-headline</v-icon>
+                                      </v-btn>
+                                      <!--Função para excluir arquivo/mobilemedia-->
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="deleteelemento(procedure)"
+                                      >
+                                        <v-icon>mdi-close</v-icon>
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                </v-expansion-panel-header>
+
+                                <v-expansion-panel-content>
+                                  <p class="mt-2">{{procedure.descriptioninformationitem}}</p>
+                                  <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
+                                  <h3 class="mt-2">Fases do procedimento:</h3>
+                                  <v-simple-table>
+                                    <template v-slot:default>
+                                      <thead>
+                                        <tr>
+                                          <th
+                                            class="text-left"
+                                            style="margin-right:-20px"
+                                          >Ordem da fase</th>
+                                          <th class="text-left">Descrição</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr
+                                          v-for="fase in procedure.phaseprocedures"
+                                          :key="fase.idphaseprocedure"
+                                        >
+                                          <td style="margin-right:-20px">{{fase.order}}</td>
+                                          <td>{{fase.description}}</td>
+                                        </tr>
+                                      </tbody>
+                                    </template>
+                                  </v-simple-table>
+                                  <!--FIM DA LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </v-expansion-panels>
+                            <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS -->
+                            <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
+                            <v-expansion-panels
+                              v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                              :key="instrucelement.idinstructionalelement"
+                              class="mt-2 mb-2"
+                            >
+                              <v-expansion-panel>
+                                <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                                  <v-row>
+                                    <v-col cols="9">
+                                      <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                                    </v-col>
+                                    <v-col cols="3">
+                                      <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
+                                      >
+                                        <v-icon>mdi-view-headline</v-icon>
+                                      </v-btn>
+                                      <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
+                                      <v-btn
+                                        icon="icon"
+                                        color="white"
+                                        @click="deleteelemento(instrucelement)"
+                                      >
+                                        <v-icon>mdi-close</v-icon>
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                </v-expansion-panel-header>
+
+                                <v-expansion-panel-content></v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </v-expansion-panels>
+                            <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                           </v-expansion-panel-content>
+                          <!--FIM DO CONTENT DOS CONCEITOS DOS SUBMÓDULOS-->
                         </v-expansion-panel>
                       </v-expansion-panels>
 
@@ -755,7 +897,7 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
 
-                <!-- Panels dos Conceitos-->
+                <!-- Panels dos Conceitos dos Módulos-->
                 <v-expansion-panels
                   v-for="(conceito) in modulo.concepts"
                   :key="conceito.idconceito"
@@ -852,7 +994,7 @@
                     <!--FIM DO HEADER DOS CONCEITOS DOS MÓDULOS-->
 
                     <v-expansion-panel-content>
-                      <!-- Listagem dos relacionamentos do conceito -->
+                      <!-- Listagem dos relacionamentos do conceito dos módulos -->
                       <h3 class="mt-2">Relacionamentos:</h3>
                       <v-simple-table>
                         <template v-slot:default>
@@ -977,6 +1119,43 @@
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
+                      <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
+                      <v-expansion-panels
+                        v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                        :key="instrucelement.idinstructionalelement"
+                        class="mt-2 mb-2"
+                      >
+                        <v-expansion-panel>
+                          <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                            <v-row>
+                              <v-col cols="9">
+                                <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                              </v-col>
+                              <v-col cols="3">
+                                <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
+                                >
+                                  <v-icon>mdi-view-headline</v-icon>
+                                </v-btn>
+                                <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(instrucelement)"
+                                >
+                                  <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-header>
+
+                          <v-expansion-panel-content></v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                      <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS  DOS CONCEITOS DOS MÓDULOS-->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
@@ -1004,7 +1183,7 @@ import TextDialog from "./instructional_model/TextDialog";
 import LinkDialog from "./instructional_model/LinkDialog";
 import MenuFiles from "./MenuFiles";
 import ProcedureDialog from "./instructional_model/ProcedureDialog";
-import InstrucMenuFiles from "./instructional_model/InstrucMenuFiles";
+import InstrucMenuFiles from "./InstrucMenuFiles";
 import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
 
@@ -1038,7 +1217,8 @@ export default {
     "dialog_concept",
     "dialog_proceduretree",
     "dialog_mobilemediatree",
-    "dialog_elementoinstrucionaltree"
+    "dialog_elementoinstrucionaltree",
+    "dialog_instructionalelementtree"
   ],
   data: () => ({
     itemsMenuNewModulo: [
@@ -1309,6 +1489,67 @@ export default {
             }
           });
       }
+    },
+    dialog_instructionalelementtree: function() {
+      if (this.dialog_instructionalelementtree === true) {
+        var vm = this;
+        var csrftoken = Cookie.get("csrftoken");
+        var headers = {
+          "X-CSRFTOKEN": csrftoken
+        };
+        axios
+          .patch(
+            this.objectTreeView.url,
+            {
+              headers: headers
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            }
+          )
+          .then(function(resposta) {
+            if (resposta.data.fk_idknowledgedomain) {
+              vm.setinstructionalelement(resposta.data, vm.dominio, "dominio");
+            } else if (resposta.data.fk_module) {
+              axios
+                .patch(
+                  resposta.data.fk_module,
+                  {
+                    headers: headers
+                  },
+                  {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  }
+                )
+                .then(function(resposta2) {
+                  vm.setinstructionalelement(resposta.data, resposta2.data, "modulo");
+                });
+            } else if (resposta.data.fk_idconcept) {
+              axios
+                .patch(
+                  resposta.data.fk_idconcept,
+                  {
+                    headers: headers
+                  },
+                  {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  }
+                )
+                .then(function(resposta2) {
+                  vm.setinstructionalelement(resposta.data, resposta2.data, "conceito");
+                });
+            }
+          });
+      }
     }
   },
   computed: {
@@ -1408,6 +1649,36 @@ export default {
         valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/5/`
       ) {
         this.dialog_link = true;
+      }
+    },
+
+    setinstructionalelement(
+      valueInstructionalElement,
+      instrucValueOptionCall,
+      instrucType
+    ) {
+      this.elementoinstrucional = valueInstructionalElement;
+      this.instrucObjectFile = instrucValueOptionCall;
+      this.instrucType = instrucType;
+      this.instrucValueType = valueInstructionalElement.fk_instructionalelementtype.split(
+        "/"
+      )[4];
+
+      if (
+        valueInstructionalElement.fk_instructionalelementtype ===
+        `http://127.0.0.1:8000/instrucelementtype/1/`
+      ) {
+        this.dialog_avaliacao = true;
+      } else if (
+        valueInstructionalElement.fk_instructionalelementtype ===
+        `http://127.0.0.1:8000/instrucelementtype/2/`
+      ) {
+        this.dialog_avaliacao = true;
+      } else if (
+        valueInstructionalElement.fk_instructionalelementtype ===
+        `http://127.0.0.1:8000/instrucelementtype/3/`
+      ) {
+        this.dialog_atividadecolaborativa = true;
       }
     },
     close_or_save_modulo(value) {
@@ -1550,9 +1821,12 @@ export default {
       this.conceito = "";
       this.modulo = "";
       this.submodulo = "";
+      this.elementoinstrucional = "";
       this.instrucObjectFile = "";
       this.instrucType = "";
       this.instrucValueType = "";
+
+      this.controlTreeView("elementoinstrucional");
 
       await this.$nextTick(function() {
         vm.getDominio();
@@ -1590,12 +1864,14 @@ export default {
             "http://127.0.0.1:8000/instrucelementtype/3/"
         );
       }
-
-      var instrucsfinded = element.instructionalelements.filter(
-        checkInstrucElements
-      );
-
-      return instrucsfinded;
+      if (element !== "") {
+        var instrucsfinded = element.instructionalelements.filter(
+          checkInstrucElements
+        );
+        return instrucsfinded;
+      } else {
+        return [];
+      }
     }
   }
 };

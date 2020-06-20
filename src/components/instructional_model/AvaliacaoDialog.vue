@@ -8,7 +8,7 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
-          <label class="pt-2" style="font-size:1.3em;" for="procedureNameArea">
+          <label class="pt-2" style="font-size:1.3em;" for="avaliacaoNameArea">
             <strong>Identificador d{{labelMessage2[instrucValueType - 1]}}:</strong>
           </label>
           <v-text-field
@@ -224,6 +224,7 @@ export default {
       "Descreva a avaliação a ser criada."
     ],
     labelMessage2: ["o exercício", "a avaliação"],
+    labelType: ["Exercício", "Avaliação"],
     questionAjust: "",
     idObjAnswerItems: [
       "A",
@@ -266,10 +267,67 @@ export default {
     ],
     questionsControl: []
   }),
+  watch: {
+    dialog: function() {
+      if (this.instructionalelement) {
+        var vm = this;
+        this.$nextTick(function() {
+          this.avaliacaoName = this.instructionalelement.label;
+        });
+        this.questionsControl = [];
+        if (this.instructionalelement !== "") {
+          this.instructionalelement.questions.forEach(function(
+            elementQuestion,
+            indexQuestion
+          ) {
+            if (
+              elementQuestion.typequestion ===
+              `http://127.0.0.1:8000/questiontype/1/`
+            ) {
+              vm.questionsControl.push({
+                typeQuestion: parseInt(
+                  elementQuestion.typequestion.split("/")[4]
+                ),
+                descriptionQuestion: elementQuestion.descriptionquestion,
+                answersAlternatives: [],
+                url: elementQuestion.url
+              });
+              elementQuestion.answersalternatives.forEach(function(
+                elementAlternative
+              ) {
+                vm.questionsControl[indexQuestion].answersAlternatives.push({
+                  isTrue: elementAlternative.istrue,
+                  answers: elementAlternative.answers,
+                  url: elementAlternative.url
+                });
+              });
+            } else if (
+              elementQuestion.typequestion ===
+              `http://127.0.0.1:8000/questiontype/2/`
+            ) {
+              vm.questionsControl.push({
+                typeQuestion: parseInt(
+                  elementQuestion.typequestion.split("/")[4]
+                ),
+                descriptionQuestion: elementQuestion.descriptionquestion,
+                correctAnswer:
+                  elementQuestion.resolutionquestion[0].correctanswer,
+                url: elementQuestion.url,
+                urlCorrectAnswer: elementQuestion.resolutionquestion[0].url
+              });
+            }
+          });
+        }
+      } else {
+        this.resetValidation();
+        this.avaliacaoName = "";
+      }
+    }
+  },
   methods: {
     async postQuestions() {
       var instructionalelement = {
-        label: "Exemplo",
+        label: this.labelType[this.instrucValueType - 1],
         fk_instructionalelementtype:
           `http://127.0.0.1:8000/instrucelementtype/` +
           this.instrucValueType +
@@ -290,8 +348,161 @@ export default {
           fk_idconcept: this.instrucOptionCall.url
         });
       }
-
-      if (!this.instructionalelement) {
+      if (this.instructionalelement) {
+        /* CÓDIGO PARA EDIÇÃO DA AVALIAÇÃO/EXERCÍCIO */
+        await axios
+          .put(vm.instructionalelement.url, instructionalelement, {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          })
+          .then(async function(resposta) {
+            vm.questionsControl.forEach(async function(
+              elementQuestion,
+              indexQuestion
+            ) {
+              if (elementQuestion.url) {
+                await axios
+                  .put(
+                    elementQuestion.url,
+                    {
+                      orderquestion: indexQuestion,
+                      descriptionquestion: elementQuestion.descriptionQuestion,
+                      typequestion:
+                        `http://127.0.0.1:8000/questiontype/` +
+                        elementQuestion.typeQuestion +
+                        `/`,
+                      fk_idinstructionalelement: vm.instructionalelement.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(async function(resposta2) {
+                    if (elementQuestion.typeQuestion === 1) {
+                      elementQuestion.answersAlternatives.forEach(
+                        async function(elementAlternative, indexAlternative) {
+                          if (elementAlternative.url) {
+                            await axios.put(
+                              elementAlternative.url,
+                              {
+                                idobjanswer:
+                                  vm.idObjAnswerItems[indexAlternative],
+                                answers: elementAlternative.answers,
+                                istrue: elementAlternative.isTrue,
+                                fk_idquestion: resposta2.data.url,
+                                orderansweralternatives: indexAlternative
+                              },
+                              {
+                                auth: {
+                                  username: "admin",
+                                  password: "admin"
+                                }
+                              }
+                            );
+                          } else {
+                            await axios.post(
+                              `http://127.0.0.1:8000/answersalternatives/`,
+                              {
+                                idobjanswer:
+                                  vm.idObjAnswerItems[indexAlternative],
+                                answers: elementAlternative.answers,
+                                istrue: elementAlternative.isTrue,
+                                fk_idquestion: resposta2.data.url,
+                                orderansweralternatives: indexAlternative
+                              },
+                              {
+                                auth: {
+                                  username: "admin",
+                                  password: "admin"
+                                }
+                              }
+                            );
+                          }
+                        }
+                      );
+                    } else if (elementQuestion.typeQuestion === 2) {
+                      await axios.put(
+                        elementQuestion.urlCorrectAnswer,
+                        {
+                          correctanswer: elementQuestion.correctAnswer
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                  });
+              } else {
+                await axios
+                  .post(
+                    `http://127.0.0.1:8000/question/`,
+                    {
+                      orderquestion: indexQuestion + 1,
+                      descriptionquestion: elementQuestion.descriptionQuestion,
+                      fk_idinstructionalelement: resposta.data.url,
+                      typequestion:
+                        `http://127.0.0.1:8000/questiontype/` +
+                        elementQuestion.typeQuestion +
+                        `/`
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(async function(resposta2) {
+                    if (elementQuestion.typeQuestion === 1) {
+                      elementQuestion.answersAlternatives.forEach(
+                        async function(elementAlternative, indexAlternative) {
+                          await axios.post(
+                            `http://127.0.0.1:8000/answersalternatives/`,
+                            {
+                              idobjanswer:
+                                vm.idObjAnswerItems[indexAlternative],
+                              answers: elementAlternative.answers,
+                              istrue: elementAlternative.isTrue,
+                              fk_idquestion: resposta2.data.url,
+                              orderansweralternatives: indexAlternative
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      );
+                    } else if (elementQuestion.typeQuestion === 2) {
+                      await axios.post(
+                        `http://127.0.0.1:8000/resolutionquestion/`,
+                        {
+                          correctanswer: elementQuestion.correctAnswer,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                  });
+              }
+            });
+          });
+      } else {
         /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
         await axios
           .post(
@@ -309,12 +520,13 @@ export default {
               elementQuestion,
               indexQuestion
             ) {
+              console.log("oi", indexQuestion);
               await axios
                 .post(
                   `http://127.0.0.1:8000/question/`,
                   {
-                    orderquestion: indexQuestion + 1,
                     descriptionquestion: elementQuestion.descriptionQuestion,
+                    orderquestion: indexQuestion,
                     fk_idinstructionalelement: resposta.data.url,
                     typequestion:
                       `http://127.0.0.1:8000/questiontype/` +
@@ -389,7 +601,15 @@ export default {
         });
       }
     },
-    deleteQuestion(idQuestion) {
+    async deleteQuestion(idQuestion) {
+      if (this.questionsControl[idQuestion].url) {
+        await axios.delete(this.questionsControl[idQuestion].url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        });
+      }
       if (idQuestion == 0) {
         this.questionsControl.shift();
       } else {
@@ -403,7 +623,21 @@ export default {
         url: null
       });
     },
-    deleteAlternative(idQuestion, idAlternative) {
+    async deleteAlternative(idQuestion, idAlternative) {
+      if (
+        this.questionsControl[idQuestion].answersAlternatives[idAlternative].url
+      ) {
+        await axios.delete(
+          this.questionsControl[idQuestion].answersAlternatives[idAlternative]
+            .url,
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        );
+      }
       if (idAlternative == 0) {
         this.questionsControl[idQuestion].answersAlternatives.shift();
       } else {
@@ -454,15 +688,24 @@ export default {
             await this.postQuestions();
             this.questionsControl = [];
             await this.$emit("instrucclose", auxNumberQuestions);
+            await this.resetVariables();
           }
         } else {
           this.dialog_alert = true;
         }
       }
     },
+    resetVariables() {
+      this.questionsControl = [];
+      this.avaliacaoName = "";
+    },
     async reset() {
       await this.$emit("instrucclose");
-      await this.$refs.form.reset();
+      await this.resetVariables();
+      this.questionsControl = [];
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
     }
   }
 };
