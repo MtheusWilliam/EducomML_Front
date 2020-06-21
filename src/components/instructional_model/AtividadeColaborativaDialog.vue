@@ -85,7 +85,7 @@
                 class="ml-2"
                 large
                 style="color:white; font-size: 1.2em;"
-                @click="addQuesitonario()"
+                @click="addQuestionario()"
               >
                 <strong>Adicionar Questões</strong>
                 <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
@@ -503,9 +503,11 @@ export default {
               });
             }
           });
+          vm.viewQuestions = true;
         }
       } else {
         this.resetValidation();
+        this.viewQuestions = false;
         this.avaliacaoName = "";
       }
     }
@@ -513,7 +515,7 @@ export default {
   methods: {
     async postOnlyInstruc() {
       var instructionalelement = {
-        label: "Atividade Colaborativa",
+        label: this.colaborativeName,
         fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/3/`,
         memberamount: this.memberAmount,
         description: this.colaborativeDescription
@@ -546,7 +548,7 @@ export default {
           }
         );
       } else {
-        await axios.put(instructionalelement.url, instructionalelement, {
+        await axios.put(this.instructionalelement.url, instructionalelement, {
           auth: {
             username: "admin",
             password: "admin"
@@ -577,7 +579,161 @@ export default {
         });
       }
 
-      if (!this.instructionalelement) {
+      if (this.instructionalelement) {
+        /* CÓDIGO PARA EDIÇÃO DA AVALIAÇÃO/EXERCÍCIO */
+        await axios
+          .put(vm.instructionalelement.url, instructionalelement, {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          })
+          .then(async function(resposta) {
+            vm.questionsControl.forEach(async function(
+              elementQuestion,
+              indexQuestion
+            ) {
+              if (elementQuestion.url) {
+                await axios
+                  .put(
+                    elementQuestion.url,
+                    {
+                      orderquestion: indexQuestion,
+                      descriptionquestion: elementQuestion.descriptionQuestion,
+                      typequestion:
+                        `http://127.0.0.1:8000/questiontype/` +
+                        elementQuestion.typeQuestion +
+                        `/`,
+                      fk_idinstructionalelement: vm.instructionalelement.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(async function(resposta2) {
+                    if (elementQuestion.typeQuestion === 1) {
+                      elementQuestion.answersAlternatives.forEach(
+                        async function(elementAlternative, indexAlternative) {
+                          if (elementAlternative.url) {
+                            await axios.put(
+                              elementAlternative.url,
+                              {
+                                idobjanswer:
+                                  vm.idObjAnswerItems[indexAlternative],
+                                answers: elementAlternative.answers,
+                                istrue: elementAlternative.isTrue,
+                                fk_idquestion: resposta2.data.url,
+                                orderansweralternatives: indexAlternative
+                              },
+                              {
+                                auth: {
+                                  username: "admin",
+                                  password: "admin"
+                                }
+                              }
+                            );
+                          } else {
+                            await axios.post(
+                              `http://127.0.0.1:8000/answersalternatives/`,
+                              {
+                                idobjanswer:
+                                  vm.idObjAnswerItems[indexAlternative],
+                                answers: elementAlternative.answers,
+                                istrue: elementAlternative.isTrue,
+                                fk_idquestion: resposta2.data.url,
+                                orderansweralternatives: indexAlternative
+                              },
+                              {
+                                auth: {
+                                  username: "admin",
+                                  password: "admin"
+                                }
+                              }
+                            );
+                          }
+                        }
+                      );
+                    } else if (elementQuestion.typeQuestion === 2) {
+                      await axios.put(
+                        elementQuestion.urlCorrectAnswer,
+                        {
+                          correctanswer: elementQuestion.correctAnswer
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                  });
+              } else {
+                await axios
+                  .post(
+                    `http://127.0.0.1:8000/question/`,
+                    {
+                      orderquestion: indexQuestion + 1,
+                      descriptionquestion: elementQuestion.descriptionQuestion,
+                      fk_idinstructionalelement: resposta.data.url,
+                      typequestion:
+                        `http://127.0.0.1:8000/questiontype/` +
+                        elementQuestion.typeQuestion +
+                        `/`
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  )
+                  .then(async function(resposta2) {
+                    if (elementQuestion.typeQuestion === 1) {
+                      elementQuestion.answersAlternatives.forEach(
+                        async function(elementAlternative, indexAlternative) {
+                          await axios.post(
+                            `http://127.0.0.1:8000/answersalternatives/`,
+                            {
+                              idobjanswer:
+                                vm.idObjAnswerItems[indexAlternative],
+                              answers: elementAlternative.answers,
+                              istrue: elementAlternative.isTrue,
+                              fk_idquestion: resposta2.data.url,
+                              orderansweralternatives: indexAlternative
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      );
+                    } else if (elementQuestion.typeQuestion === 2) {
+                      await axios.post(
+                        `http://127.0.0.1:8000/resolutionquestion/`,
+                        {
+                          correctanswer: elementQuestion.correctAnswer,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                  });
+              }
+            });
+          });
+      } else {
         /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
         await axios
           .post(
@@ -595,12 +751,13 @@ export default {
               elementQuestion,
               indexQuestion
             ) {
+              console.log("oi", indexQuestion);
               await axios
                 .post(
                   `http://127.0.0.1:8000/question/`,
                   {
-                    orderquestion: indexQuestion + 1,
                     descriptionquestion: elementQuestion.descriptionQuestion,
+                    orderquestion: indexQuestion,
                     fk_idinstructionalelement: resposta.data.url,
                     typequestion:
                       `http://127.0.0.1:8000/questiontype/` +
@@ -691,7 +848,7 @@ export default {
         this.mobileMediasControl.splice(idMobileMedia, 1);
       }
     },
-    addQuesitonario() {
+    addQuestionario() {
       if (this.viewQuestions === false) {
         this.viewQuestions = true;
       }
@@ -718,7 +875,15 @@ export default {
         });
       }
     },
-    deleteQuestion(idQuestion) {
+    async deleteQuestion(idQuestion) {
+      if (this.questionsControl[idQuestion].url) {
+        await axios.delete(this.questionsControl[idQuestion].url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        });
+      }
       if (idQuestion == 0) {
         this.questionsControl.shift();
       } else {
@@ -732,7 +897,21 @@ export default {
         url: null
       });
     },
-    deleteAlternative(idQuestion, idAlternative) {
+    async deleteAlternative(idQuestion, idAlternative) {
+      if (
+        this.questionsControl[idQuestion].answersAlternatives[idAlternative].url
+      ) {
+        await axios.delete(
+          this.questionsControl[idQuestion].answersAlternatives[idAlternative]
+            .url,
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        );
+      }
       if (idAlternative == 0) {
         this.questionsControl[idQuestion].answersAlternatives.shift();
       } else {

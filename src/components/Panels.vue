@@ -3,7 +3,7 @@
     <!--Panel do Domínio-->
     <v-expansion-panels>
       <v-expansion-panel v-for="(item,i) in 1" :key="i">
-        <v-expansion-panel-header color="purple" style="color:white;">
+        <v-expansion-panel-header color="#666666" style="color:white;">
           <!--HEADER DO DOMÍNIO-->
           <v-row>
             <v-col cols="9">
@@ -219,7 +219,7 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="orange" style="color:white;">
+              <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                 <v-row>
                   <v-col cols="9">
                     <p>
@@ -258,7 +258,7 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="#00DDC9" style="color:white;">
+              <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                 <v-row>
                   <v-col cols="9">
                     <p>[Elemento Instrucional] {{instrucelement.label}}</p>
@@ -291,7 +291,7 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel v-if="modulo.fk_idmodule === null">
-              <v-expansion-panel-header color="primary" style="color:white;">
+              <v-expansion-panel-header color="#7FD15E" style="color:white;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col cols="9">
@@ -388,7 +388,7 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="orange" style="color:white;">
+                    <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                       <v-row>
                         <v-col cols="9">
                           <p>
@@ -427,7 +427,7 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                    <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                       <v-row>
                         <v-col cols="9">
                           <p>[Elemento Instrucional] {{instrucelement.label}}</p>
@@ -460,7 +460,7 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="pink" style="color:white;">
+                    <v-expansion-panel-header color="#71CB97" style="color:white;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col cols="9">
@@ -546,7 +546,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="orange" style="color:white;">
+                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
                               <v-col cols="9">
                                 <p>
@@ -589,7 +589,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
                               <v-col cols="9">
                                 <p>[Elemento Instrucional] {{instrucelement.label}}</p>
@@ -626,7 +626,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#00C853" style="color:white;">
+                          <v-expansion-panel-header color="#3B83FF" style="color:white;">
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-row>
                               <v-col cols="9">
@@ -749,7 +749,7 @@
                             >
                               <v-expansion-panel>
                                 <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
-                                <v-expansion-panel-header color="orange" style="color:white;">
+                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <!--HEADER DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS-->
                                   <v-row>
                                     <v-col cols="9">
@@ -793,7 +793,7 @@
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
-                                <v-expansion-panel-header color="#737374" style="color:white;">
+                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <v-row>
                                     <v-col cols="9">
                                       <p>[Procedimento] {{procedure.nameinformationitem}}</p>
@@ -857,7 +857,7 @@
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
-                                <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <v-row>
                                     <v-col cols="9">
                                       <p>[Elemento Instrucional] {{instrucelement.label}}</p>
@@ -904,7 +904,7 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#00C853" style="color:white;">
+                    <v-expansion-panel-header color="#3B83FF" style="color:white;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col cols="9">
@@ -1025,7 +1025,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="orange" style="color:white;">
+                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
                               <v-col cols="9">
                                 <p>
@@ -1069,7 +1069,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#737374" style="color:white;">
+                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
                               <v-col cols="9">
                                 <p>[Procedimento] {{procedure.nameinformationitem}}</p>
@@ -1126,7 +1126,7 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#00DDC9" style="color:white;">
+                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
                               <v-col cols="9">
                                 <p>[Elemento Instrucional] {{instrucelement.label}}</p>
@@ -1528,7 +1528,11 @@ export default {
                   }
                 )
                 .then(function(resposta2) {
-                  vm.setinstructionalelement(resposta.data, resposta2.data, "modulo");
+                  vm.setinstructionalelement(
+                    resposta.data,
+                    resposta2.data,
+                    "modulo"
+                  );
                 });
             } else if (resposta.data.fk_idconcept) {
               axios
@@ -1545,7 +1549,11 @@ export default {
                   }
                 )
                 .then(function(resposta2) {
-                  vm.setinstructionalelement(resposta.data, resposta2.data, "conceito");
+                  vm.setinstructionalelement(
+                    resposta.data,
+                    resposta2.data,
+                    "conceito"
+                  );
                 });
             }
           });
