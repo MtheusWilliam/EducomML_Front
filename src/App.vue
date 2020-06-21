@@ -8,7 +8,7 @@
       <v-spacer></v-spacer>
 
       <div class="mt-5 d-flex align-center">
-        <v-img src="@/assets/logo.svg" style="width: 190px;"></v-img>
+        <v-img src="@/assets/logo.svg" style="width: 210px;" class="mr-3"></v-img>
       </div>
     </v-app-bar>
 
