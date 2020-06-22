@@ -215,7 +215,7 @@
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(mobilemedia) in dominio.mobilemedias"
-            :key="mobilemedia.idmobilemedia"
+            :key="mobilemedia.url"
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
@@ -254,7 +254,7 @@
           <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(instrucelement) in instrucElementsSearch(dominio)"
-            :key="instrucelement.idinstructionalelement"
+            :key="instrucelement.url"
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
@@ -287,7 +287,7 @@
           <!--Panels dos Módulos-->
           <v-expansion-panels
             v-for="(modulo) in dominio_data.modules"
-            :key="modulo.idmodule"
+            :key="modulo.url"
             class="mt-2 mb-2"
           >
             <v-expansion-panel v-if="modulo.fk_idmodule === null">
@@ -384,7 +384,7 @@
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
                   v-for="(mobilemedia) in modulo.mobilemedias"
-                  :key="mobilemedia.idmobilemedia"
+                  :key="mobilemedia.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
@@ -423,7 +423,7 @@
                 <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <v-expansion-panels
                   v-for="(instrucelement) in instrucElementsSearch(modulo)"
-                  :key="instrucelement.idinstructionalelement"
+                  :key="instrucelement.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
@@ -456,7 +456,7 @@
                 <!--Panels dos SubMódulos-->
                 <v-expansion-panels
                   v-for="(submodulo) in modulo.submodules"
-                  :key="submodulo.idmodule"
+                  :key="submodulo.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
@@ -542,7 +542,7 @@
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in submodulo.mobilemedias"
-                        :key="mobilemedia.idmobilemedia"
+                        :key="mobilemedia.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
@@ -585,7 +585,7 @@
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <v-expansion-panels
                         v-for="(instrucelement) in instrucElementsSearch(submodulo)"
-                        :key="instrucelement.idinstructionalelement"
+                        :key="instrucelement.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
@@ -622,7 +622,7 @@
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
                       <v-expansion-panels
                         v-for="(conceito) in submodulo.concepts"
-                        :key="conceito.idconceito"
+                        :key="conceito.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
@@ -730,10 +730,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr
-                                    v-for="relacao in conceito.sourceconcept"
-                                    :key="relacao.idreference"
-                                  >
+                                  <tr v-for="relacao in conceito.sourceconcept" :key="relacao.url">
                                     <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
                                     <td>{{relacao.namereference}}</td>
                                     <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
@@ -744,7 +741,7 @@
                             <!-- Listagem dos arquivos dos conceitos DOS SUBMÓDULOS-->
                             <v-expansion-panels
                               v-for="(mobilemedia) in conceito.mobilemedias"
-                              :key="mobilemedia.idmobilemedia"
+                              :key="mobilemedia.url"
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
@@ -789,7 +786,7 @@
                             <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
                               v-for="(procedure) in proceduresUnderConcept(conceito)"
-                              :key="procedure.idinformationitem"
+                              :key="procedure.url"
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
@@ -837,7 +834,7 @@
                                       <tbody>
                                         <tr
                                           v-for="fase in procedure.phaseprocedures"
-                                          :key="fase.idphaseprocedure"
+                                          :key="fase.url"
                                         >
                                           <td style="margin-right:-20px">{{fase.order}}</td>
                                           <td>{{fase.description}}</td>
@@ -853,7 +850,7 @@
                             <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
                               v-for="(instrucelement) in instrucElementsSearch(conceito)"
-                              :key="instrucelement.idinstructionalelement"
+                              :key="instrucelement.url"
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
@@ -900,7 +897,7 @@
                 <!-- Panels dos Conceitos dos Módulos-->
                 <v-expansion-panels
                   v-for="(conceito) in modulo.concepts"
-                  :key="conceito.idconceito"
+                  :key="conceito.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
@@ -1006,10 +1003,7 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr
-                              v-for="relacao in conceito.sourceconcept"
-                              :key="relacao.idreference"
-                            >
+                            <tr v-for="relacao in conceito.sourceconcept" :key="relacao.url">
                               <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
                               <td>{{relacao.namereference}}</td>
                               <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
@@ -1021,7 +1015,7 @@
                       <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in conceito.mobilemedias"
-                        :key="mobilemedia.idmobilemedia"
+                        :key="mobilemedia.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
@@ -1065,7 +1059,7 @@
                       <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
                         v-for="(procedure) in proceduresUnderConcept(conceito)"
-                        :key="procedure.idinformationitem"
+                        :key="procedure.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
@@ -1104,10 +1098,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr
-                                    v-for="fase in procedure.phaseprocedures"
-                                    :key="fase.idphaseprocedure"
-                                  >
+                                  <tr v-for="fase in procedure.phaseprocedures" :key="fase.url">
                                     <td>{{fase.order}}</td>
                                     <td>{{fase.description}}</td>
                                   </tr>
@@ -1122,7 +1113,7 @@
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
                         v-for="(instrucelement) in instrucElementsSearch(conceito)"
-                        :key="instrucelement.idinstructionalelement"
+                        :key="instrucelement.url"
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
