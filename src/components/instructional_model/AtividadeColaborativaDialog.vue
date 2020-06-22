@@ -161,12 +161,12 @@
           </div>
           <div v-if="viewQuestions">
             <v-app-bar color="#D2A64D" dense dark height="45px" class="mt-4">
-              <v-col cols="8">
+              <v-col cols="7">
                 <v-toolbar-title style="font-size:1.2em;">
                   <strong>Lista de questões da atividade</strong>
                 </v-toolbar-title>
               </v-col>
-              <v-col cols="2" class="ml-8">
+              <v-col class="ml-8">
                 <v-menu
                   top="top"
                   width="300px"
@@ -213,22 +213,20 @@
                   </v-btn>
                 </v-col>
                 <v-row>
-                  <v-row>
-                    <v-col>
-                      <v-text-field
-                        v-model="questionsControl[i].descriptionQuestion"
-                        label="Descrição da questão"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="3" class="mt-3" v-if="item.typeQuestion === 1">
-                      <v-btn
-                        color="primary"
-                        style="color:white;"
-                        @click="addAlternative(i)"
-                      >Adicionar Alternativa</v-btn>
-                    </v-col>
-                  </v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="questionsControl[i].descriptionQuestion"
+                      label="Descrição da questão"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="3" class="mt-3" v-if="item.typeQuestion === 1">
+                    <v-btn
+                      color="primary"
+                      style="color:white;"
+                      @click="addAlternative(i)"
+                    >Adicionar Alternativa</v-btn>
+                  </v-col>
                 </v-row>
                 <div
                   v-if="item.typeQuestion === 1"
