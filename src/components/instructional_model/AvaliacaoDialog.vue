@@ -358,7 +358,7 @@ export default {
             }
           })
           .then(async function(resposta) {
-            vm.questionsControl.forEach(async function(
+            await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
             ) {
@@ -384,7 +384,7 @@ export default {
                   )
                   .then(async function(resposta2) {
                     if (elementQuestion.typeQuestion === 1) {
-                      elementQuestion.answersAlternatives.forEach(
+                      await elementQuestion.answersAlternatives.forEach(
                         async function(elementAlternative, indexAlternative) {
                           if (elementAlternative.url) {
                             await axios.put(
@@ -462,7 +462,7 @@ export default {
                   )
                   .then(async function(resposta2) {
                     if (elementQuestion.typeQuestion === 1) {
-                      elementQuestion.answersAlternatives.forEach(
+                      await elementQuestion.answersAlternatives.forEach(
                         async function(elementAlternative, indexAlternative) {
                           await axios.post(
                             `http://127.0.0.1:8000/answersalternatives/`,
@@ -516,7 +516,7 @@ export default {
             }
           )
           .then(async function(resposta) {
-            vm.questionsControl.forEach(async function(
+            await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
             ) {
@@ -542,7 +542,7 @@ export default {
                 )
                 .then(async function(resposta2) {
                   if (elementQuestion.typeQuestion === 1) {
-                    elementQuestion.answersAlternatives.forEach(async function(
+                    await elementQuestion.answersAlternatives.forEach(async function(
                       elementAlternative,
                       indexAlternative
                     ) {

@@ -1827,17 +1827,18 @@ export default {
 
       this.controlTreeView("elementoinstrucional");
 
-      await this.$nextTick(function() {
+      await setTimeout(function() {
         vm.getDominio();
-      }, 3 + numberQuestions);
+      }, 1200);
       if (numberQuestions > 5) {
         await setTimeout(function() {
           vm.getDominio();
-        }, 600);
-      } else if (numberQuestions > 10) {
+        }, 1500);
+      }
+      if (numberQuestions > 10) {
         await setTimeout(function() {
           vm.getDominio();
-        }, 1200);
+        }, 1800);
       }
     },
     proceduresUnderConcept(concept) {
