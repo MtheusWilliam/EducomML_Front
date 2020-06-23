@@ -1430,10 +1430,11 @@ export default {
             xhr.responseType = "blob";
             xhr.onload = function() {
               var blob = xhr.response;
-              const file = new File([blob], namefile, {
+              var file = new File([blob], namefile, {
                 type: blob.type
               });
-              obj = file;
+              vm.auxGetSrc.push(file);
+              vm.atualizaObj();
             };
             xhr.open("GET", url);
             xhr.send();
@@ -1455,10 +1456,11 @@ export default {
             xhr.responseType = "blob";
             xhr.onload = function() {
               var blob = xhr.response;
-              const file = new File([blob], namefile, {
+              var file = new File([blob], namefile, {
                 type: blob.type
               });
-              obj = file;
+              vm.auxGetSrc.push(file);
+              vm.atualizaObj();
             };
             xhr.open("GET", url);
             xhr.send();
