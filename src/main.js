@@ -27,7 +27,7 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/user',
+      path: '/home',
       component: UserHome
     },
     {
@@ -41,7 +41,7 @@ const router = new VueRouter({
       component: AtividadeColaborativaDialog
     },
     {
-      path: '/home',
+      path: '/',
       component: Home
     },
   ]
