@@ -206,16 +206,42 @@
             </v-app-bar>
             <v-container>
               <v-row v-for="(item,i) in questionsControl" :key="i">
-                <v-col cols="11" style="background-color:grey;color:white;" class="mt-5">
+                <v-col cols="10" style="background-color:grey;color:white;" class="mt-5">
                   <h3>Questão {{i+1}}</h3>
                 </v-col>
-                <v-col cols="1">
-                  <v-btn icon @click="deleteQuestion(i)">
-                    <v-icon class="ml-8 mb-2" x-large color="red">mdi-close-box</v-icon>
+                <v-col cols="2" style="paddin-left:-20px; margin-left:-30px;">
+                  <v-menu
+                    top="top"
+                    width="300px"
+                    origin="center center"
+                    :offset-y="true"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on" class="ml-11">
+                        <v-icon class="mt-6" x-large color="primary">mdi-plus-box</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list>
+                      <v-list-item
+                        v-for="(itemType, idItemType) in itemsMobileMedia"
+                        :key="idItemType"
+                        @click="addMobileMediaQuestion(i, idItemType+1)"
+                      >
+                        <v-icon x-large color="blue">{{itemType.icon}}</v-icon>
+                        <v-list-item-title style="font-size: 1.2em; color:#2196F3;" class="ml-1">
+                          <strong>{{itemType.name}}</strong>
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                  <v-btn icon @click="deleteQuestion(i)" class="ml-4">
+                    <v-icon class="mt-6" x-large color="red">mdi-close-box</v-icon>
                   </v-btn>
                 </v-col>
                 <v-row>
-                  <v-col>
+                  <v-col cols>
                     <v-text-field
                       v-model="questionsControl[i].descriptionQuestion"
                       label="Descrição da questão"
@@ -230,6 +256,96 @@
                     >Adicionar Alternativa</v-btn>
                   </v-col>
                 </v-row>
+
+                <div
+                  v-if="questionsControl[i].mobileMedias.length > 0"
+                  style="display: block; width: 100%; margin-top:-20px;"
+                >
+                  <v-col cols="12">
+                    <div
+                      v-for="(mobilemedia, idmobile) in questionsControl[i].mobileMedias"
+                      :key="idmobile"
+                    >
+                      <v-row v-if="mobilemedia.type === 1">
+                        <v-spacer></v-spacer>
+                        <v-file-input
+                          style="width: 165px;"
+                          label="UPLOAD IMAGE"
+                          filled
+                          @change="atualizaMetaQuestions"
+                          v-model="mobilemedia.object"
+                          accept="image/*"
+                          prepend-icon="mdi-camera"
+                        ></v-file-input>
+                        <v-btn icon="icon" class="mt-2 ml-3">
+                          <v-icon
+                            x-large
+                            color="red"
+                            @click="deleteMobileMediaQuestion(i, idmobile)"
+                          >mdi-minus-box</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-row>
+                      <v-row v-if="mobilemedia.type === 2">
+                        <v-spacer></v-spacer>
+                        <v-file-input
+                          style="width: 165px;"
+                          label="UPLOAD VIDEO"
+                          filled
+                          @change="atualizaMetaQuestions"
+                          v-model="mobilemedia.object"
+                          accept="video/*"
+                          prepend-icon="mdi-video"
+                        ></v-file-input>
+                        <v-btn icon="icon" class="mt-2 ml-3">
+                          <v-icon
+                            x-large
+                            color="red"
+                            @click="deleteMobileMediaQuestion(i, idmobile)"
+                          >mdi-minus-box</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-row>
+                      <v-row v-if="mobilemedia.type === 3">
+                        <v-spacer></v-spacer>
+                        <v-file-input
+                          style="width: 165px;"
+                          label="UPLOAD AUDIO"
+                          filled
+                          v-model="mobilemedia.object"
+                          accept="audio/*"
+                          prepend-icon="mdi-file-music"
+                        ></v-file-input>
+                        <v-btn icon="icon" class="mt-2 ml-3">
+                          <v-icon
+                            x-large
+                            color="red"
+                            @click="deleteMobileMediaQuestion(i, idmobile)"
+                          >mdi-minus-box</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-row>
+                      <v-row v-if="mobilemedia.type === 5" class="mb-2">
+                        <v-spacer></v-spacer>
+                        <v-text-field
+                          v-model="mobilemedia.object"
+                          :rules="linkUrlRules"
+                          label="Url"
+                          required
+                        ></v-text-field>
+                        <v-btn icon="icon" class="mt-2 ml-3">
+                          <v-icon
+                            x-large
+                            color="red"
+                            @click="deleteMobileMediaQuestion(i, idmobile)"
+                          >mdi-minus-box</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                      </v-row>
+                    </div>
+                  </v-col>
+                </div>
+
                 <div
                   v-if="item.typeQuestion === 1"
                   style="display: block; width: 100%; margin-top:-20px;"
@@ -467,7 +583,6 @@ export default {
           await this.instructionalelement.mobilemedias.forEach(async function(
             elementMobile
           ) {
-            console.log(elementMobile);
             if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
               vm.getSrcImage(elementMobile.path, elementMobile.namefile);
               await vm.mobileMediasControl.push({
@@ -602,6 +717,39 @@ export default {
           }
         });
       }
+
+      var pathQuestions = [];
+      var auxPathQuestions = "";
+      this.questionsControl.forEach(function(question) {
+        if (question.mobileMedias) {
+          question.mobileMedias.forEach(mobilemedia => {
+            if (mobilemedia.url) {
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(mobilemedia.path)
+                  .put(mobilemedia.object);
+              }
+            } else {
+              auxPathQuestions =
+                vm.domain.idknowledgedomain.toString() +
+                "/" +
+                Date.now().toString();
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(auxPathQuestions)
+                  .put(mobilemedia.object);
+
+                pathQuestions.push(auxPathQuestions);
+              }
+            }
+          });
+        }
+      });
+
       if (this.instrucType === "dominio") {
         Object.assign(instructionalelement, {
           fk_idknowledgedomain: this.instrucOptionCall.url
@@ -1032,6 +1180,7 @@ export default {
           )
           .then(async function(resposta) {
             if (vm.mobileMediasControl) {
+              /* INSERÇÃO DOS MOBILEMEDIAS DA ATIVIDADE COLABORATIVA */
               await vm.mobileMediasControl.forEach(async function(
                 mobilemedia,
                 indexmobile
@@ -1155,10 +1304,13 @@ export default {
                 }
               });
             }
+
+            var i2 = 0;
             await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
             ) {
+              /* INSERÇÃO DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
               await axios
                 .post(
                   `http://127.0.0.1:8000/question/`,
@@ -1179,7 +1331,132 @@ export default {
                   }
                 )
                 .then(async function(resposta2) {
+                  /* INSERÇÃO DOS MOBILEMEDIAS DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
+                  await elementQuestion.mobileMedias.forEach(async function(
+                    elementMobile,
+                    indexMobile
+                  ) {
+                    if (elementMobile.type === 1) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Imagem " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: pathQuestions[i2],
+                          resolution: elementMobile.resolution,
+                          namefile: pathQuestions[i2].split("/")[1],
+                          description:
+                            "Imagem " +
+                            (indexMobile + 1) +
+                            " Questão" +
+                            resposta2.data.orderquestion,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    } else if (elementMobile.type === 2) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Video " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: pathQuestions[i2],
+                          resolution: elementMobile.resolution,
+                          namefile: pathQuestions[i2].split("/")[1],
+                          description: null,
+                          time: elementMobile.time,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    } else if (elementMobile.type === 3) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Audio " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: pathQuestions[i2],
+                          resolution: null,
+                          namefile: pathQuestions[i2].split("/")[1],
+                          description: null,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    } else if (elementMobile.type === 5) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Link " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: null,
+                          resolution: null,
+                          namefile: null,
+                          description: null,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: elementMobile.object,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                    i2++;
+                  });
                   if (elementQuestion.typeQuestion === 1) {
+                    /* INSERÇÃO DAS ALTERNATIVAS DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
                     await elementQuestion.answersAlternatives.forEach(
                       async function(elementAlternative, indexAlternative) {
                         await axios.post(
@@ -1201,6 +1478,7 @@ export default {
                       }
                     );
                   } else if (elementQuestion.typeQuestion === 2) {
+                    /* INSERÇÃO DA RESPOSTA DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
                     await axios.post(
                       `http://127.0.0.1:8000/resolutionquestion/`,
                       {
@@ -1303,6 +1581,7 @@ export default {
           typeQuestion: questionType,
           descriptionQuestion: null,
           answersAlternatives: [],
+          mobileMedias: [],
           url: null
         });
       } else if (questionType === 2) {
@@ -1310,6 +1589,7 @@ export default {
           typeQuestion: questionType,
           descriptionQuestion: null,
           correctAnswer: null,
+          mobileMedias: [],
           url: null,
           urlCorrectAnswer: null
         });
@@ -1328,6 +1608,72 @@ export default {
         this.questionsControl.shift();
       } else {
         this.questionsControl.splice(idQuestion, 1);
+      }
+    },
+    addMobileMediaQuestion(idQuestion, mobileMediaType) {
+      if (mobileMediaType === 1) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 2) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          time: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 3) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 4) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType + 1,
+          object: null,
+          url: null
+        });
+      }
+    },
+    async deleteMobileMediaQuestion(idQuestion, idMobileMedia) {
+      if (this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url) {
+        if (
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].type !==
+          5
+        ) {
+          await firebase
+            .storage()
+            .ref()
+            .child(
+              this.questionsControl[idQuestion].mobileMedias[idMobileMedia].path
+            )
+            .delete();
+        }
+        await axios.delete(
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url,
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        );
+      }
+      if (idMobileMedia == 0) {
+        this.questionsControl[idQuestion].mobileMedias.shift();
+      } else {
+        this.questionsControl[idQuestion].mobileMedias.splice(idMobileMedia, 1);
       }
     },
     addAlternative(idQuestion) {
@@ -1546,6 +1892,38 @@ export default {
             xhr.open("GET", url);
             xhr.send();
           });
+      }
+    },
+    atualizaMetaQuestions() {
+      if (this.questionsControl.length > 0) {
+        this.questionsControl.forEach(question => {
+          if (question.mobileMedias) {
+            question.mobileMedias.forEach(mobilemedia => {
+              if (mobilemedia.object && !mobilemedia.url) {
+                if (mobilemedia.type === 1) {
+                  var img = new Image();
+                  img.src = URL.createObjectURL(mobilemedia.object);
+                  img.onload = function() {
+                    mobilemedia.resolution = img.width + "X" + img.height;
+                  };
+                } else if (mobilemedia.type === 2) {
+                  var video = document.createElement("video");
+                  var source = document.createElement("source");
+                  source.setAttribute(
+                    "src",
+                    URL.createObjectURL(mobilemedia.object)
+                  );
+                  video.appendChild(source);
+                  video.oncanplay = function() {
+                    mobilemedia.resolution =
+                      video.videoWidth + "X" + video.videoHeight;
+                    mobilemedia.time = video.duration;
+                  };
+                }
+              }
+            });
+          }
+        });
       }
     },
     resetValidation() {
