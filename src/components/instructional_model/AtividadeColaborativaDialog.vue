@@ -487,6 +487,7 @@ export default {
   ],
   data: () => ({
     auxGetSrc: [],
+    auxGetSrcQuestions: [],
     valid: true,
     dialog_alert: false,
     dialog_alert2: false,
@@ -638,6 +639,7 @@ export default {
                 ),
                 descriptionQuestion: elementQuestion.descriptionquestion,
                 answersAlternatives: [],
+                mobileMedias: [],
                 url: elementQuestion.url
               });
               await elementQuestion.answersalternatives.forEach(async function(
@@ -662,8 +664,61 @@ export default {
                 descriptionQuestion: elementQuestion.descriptionquestion,
                 correctAnswer:
                   elementQuestion.resolutionquestion[0].correctanswer,
+                mobileMedias: [],
                 url: elementQuestion.url,
                 urlCorrectAnswer: elementQuestion.resolutionquestion[0].url
+              });
+            }
+            if (elementQuestion.mobilemedias) {
+              await elementQuestion.mobilemedias.forEach(async function(
+                elementMobile
+              ) {
+                if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                  vm.getSrcImageQuestions(
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                  vm.getSrcVideoQuestions(
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    time: elementMobile.time,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                  vm.getSrcAudioQuestions(
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: elementMobile.urllink,
+                    url: elementMobile.url
+                  });
+                }
               });
             }
           });
@@ -1768,6 +1823,7 @@ export default {
     },
     resetVariables() {
       this.auxGetSrc = [];
+      this.auxGetSrcQuestions = [];
       this.questionsControl = [];
       this.mobileMediasControl = [];
       this.colaborativeName = "";
@@ -1924,6 +1980,95 @@ export default {
             });
           }
         });
+      }
+    },
+    atualizaObjQuestions() {
+      var i = 0;
+      var vm = this;
+      this.questionsControl.forEach(function(elementQuestion) {
+        if (elementQuestion.mobileMedias) {
+          elementQuestion.mobileMedias.forEach(function(elementMobile) {
+            if (elementMobile.type !== 5) {
+              elementMobile.object = vm.auxGetSrcQuestions[i];
+              i++;
+            }
+          });
+        }
+      });
+    },
+    getSrcImageQuestions(path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewImageSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions();
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    getSrcVideoQuestions(path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewVideoSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions();
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    getSrcAudioQuestions(path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewAudioSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions();
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
       }
     },
     resetValidation() {
