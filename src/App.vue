@@ -1,19 +1,19 @@
 <template>
-  <v-app>
-    <v-app-bar app color="white darken-3" dark flat>
+  <v-app class="px-0 mx-0">
+    <v-app-bar app color="white darken-3" dark dense flat>
       <div class="mt-5 d-flex align-center">
-        <v-icon size="55" color="#63B0B0">mdi-home</v-icon>
+        <v-icon size="40" color="#63B0B0">mdi-home</v-icon>
       </div>
 
       <v-spacer></v-spacer>
 
       <div class="mt-5 d-flex align-center">
-        <v-img src="@/assets/logo.svg" style="width: 210px;" class="mr-3"></v-img>
+        <v-img src="@/assets/logo.svg" style="width: 150px;" class="mr-3"></v-img>
       </div>
     </v-app-bar>
 
-    <v-content>
-      <router-view />
+    <v-content class="px-0 mx-0" style="width:200%;">
+      <router-view/>
     </v-content>
   </v-app>
 </template>

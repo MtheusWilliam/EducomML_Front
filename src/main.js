@@ -6,6 +6,7 @@ import axios from "axios";
 
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
+import Home from './components/Home';
 import CreateConceitual from './components/CreateConceitual';
 import AtividadeColaborativaDialog from './components/instructional_model/AtividadeColaborativaDialog';
 import * as firebase from "firebase";
@@ -25,9 +26,8 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 const router = new VueRouter({
   mode: 'history',
   routes: [
-
     {
-      path: '/home',
+      path: '/user',
       component: UserHome
     },
     {
@@ -39,6 +39,10 @@ const router = new VueRouter({
       path: '/teste',
       name: 'teste',
       component: AtividadeColaborativaDialog
+    },
+    {
+      path: '/home',
+      component: Home
     },
   ]
 })
