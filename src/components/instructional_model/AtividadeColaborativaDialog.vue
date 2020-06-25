@@ -486,6 +486,7 @@ export default {
     "instructionalelement"
   ],
   data: () => ({
+    i: 0,
     auxGetSrc: [],
     auxGetSrcQuestions: [],
     valid: true,
@@ -746,7 +747,7 @@ export default {
       var path = [];
       var auxPath = "";
       if (this.mobileMediasControl) {
-        this.mobileMediasControl.forEach(mobilemedia => {
+        this.mobileMediasControl.forEach(async mobilemedia => {
           if (mobilemedia.url) {
             if (mobilemedia.type !== 5) {
               firebase
@@ -756,28 +757,31 @@ export default {
                 .put(mobilemedia.object);
             }
           } else {
-            auxPath =
-              this.domain.idknowledgedomain.toString() +
-              "/" +
-              Date.now().toString();
-            if (mobilemedia.type !== 5) {
-              firebase
-                .storage()
-                .ref()
-                .child(auxPath)
-                .put(mobilemedia.object);
+            setTimeout(function() {
+              auxPath =
+                vm.domain.idknowledgedomain.toString() +
+                "/" +
+                Date.now().toString();
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(auxPath)
+                  .put(mobilemedia.object);
 
-              path.push(auxPath);
-            }
+                path.push(auxPath);
+              } else {
+                path.push("");
+              }
+            }, 1);
           }
         });
       }
-
       var pathQuestions = [];
       var auxPathQuestions = "";
-      this.questionsControl.forEach(function(question) {
+      this.questionsControl.forEach(async function(question) {
         if (question.mobileMedias) {
-          question.mobileMedias.forEach(mobilemedia => {
+          await question.mobileMedias.forEach(mobilemedia => {
             if (mobilemedia.url) {
               if (mobilemedia.type !== 5) {
                 firebase
@@ -787,19 +791,23 @@ export default {
                   .put(mobilemedia.object);
               }
             } else {
-              auxPathQuestions =
-                vm.domain.idknowledgedomain.toString() +
-                "/" +
-                Date.now().toString();
-              if (mobilemedia.type !== 5) {
-                firebase
-                  .storage()
-                  .ref()
-                  .child(auxPathQuestions)
-                  .put(mobilemedia.object);
+              setTimeout(function() {
+                auxPathQuestions =
+                  vm.domain.idknowledgedomain.toString() +
+                  "/" +
+                  Date.now().toString();
+                if (mobilemedia.type !== 5) {
+                  firebase
+                    .storage()
+                    .ref()
+                    .child(auxPathQuestions)
+                    .put(mobilemedia.object);
 
-                pathQuestions.push(auxPathQuestions);
-              }
+                  pathQuestions.push(auxPathQuestions);
+                } else {
+                  pathQuestions.push("");
+                }
+              }, 1);
             }
           });
         }
@@ -1359,8 +1367,6 @@ export default {
                 }
               });
             }
-
-            var i2 = 0;
             await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
@@ -1391,7 +1397,17 @@ export default {
                     elementMobile,
                     indexMobile
                   ) {
+                    pathQuestions = await pathQuestions.sort(function(a, b) {
+                      if (parseInt(a) > parseInt(b)) {
+                        return -1;
+                      }
+                      if (parseInt(a) < parseInt(b)) {
+                        return 1;
+                      }
+                      return 0;
+                    });
                     if (elementMobile.type === 1) {
+                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1400,9 +1416,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[i2],
+                          path: pathQuestions[vm.i],
                           resolution: elementMobile.resolution,
-                          namefile: pathQuestions[i2].split("/")[1],
+                          namefile: pathQuestions[vm.i++].split("/")[1],
                           description:
                             "Imagem " +
                             (indexMobile + 1) +
@@ -1424,6 +1440,7 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 2) {
+                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1432,9 +1449,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[i2],
+                          path: pathQuestions[vm.i],
                           resolution: elementMobile.resolution,
-                          namefile: pathQuestions[i2].split("/")[1],
+                          namefile: pathQuestions[vm.i++].split("/")[1],
                           description: null,
                           time: elementMobile.time,
                           textfull: null,
@@ -1452,6 +1469,7 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 3) {
+                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1460,9 +1478,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[i2],
+                          path: pathQuestions[vm.i],
                           resolution: null,
-                          namefile: pathQuestions[i2].split("/")[1],
+                          namefile: pathQuestions[vm.i++].split("/")[1],
                           description: null,
                           time: null,
                           textfull: null,
@@ -1480,6 +1498,7 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 5) {
+                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1508,7 +1527,6 @@ export default {
                         }
                       );
                     }
-                    i2++;
                   });
                   if (elementQuestion.typeQuestion === 1) {
                     /* INSERÇÃO DAS ALTERNATIVAS DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
@@ -1822,6 +1840,7 @@ export default {
       }
     },
     resetVariables() {
+      this.i = 0;
       this.auxGetSrc = [];
       this.auxGetSrcQuestions = [];
       this.questionsControl = [];
@@ -1840,6 +1859,15 @@ export default {
     },
     atualizaObj() {
       var i = 0;
+      this.auxGetSrc = this.auxGetSrc.sort(function(a, b) {
+        if (parseInt(a.name) > parseInt(b.name)) {
+          return 1;
+        }
+        if (parseInt(a.name) < parseInt(b.name)) {
+          return -1;
+        }
+        return 0;
+      });
       this.mobileMediasControl.forEach(element => {
         if (element.type !== 5) {
           element.object = this.auxGetSrc[i];
