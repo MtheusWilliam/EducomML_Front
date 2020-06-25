@@ -773,11 +773,10 @@ export default {
               } else {
                 path.push("");
               }
-            }, 1);
+            }, 5);
           }
         });
       }
-      var pathQuestions = [];
       var auxPathQuestions = "";
       this.questionsControl.forEach(async function(question) {
         if (question.mobileMedias) {
@@ -803,11 +802,9 @@ export default {
                     .child(auxPathQuestions)
                     .put(mobilemedia.object);
 
-                  pathQuestions.push(auxPathQuestions);
-                } else {
-                  pathQuestions.push("");
+                  mobilemedia.path = auxPathQuestions;
                 }
-              }, 1);
+              }, 10);
             }
           });
         }
@@ -843,6 +840,7 @@ export default {
                 mobilemedia,
                 indexmobile
               ) {
+                /* DANDO PUT NOS MOBILEMEDIAS QUE POSSUEM URL*/
                 if (mobilemedia.url) {
                   if (mobilemedia.type === 1) {
                     await axios.put(
@@ -962,7 +960,9 @@ export default {
                     );
                   }
                 } else {
+                  /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
                   if (mobilemedia.type === 1) {
+                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -995,6 +995,7 @@ export default {
                       }
                     );
                   } else if (mobilemedia.type === 2) {
+                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -1023,6 +1024,7 @@ export default {
                       }
                     );
                   } else if (mobilemedia.type === 3) {
+                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -1079,6 +1081,7 @@ export default {
                       }
                     );
                   }
+                  console.log("path", path);
                   i++;
                 }
               });
@@ -1088,6 +1091,7 @@ export default {
               elementQuestion,
               indexQuestion
             ) {
+              /*DANDO PUT NAS QUESTÕES COM URL*/
               if (elementQuestion.url) {
                 await axios
                   .put(
@@ -1109,6 +1113,251 @@ export default {
                     }
                   )
                   .then(async function(resposta2) {
+                    /*DANDO PUT NOS MOBILEMEDIAS DAS QUESTÕES COM URL*/
+
+                    await elementQuestion.mobileMedias.forEach(async function(
+                      elementMobile,
+                      indexMobile
+                    ) {
+                      if (elementMobile.url) {
+                        if (elementMobile.type === 1) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Imagem " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.namefile,
+                              description:
+                                "Imagem " +
+                                (indexMobile + 1) +
+                                " Questão" +
+                                resposta2.data.orderquestion,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 2) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Video " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.namefile,
+                              description: null,
+                              time: elementMobile.time,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 3) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Audio " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: null,
+                              namefile: elementMobile.namefile,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 5) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: null,
+                              resolution: null,
+                              namefile: null,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: elementMobile.object,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      } else {
+                        if (elementMobile.type === 1) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Imagem " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.path.split("/")[1],
+                              description:
+                                "Imagem " +
+                                (indexMobile + 1) +
+                                " Questão" +
+                                resposta2.data.orderquestion,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 2) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Video " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.path.split("/")[1],
+                              description: null,
+                              time: elementMobile.time,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 3) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Audio " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: null,
+                              namefile: elementMobile.path.split("/")[1],
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 5) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: null,
+                              resolution: null,
+                              namefile: null,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: elementMobile.object,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      }
+                    });
+
                     if (elementQuestion.typeQuestion === 1) {
                       await elementQuestion.answersAlternatives.forEach(
                         async function(elementAlternative, indexAlternative) {
@@ -1397,17 +1646,7 @@ export default {
                     elementMobile,
                     indexMobile
                   ) {
-                    pathQuestions = await pathQuestions.sort(function(a, b) {
-                      if (parseInt(a) > parseInt(b)) {
-                        return -1;
-                      }
-                      if (parseInt(a) < parseInt(b)) {
-                        return 1;
-                      }
-                      return 0;
-                    });
                     if (elementMobile.type === 1) {
-                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1416,9 +1655,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[vm.i],
+                          path: elementMobile.path,
                           resolution: elementMobile.resolution,
-                          namefile: pathQuestions[vm.i++].split("/")[1],
+                          namefile: elementMobile.path.split("/")[1],
                           description:
                             "Imagem " +
                             (indexMobile + 1) +
@@ -1440,7 +1679,6 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 2) {
-                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1449,9 +1687,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[vm.i],
+                          path: elementMobile.path,
                           resolution: elementMobile.resolution,
-                          namefile: pathQuestions[vm.i++].split("/")[1],
+                          namefile: elementMobile.path.split("/")[1],
                           description: null,
                           time: elementMobile.time,
                           textfull: null,
@@ -1469,7 +1707,6 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 3) {
-                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
@@ -1478,9 +1715,9 @@ export default {
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
                             "/",
-                          path: pathQuestions[vm.i],
+                          path: elementMobile.path,
                           resolution: null,
-                          namefile: pathQuestions[vm.i++].split("/")[1],
+                          namefile: elementMobile.path.split("/")[1],
                           description: null,
                           time: null,
                           textfull: null,
@@ -1498,11 +1735,10 @@ export default {
                         }
                       );
                     } else if (elementMobile.type === 5) {
-                      console.log("path", pathQuestions);
                       await axios.post(
                         `http://localhost:8000/mobilemedia/`,
                         {
-                          label: "Link " + (indexMobile + 1),
+                          label: "Link " + (indexMobile + 1) + vm.i++ * 0,
                           fk_idmediatype:
                             "http://localhost:8000/mediatype/" +
                             elementMobile.type +
@@ -2013,6 +2249,15 @@ export default {
     atualizaObjQuestions() {
       var i = 0;
       var vm = this;
+      this.auxGetSrcQuestions = this.auxGetSrcQuestions.sort(function(a, b) {
+        if (parseInt(a.name) > parseInt(b.name)) {
+          return 1;
+        }
+        if (parseInt(a.name) < parseInt(b.name)) {
+          return -1;
+        }
+        return 0;
+      });
       this.questionsControl.forEach(function(elementQuestion) {
         if (elementQuestion.mobileMedias) {
           elementQuestion.mobileMedias.forEach(function(elementMobile) {
@@ -2024,11 +2269,11 @@ export default {
         }
       });
     },
-    getSrcImageQuestions(path, namefile) {
+    async getSrcImageQuestions(path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
@@ -2049,11 +2294,11 @@ export default {
           });
       }
     },
-    getSrcVideoQuestions(path, namefile) {
+    async getSrcVideoQuestions(path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
@@ -2074,11 +2319,11 @@ export default {
           });
       }
     },
-    getSrcAudioQuestions(path, namefile) {
+    async getSrcAudioQuestions(path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
