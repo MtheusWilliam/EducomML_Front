@@ -488,7 +488,6 @@ export default {
   data: () => ({
     i: 0,
     auxGetSrc: [],
-    auxGetSrcQuestions: [],
     valid: true,
     dialog_alert: false,
     dialog_alert2: false,
@@ -583,10 +582,15 @@ export default {
         this.mobileMediasControl = [];
         if (this.instructionalelement.mobilemedias.length > 0) {
           await this.instructionalelement.mobilemedias.forEach(async function(
-            elementMobile
+            elementMobile,
+            indexMobile
           ) {
             if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
-              vm.getSrcImage(elementMobile.path, elementMobile.namefile);
+              vm.getSrcImage(
+                indexMobile,
+                elementMobile.path,
+                elementMobile.namefile
+              );
               await vm.mobileMediasControl.push({
                 type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
                 object: null,
@@ -596,7 +600,11 @@ export default {
                 url: elementMobile.url
               });
             } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
-              vm.getSrcVideo(elementMobile.path, elementMobile.namefile);
+              vm.getSrcVideo(
+                indexMobile,
+                elementMobile.path,
+                elementMobile.namefile
+              );
               await vm.mobileMediasControl.push({
                 type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
                 object: null,
@@ -607,7 +615,11 @@ export default {
                 url: elementMobile.url
               });
             } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
-              vm.getSrcAudio(elementMobile.path, elementMobile.namefile);
+              vm.getSrcAudio(
+                indexMobile,
+                elementMobile.path,
+                elementMobile.namefile
+              );
               await vm.mobileMediasControl.push({
                 type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
                 object: null,
@@ -672,10 +684,13 @@ export default {
             }
             if (elementQuestion.mobilemedias) {
               await elementQuestion.mobilemedias.forEach(async function(
-                elementMobile
+                elementMobile,
+                indexMobile
               ) {
                 if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
                   vm.getSrcImageQuestions(
+                    indexQuestion,
+                    indexMobile,
                     elementMobile.path,
                     elementMobile.namefile
                   );
@@ -689,6 +704,8 @@ export default {
                   });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
                   vm.getSrcVideoQuestions(
+                    indexQuestion,
+                    indexMobile,
                     elementMobile.path,
                     elementMobile.namefile
                   );
@@ -703,6 +720,8 @@ export default {
                   });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
                   vm.getSrcAudioQuestions(
+                    indexQuestion,
+                    indexMobile,
                     elementMobile.path,
                     elementMobile.namefile
                   );
@@ -744,7 +763,6 @@ export default {
         description: this.colaborativeDescription
       };
       var vm = this;
-      var path = [];
       var auxPath = "";
       if (this.mobileMediasControl) {
         this.mobileMediasControl.forEach(async mobilemedia => {
@@ -769,9 +787,7 @@ export default {
                   .child(auxPath)
                   .put(mobilemedia.object);
 
-                path.push(auxPath);
-              } else {
-                path.push("");
+                mobilemedia.path = auxPath;
               }
             }, 5);
           }
@@ -962,7 +978,6 @@ export default {
                 } else {
                   /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
                   if (mobilemedia.type === 1) {
-                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -971,9 +986,9 @@ export default {
                           "http://localhost:8000/mediatype/" +
                           mobilemedia.type +
                           "/",
-                        path: path[i],
+                        path: mobilemedia.path,
                         resolution: mobilemedia.resolution,
-                        namefile: path[i].split("/")[1],
+                        namefile: mobilemedia.path.split("/")[1],
                         description:
                           "Imagem " +
                           (indexmobile + 1) +
@@ -1004,9 +1019,9 @@ export default {
                           "http://localhost:8000/mediatype/" +
                           mobilemedia.type +
                           "/",
-                        path: path[i],
+                        path: mobilemedia.path,
                         resolution: mobilemedia.resolution,
-                        namefile: path[i].split("/")[1],
+                        namefile: mobilemedia.path.split("/")[1],
                         description: null,
                         time: mobilemedia.time,
                         textfull: null,
@@ -1024,7 +1039,6 @@ export default {
                       }
                     );
                   } else if (mobilemedia.type === 3) {
-                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -1033,9 +1047,9 @@ export default {
                           "http://localhost:8000/mediatype/" +
                           mobilemedia.type +
                           "/",
-                        path: path[i],
+                        path: mobilemedia.path,
                         resolution: null,
-                        namefile: path[i].split("/")[1],
+                        namefile: mobilemedia.path.split("/")[1],
                         description: null,
                         time: null,
                         textfull: null,
@@ -1081,8 +1095,6 @@ export default {
                       }
                     );
                   }
-                  console.log("path", path);
-                  i++;
                 }
               });
             }
@@ -1506,9 +1518,9 @@ export default {
                         "http://localhost:8000/mediatype/" +
                         mobilemedia.type +
                         "/",
-                      path: path[indexmobile],
+                      path: mobilemedia.path,
                       resolution: mobilemedia.resolution,
-                      namefile: path[indexmobile].split("/")[1],
+                      namefile: mobilemedia.path.split("/")[1],
                       description:
                         "Imagem " +
                         (indexmobile + 1) +
@@ -1538,9 +1550,9 @@ export default {
                         "http://localhost:8000/mediatype/" +
                         mobilemedia.type +
                         "/",
-                      path: path[indexmobile],
+                      path: mobilemedia.path,
                       resolution: mobilemedia.resolution,
-                      namefile: path[indexmobile].split("/")[1],
+                      namefile: mobilemedia.path.split("/")[1],
                       description: null,
                       time: mobilemedia.time,
                       textfull: null,
@@ -1566,9 +1578,9 @@ export default {
                         "http://localhost:8000/mediatype/" +
                         mobilemedia.type +
                         "/",
-                      path: path[indexmobile],
+                      path: mobilemedia.path,
                       resolution: null,
-                      namefile: path[indexmobile].split("/")[1],
+                      namefile: mobilemedia.path.split("/")[1],
                       description: null,
                       time: null,
                       textfull: null,
@@ -2093,23 +2105,8 @@ export default {
       this.mobileMediasControl = [];
       await this.$refs.form.reset();
     },
-    atualizaObj() {
-      var i = 0;
-      this.auxGetSrc = this.auxGetSrc.sort(function(a, b) {
-        if (parseInt(a.name) > parseInt(b.name)) {
-          return 1;
-        }
-        if (parseInt(a.name) < parseInt(b.name)) {
-          return -1;
-        }
-        return 0;
-      });
-      this.mobileMediasControl.forEach(element => {
-        if (element.type !== 5) {
-          element.object = this.auxGetSrc[i];
-          i++;
-        }
-      });
+    atualizaObj(file, indexMobile) {
+      this.mobileMediasControl[indexMobile].object = file;
     },
     atualizaMeta() {
       if (this.mobileMediasControl.length > 0) {
@@ -2139,11 +2136,11 @@ export default {
         });
       }
     },
-    getSrcImage(path, namefile) {
+    async getSrcImage(indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
@@ -2156,19 +2153,19 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrc.push(file);
-              vm.atualizaObj();
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
           });
       }
     },
-    getSrcVideo(path, namefile) {
+    async getSrcVideo(indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
@@ -2181,19 +2178,19 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrc.push(file);
-              vm.atualizaObj();
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
           });
       }
     },
-    getSrcAudio(path, namefile) {
+    async getSrcAudio(indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
-        firebase
+        await firebase
           .storage()
           .ref(path)
           .getDownloadURL()
@@ -2206,8 +2203,8 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrc.push(file);
-              vm.atualizaObj();
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
@@ -2246,30 +2243,12 @@ export default {
         });
       }
     },
-    atualizaObjQuestions() {
-      var i = 0;
-      var vm = this;
-      this.auxGetSrcQuestions = this.auxGetSrcQuestions.sort(function(a, b) {
-        if (parseInt(a.name) > parseInt(b.name)) {
-          return 1;
-        }
-        if (parseInt(a.name) < parseInt(b.name)) {
-          return -1;
-        }
-        return 0;
-      });
-      this.questionsControl.forEach(function(elementQuestion) {
-        if (elementQuestion.mobileMedias) {
-          elementQuestion.mobileMedias.forEach(function(elementMobile) {
-            if (elementMobile.type !== 5) {
-              elementMobile.object = vm.auxGetSrcQuestions[i];
-              i++;
-            }
-          });
-        }
-      });
+    atualizaObjQuestions(file, indexQuestion, indexMobile) {
+      this.questionsControl[indexQuestion].mobileMedias[
+        indexMobile
+      ].object = file;
     },
-    async getSrcImageQuestions(path, namefile) {
+    async getSrcImageQuestions(indexQuestion, indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
@@ -2286,15 +2265,15 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrcQuestions.push(file);
-              vm.atualizaObjQuestions();
+              /*vm.auxGetSrcQuestions.push(file);*/
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
           });
       }
     },
-    async getSrcVideoQuestions(path, namefile) {
+    async getSrcVideoQuestions(indexQuestion, indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
@@ -2311,15 +2290,15 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrcQuestions.push(file);
-              vm.atualizaObjQuestions();
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
           });
       }
     },
-    async getSrcAudioQuestions(path, namefile) {
+    async getSrcAudioQuestions(indexQuestion, indexMobile, path, namefile) {
       /*var obj = {};*/
       if (path) {
         var vm = this;
@@ -2336,8 +2315,8 @@ export default {
               var file = new File([blob], namefile, {
                 type: blob.type
               });
-              vm.auxGetSrcQuestions.push(file);
-              vm.atualizaObjQuestions();
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
             };
             xhr.open("GET", url);
             xhr.send();
