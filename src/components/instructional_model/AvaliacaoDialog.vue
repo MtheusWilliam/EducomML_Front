@@ -2,9 +2,40 @@
   <v-container class="pa-0">
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
-        <span class="headline">
-          <p>{{labelMessage[instrucValueType - 1]}}</p>
-        </span>
+        <v-col>
+          <span class="headline">
+            <p>{{labelMessage[instrucValueType - 1]}}</p>
+          </span>
+        </v-col>
+        <v-col cols="4">
+          <v-menu
+            top="top"
+            width="300px"
+            origin="center center"
+            :offset-y="true"
+            transition="scale-transition"
+          >
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" large color="primary" style="color:white;" class="mb-3">
+                <strong>Adicionar MobileMedia</strong>
+                <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item
+                v-for="(item, i) in itemsMobileMedia"
+                :key="i"
+                @click="addMobileMedia(i+1)"
+              >
+                <v-icon x-large color="blue">{{item.icon}}</v-icon>
+                <v-list-item-title style="font-size: 1.2em; color:#2196F3;" class="ml-1">
+                  <strong>{{item.name}}</strong>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-col>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
@@ -19,6 +50,74 @@
             required
             class="mt-2 mb-4"
           ></v-text-field>
+          <div v-if="mobileMediasControl.length > 0">
+            <label class="mb-6 pt-2" style="font-size:1.3em;">
+              <strong>MobileMedias d{{labelMessage2[instrucValueType - 1]}}:</strong>
+            </label>
+            <div class="mt-8"></div>
+            <div v-for="(mobilemedia,i) in mobileMediasControl" :key="i">
+              <v-row v-if="mobilemedia.type === 1">
+                <v-spacer></v-spacer>
+                <v-file-input
+                  style="width: 165px;"
+                  label="UPLOAD IMAGE"
+                  filled
+                  @change="atualizaMeta"
+                  v-model="mobilemedia.object"
+                  accept="image/*"
+                  prepend-icon="mdi-camera"
+                ></v-file-input>
+                <v-btn icon="icon" class="mt-2 ml-3">
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-row>
+              <v-row v-if="mobilemedia.type === 2">
+                <v-spacer></v-spacer>
+                <v-file-input
+                  style="width: 165px;"
+                  label="UPLOAD VIDEO"
+                  filled
+                  @change="atualizaMeta"
+                  v-model="mobilemedia.object"
+                  accept="video/*"
+                  prepend-icon="mdi-video"
+                ></v-file-input>
+                <v-btn icon="icon" class="mt-2 ml-3">
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-row>
+              <v-row v-if="mobilemedia.type === 3">
+                <v-spacer></v-spacer>
+                <v-file-input
+                  style="width: 165px;"
+                  label="UPLOAD AUDIO"
+                  filled
+                  v-model="mobilemedia.object"
+                  accept="audio/*"
+                  prepend-icon="mdi-file-music"
+                ></v-file-input>
+                <v-btn icon="icon" class="mt-2 ml-3">
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-row>
+              <v-row v-if="mobilemedia.type === 5" class="mb-2">
+                <v-spacer></v-spacer>
+                <v-text-field
+                  v-model="mobilemedia.object"
+                  :rules="linkUrlRules"
+                  label="Url"
+                  required
+                ></v-text-field>
+                <v-btn icon="icon" class="mt-2 ml-3">
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+              </v-row>
+            </div>
+          </div>
           <v-app-bar color="#D2A64D" dense dark height="45px" style="margin-bottom: -15px;">
             <v-col cols="8">
               <v-toolbar-title style="font-size:1.2em;">
@@ -53,10 +152,36 @@
           </v-app-bar>
           <v-container>
             <v-row v-for="(item,i) in questionsControl" :key="i">
-              <v-col cols="11" style="background-color:grey;color:white;" class="mt-5">
+              <v-col cols="10" style="background-color:grey;color:white;" class="mt-5">
                 <h3>Questão {{i+1}}</h3>
               </v-col>
-              <v-col cols="1">
+              <v-col cols="2">
+                <v-menu
+                  top="top"
+                  width="300px"
+                  origin="center center"
+                  :offset-y="true"
+                  transition="scale-transition"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" class="ml-5">
+                      <v-icon class="mt-6" x-large color="primary">mdi-plus-box</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item
+                      v-for="(itemType, idItemType) in itemsMobileMedia"
+                      :key="idItemType"
+                      @click="addMobileMediaQuestion(i, idItemType+1)"
+                    >
+                      <v-icon x-large color="blue">{{itemType.icon}}</v-icon>
+                      <v-list-item-title style="font-size: 1.2em; color:#2196F3;" class="ml-1">
+                        <strong>{{itemType.name}}</strong>
+                      </v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
                 <v-btn icon @click="deleteQuestion(i)">
                   <v-icon class="ml-8 mt-6" x-large color="red">mdi-close-box</v-icon>
                 </v-btn>
@@ -77,6 +202,94 @@
                   >Adicionar Alternativa</v-btn>
                 </v-col>
               </v-row>
+              <div
+                v-if="questionsControl[i].mobileMedias.length > 0"
+                style="display: block; width: 100%; margin-top:-20px;"
+              >
+                <v-col cols="12">
+                  <div
+                    v-for="(mobilemedia, idmobile) in questionsControl[i].mobileMedias"
+                    :key="idmobile"
+                  >
+                    <v-row v-if="mobilemedia.type === 1">
+                      <v-spacer></v-spacer>
+                      <v-file-input
+                        style="width: 165px;"
+                        label="UPLOAD IMAGE"
+                        filled
+                        @change="atualizaMetaQuestions"
+                        v-model="mobilemedia.object"
+                        accept="image/*"
+                        prepend-icon="mdi-camera"
+                      ></v-file-input>
+                      <v-btn icon="icon" class="mt-2 ml-3">
+                        <v-icon
+                          x-large
+                          color="red"
+                          @click="deleteMobileMediaQuestion(i, idmobile)"
+                        >mdi-minus-box</v-icon>
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-row>
+                    <v-row v-if="mobilemedia.type === 2">
+                      <v-spacer></v-spacer>
+                      <v-file-input
+                        style="width: 165px;"
+                        label="UPLOAD VIDEO"
+                        filled
+                        @change="atualizaMetaQuestions"
+                        v-model="mobilemedia.object"
+                        accept="video/*"
+                        prepend-icon="mdi-video"
+                      ></v-file-input>
+                      <v-btn icon="icon" class="mt-2 ml-3">
+                        <v-icon
+                          x-large
+                          color="red"
+                          @click="deleteMobileMediaQuestion(i, idmobile)"
+                        >mdi-minus-box</v-icon>
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-row>
+                    <v-row v-if="mobilemedia.type === 3">
+                      <v-spacer></v-spacer>
+                      <v-file-input
+                        style="width: 165px;"
+                        label="UPLOAD AUDIO"
+                        filled
+                        v-model="mobilemedia.object"
+                        accept="audio/*"
+                        prepend-icon="mdi-file-music"
+                      ></v-file-input>
+                      <v-btn icon="icon" class="mt-2 ml-3">
+                        <v-icon
+                          x-large
+                          color="red"
+                          @click="deleteMobileMediaQuestion(i, idmobile)"
+                        >mdi-minus-box</v-icon>
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-row>
+                    <v-row v-if="mobilemedia.type === 5" class="mb-2">
+                      <v-spacer></v-spacer>
+                      <v-text-field
+                        v-model="mobilemedia.object"
+                        :rules="linkUrlRules"
+                        label="Url"
+                        required
+                      ></v-text-field>
+                      <v-btn icon="icon" class="mt-2 ml-3">
+                        <v-icon
+                          x-large
+                          color="red"
+                          @click="deleteMobileMediaQuestion(i, idmobile)"
+                        >mdi-minus-box</v-icon>
+                      </v-btn>
+                      <v-spacer></v-spacer>
+                    </v-row>
+                  </div>
+                </v-col>
+              </div>
               <div
                 v-if="item.typeQuestion === 1"
                 style="display: block; width: 100%; margin-top:-20px;"
@@ -202,6 +415,7 @@
 
 <script>
 import axios from "axios";
+import * as firebase from "firebase";
 export default {
   name: "AvaliacaoDialog",
   props: [
@@ -226,6 +440,25 @@ export default {
     labelMessage2: ["o exercício", "a avaliação"],
     labelType: ["Exercício", "Avaliação"],
     questionAjust: "",
+    itemsMobileMedia: [
+      {
+        icon: "mdi-file-image",
+        name: "Imagem"
+      },
+      {
+        icon: "mdi-file-video",
+        name: "Video"
+      },
+      {
+        icon: "mdi-file-music",
+        name: "Audio"
+      },
+      {
+        icon: "mdi-link-variant",
+        name: "Link"
+      }
+    ],
+    linkUrlRules: [v => !!v || "É necessário inserir a url do seu link"],
     idObjAnswerItems: [
       "A",
       "B",
@@ -265,18 +498,77 @@ export default {
     alternativeDescriptionRules: [
       v => !!v || "É necessário descrever a alternativa."
     ],
+    mobileMediasControl: [],
     questionsControl: []
   }),
   watch: {
-    dialog: function() {
+    dialog: async function() {
       if (this.instructionalelement) {
         var vm = this;
         this.$nextTick(function() {
           this.avaliacaoName = this.instructionalelement.label;
         });
         this.questionsControl = [];
+        this.mobileMediasControl = [];
         if (this.instructionalelement !== "") {
-          this.instructionalelement.questions.forEach(function(
+          if (this.instructionalelement.mobilemedias.length > 0) {
+            await this.instructionalelement.mobilemedias.forEach(async function(
+              elementMobile,
+              indexMobile
+            ) {
+              if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                vm.getSrcImage(
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.mobileMediasControl.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  resolution: elementMobile.resolution,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                vm.getSrcVideo(
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.mobileMediasControl.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  resolution: elementMobile.resolution,
+                  time: elementMobile.time,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                vm.getSrcAudio(
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.mobileMediasControl.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                await vm.mobileMediasControl.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: elementMobile.urllink,
+                  url: elementMobile.url
+                });
+              }
+            });
+          }
+
+          await this.instructionalelement.questions.forEach(async function(
             elementQuestion,
             indexQuestion
           ) {
@@ -284,18 +576,21 @@ export default {
               elementQuestion.typequestion ===
               `http://127.0.0.1:8000/questiontype/1/`
             ) {
-              vm.questionsControl.push({
+              await vm.questionsControl.push({
                 typeQuestion: parseInt(
                   elementQuestion.typequestion.split("/")[4]
                 ),
                 descriptionQuestion: elementQuestion.descriptionquestion,
                 answersAlternatives: [],
+                mobileMedias: [],
                 url: elementQuestion.url
               });
-              elementQuestion.answersalternatives.forEach(function(
+              await elementQuestion.answersalternatives.forEach(async function(
                 elementAlternative
               ) {
-                vm.questionsControl[indexQuestion].answersAlternatives.push({
+                await vm.questionsControl[
+                  indexQuestion
+                ].answersAlternatives.push({
                   isTrue: elementAlternative.istrue,
                   answers: elementAlternative.answers,
                   url: elementAlternative.url
@@ -305,35 +600,159 @@ export default {
               elementQuestion.typequestion ===
               `http://127.0.0.1:8000/questiontype/2/`
             ) {
-              vm.questionsControl.push({
+              await vm.questionsControl.push({
                 typeQuestion: parseInt(
                   elementQuestion.typequestion.split("/")[4]
                 ),
                 descriptionQuestion: elementQuestion.descriptionquestion,
                 correctAnswer:
                   elementQuestion.resolutionquestion[0].correctanswer,
+                mobileMedias: [],
                 url: elementQuestion.url,
                 urlCorrectAnswer: elementQuestion.resolutionquestion[0].url
+              });
+            }
+            if (elementQuestion.mobilemedias) {
+              await elementQuestion.mobilemedias.forEach(async function(
+                elementMobile,
+                indexMobile
+              ) {
+                if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                  vm.getSrcImageQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                  vm.getSrcVideoQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    time: elementMobile.time,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                  vm.getSrcAudioQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: elementMobile.urllink,
+                    url: elementMobile.url
+                  });
+                }
               });
             }
           });
         }
       } else {
+        this.questionsControl = [];
+        this.mobileMediasControl = [];
         this.resetValidation();
-        this.avaliacaoName = "";
+        this.resetVariables();
       }
     }
   },
   methods: {
     async postQuestions() {
       var instructionalelement = {
-        label: this.labelType[this.instrucValueType - 1],
+        label: this.avaliacaoName,
         fk_instructionalelementtype:
           `http://127.0.0.1:8000/instrucelementtype/` +
           this.instrucValueType +
           `/`
       };
       var vm = this;
+      var auxPath = "";
+      if (this.mobileMediasControl) {
+        this.mobileMediasControl.forEach(async mobilemedia => {
+          if (mobilemedia.url) {
+            if (mobilemedia.type !== 5) {
+              firebase
+                .storage()
+                .ref()
+                .child(mobilemedia.path)
+                .put(mobilemedia.object);
+            }
+          } else {
+            setTimeout(function() {
+              auxPath =
+                vm.domain.idknowledgedomain.toString() +
+                "/" +
+                Date.now().toString();
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(auxPath)
+                  .put(mobilemedia.object);
+
+                mobilemedia.path = auxPath;
+              }
+            }, 30);
+          }
+        });
+      }
+      var auxPathQuestions = "";
+      this.questionsControl.forEach(async function(question) {
+        if (question.mobileMedias) {
+          await question.mobileMedias.forEach(mobilemedia => {
+            if (mobilemedia.url) {
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(mobilemedia.path)
+                  .put(mobilemedia.object);
+              }
+            } else {
+              setTimeout(function() {
+                auxPathQuestions =
+                  vm.domain.idknowledgedomain.toString() +
+                  "/" +
+                  Date.now().toString();
+                if (mobilemedia.type !== 5) {
+                  firebase
+                    .storage()
+                    .ref()
+                    .child(auxPathQuestions)
+                    .put(mobilemedia.object);
+
+                  mobilemedia.path = auxPathQuestions;
+                }
+              }, 41);
+            }
+          });
+        }
+      });
 
       if (this.instrucType === "dominio") {
         Object.assign(instructionalelement, {
@@ -358,6 +777,255 @@ export default {
             }
           })
           .then(async function(resposta) {
+            if (vm.mobileMediasControl) {
+              var i = 0;
+              await vm.mobileMediasControl.forEach(async function(
+                mobilemedia,
+                indexmobile
+              ) {
+                /* DANDO PUT NOS MOBILEMEDIAS QUE POSSUEM URL*/
+                if (mobilemedia.url) {
+                  if (mobilemedia.type === 1) {
+                    await axios.put(
+                      mobilemedia.url,
+                      {
+                        label: "Imagem " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: mobilemedia.resolution,
+                        namefile: mobilemedia.namefile,
+                        description:
+                          "Imagem " +
+                          (indexmobile + 1) +
+                          " " +
+                          resposta.data.label,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 2) {
+                    await axios.put(
+                      mobilemedia.url,
+                      {
+                        label: "Video " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: mobilemedia.resolution,
+                        namefile: mobilemedia.namefile,
+                        description: null,
+                        time: mobilemedia.time,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 3) {
+                    await axios.put(
+                      mobilemedia.url,
+                      {
+                        label: "Audio " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: null,
+                        namefile: mobilemedia.namefile,
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 5) {
+                    await axios.put(
+                      mobilemedia.url,
+                      {
+                        label: "Link " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: null,
+                        resolution: null,
+                        namefile: null,
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: mobilemedia.object,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  }
+                } else {
+                  /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
+                  if (mobilemedia.type === 1) {
+                    await axios.post(
+                      `http://localhost:8000/mobilemedia/`,
+                      {
+                        label: "Imagem " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: mobilemedia.resolution,
+                        namefile: mobilemedia.path.split("/")[1],
+                        description:
+                          "Imagem " +
+                          (indexmobile + 1) +
+                          " " +
+                          resposta.data.label,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 2) {
+                    console.log("i", i);
+                    await axios.post(
+                      `http://localhost:8000/mobilemedia/`,
+                      {
+                        label: "Video " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: mobilemedia.resolution,
+                        namefile: mobilemedia.path.split("/")[1],
+                        description: null,
+                        time: mobilemedia.time,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 3) {
+                    await axios.post(
+                      `http://localhost:8000/mobilemedia/`,
+                      {
+                        label: "Audio " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: mobilemedia.path,
+                        resolution: null,
+                        namefile: mobilemedia.path.split("/")[1],
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  } else if (mobilemedia.type === 5) {
+                    await axios.post(
+                      `http://localhost:8000/mobilemedia/`,
+                      {
+                        label: "Link " + (indexmobile + 1),
+                        fk_idmediatype:
+                          "http://localhost:8000/mediatype/" +
+                          mobilemedia.type +
+                          "/",
+                        path: null,
+                        resolution: null,
+                        namefile: null,
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: mobilemedia.object,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idinstructionalelement: resposta.data.url
+                      },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    );
+                  }
+                }
+              });
+            }
+
             await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
@@ -383,6 +1051,251 @@ export default {
                     }
                   )
                   .then(async function(resposta2) {
+                    /*DANDO PUT NOS MOBILEMEDIAS DAS QUESTÕES COM URL*/
+
+                    await elementQuestion.mobileMedias.forEach(async function(
+                      elementMobile,
+                      indexMobile
+                    ) {
+                      if (elementMobile.url) {
+                        if (elementMobile.type === 1) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Imagem " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.namefile,
+                              description:
+                                "Imagem " +
+                                (indexMobile + 1) +
+                                " Questão" +
+                                resposta2.data.orderquestion,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 2) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Video " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.namefile,
+                              description: null,
+                              time: elementMobile.time,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 3) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Audio " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: null,
+                              namefile: elementMobile.namefile,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 5) {
+                          await axios.put(
+                            elementMobile.url,
+                            {
+                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: null,
+                              resolution: null,
+                              namefile: null,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: elementMobile.object,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      } else {
+                        if (elementMobile.type === 1) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Imagem " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.path.split("/")[1],
+                              description:
+                                "Imagem " +
+                                (indexMobile + 1) +
+                                " Questão" +
+                                resposta2.data.orderquestion,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 2) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Video " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: elementMobile.resolution,
+                              namefile: elementMobile.path.split("/")[1],
+                              description: null,
+                              time: elementMobile.time,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 3) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Audio " + (indexMobile + 1),
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: elementMobile.path,
+                              resolution: null,
+                              namefile: elementMobile.path.split("/")[1],
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: null,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        } else if (elementMobile.type === 5) {
+                          await axios.post(
+                            `http://localhost:8000/mobilemedia/`,
+                            {
+                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                              fk_idmediatype:
+                                "http://localhost:8000/mediatype/" +
+                                elementMobile.type +
+                                "/",
+                              path: null,
+                              resolution: null,
+                              namefile: null,
+                              description: null,
+                              time: null,
+                              textfull: null,
+                              textshort: null,
+                              urllink: elementMobile.object,
+                              difficultyLevel: null,
+                              learningStyle: null,
+                              fk_idquestion: resposta2.data.url
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        }
+                      }
+                    });
+
                     if (elementQuestion.typeQuestion === 1) {
                       await elementQuestion.answersAlternatives.forEach(
                         async function(elementAlternative, indexAlternative) {
@@ -516,11 +1429,136 @@ export default {
             }
           )
           .then(async function(resposta) {
+            if (vm.mobileMediasControl) {
+              /* INSERÇÃO DOS MOBILEMEDIAS DA AVALIAÇÃO/EXERCÍCIO */
+              await vm.mobileMediasControl.forEach(async function(
+                mobilemedia,
+                indexmobile
+              ) {
+                if (mobilemedia.type === 1) {
+                  await axios.post(
+                    `http://localhost:8000/mobilemedia/`,
+                    {
+                      label: "Imagem " + (indexmobile + 1),
+                      fk_idmediatype:
+                        "http://localhost:8000/mediatype/" +
+                        mobilemedia.type +
+                        "/",
+                      path: mobilemedia.path,
+                      resolution: mobilemedia.resolution,
+                      namefile: mobilemedia.path.split("/")[1],
+                      description:
+                        "Imagem " +
+                        (indexmobile + 1) +
+                        " " +
+                        resposta.data.label,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  );
+                } else if (mobilemedia.type === 2) {
+                  await axios.post(
+                    `http://localhost:8000/mobilemedia/`,
+                    {
+                      label: "Video " + (indexmobile + 1),
+                      fk_idmediatype:
+                        "http://localhost:8000/mediatype/" +
+                        mobilemedia.type +
+                        "/",
+                      path: mobilemedia.path,
+                      resolution: mobilemedia.resolution,
+                      namefile: mobilemedia.path.split("/")[1],
+                      description: null,
+                      time: mobilemedia.time,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  );
+                } else if (mobilemedia.type === 3) {
+                  await axios.post(
+                    `http://localhost:8000/mobilemedia/`,
+                    {
+                      label: "Audio " + (indexmobile + 1),
+                      fk_idmediatype:
+                        "http://localhost:8000/mediatype/" +
+                        mobilemedia.type +
+                        "/",
+                      path: mobilemedia.path,
+                      resolution: null,
+                      namefile: mobilemedia.path.split("/")[1],
+                      description: null,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  );
+                } else if (mobilemedia.type === 5) {
+                  await axios.post(
+                    `http://localhost:8000/mobilemedia/`,
+                    {
+                      label: "Link " + (indexmobile + 1),
+                      fk_idmediatype:
+                        "http://localhost:8000/mediatype/" +
+                        mobilemedia.type +
+                        "/",
+                      path: null,
+                      resolution: null,
+                      namefile: null,
+                      description: null,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: mobilemedia.object,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin"
+                      }
+                    }
+                  );
+                }
+              });
+            }
+
             await vm.questionsControl.forEach(async function(
               elementQuestion,
               indexQuestion
             ) {
-              console.log("oi", indexQuestion);
               await axios
                 .post(
                   `http://127.0.0.1:8000/question/`,
@@ -541,19 +1579,35 @@ export default {
                   }
                 )
                 .then(async function(resposta2) {
-                  if (elementQuestion.typeQuestion === 1) {
-                    await elementQuestion.answersAlternatives.forEach(async function(
-                      elementAlternative,
-                      indexAlternative
-                    ) {
+                  /* INSERÇÃO DOS MOBILEMEDIAS DAS QUESTÕES DA AVALIAÇÃO/EXERCICIO */
+                  await elementQuestion.mobileMedias.forEach(async function(
+                    elementMobile,
+                    indexMobile
+                  ) {
+                    if (elementMobile.type === 1) {
                       await axios.post(
-                        `http://127.0.0.1:8000/answersalternatives/`,
+                        `http://localhost:8000/mobilemedia/`,
                         {
-                          idobjanswer: vm.idObjAnswerItems[indexAlternative],
-                          answers: elementAlternative.answers,
-                          istrue: elementAlternative.isTrue,
-                          fk_idquestion: resposta2.data.url,
-                          orderansweralternatives: indexAlternative
+                          label: "Imagem " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: elementMobile.path,
+                          resolution: elementMobile.resolution,
+                          namefile: elementMobile.path.split("/")[1],
+                          description:
+                            "Imagem " +
+                            (indexMobile + 1) +
+                            " Questão" +
+                            resposta2.data.orderquestion,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
                         },
                         {
                           auth: {
@@ -562,7 +1616,114 @@ export default {
                           }
                         }
                       );
-                    });
+                    } else if (elementMobile.type === 2) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Video " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: elementMobile.path,
+                          resolution: elementMobile.resolution,
+                          namefile: elementMobile.path.split("/")[1],
+                          description: null,
+                          time: elementMobile.time,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    } else if (elementMobile.type === 3) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Audio " + (indexMobile + 1),
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: elementMobile.path,
+                          resolution: null,
+                          namefile: elementMobile.path.split("/")[1],
+                          description: null,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: null,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    } else if (elementMobile.type === 5) {
+                      await axios.post(
+                        `http://localhost:8000/mobilemedia/`,
+                        {
+                          label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                          fk_idmediatype:
+                            "http://localhost:8000/mediatype/" +
+                            elementMobile.type +
+                            "/",
+                          path: null,
+                          resolution: null,
+                          namefile: null,
+                          description: null,
+                          time: null,
+                          textfull: null,
+                          textshort: null,
+                          urllink: elementMobile.object,
+                          difficultyLevel: null,
+                          learningStyle: null,
+                          fk_idquestion: resposta2.data.url
+                        },
+                        {
+                          auth: {
+                            username: "admin",
+                            password: "admin"
+                          }
+                        }
+                      );
+                    }
+                  });
+
+                  if (elementQuestion.typeQuestion === 1) {
+                    await elementQuestion.answersAlternatives.forEach(
+                      async function(elementAlternative, indexAlternative) {
+                        await axios.post(
+                          `http://127.0.0.1:8000/answersalternatives/`,
+                          {
+                            idobjanswer: vm.idObjAnswerItems[indexAlternative],
+                            answers: elementAlternative.answers,
+                            istrue: elementAlternative.isTrue,
+                            fk_idquestion: resposta2.data.url,
+                            orderansweralternatives: indexAlternative
+                          },
+                          {
+                            auth: {
+                              username: "admin",
+                              password: "admin"
+                            }
+                          }
+                        );
+                      }
+                    );
                   } else if (elementQuestion.typeQuestion === 2) {
                     await axios.post(
                       `http://127.0.0.1:8000/resolutionquestion/`,
@@ -583,12 +1744,177 @@ export default {
           });
       }
     },
+    addMobileMedia(mobileMediaType) {
+      if (mobileMediaType === 1) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 2) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          time: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 3) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 4) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType + 1,
+          object: null,
+          url: null
+        });
+      }
+    },
+    async deleteMobileMedia(idMobileMedia) {
+      if (this.mobileMediasControl[idMobileMedia].url) {
+        if (this.mobileMediasControl[idMobileMedia].type !== 5) {
+          await firebase
+            .storage()
+            .ref()
+            .child(this.mobileMediasControl[idMobileMedia].path)
+            .delete();
+        }
+        await axios.delete(this.mobileMediasControl[idMobileMedia].url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        });
+      }
+      if (idMobileMedia == 0) {
+        this.mobileMediasControl.shift();
+      } else {
+        this.mobileMediasControl.splice(idMobileMedia, 1);
+      }
+    },
+    atualizaMeta() {
+      if (this.mobileMediasControl.length > 0) {
+        this.mobileMediasControl.forEach(mobilemedia => {
+          if (mobilemedia.object && !mobilemedia.url) {
+            if (mobilemedia.type === 1) {
+              var img = new Image();
+              img.src = URL.createObjectURL(mobilemedia.object);
+              img.onload = function() {
+                mobilemedia.resolution = img.width + "X" + img.height;
+              };
+            } else if (mobilemedia.type === 2) {
+              var video = document.createElement("video");
+              var source = document.createElement("source");
+              source.setAttribute(
+                "src",
+                URL.createObjectURL(mobilemedia.object)
+              );
+              video.appendChild(source);
+              video.oncanplay = function() {
+                mobilemedia.resolution =
+                  video.videoWidth + "X" + video.videoHeight;
+                mobilemedia.time = video.duration;
+              };
+            }
+          }
+        });
+      }
+    },
+    async getSrcImage(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewImageSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcVideo(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewVideoSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcAudio(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewAudioSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    atualizaObj(file, indexMobile) {
+      this.mobileMediasControl[indexMobile].object = file;
+    },
     addQuestion(questionType) {
       if (questionType === 1) {
         this.questionsControl.push({
           typeQuestion: questionType,
           descriptionQuestion: null,
           answersAlternatives: [],
+          mobileMedias: [],
           url: null
         });
       } else if (questionType === 2) {
@@ -596,6 +1922,7 @@ export default {
           typeQuestion: questionType,
           descriptionQuestion: null,
           correctAnswer: null,
+          mobileMedias: [],
           url: null,
           urlCorrectAnswer: null
         });
@@ -645,6 +1972,184 @@ export default {
           idAlternative,
           1
         );
+      }
+    },
+    addMobileMediaQuestion(idQuestion, mobileMediaType) {
+      if (mobileMediaType === 1) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 2) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          time: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 3) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          path: null,
+          namefile: null,
+          url: null
+        });
+      } else if (mobileMediaType === 4) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType + 1,
+          object: null,
+          url: null
+        });
+      }
+    },
+    async deleteMobileMediaQuestion(idQuestion, idMobileMedia) {
+      if (this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url) {
+        if (
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].type !==
+          5
+        ) {
+          await firebase
+            .storage()
+            .ref()
+            .child(
+              this.questionsControl[idQuestion].mobileMedias[idMobileMedia].path
+            )
+            .delete();
+        }
+        await axios.delete(
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url,
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        );
+      }
+      if (idMobileMedia == 0) {
+        this.questionsControl[idQuestion].mobileMedias.shift();
+      } else {
+        this.questionsControl[idQuestion].mobileMedias.splice(idMobileMedia, 1);
+      }
+    },
+    atualizaMetaQuestions() {
+      if (this.questionsControl.length > 0) {
+        this.questionsControl.forEach(question => {
+          if (question.mobileMedias) {
+            question.mobileMedias.forEach(mobilemedia => {
+              if (mobilemedia.object && !mobilemedia.url) {
+                if (mobilemedia.type === 1) {
+                  var img = new Image();
+                  img.src = URL.createObjectURL(mobilemedia.object);
+                  img.onload = function() {
+                    mobilemedia.resolution = img.width + "X" + img.height;
+                  };
+                } else if (mobilemedia.type === 2) {
+                  var video = document.createElement("video");
+                  var source = document.createElement("source");
+                  source.setAttribute(
+                    "src",
+                    URL.createObjectURL(mobilemedia.object)
+                  );
+                  video.appendChild(source);
+                  video.oncanplay = function() {
+                    mobilemedia.resolution =
+                      video.videoWidth + "X" + video.videoHeight;
+                    mobilemedia.time = video.duration;
+                  };
+                }
+              }
+            });
+          }
+        });
+      }
+    },
+    atualizaObjQuestions(file, indexQuestion, indexMobile) {
+      this.questionsControl[indexQuestion].mobileMedias[
+        indexMobile
+      ].object = file;
+    },
+    async getSrcImageQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewImageSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              /*vm.auxGetSrcQuestions.push(file);*/
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcVideoQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewVideoSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcAudioQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function(url) {
+            /*vm.viewAudioSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type
+              });
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
       }
     },
     async validate() {
@@ -697,12 +2202,14 @@ export default {
     },
     resetVariables() {
       this.questionsControl = [];
+      this.mobileMediasControl = [];
       this.avaliacaoName = "";
     },
     async reset() {
       await this.$emit("instrucclose");
       await this.resetVariables();
       this.questionsControl = [];
+      this.mobileMediasControl = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();

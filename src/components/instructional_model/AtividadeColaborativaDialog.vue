@@ -749,7 +749,7 @@ export default {
         this.mobileMediasControl = [];
         this.resetValidation();
         this.viewQuestions = false;
-        this.avaliacaoName = "";
+        this.resetVariables();
       }
     }
   },
@@ -789,7 +789,7 @@ export default {
 
                 mobilemedia.path = auxPath;
               }
-            }, 5);
+            }, 30);
           }
         });
       }
@@ -820,7 +820,7 @@ export default {
 
                   mobilemedia.path = auxPathQuestions;
                 }
-              }, 10);
+              }, 37);
             }
           });
         }
@@ -1490,7 +1490,7 @@ export default {
             });
           });
       } else {
-        /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
+        /* CÓDIGO PARA CRIAÇÃO DA ATIVIDADE COLABORATIVA */
         await axios
           .post(
             `http://127.0.0.1:8000/instructionalelement/`,
