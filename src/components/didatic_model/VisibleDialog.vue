@@ -50,7 +50,7 @@ import axios from "axios";
 import Cookie from "js-cookie";
 export default {
   name: "VisibleDialog",
-  props: ["dominio", "dialog"],
+  props: ["domain", "dialog"],
   data: () => ({
     valid: true,
     treeData: [],
@@ -59,10 +59,10 @@ export default {
     checkbox: true
   }),
   watch: {
-    dialog: async function() {
-      this.treeData = [];
-      this.selection = [];
-      if (this.dominio) {
+    domain: async function() {
+      if (this.domain) {
+        this.treeData = [];
+        this.selection = [];
         await this.setDomainVariables();
       }
     }
@@ -80,8 +80,8 @@ export default {
     setDomainVariables() {
       this.treeData = [];
       var indexmodulo = 0;
-      if (this.dominio.mobilemedias.length) {
-        this.dominio.mobilemedias.forEach(mobilemedia => {
+      if (this.domain.mobilemedias.length) {
+        this.domain.mobilemedias.forEach(mobilemedia => {
           var object = {
             id: mobilemedia.url,
             name: "[MOBILEMEDIA] " + mobilemedia.label,
@@ -94,8 +94,8 @@ export default {
           indexmodulo++;
         });
       }
-      if (this.dominio.instructionalelements.length) {
-        this.dominio.instructionalelements.forEach(instructionalelement => {
+      if (this.domain.instructionalelements.length) {
+        this.domain.instructionalelements.forEach(instructionalelement => {
           if (
             instructionalelement.fk_instructionalelementtype.split("/")[4] !== 4
           ) {
@@ -112,8 +112,8 @@ export default {
           }
         });
       }
-      if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
-        this.dominio.modules.forEach(modulo => {
+      if (Array.isArray(this.domain.modules) && this.domain.modules.length) {
+        this.domain.modules.forEach(modulo => {
           if (modulo.fk_idmodule === null) {
             var indexsubmodulo = 0;
             var object = {
@@ -745,7 +745,6 @@ export default {
     },
     reset() {
       this.$emit("close_or_save", "close");
-      this.$refs.form.reset();
     },
     resetValidation() {
       this.$refs.form.resetValidation();

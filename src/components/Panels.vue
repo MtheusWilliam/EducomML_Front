@@ -208,9 +208,9 @@
               <!--Formulario para criação de atividade colaborativa -->
               <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1000px">
                 <VisibleDialog
-                  :dominio="dominio"
+                  :domain="dominio"
                   :dialog="dialog_visible"
-                  @close_or_save="dialog_visible=false; visibleClose()"
+                  @close_or_save="visibleClose"
                 />
               </v-dialog>
             </v-col>
@@ -1173,7 +1173,7 @@
         height="49"
         dark
         large
-        @click="dialog_visible=true"
+        @click="openDidatic();"
         class="mr-1"
       >Modelo Didático</v-btn>
       <v-btn color="success" height="49" dark large @click="saveDominio" class="mr-3">
@@ -1900,9 +1900,14 @@ export default {
     },
     async visibleClose() {
       var vm = this;
+      this.dialog_visible = false;
       await setTimeout(function() {
         vm.getDominio();
       }, 2000);
+    },
+    openDidatic() {
+      this.getDominio();
+      this.dialog_visible = true;
     },
     saveDominio() {
       console.log("");
