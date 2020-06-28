@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title style="background-color:purple; color:white;">
         <span class="headline">
-          <p>Insira as informações equivalentes ao modelo didático.</p>
+          <p>Defina as informações equivalentes ao modelo didático.</p>
         </span>
       </v-card-title>
       <v-card-text>
