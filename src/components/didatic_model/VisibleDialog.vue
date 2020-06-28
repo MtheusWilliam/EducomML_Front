@@ -7,16 +7,28 @@
         </span>
       </v-card-title>
       <v-card-text>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-treeview
-            @update:active="test"
-            v-model="selection"
-            :selection-type="'independent'"
-            :items="treeData"
-            return-object
-            selectable
-          ></v-treeview>
-        </v-form>
+        <v-row class="mt-2 ml-3">
+          <v-btn
+            color="warning"
+            height="40px"
+            dark
+            x-small
+            small
+            @click="deselectAll()"
+            class="mr-1"
+          >Deselecionar tudo</v-btn>
+          <v-btn color="primary" height="40" dark small @click="selectAll()">Selecionar tudo</v-btn>
+        </v-row>
+
+        <v-treeview
+          @update:active="test"
+          v-model="selection"
+          :selection-type="'independent'"
+          :items="treeData"
+          return-object
+          selectable
+          selected-color="success"
+        ></v-treeview>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -47,18 +59,15 @@ export default {
     checkbox: true
   }),
   watch: {
-    dialog: function() {
+    dialog: async function() {
+      this.treeData = [];
+      this.selection = [];
       if (this.dominio) {
-        this.setDomainVariables();
+        await this.setDomainVariables();
       }
     }
   },
   methods: {
-    async validate() {
-      console.log("selection", this.selection);
-      console.log("treeData", this.treeData);
-      this.putVisible();
-    },
     test(value) {
       if (value.length) {
         if (value[0].split("/")[5] === "sub") {
@@ -367,16 +376,17 @@ export default {
         });
       }
     },
-    putVisible() {
-      console.log("oi");
+    async putVisible() {
+      var vm = this;
+      var csrftoken = Cookie.get("csrftoken");
+      var headers = {
+        "X-CSRFTOKEN": csrftoken
+      };
       this.treeData.forEach(element => {
         if (
+          element.visible === true &&
           !this.selection.find(findElement => findElement.id === element.id)
         ) {
-          var csrftoken = Cookie.get("csrftoken");
-          var headers = {
-            "X-CSRFTOKEN": csrftoken
-          };
           axios
             .patch(
               element.id,
@@ -408,18 +418,50 @@ export default {
                 }
               });
             });
+        } else if (
+          element.visible === false &&
+          this.selection.find(findElement => findElement.id === element.id)
+        ) {
+          axios
+            .patch(
+              element.id,
+              { headers: headers },
+              {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              }
+            )
+            .then(async function(resposta) {
+              var aux = resposta.data;
+              await Object.keys(aux).forEach(atributo => {
+                if (Array.isArray(aux[atributo])) {
+                  delete aux[atributo];
+                } else if (atributo === "url") {
+                  delete aux[atributo];
+                } else if (atributo[0] + atributo[1] === "id") {
+                  delete aux[atributo];
+                } else if (atributo === "visible") {
+                  aux.visible = true;
+                }
+              });
+              await axios.put(element.id, aux, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              });
+            });
         }
         if (Array.isArray(element.children) && element.children.length) {
           element.children.forEach(element2 => {
             if (
+              element2.visible === true &&
               !this.selection.find(
                 findElement2 => findElement2.id === element2.id
               )
             ) {
-              var csrftoken = Cookie.get("csrftoken");
-              var headers = {
-                "X-CSRFTOKEN": csrftoken
-              };
               axios
                 .patch(
                   element2.id,
@@ -452,19 +494,54 @@ export default {
                     }
                   });
                 });
+            } else if (
+              element2.visible === false &&
+              this.selection.find(
+                findElement2 => findElement2.id === element2.id
+              )
+            ) {
+              axios
+                .patch(
+                  element2.id,
+                  { headers: headers },
+                  {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  }
+                )
+                .then(async function(resposta) {
+                  var aux = resposta.data;
+                  await Object.keys(aux).forEach(atributo => {
+                    if (Array.isArray(aux[atributo])) {
+                      delete aux[atributo];
+                    } else if (atributo === "url") {
+                      delete aux[atributo];
+                    } else if (atributo[0] + atributo[1] === "id") {
+                      delete aux[atributo];
+                    } else if (atributo === "visible") {
+                      aux.visible = true;
+                    }
+                  });
+
+                  await axios.put(element2.id, aux, {
+                    auth: {
+                      username: "admin",
+                      password: "admin"
+                    }
+                  });
+                });
             }
 
             if (Array.isArray(element2.children) && element2.children.length) {
               element2.children.forEach(element3 => {
                 if (
+                  element3.visible === true &&
                   !this.selection.find(
                     findElement3 => findElement3.id === element3.id
                   )
                 ) {
-                  var csrftoken = Cookie.get("csrftoken");
-                  var headers = {
-                    "X-CSRFTOKEN": csrftoken
-                  };
                   axios
                     .patch(
                       element3.id,
@@ -496,6 +573,43 @@ export default {
                         }
                       });
                     });
+                } else if (
+                  element3.visible === false &&
+                  this.selection.find(
+                    findElement3 => findElement3.id === element3.id
+                  )
+                ) {
+                  axios
+                    .patch(
+                      element3.id,
+                      { headers: headers },
+                      {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      }
+                    )
+                    .then(async function(resposta) {
+                      var aux = resposta.data;
+                      await Object.keys(aux).forEach(atributo => {
+                        if (Array.isArray(aux[atributo])) {
+                          delete aux[atributo];
+                        } else if (atributo === "url") {
+                          delete aux[atributo];
+                        } else if (atributo[0] + atributo[1] === "id") {
+                          delete aux[atributo];
+                        } else if (atributo === "visible") {
+                          aux.visible = true;
+                        }
+                      });
+                      await axios.put(element3.id, aux, {
+                        auth: {
+                          username: "admin",
+                          password: "admin"
+                        }
+                      });
+                    });
                 }
 
                 if (
@@ -504,14 +618,11 @@ export default {
                 ) {
                   element3.children.forEach(element4 => {
                     if (
+                      element4.visible === true &&
                       !this.selection.find(
                         findElement4 => findElement4.id === element4.id
                       )
                     ) {
-                      var csrftoken = Cookie.get("csrftoken");
-                      var headers = {
-                        "X-CSRFTOKEN": csrftoken
-                      };
                       axios
                         .patch(
                           element4.id,
@@ -549,6 +660,49 @@ export default {
                             }
                           );
                         });
+                    } else if (
+                      element4.visible === false &&
+                      this.selection.find(
+                        findElement4 => findElement4.id === element4.id
+                      )
+                    ) {
+                      axios
+                        .patch(
+                          element4.id,
+                          { headers: headers },
+                          {
+                            auth: {
+                              username: "admin",
+                              password: "admin"
+                            }
+                          }
+                        )
+                        .then(async function(resposta) {
+                          var aux = resposta.data;
+                          await Object.keys(aux).forEach(atributo => {
+                            if (Array.isArray(aux[atributo])) {
+                              delete aux[atributo];
+                            } else if (atributo === "url") {
+                              delete aux[atributo];
+                            } else if (atributo[0] + atributo[1] === "id") {
+                              delete aux[atributo];
+                            } else if (atributo === "visible") {
+                              aux.visible = true;
+                            }
+                          });
+                          await axios.put(
+                            element4.id,
+                            {
+                              aux
+                            },
+                            {
+                              auth: {
+                                username: "admin",
+                                password: "admin"
+                              }
+                            }
+                          );
+                        });
                     }
                   });
                 }
@@ -557,6 +711,37 @@ export default {
           });
         }
       });
+      await setTimeout(async function() {
+        vm.$emit("close_or_save", "close");
+      }, 300);
+    },
+    deselectAll() {
+      this.selection = [];
+    },
+    selectAll() {
+      var vm = this;
+      this.selection = [];
+      this.treeData.forEach(element => {
+        vm.selection.push(element);
+        if (element.children) {
+          element.children.forEach(element2 => {
+            vm.selection.push(element2);
+            if (element2.children) {
+              element2.children.forEach(element3 => {
+                vm.selection.push(element3);
+                if (element3.children) {
+                  element3.children.forEach(element4 => {
+                    vm.selection.push(element4);
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    },
+    async validate() {
+      await this.putVisible();
     },
     reset() {
       this.$emit("close_or_save", "close");

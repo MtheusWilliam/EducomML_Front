@@ -210,7 +210,7 @@
                 <VisibleDialog
                   :dominio="dominio"
                   :dialog="dialog_visible"
-                  @close_or_save="dialog_visible=false"
+                  @close_or_save="dialog_visible=false; visibleClose()"
                 />
               </v-dialog>
             </v-col>
@@ -1897,6 +1897,12 @@ export default {
       } else {
         return [];
       }
+    },
+    async visibleClose() {
+      var vm = this;
+      await setTimeout(function() {
+        vm.getDominio();
+      }, 2000);
     },
     saveDominio() {
       console.log("");
