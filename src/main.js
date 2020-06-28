@@ -8,7 +8,7 @@ import axios from "axios";
 import UserHome from './components/UserHome';
 import Home from './components/Home';
 import CreateConceitual from './components/CreateConceitual';
-import AtividadeColaborativaDialog from './components/instructional_model/AtividadeColaborativaDialog';
+import VisibleDialog from './components/didatic_model/VisibleDialog';
 import * as firebase from "firebase";
 
 var config = {
@@ -38,7 +38,7 @@ const router = new VueRouter({
     {
       path: '/teste',
       name: 'teste',
-      component: AtividadeColaborativaDialog
+      component: VisibleDialog
     },
     {
       path: '/',

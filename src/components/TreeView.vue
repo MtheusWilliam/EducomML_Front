@@ -11,7 +11,7 @@
         </v-btn>
       </v-app-bar>
     </div>
-    <v-treeview open-all @update:active="test" :items="treeData" activatable></v-treeview>
+    <v-treeview open-all @update:active="test" :items="treeData" activatable :showCheckBox="true"></v-treeview>
   </v-container>
 </template>
 

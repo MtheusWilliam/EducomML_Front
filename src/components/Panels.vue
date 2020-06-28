@@ -205,6 +205,14 @@
                   :instructionalelement="elementoinstrucional"
                 />
               </v-dialog>
+              <!--Formulario para criação de atividade colaborativa -->
+              <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1000px">
+                <VisibleDialog
+                  :dominio="dominio"
+                  :dialog="dialog_visible"
+                  @close_or_save="dialog_visible=false"
+                />
+              </v-dialog>
             </v-col>
           </v-row>
         </v-expansion-panel-header>
@@ -1159,6 +1167,20 @@
         <!--FIM DO CONTENT DO DOMÍNIO-->
       </v-expansion-panel>
     </v-expansion-panels>
+    <v-row class="d-flex justify-end mt-2">
+      <v-btn
+        color="primary"
+        height="49"
+        dark
+        large
+        @click="dialog_visible=true"
+        class="mr-1"
+      >Modelo Didático</v-btn>
+      <v-btn color="success" height="49" dark large @click="saveDominio" class="mr-3">
+        Salvar Domínio
+        <v-icon dark right>mdi-content-save</v-icon>
+      </v-btn>
+    </v-row>
   </v-row>
 </template>
 
@@ -1177,6 +1199,7 @@ import ProcedureDialog from "./instructional_model/ProcedureDialog";
 import InstrucMenuFiles from "./InstrucMenuFiles";
 import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
+import VisibleDialog from "./didatic_model/VisibleDialog";
 
 import firebase from "firebase/app";
 import axios from "axios";
@@ -1197,7 +1220,8 @@ export default {
     ProcedureDialog,
     InstrucMenuFiles,
     AvaliacaoDialog,
-    AtividadeColaborativaDialog
+    AtividadeColaborativaDialog,
+    VisibleDialog
   },
   props: [
     "dominio",
@@ -1250,6 +1274,7 @@ export default {
     dialog_procedure: false,
     dialog_avaliacao: false,
     dialog_atividadecolaborativa: false,
+    dialog_visible: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -1795,10 +1820,10 @@ export default {
       await this.$nextTick(function() {
         vm.getDominio();
       }, 3 + rounds);
-      if (rounds > 5) {
+      if (rounds) {
         await setTimeout(function() {
           vm.getDominio();
-        }, 600);
+        }, 1200);
       }
     },
     instrucOpenFileDialog(value) {
@@ -1872,6 +1897,9 @@ export default {
       } else {
         return [];
       }
+    },
+    saveDominio() {
+      console.log("");
     }
   }
 };

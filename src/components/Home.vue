@@ -32,6 +32,7 @@
       <v-col cols="4">
         <v-img src="@/assets/home.png"></v-img>
       </v-col>
+
       <v-row>
         <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
       </v-row>
