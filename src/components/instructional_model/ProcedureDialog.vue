@@ -60,9 +60,10 @@
             </v-row>
 
             <v-row v-for="(item,i) in phasesControl" :key="i">
-              <v-col cols="3" style="text-align:center; font-size: 1.8em; margin-top:20px;">{{i+1}}º</v-col>
+              <v-col cols="3" style="text-align:center; font-size: 1.8em; margin-top:10px;">{{i+1}}º</v-col>
               <v-col cols="8">
                 <v-textarea
+                  style="margin-top: -10px;"
                   v-model="phasesControl[i].description"
                   background-color="#F2F3F3"
                   :rules="phasesControlRules"

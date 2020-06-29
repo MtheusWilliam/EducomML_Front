@@ -3,11 +3,11 @@
     <!--Panel do Domínio-->
     <v-expansion-panels>
       <v-expansion-panel v-for="(item,i) in 1" :key="i">
-        <v-expansion-panel-header color="#666666" style="color:white;">
+        <v-expansion-panel-header color="#666666" style="color:white; height: 55px;">
           <!--HEADER DO DOMÍNIO-->
           <v-row>
             <v-col>
-              <p>
+              <p class="mt-3">
                 [Dominio]
                 {{ dominio_data.nameknowledgedomain }}
               </p>
@@ -219,7 +219,7 @@
         <!--FIM DO HEADER DO DOMÍNIO-->
         <v-expansion-panel-content>
           <!--CONTENT DO DOMÍNIO-->
-          {{ dominio_data.subtitle }}
+          <v-row class="mt-2 ml-1">{{ dominio_data.subtitle }}</v-row>
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(mobilemedia) in dominio.mobilemedias"
@@ -227,10 +227,10 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+              <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                 <v-row>
-                  <v-col cols="9">
-                    <p>
+                  <v-col>
+                    <p class="mt-3">
                       <v-icon
                         color="white"
                         large
@@ -266,10 +266,10 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+              <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                 <v-row>
                   <v-col>
-                    <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                    <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
                   </v-col>
                   <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
@@ -299,11 +299,11 @@
             class="mt-2 mb-2"
           >
             <v-expansion-panel v-if="modulo.fk_idmodule === null">
-              <v-expansion-panel-header color="#7FD15E" style="color:white;">
+              <v-expansion-panel-header color="#7FD15E" style="color:white; height: 55px;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col>
-                    <p>
+                    <p class="mt-3">
                       [Modulo]
                       {{ modulo.namemodule }}
                     </p>
@@ -388,7 +388,7 @@
 
               <v-expansion-panel-content>
                 <!--CONTENT DO MÓDULO-->
-                {{ modulo.subtitle }}
+                <v-row class="mt-2 ml-1">{{ modulo.subtitle }}</v-row>
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
                   v-for="(mobilemedia) in modulo.mobilemedias"
@@ -396,10 +396,10 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                    <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                       <v-row>
                         <v-col>
-                          <p>
+                          <p class="mt-3">
                             <v-icon
                               color="white"
                               large
@@ -435,10 +435,10 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                    <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                       <v-row>
                         <v-col>
-                          <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                          <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do módulo-->
@@ -468,11 +468,11 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#71CB97" style="color:white;">
+                    <v-expansion-panel-header color="#71CB97" style="color:white; height: 55px;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col>
-                          <p>
+                          <p class="mt-3">
                             [Submodulo]
                             {{ submodulo.namemodule }}
                           </p>
@@ -546,7 +546,7 @@
 
                     <v-expansion-panel-content>
                       <!--CONTENT DO SUBMODULO-->
-                      {{ submodulo.subtitle }}
+                      <v-row class="mt-2 ml-1">{{ submodulo.subtitle }}</v-row>
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in submodulo.mobilemedias"
@@ -554,10 +554,13 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#A5A5A5"
+                            style="color:white; height: 55px;"
+                          >
                             <v-row>
                               <v-col>
-                                <p>
+                                <p class="mt-3">
                                   <v-icon
                                     color="white"
                                     large
@@ -597,10 +600,13 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#A5A5A5"
+                            style="color:white; height: 55px;"
+                          >
                             <v-row>
                               <v-col>
-                                <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
@@ -634,11 +640,14 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#3B83FF" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#3B83FF"
+                            style="color:white; height: 55px;"
+                          >
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-row>
                               <v-col>
-                                <p>
+                                <p class="mt-3">
                                   [Conceito]
                                   {{ conceito.nameconcept }}
                                 </p>
@@ -725,7 +734,6 @@
 
                           <v-expansion-panel-content>
                             <!--INÍCIO DO CONTENT DOS CONCEITOS DOS SUBMÓDULOS-->
-                            <p>Relacionamentos:</p>
                             <!-- Listagem dos relacionamentos dos conceitos adicionados dentro de submódulos -->
                             <h3 class="mt-2">Relacionamentos:</h3>
                             <v-simple-table>
@@ -754,11 +762,14 @@
                             >
                               <v-expansion-panel>
                                 <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
-                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                                <v-expansion-panel-header
+                                  color="#A5A5A5"
+                                  style="color:white; height: 55px;"
+                                >
                                   <!--HEADER DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS-->
                                   <v-row>
                                     <v-col>
-                                      <p>
+                                      <p class="mt-3">
                                         <v-icon
                                           color="white"
                                           large
@@ -798,10 +809,15 @@
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
-                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                                <v-expansion-panel-header
+                                  color="#A5A5A5"
+                                  style="color:white; height: 55px;"
+                                >
                                   <v-row>
                                     <v-col>
-                                      <p>[Procedimento] {{procedure.nameinformationitem}}</p>
+                                      <p
+                                        class="mt-3"
+                                      >[Procedimento] {{procedure.nameinformationitem}}</p>
                                     </v-col>
                                     <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do procedure-->
@@ -825,17 +841,14 @@
                                 </v-expansion-panel-header>
 
                                 <v-expansion-panel-content>
-                                  <p class="mt-2">{{procedure.descriptioninformationitem}}</p>
+                                  <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
                                   <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                                   <h3 class="mt-2">Fases do procedimento:</h3>
                                   <v-simple-table>
                                     <template v-slot:default>
                                       <thead>
                                         <tr>
-                                          <th
-                                            class="text-left"
-                                            style="margin-right:-20px"
-                                          >Ordem da fase</th>
+                                          <th class="text-left" style="width:160px;">Ordem da fase</th>
                                           <th class="text-left">Descrição</th>
                                         </tr>
                                       </thead>
@@ -844,7 +857,7 @@
                                           v-for="fase in procedure.phaseprocedures"
                                           :key="fase.url"
                                         >
-                                          <td style="margin-right:-20px">{{fase.order}}</td>
+                                          <td>{{fase.order}}</td>
                                           <td>{{fase.description}}</td>
                                         </tr>
                                       </tbody>
@@ -862,10 +875,15 @@
                               class="mt-2 mb-2"
                             >
                               <v-expansion-panel>
-                                <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                                <v-expansion-panel-header
+                                  color="#A5A5A5"
+                                  style="color:white; height: 55px;"
+                                >
                                   <v-row>
                                     <v-col>
-                                      <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                                      <p
+                                        class="mt-3"
+                                      >[Elemento Instrucional] {{instrucelement.label}}</p>
                                     </v-col>
                                     <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
@@ -909,11 +927,11 @@
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#3B83FF" style="color:white;">
+                    <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col>
-                          <p>
+                          <p class="mt-3">
                             [Conceito]
                             {{ conceito.nameconcept }}
                           </p>
@@ -1027,10 +1045,13 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#A5A5A5"
+                            style="color:white; height: 55px;"
+                          >
                             <v-row>
                               <v-col>
-                                <p>
+                                <p class="mt-3">
                                   <v-icon
                                     color="white"
                                     large
@@ -1071,10 +1092,13 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#A5A5A5"
+                            style="color:white; height: 55px;"
+                          >
                             <v-row>
                               <v-col>
-                                <p>[Procedimento] {{procedure.nameinformationitem}}</p>
+                                <p class="mt-3">[Procedimento] {{procedure.nameinformationitem}}</p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do procedure-->
@@ -1094,14 +1118,14 @@
                           </v-expansion-panel-header>
 
                           <v-expansion-panel-content>
-                            <p>{{procedure.descriptioninformationitem}}</p>
+                            <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
                             <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                             <h3 class="mt-2">Fases do procedimento:</h3>
                             <v-simple-table>
                               <template v-slot:default>
                                 <thead>
                                   <tr>
-                                    <th class="text-left">Ordem da fase</th>
+                                    <th class="text-left" style="width:160px;">Ordem da fase</th>
                                     <th class="text-left">Descrição</th>
                                   </tr>
                                 </thead>
@@ -1125,10 +1149,13 @@
                         class="mt-2 mb-2"
                       >
                         <v-expansion-panel>
-                          <v-expansion-panel-header color="#A5A5A5" style="color:white;">
+                          <v-expansion-panel-header
+                            color="#A5A5A5"
+                            style="color:white; height: 55px;"
+                          >
                             <v-row>
                               <v-col>
-                                <p>[Elemento Instrucional] {{instrucelement.label}}</p>
+                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
@@ -1168,15 +1195,8 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <v-row class="d-flex justify-end mt-2">
-      <v-btn
-        color="primary"
-        height="49"
-        dark
-        large
-        @click="openDidatic();"
-        class="mr-1"
-      >Modelo Didático</v-btn>
-      <v-btn color="success" height="49" dark large @click="saveDominio" class="mr-3">
+      <v-btn color="primary" height="49" dark @click="openDidatic();" class="mr-1">Modelo Didático</v-btn>
+      <v-btn color="success" height="49" dark @click="saveDominio" class="mr-3">
         Salvar Domínio
         <v-icon dark right>mdi-content-save</v-icon>
       </v-btn>
