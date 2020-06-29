@@ -6,13 +6,13 @@
         <v-expansion-panel-header color="#666666" style="color:white;">
           <!--HEADER DO DOMÍNIO-->
           <v-row>
-            <v-col cols="9">
+            <v-col>
               <p>
                 [Dominio]
                 {{ dominio_data.nameknowledgedomain }}
               </p>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="4" class="d-flex justify-end mr-1">
               <!--Menu para criação de elementos instrucionais do Domínio-->
               <v-menu
                 top="top"
@@ -238,7 +238,7 @@
                       {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
                     </p>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Formulario para edição do arquivo/mobilemedia-->
                     <v-btn
                       icon="icon"
@@ -268,10 +268,10 @@
             <v-expansion-panel>
               <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                 <v-row>
-                  <v-col cols="9">
+                  <v-col>
                     <p>[Elemento Instrucional] {{instrucelement.label}}</p>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
                     <v-btn
                       icon="icon"
@@ -302,13 +302,13 @@
               <v-expansion-panel-header color="#7FD15E" style="color:white;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
-                  <v-col cols="9">
+                  <v-col>
                     <p>
                       [Modulo]
                       {{ modulo.namemodule }}
                     </p>
                   </v-col>
-                  <v-col cols="3">
+                  <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Menu para criação de elementos instrucionais do Módulo-->
                     <v-menu
                       top="top"
@@ -398,7 +398,7 @@
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                       <v-row>
-                        <v-col cols="9">
+                        <v-col>
                           <p>
                             <v-icon
                               color="white"
@@ -407,7 +407,7 @@
                             {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
                           </p>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Formulario para edição do arquivo/mobilemedia-->
                           <v-btn
                             icon="icon"
@@ -437,10 +437,10 @@
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                       <v-row>
-                        <v-col cols="9">
+                        <v-col>
                           <p>[Elemento Instrucional] {{instrucelement.label}}</p>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do módulo-->
                           <v-btn
                             icon="icon"
@@ -471,13 +471,13 @@
                     <v-expansion-panel-header color="#71CB97" style="color:white;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
-                        <v-col cols="9">
+                        <v-col>
                           <p>
                             [Submodulo]
                             {{ submodulo.namemodule }}
                           </p>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Menu para criação de elementos instrucionais do SubMódulo-->
                           <v-menu
                             top="top"
@@ -556,7 +556,7 @@
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>
                                   <v-icon
                                     color="white"
@@ -565,7 +565,7 @@
                                   {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
                                 </p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn
                                   icon="icon"
@@ -599,10 +599,10 @@
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>[Elemento Instrucional] {{instrucelement.label}}</p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
                                 <v-btn
                                   icon="icon"
@@ -637,13 +637,13 @@
                           <v-expansion-panel-header color="#3B83FF" style="color:white;">
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>
                                   [Conceito]
                                   {{ conceito.nameconcept }}
                                 </p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
                                 <v-menu
                                   top="top"
@@ -757,7 +757,7 @@
                                 <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <!--HEADER DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS-->
                                   <v-row>
-                                    <v-col cols="9">
+                                    <v-col>
                                       <p>
                                         <v-icon
                                           color="white"
@@ -766,7 +766,7 @@
                                         {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
                                       </p>
                                     </v-col>
-                                    <v-col cols="3">
+                                    <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn
                                         icon="icon"
@@ -800,10 +800,10 @@
                               <v-expansion-panel>
                                 <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <v-row>
-                                    <v-col cols="9">
+                                    <v-col>
                                       <p>[Procedimento] {{procedure.nameinformationitem}}</p>
                                     </v-col>
-                                    <v-col cols="3">
+                                    <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do procedure-->
                                       <v-btn
                                         icon="icon"
@@ -864,10 +864,10 @@
                               <v-expansion-panel>
                                 <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                                   <v-row>
-                                    <v-col cols="9">
+                                    <v-col>
                                       <p>[Elemento Instrucional] {{instrucelement.label}}</p>
                                     </v-col>
-                                    <v-col cols="3">
+                                    <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                                       <v-btn
                                         icon="icon"
@@ -912,13 +912,13 @@
                     <v-expansion-panel-header color="#3B83FF" style="color:white;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
-                        <v-col cols="9">
+                        <v-col>
                           <p>
                             [Conceito]
                             {{ conceito.nameconcept }}
                           </p>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
                           <v-menu
                             top="top"
@@ -1029,7 +1029,7 @@
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>
                                   <v-icon
                                     color="white"
@@ -1038,7 +1038,7 @@
                                   {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
                                 </p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn
                                   icon="icon"
@@ -1073,10 +1073,10 @@
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>[Procedimento] {{procedure.nameinformationitem}}</p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do procedure-->
                                 <v-btn
                                   icon="icon"
@@ -1127,10 +1127,10 @@
                         <v-expansion-panel>
                           <v-expansion-panel-header color="#A5A5A5" style="color:white;">
                             <v-row>
-                              <v-col cols="9">
+                              <v-col>
                                 <p>[Elemento Instrucional] {{instrucelement.label}}</p>
                               </v-col>
-                              <v-col cols="3">
+                              <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                                 <v-btn
                                   icon="icon"
