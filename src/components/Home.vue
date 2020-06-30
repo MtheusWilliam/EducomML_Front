@@ -1,5 +1,7 @@
 <template>
+
   <v-row class="mt-2">
+  
     <v-row>
       <v-app-bar color="blue-grey lighten-4" z-index="1">
         <v-toolbar-title style="font-size:1.4em; color:white;" class="ml-6 mb-2">
@@ -9,12 +11,16 @@
         </v-toolbar-title>
 
         <v-spacer></v-spacer>
-        <v-div class="mr-6">
+        <div class="mr-6">
           <strong class="mx-2">Você ainda não se identificou</strong>
-          <router-link :to="{path: '/home'}">
-            <v-btn outlined color="indigo lighten-1" dark>Acessar</v-btn>
-          </router-link>
-        </v-div>
+          <v-dialog  max-width="600px">
+                <template v-slot:activator="{ on }">
+                  <v-btn outlined color="indigo lighten-1" v-on="on" dark @click="dialog_login=true">Acessar</v-btn>
+                </template>
+                <Login/>
+    </v-dialog>
+            
+        </div>
       </v-app-bar>
     </v-row>
     <v-row style="background-image: linear-gradient(#7993a5, #101223); color:white; width: 100%">
@@ -37,16 +43,22 @@
         <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
       </v-row>
     </v-row>
+    
   </v-row>
 </template>
 
 <script>
+import Login from "./Login";
+
 export default {
+  components: {
+    Login
+  },
   name: "UserHome",
   data: () => ({
     buttons: ["contato", "publicações", "projetos"]
   }),
-  methods: {}
+  
 };
 </script>
 

@@ -15,13 +15,16 @@
     "get-video-duration": "^3.0.0-beta.1",
     "image-size": "^0.8.3",
     "js-cookie": "^2.2.1",
+    "jwt-decode": "^2.2.0",
     "vue": "^2.6.11",
+    "vue-axios": "^2.1.5",
     "vue-cookies": "^1.7.0",
     "vue-core-video-player": "^0.1.9",
     "vue-router": "^3.2.0",
     "vue-select": "^3.10.3",
     "vuetify": "^2.2.11",
-    "vuetify-audio": "^0.3.2"
+    "vuetify-audio": "^0.3.2",
+    "vuex": "^3.5.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",

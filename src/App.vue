@@ -27,15 +27,6 @@
 
 export default {
   name: "App",
-
-  components: {
-    /*TreeView,
-    DominioDialog,
-    ModuloDialog,
-    ConceitoDialog
-    /*ModelTutorial*/
-  },
-
-  data: () => ({})
+  data: () => ({}),
 };
 </script>
