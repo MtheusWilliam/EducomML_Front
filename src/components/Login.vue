@@ -54,6 +54,11 @@
         username: this.username,
         password: this.password
       },);
+      console.log(await this.$router);
+      await this.$router.push({
+            path: "/home",
+          });
+      /*
        var header = await this.$store.dispatch('getCookie');
        console.log(header);
       await this.axios.post("http://localhost:8000/reference/",{
@@ -63,7 +68,7 @@
         targetconcept: "http://localhost:8000/concept/1/",
       }, header).then(response =>{
         console.log(response.data);
-      })
+      })*/
     },
   }
   }

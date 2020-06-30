@@ -33,11 +33,11 @@ Vue.config.productionTip = false;
 
 var store = new Vuex.Store({
   state: {
-    jwt: localStorage.getItem('t'),
+    jwt: null,
     endpoints: {
       obtainJWT: 'http://127.0.0.1:8000/api-token-auth/',
       refreshJWT: 'http://127.0.0.1:8000/api-token-refresh/'
-    }
+    },
   },
   mutations: {
     updateToken(state, newToken){
@@ -91,6 +91,9 @@ var store = new Vuex.Store({
         }
       }
     },
+    logout(){
+      this.commit('removeToken');
+    },
     getCookie() {
       var csrftoken = Cookie.get("csrftoken");
       var jwt = this.state.jwt;
@@ -109,6 +112,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/home',
+      name: 'home',
       component: UserHome
     },
     {
@@ -126,6 +130,11 @@ const router = new VueRouter({
       component: Home
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/' || store.state.jwt !== null) next({ path: '/' })
+  else next()
 })
 
 new Vue({

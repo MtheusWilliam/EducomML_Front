@@ -9,18 +9,21 @@
             <v-img src="@/assets/logo.svg" style="width: 170px;" class="mr-3"></v-img>
           </div>
         </v-toolbar-title>
-
+      
         <v-spacer></v-spacer>
-        <div class="mr-6">
-          <strong class="mx-2">Você ainda não se identificou</strong>
-          <v-dialog  max-width="600px">
+  <div class="mr-6">
+          <strong v-if="!$store.state.jwt" class="mx-2">Você ainda não se identificou</strong>
+          <v-dialog v-if="!$store.state.jwt"  max-width="600px">
                 <template v-slot:activator="{ on }">
                   <v-btn outlined color="indigo lighten-1" v-on="on" dark @click="dialog_login=true">Acessar</v-btn>
                 </template>
                 <Login/>
     </v-dialog>
+    <v-btn v-else outlined color="indigo lighten-1" dark @click="$store.dispatch('logout');$router.push({path:'/'})">Sair</v-btn>
+      
             
         </div>
+        
       </v-app-bar>
     </v-row>
     <v-row style="background-image: linear-gradient(#7993a5, #101223); color:white; width: 100%">
