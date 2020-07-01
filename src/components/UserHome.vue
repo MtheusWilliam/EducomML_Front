@@ -200,7 +200,7 @@ export default {
     },
     putDominio(idDomain) {
       this.$router.push({
-        name: "createConceitual",
+        name: "create",
         params: {
           idDomain: idDomain
         }
@@ -246,7 +246,7 @@ export default {
             .then(function(resposta) {
               vm.idDomain = resposta.data.idknowledgedomain;
               vm.$router.push({
-                name: "createConceitual",
+                name: "create",
                 params: {
                   idDomain: resposta.data.idknowledgedomain
                 }

@@ -120,8 +120,8 @@ const router = new VueRouter({
       component: UserHome
     },
     {
-      path: '/create/conceitual',
-      name: 'createConceitual',
+      path: '/create/',
+      name: 'create',
       component: CreateConceitual
     },
     {

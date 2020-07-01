@@ -9,20 +9,30 @@
 
       <v-spacer></v-spacer>
       <div class="mt-5 d-flex align-center">
-        <strong
-          v-if="!$store.state.jwt"
-          class="mx-2"
-          style="color:black;"
-        >Você ainda não se identificou</strong>
         <v-dialog v-if="!$store.state.jwt" max-width="600px">
           <template v-slot:activator="{ on }">
             <v-btn
+              v-if="!$store.state.jwt"
+              outlined
+              color="indigo lighten-1"
+              v-on="on"
+              dark
+              @click="dialog_signup=true"
+            >CADASTRE-SE</v-btn>
+          </template>
+          <SignUp />
+        </v-dialog>
+
+        <v-dialog v-if="!$store.state.jwt" max-width="600px">
+          <template v-slot:activator="{ on }">
+            <v-btn
+              class="ml-2"
               outlined
               color="indigo lighten-1"
               v-on="on"
               dark
               @click="dialog_login=true"
-            >Acessar</v-btn>
+            >Entrar</v-btn>
           </template>
           <Login />
         </v-dialog>
@@ -50,10 +60,12 @@
 /*import ModuloDialog from "./components/concept_model/ModuloDialog";*/
 /*import ConceitoDialog from "./components/concept_model/ConceitoDialog";*/
 import Login from "./components/Login";
+import SignUp from "./components/SignUp";
 export default {
   name: "App",
   components: {
-    Login
+    Login,
+    SignUp
   },
   data: () => ({})
 };
