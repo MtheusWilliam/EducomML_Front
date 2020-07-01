@@ -183,18 +183,20 @@ export default {
   },
   methods: {
     async getDominios() {
-    var vm = this;
-    var header = await this.$store.dispatch('getHeader');
-     var response = await this.axios.post('http://localhost:8000/userId/',{
-        username: this.$store.state.username,
-      }, header );
+      var vm = this;
+      var header = await this.$store.dispatch("getHeader");
+      var response = await this.axios.post(
+        "http://localhost:8000/userId/",
+        {
+          username: this.$store.state.username
+        },
+        header
+      );
 
-      await this.axios.get(response.data.url, header).then( response2 => {
-          console.log(response.data);
-          console.log(response2.data.knowledgedomains);
-          vm.dominios = response2.data.knowledgedomains;
-        });
-
+      await this.axios.get(response.data.url, header).then(response2 => {
+        vm.dominios = response2.data.knowledgedomains;
+        vm.userName = response2.data.username;
+      });
     },
     putDominio(idDomain) {
       this.$router.push({
@@ -220,34 +222,37 @@ export default {
     },
     async postDominio() {
       var vm = this;
-      var header = await this.$store.dispatch('getHeader');
-      await this.axios.post('http://localhost:8000/userId/',{
-        username: this.$store.state.username,
-      }, header ).then(async response => {
-        console.log(response.data);
-        await this.axios
+      var header = await this.$store.dispatch("getHeader");
+      await this.axios
         .post(
-          `http://127.0.0.1:8000/knowledgedomain/`,
+          "http://localhost:8000/userId/",
           {
-            nameknowledgedomain: this.nameknowledgedomain,
-            subtitle: this.subtitle,
-            lastversion: this.lastversion,
-            author: response.data.complete_name,
-            fk_iduser: response.data.url,
+            username: this.$store.state.username
           },
           header
         )
-        .then(function(resposta) {
-          vm.idDomain = resposta.data.idknowledgedomain;
-          vm.$router.push({
-            name: "createConceitual",
-            params: {
-              idDomain: resposta.data.idknowledgedomain
-            }
-          });
-          console.log(resposta.data);
+        .then(async response => {
+          await this.axios
+            .post(
+              `http://127.0.0.1:8000/knowledgedomain/`,
+              {
+                nameknowledgedomain: this.nameknowledgedomain,
+                subtitle: this.subtitle,
+                lastversion: this.lastversion,
+                fk_iduser: response.data.url
+              },
+              header
+            )
+            .then(function(resposta) {
+              vm.idDomain = resposta.data.idknowledgedomain;
+              vm.$router.push({
+                name: "createConceitual",
+                params: {
+                  idDomain: resposta.data.idknowledgedomain
+                }
+              });
+            });
         });
-      });
     },
     validate() {
       if (this.$refs.form.validate()) {

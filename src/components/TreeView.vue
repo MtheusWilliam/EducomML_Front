@@ -58,7 +58,8 @@ export default {
       if (this.dominio.instructionalelements.length) {
         this.dominio.instructionalelements.forEach(instructionalelement => {
           if (
-            instructionalelement.fk_instructionalelementtype.split("/")[4] !== 4
+            instructionalelement.fk_instructionalelementtype.split("/")[4] !==
+            "4"
           ) {
             this.treeData[0].children.push({
               id: instructionalelement.url,
@@ -93,7 +94,7 @@ export default {
                 if (
                   instructionalelement.fk_instructionalelementtype.split(
                     "/"
-                  )[4] !== 4
+                  )[4] !== "4"
                 ) {
                   this.treeData[0].children[indexmodulo].children.push({
                     id: instructionalelement.url,
@@ -129,15 +130,22 @@ export default {
                 if (submodulo.instructionalelements.length) {
                   submodulo.instructionalelements.forEach(
                     instructionalelement => {
-                      this.treeData[0].children[indexmodulo].children[
-                        indexsubmodulo
-                      ].children.push({
-                        id: instructionalelement.url,
-                        name:
-                          "[INSTRUCTIONAL ELEMENT] " +
-                          instructionalelement.label
-                      });
-                      indexconceito++;
+                      if (
+                        instructionalelement.fk_instructionalelementtype.split(
+                          "/"
+                        )[4] !== "4"
+                      ) {
+                        this.treeData[0].children[indexmodulo].children[
+                          indexsubmodulo
+                        ].children.push({
+                          id: instructionalelement.url,
+                          name:
+                            "[INSTRUCTIONAL ELEMENT] " +
+                            instructionalelement.label
+                        });
+
+                        indexconceito++;
+                      }
                     }
                   );
                 }
@@ -166,14 +174,20 @@ export default {
                     if (conceito.instructionalelements.length) {
                       conceito.instructionalelements.forEach(
                         instructionalelement => {
-                          this.treeData[0].children[indexmodulo].children[
-                            indexsubmodulo
-                          ].children[indexconceito].children.push({
-                            id: instructionalelement.url,
-                            name:
-                              "[INSTRUCTIONAL ELEMENT] " +
-                              instructionalelement.label
-                          });
+                          if (
+                            instructionalelement.fk_instructionalelementtype.split(
+                              "/"
+                            )[4] !== "4"
+                          ) {
+                            this.treeData[0].children[indexmodulo].children[
+                              indexsubmodulo
+                            ].children[indexconceito].children.push({
+                              id: instructionalelement.url,
+                              name:
+                                "[INSTRUCTIONAL ELEMENT] " +
+                                instructionalelement.label
+                            });
+                          }
                         }
                       );
                     }
@@ -227,14 +241,20 @@ export default {
                 if (conceito.instructionalelements.length) {
                   conceito.instructionalelements.forEach(
                     instructionalelement => {
-                      this.treeData[0].children[indexmodulo].children[
-                        indexconceito
-                      ].children.push({
-                        id: instructionalelement.url,
-                        name:
-                          "[INSTRUCTIONAL ELEMENT] " +
-                          instructionalelement.label
-                      });
+                      if (
+                        instructionalelement.fk_instructionalelementtype.split(
+                          "/"
+                        )[4] !== "4"
+                      ) {
+                        this.treeData[0].children[indexmodulo].children[
+                          indexconceito
+                        ].children.push({
+                          id: instructionalelement.url,
+                          name:
+                            "[INSTRUCTIONAL ELEMENT] " +
+                            instructionalelement.label
+                        });
+                      }
                     }
                   );
                 }
