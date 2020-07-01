@@ -156,6 +156,14 @@ export default {
       }
     },
     dialog: function() {
+      this.getMobileMedia();
+    }
+  },
+  mounted: function() {
+    this.getMobileMedia();
+  },
+  methods: {
+    getMobileMedia() {
       if (this.mobilemedia) {
         var vm = this;
         this.$nextTick(function() {
@@ -204,9 +212,7 @@ export default {
       } else {
         this.viewImageSrc = "";
       }
-    }
-  },
-  methods: {
+    },
     async postOrPutMobilemedia() {
       var auxinformationitem = {
         auxinfo:

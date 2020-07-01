@@ -142,12 +142,21 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getConceito();
+    },
+    module: function() {
+      this.getConceito();
+    }
+  },
+  mounted: function() {
+    this.getConceito();
+  },
+  methods: {
+    getConceito() {
       var vm = this;
       this.$nextTick(function() {
         vm.conceptName = vm.concept.nameconcept;
       });
-    },
-    module: function() {
       this.targetconcepts = [];
       if (this.module.concepts) {
         this.conceptName = this.concept.nameconcept;
@@ -185,9 +194,7 @@ export default {
           i++;
         });
       }
-    }
-  },
-  methods: {
+    },
     async altera_Cria_Conceito() {
       var vm = this;
       if (this.concept === "") {

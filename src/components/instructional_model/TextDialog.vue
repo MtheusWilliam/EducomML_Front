@@ -53,26 +53,6 @@
               ></v-select>
             </v-col>
           </v-row>
-
-          <v-row style="margin-bottom: -30px;">
-            <v-col cols="11">
-              <label for="textShortArea">Seu texto na forma resumida:</label>
-              <v-textarea
-                id="textShortArea"
-                background-color="#F2F3F3"
-                clearable
-                clear-icon="mdi-close-circle"
-                class="mt-2"
-                rows="5"
-                filled
-                auto-grow
-                v-model="infoTextShort"
-              ></v-textarea>
-            </v-col>
-            <v-col cols="1" style="padding-top: 70px;">
-              <v-switch v-model="switchTextShort"></v-switch>
-            </v-col>
-          </v-row>
           <br />
           <v-row style="margin-bottom: -35px;">
             <v-col cols="11">
@@ -90,6 +70,25 @@
             </v-col>
             <v-col cols="1" style="red; padding-top: 20%;">
               <v-switch v-model="switchTextFull"></v-switch>
+            </v-col>
+          </v-row>
+          <v-row style="margin-bottom: -30px;">
+            <v-col cols="11">
+              <label for="textShortArea">Seu texto na forma resumida:</label>
+              <v-textarea
+                id="textShortArea"
+                background-color="#F2F3F3"
+                clearable
+                clear-icon="mdi-close-circle"
+                class="mt-2"
+                rows="5"
+                filled
+                auto-grow
+                v-model="infoTextShort"
+              ></v-textarea>
+            </v-col>
+            <v-col cols="1" style="padding-top: 70px;">
+              <v-switch v-model="switchTextShort"></v-switch>
             </v-col>
           </v-row>
         </v-form>
@@ -151,6 +150,14 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getMobileMedia();
+    }
+  },
+  mounted: function() {
+    this.getMobileMedia();
+  },
+  methods: {
+    getMobileMedia() {
       if (this.mobilemedia) {
         var vm = this;
         this.$nextTick(function() {
@@ -203,9 +210,7 @@ export default {
           }
         });
       }
-    }
-  },
-  methods: {
+    },
     async postOrPutMobileMedia() {
       // var vm = this;
       var auxinformationitem = {

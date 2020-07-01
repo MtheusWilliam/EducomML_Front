@@ -66,21 +66,23 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getSubModulo();
+    },
+    submodule: function() {
+      this.getSubModulo();
+    }
+  },
+  mounted: function() {
+    this.getSubModulo();
+  },
+  methods: {
+    getSubModulo() {
       var vm = this;
       this.$nextTick(function() {
         vm.subModuloTitle = vm.submodule.namemodule;
         vm.subModuloSubtitle = vm.submodule.subtitle;
       });
     },
-    submodule: function() {
-      var vm = this;
-      this.$nextTick(function() {
-        vm.subModuloTitle = vm.submodule.namemodule;
-        vm.subModuloSubtitle = vm.submodule.subtitle;
-      });
-    }
-  },
-  methods: {
     async postSubModulo() {
       await axios.post(
         `http://localhost:8000/module/`,

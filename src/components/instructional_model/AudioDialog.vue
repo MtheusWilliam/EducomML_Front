@@ -135,6 +135,14 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getMobileMedia();
+    }
+  },
+  mounted: function() {
+    this.getMobileMedia();
+  },
+  methods: {
+    getMobileMedia() {
       if (this.mobilemedia) {
         var vm = this;
         this.$nextTick(function() {
@@ -179,9 +187,7 @@ export default {
       } else {
         this.viewAudioSrc = "";
       }
-    }
-  },
-  methods: {
+    },
     async postMobileMedia() {
       var auxinformationitem = {
         auxinfo:

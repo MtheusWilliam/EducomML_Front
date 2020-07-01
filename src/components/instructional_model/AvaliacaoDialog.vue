@@ -503,6 +503,14 @@ export default {
   }),
   watch: {
     dialog: async function() {
+      this.getAvaliacao();
+    }
+  },
+  mounted: function() {
+    this.getAvaliacao();
+  },
+  methods: {
+    async getAvaliacao() {
       if (this.instructionalelement) {
         var vm = this;
         this.$nextTick(function() {
@@ -679,9 +687,7 @@ export default {
         this.resetValidation();
         this.resetVariables();
       }
-    }
-  },
-  methods: {
+    },
     async postQuestions() {
       var instructionalelement = {
         label: this.avaliacaoName,

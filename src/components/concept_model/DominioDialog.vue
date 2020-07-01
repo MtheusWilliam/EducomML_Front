@@ -23,13 +23,6 @@
             required="required"
             ref="refSubtitleDominio"
           ></v-text-field>
-
-          <v-text-field
-            v-model="domainAuthorsName"
-            :rules="domainAuthorsNameRules"
-            label="Autor(es) da modelagem"
-            required="required"
-          ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>

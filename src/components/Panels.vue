@@ -241,6 +241,7 @@
                   <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Formulario para edição do arquivo/mobilemedia-->
                     <v-btn
+                      class="mt-2"
                       icon="icon"
                       color="white"
                       @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
@@ -248,7 +249,12 @@
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
-                    <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
+                    <v-btn
+                      class="mt-2"
+                      icon="icon"
+                      color="white"
+                      @click="deleteelemento(mobilemedia)"
+                    >
                       <v-icon>mdi-close</v-icon>
                     </v-btn>
                   </v-col>
@@ -374,7 +380,7 @@
                       </v-list>
                     </v-menu>
                     <!--Formulario para edição do modulo-->
-                    <v-btn icon="icon" color="white" @click="setmodulo(modulo);dialog_modulo=true">
+                    <v-btn icon="icon" color="white" @click="dialog_modulo=true;setmodulo(modulo)">
                       <v-icon>mdi-view-headline</v-icon>
                     </v-btn>
                     <!--Função para excluir módulo-->
@@ -410,6 +416,7 @@
                         <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Formulario para edição do arquivo/mobilemedia-->
                           <v-btn
+                            class="mt-2"
                             icon="icon"
                             color="white"
                             @click="setmobilemedia(mobilemedia, modulo, 'modulo')"
@@ -417,7 +424,12 @@
                             <v-icon>mdi-view-headline</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
-                          <v-btn icon="icon" color="white" @click="deleteelemento(mobilemedia)">
+                          <v-btn
+                            class="mt-2"
+                            icon="icon"
+                            color="white"
+                            @click="deleteelemento(mobilemedia)"
+                          >
                             <v-icon>mdi-close</v-icon>
                           </v-btn>
                         </v-col>
@@ -571,6 +583,7 @@
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn
+                                  class="mt-2"
                                   icon="icon"
                                   color="white"
                                   @click="setmobilemedia(mobilemedia, submodulo, 'modulo')"
@@ -579,6 +592,7 @@
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
+                                  class="mt-2"
                                   icon="icon"
                                   color="white"
                                   @click="deleteelemento(mobilemedia)"
@@ -822,6 +836,7 @@
                                     <v-col cols="4" class="d-flex justify-end mr-1">
                                       <!--Formulario para edição do procedure-->
                                       <v-btn
+                                        class="mt-2"
                                         icon="icon"
                                         color="white"
                                         @click="setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
@@ -830,6 +845,7 @@
                                       </v-btn>
                                       <!--Função para excluir arquivo/mobilemedia-->
                                       <v-btn
+                                        class="mt-2"
                                         icon="icon"
                                         color="white"
                                         @click="deleteelemento(procedure)"
@@ -1062,6 +1078,7 @@
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do arquivo/mobilemedia-->
                                 <v-btn
+                                  class="mt-2"
                                   icon="icon"
                                   color="white"
                                   @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
@@ -1070,6 +1087,7 @@
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
+                                  class="mt-2"
                                   icon="icon"
                                   color="white"
                                   @click="deleteelemento(mobilemedia)"
@@ -1103,6 +1121,7 @@
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do procedure-->
                                 <v-btn
+                                  class="mt-2"
                                   icon="icon"
                                   color="white"
                                   @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
@@ -1110,7 +1129,12 @@
                                   <v-icon>mdi-view-headline</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
-                                <v-btn icon="icon" color="white" @click="deleteelemento(procedure)">
+                                <v-btn
+                                  class="mt-2"
+                                  icon="icon"
+                                  color="white"
+                                  @click="deleteelemento(procedure)"
+                                >
                                   <v-icon>mdi-close</v-icon>
                                 </v-btn>
                               </v-col>

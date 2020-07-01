@@ -145,6 +145,17 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getProcedure();
+    },
+    procedure: function() {
+      this.getProcedure();
+    }
+  },
+  mounted: function() {
+    this.getProcedure();
+  },
+  methods: {
+    getProcedure() {
       var vm = this;
       this.$nextTick(function() {
         vm.procedureName = vm.procedure.nameinformationitem;
@@ -160,24 +171,6 @@ export default {
         });
       }
     },
-    procedure: function() {
-      var vm = this;
-      this.$nextTick(function() {
-        vm.procedureName = vm.procedure.nameinformationitem;
-        vm.procedureDescription = vm.procedure.descriptioninformationitem;
-      });
-      this.phasesControl = [];
-      if (this.procedure !== "") {
-        this.procedure.phaseprocedures.forEach(element => {
-          this.phasesControl.push({
-            description: element.description,
-            url: element.url
-          });
-        });
-      }
-    }
-  },
-  methods: {
     async altera_Cria_Procedimento() {
       var vm = this;
       if (this.procedure === "") {

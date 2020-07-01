@@ -571,6 +571,14 @@ export default {
   }),
   watch: {
     dialog: async function() {
+      this.getColaborative();
+    }
+  },
+  mounted: function() {
+    this.getColaborative();
+  },
+  methods: {
+    async getColaborative() {
       if (this.instructionalelement) {
         var vm = this;
         this.$nextTick(function() {
@@ -751,9 +759,7 @@ export default {
         this.viewQuestions = false;
         this.resetVariables();
       }
-    }
-  },
-  methods: {
+    },
     /* FUNÇÃO PARA SALVAR ATIVIDADE COLABORATIVA QUE TENHA QUESTÕES */
     async postQuestions() {
       var instructionalelement = {

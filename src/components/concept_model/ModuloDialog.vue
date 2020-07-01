@@ -67,22 +67,24 @@ export default {
   }),
   watch: {
     dialog: function() {
+      this.getModulo();
+    },
+    module: function() {
+      this.$refs.form.reset();
+      this.getModulo();
+    }
+  },
+  mounted: function() {
+    this.getModulo();
+  },
+  methods: {
+    getModulo() {
       var vm = this;
       this.$nextTick(function() {
         vm.moduloTitle = vm.module.namemodule;
         vm.moduloSubtitle = vm.module.subtitle;
       });
     },
-    module: function() {
-      this.$refs.form.reset();
-      var vm = this;
-      this.$nextTick(function() {
-        vm.moduloTitle = vm.module.namemodule;
-        vm.moduloSubtitle = vm.module.subtitle;
-      },60);
-    }
-  },
-  methods: {
     async postModulo() {
       // var vm = this;
       await axios
