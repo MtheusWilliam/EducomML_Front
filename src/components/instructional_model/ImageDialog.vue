@@ -177,7 +177,7 @@ export default {
             var headers = {
               "X-CSRFTOKEN": csrftoken
             };
-            
+
             axios
               .patch(
                 vm.mobilemedia.fk_informationitem,

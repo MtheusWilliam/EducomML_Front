@@ -25,7 +25,7 @@ firebase.initializeApp(config);
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
-Vue.use(VueAxios,axios);
+Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
@@ -40,58 +40,58 @@ var store = new Vuex.Store({
     },
   },
   mutations: {
-    updateToken(state, newToken){
+    updateToken(state, newToken) {
       localStorage.setItem('t', newToken);
       state.jwt = newToken;
     },
-    removeToken(state){
+    removeToken(state) {
       localStorage.removeItem('t');
       state.jwt = null;
     },
-    csrfToken(state,csrfToken){
+    csrfToken(state, csrfToken) {
       state.csrf = csrfToken;
     }
   },
-  actions:{
-    async obtainToken(state,payload){
-      console.log("state",state);
-      console.log("username",payload);
+  actions: {
+    async obtainToken(state, payload) {
+      console.log("state", state);
+      console.log("username", payload);
       await axios.post(this.state.endpoints.obtainJWT, payload)
-        .then((response)=>{
-            this.commit('updateToken', response.data.token);
-          })
-        .catch((error)=>{
-            console.log(error);
-          })
+        .then((response) => {
+          this.commit('updateToken', response.data.token);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     },
-    refreshToken(){
+    refreshToken() {
       const payload = {
         token: this.state.jwt
       }
       axios.post(this.state.endpoints.refreshJWT, payload)
-        .then((response)=>{
-            this.commit('updateToken', response.data.token)
-          })
-        .catch((error)=>{
-            console.log(error)
-          })
+        .then((response) => {
+          this.commit('updateToken', response.data.token)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
-    inspectToken(){
+    inspectToken() {
       const token = this.state.jwt;
-      if(token){
+      if (token) {
         const decoded = jwt_decode(token);
         const exp = decoded.exp
         const orig_iat = decoded.orig_iat
-        if(exp - (Date.now()/1000) < 1800 && (Date.now()/1000) - orig_iat < 628200){
+        if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - orig_iat < 628200) {
           this.dispatch('refreshToken')
-        } else if (exp -(Date.now()/1000) < 1800){
+        } else if (exp - (Date.now() / 1000) < 1800) {
           // DO NOTHING, DO NOT REFRESH          
         } else {
           // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         }
       }
     },
-    logout(){
+    logout() {
       this.commit('removeToken');
     },
     getCookie() {
@@ -100,12 +100,12 @@ var store = new Vuex.Store({
       return {
         headers: {
           "X-CSRFTOKEN": csrftoken,
-          "Authorization": "JWT "+jwt,
+          "Authorization": "JWT " + jwt,
         }
       }
     }
   },
-  })
+})
 
 const router = new VueRouter({
   mode: 'history',
@@ -133,7 +133,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/' || store.state.jwt !== null) next({ path: '/' })
+  if (to.path !== '/' && store.state.jwt === null) next({ path: '/' })
   else next()
 })
 

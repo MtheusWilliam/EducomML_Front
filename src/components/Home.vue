@@ -1,7 +1,5 @@
 <template>
-
   <v-row class="mt-2">
-  
     <v-row>
       <v-app-bar color="blue-grey lighten-4" z-index="1">
         <v-toolbar-title style="font-size:1.4em; color:white;" class="ml-6 mb-2">
@@ -9,21 +7,8 @@
             <v-img src="@/assets/logo.svg" style="width: 170px;" class="mr-3"></v-img>
           </div>
         </v-toolbar-title>
-      
+
         <v-spacer></v-spacer>
-  <div class="mr-6">
-          <strong v-if="!$store.state.jwt" class="mx-2">Você ainda não se identificou</strong>
-          <v-dialog v-if="!$store.state.jwt"  max-width="600px">
-                <template v-slot:activator="{ on }">
-                  <v-btn outlined color="indigo lighten-1" v-on="on" dark @click="dialog_login=true">Acessar</v-btn>
-                </template>
-                <Login/>
-    </v-dialog>
-    <v-btn v-else outlined color="indigo lighten-1" dark @click="$store.dispatch('logout');$router.push({path:'/'})">Sair</v-btn>
-      
-            
-        </div>
-        
       </v-app-bar>
     </v-row>
     <v-row style="background-image: linear-gradient(#7993a5, #101223); color:white; width: 100%">
@@ -46,22 +31,15 @@
         <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
       </v-row>
     </v-row>
-    
   </v-row>
 </template>
 
 <script>
-import Login from "./Login";
-
 export default {
-  components: {
-    Login
-  },
   name: "UserHome",
   data: () => ({
     buttons: ["contato", "publicações", "projetos"]
-  }),
-  
+  })
 };
 </script>
 

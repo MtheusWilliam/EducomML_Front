@@ -14,7 +14,7 @@
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title>{{userName}}</v-list-item-title>
 
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
@@ -43,15 +43,45 @@
     <!-- FORM DO DOMÍNIO -->
     <v-col class="ml-6 mr-6">
       <v-row>
-        <v-app-bar color="#63B0B0" height="60%">
+        <v-app-bar color="#63B0B0" style="width:100%;">
           <v-toolbar-title style="font-size:1.4em; color:white;">Seus Domínios</v-toolbar-title>
         </v-app-bar>
         <v-container>
-          <v-row>
+          <v-row v-if="dominios.length > 0" class="mb-6">
+            <v-spacer></v-spacer>
+            <v-col cols="4" v-for="(dominio, i) in dominios" :key="i">
+              <v-card>
+                <v-img
+                  class="white--text align-end"
+                  height="200px"
+                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                >
+                  <v-card-title>{{dominio.nameknowledgedomain}}</v-card-title>
+                </v-img>
+
+                <v-card-subtitle class="pb-0 mb-6" style="color:black;">{{dominio.subtitle}}</v-card-subtitle>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="red" dark @click="deleteDominio(dominio.url)">
+                    Excluir
+                    <v-icon class="ml-2" small>mdi-close</v-icon>
+                  </v-btn>
+                  <v-btn color="primary" @click="putDominio(dominio.idknowledgedomain)">
+                    Editar
+                    <v-icon class="ml-2" small>mdi-pencil</v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+            <v-spacer></v-spacer>
+          </v-row>
+          <v-row v-else>
             <v-spacer></v-spacer>
             <h3 class="pt-8 pb-12">Você não tem nenhum domínio atualmente...</h3>
             <v-spacer></v-spacer>
           </v-row>
+
           <v-row>
             <v-dialog v-model="dialog" persistent max-width="600px">
               <template v-slot:activator="{ on }">
@@ -87,13 +117,6 @@
                       label="Título para o conteúdo modelado"
                       required
                     ></v-text-field>
-
-                    <v-text-field
-                      v-model="author"
-                      :rules="authorRules"
-                      label="Autor(es) da modelagem"
-                      required
-                    ></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -117,6 +140,7 @@
 </template>
 
 <script>
+import Cookie from "js-cookie";
 import axios from "axios";
 export default {
   name: "UserHome",
@@ -125,6 +149,7 @@ export default {
     dialog: false,
     lastversion: "versao_teste",
     idDomain: 0,
+    userName: "",
     nameknowledgedomain: "",
     nameknowledgedomainRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
@@ -146,7 +171,7 @@ export default {
         (v && v.length <= 60) ||
         "Os nomes dos autores devem ter no máximo 60 caracteres"
     ],
-
+    dominios: [],
     drawer: true,
     items: [
       { title: "Home", icon: "mdi-home-city" },
@@ -155,7 +180,56 @@ export default {
     ],
     mini: false
   }),
+  created: function() {
+    this.getDominios();
+  },
   methods: {
+    getDominios() {
+      var vm = this;
+      var csrftoken = Cookie.get("csrftoken");
+      var headers = {
+        "X-CSRFTOKEN": csrftoken
+      };
+      axios
+        .patch(
+          `http://127.0.0.1:8000/users/1/`,
+          {
+            headers: headers
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin"
+            }
+          }
+        )
+        .then(function(resposta) {
+          vm.dominios = resposta.data.knowledgedomains;
+          vm.userName = resposta.data.username;
+        });
+    },
+    putDominio(idDomain) {
+      this.$router.push({
+        name: "createConceitual",
+        params: {
+          idDomain: idDomain
+        }
+      });
+    },
+
+    deleteDominio(urlDomain) {
+      var vm = this;
+      axios
+        .delete(urlDomain, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function() {
+          vm.getDominios();
+        });
+    },
     postDominio() {
       var vm = this;
       axios
@@ -165,7 +239,7 @@ export default {
             nameknowledgedomain: this.nameknowledgedomain,
             subtitle: this.subtitle,
             lastversion: this.lastversion,
-            author: this.author
+            fk_iduser: `http://127.0.0.1:8000/users/1/`
           },
           { auth: { username: "admin", password: "admin" } }
         )
