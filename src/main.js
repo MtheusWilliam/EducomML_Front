@@ -34,6 +34,7 @@ Vue.config.productionTip = false;
 var store = new Vuex.Store({
   state: {
     jwt: null,
+    username: '',
     endpoints: {
       obtainJWT: 'http://127.0.0.1:8000/api-token-auth/',
       refreshJWT: 'http://127.0.0.1:8000/api-token-refresh/'
@@ -43,6 +44,9 @@ var store = new Vuex.Store({
     updateToken(state, newToken) {
       localStorage.setItem('t', newToken);
       state.jwt = newToken;
+    },
+    updateUsername(state, username) {
+      state.username = username;
     },
     removeToken(state) {
       localStorage.removeItem('t');
@@ -54,11 +58,11 @@ var store = new Vuex.Store({
   },
   actions: {
     async obtainToken(state, payload) {
-      console.log("state", state);
-      console.log("username", payload);
+      var name = payload.username;
       await axios.post(this.state.endpoints.obtainJWT, payload)
         .then((response) => {
           this.commit('updateToken', response.data.token);
+          this.commit('updateUsername', name);
         })
         .catch((error) => {
           console.log(error);
@@ -94,7 +98,7 @@ var store = new Vuex.Store({
     logout() {
       this.commit('removeToken');
     },
-    getCookie() {
+    getHeader() {
       var csrftoken = Cookie.get("csrftoken");
       var jwt = this.state.jwt;
       return {

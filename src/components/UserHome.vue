@@ -140,8 +140,6 @@
 </template>
 
 <script>
-import Cookie from "js-cookie";
-import axios from "axios";
 export default {
   name: "UserHome",
   data: () => ({
@@ -180,33 +178,23 @@ export default {
     ],
     mini: false
   }),
-  created: function() {
+  mounted: function() {
     this.getDominios();
   },
   methods: {
-    getDominios() {
-      var vm = this;
-      var csrftoken = Cookie.get("csrftoken");
-      var headers = {
-        "X-CSRFTOKEN": csrftoken
-      };
-      axios
-        .patch(
-          `http://127.0.0.1:8000/users/1/`,
-          {
-            headers: headers
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
-            }
-          }
-        )
-        .then(function(resposta) {
-          vm.dominios = resposta.data.knowledgedomains;
-          vm.userName = resposta.data.username;
+    async getDominios() {
+    var vm = this;
+    var header = await this.$store.dispatch('getHeader');
+     var response = await this.axios.post('http://localhost:8000/userId/',{
+        username: this.$store.state.username,
+      }, header );
+
+      await this.axios.get(response.data.url, header).then( response2 => {
+          console.log(response.data);
+          console.log(response2.data.knowledgedomains);
+          vm.dominios = response2.data.knowledgedomains;
         });
+
     },
     putDominio(idDomain) {
       this.$router.push({
@@ -217,9 +205,9 @@ export default {
       });
     },
 
-    deleteDominio(urlDomain) {
+    async deleteDominio(urlDomain) {
       var vm = this;
-      axios
+      await this.axios
         .delete(urlDomain, {
           auth: {
             username: "admin",
@@ -230,18 +218,24 @@ export default {
           vm.getDominios();
         });
     },
-    postDominio() {
+    async postDominio() {
       var vm = this;
-      axios
+      var header = await this.$store.dispatch('getHeader');
+      await this.axios.post('http://localhost:8000/userId/',{
+        username: this.$store.state.username,
+      }, header ).then(async response => {
+        console.log(response.data);
+        await this.axios
         .post(
           `http://127.0.0.1:8000/knowledgedomain/`,
           {
             nameknowledgedomain: this.nameknowledgedomain,
             subtitle: this.subtitle,
             lastversion: this.lastversion,
-            fk_iduser: `http://127.0.0.1:8000/users/1/`
+            author: response.data.complete_name,
+            fk_iduser: response.data.url,
           },
-          { auth: { username: "admin", password: "admin" } }
+          header
         )
         .then(function(resposta) {
           vm.idDomain = resposta.data.idknowledgedomain;
@@ -251,7 +245,9 @@ export default {
               idDomain: resposta.data.idknowledgedomain
             }
           });
+          console.log(resposta.data);
         });
+      });
     },
     validate() {
       if (this.$refs.form.validate()) {
