@@ -4,11 +4,13 @@
       <v-app-bar color="blue-grey lighten-4" z-index="1">
         <v-toolbar-title style="font-size:1.4em; color:white;" class="ml-6 mb-2">
           <div class="mt-5 d-flex align-center">
-            <v-img src="@/assets/logo.svg" style="width: 170px;" class="mr-3"></v-img>
+            <v-img src="@/assets/logoblack.png" style="width: 170px;" class="mr-3 mb-2"></v-img>
           </div>
         </v-toolbar-title>
-
         <v-spacer></v-spacer>
+        <a href="#" style="text-decoration: none; color:black;" class="mr-6">
+          <strong>Documentação</strong>
+        </a>
       </v-app-bar>
     </v-row>
     <v-row style="background-image: linear-gradient(#7993a5, #101223); color:white; width: 100%">

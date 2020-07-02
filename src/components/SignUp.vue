@@ -1,15 +1,15 @@
 <template>
   <v-card class="elevation-12">
-    <v-toolbar color="#63B0B0" flat>
-      <v-toolbar-title style="color:white;">Crie sua conta no Educom.ML</v-toolbar-title>
+    <v-toolbar color="black" flat>
+      <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-img class="mt-1" src="../assets/logo.svg" style="width: 20px;"></v-img>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
       <v-tooltip bottom>
         <span>Source</span>
       </v-tooltip>
     </v-toolbar>
     <v-card-text>
-      <v-form style="margin-bottom: -20px;">
+      <v-form style="margin-bottom: -20px;" ref="form">
         <v-text-field
           v-model="username"
           label="Username"
@@ -44,6 +44,7 @@
           :rules="emailRules"
           v-model="email"
           prepend-icon="mdi-email"
+          type="email"
           required
         ></v-text-field>
 
@@ -59,12 +60,12 @@
         ></v-text-field>
 
         <v-text-field
-          id="password"
+          id="passwordConfirm"
           label="Confirmação de Senha"
-          name="password"
+          name="passwordConfirm"
           v-model="passwordConfirm"
           type="password"
-          :rules="passwordConfirmRules"
+          :rules="[passwordConfirmationRule]"
           prepend-icon="mdi-lock"
           required
         ></v-text-field>
@@ -72,17 +73,36 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="primary" @click="login" large class="mr-4">Cadastrar</v-btn>
+      <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
     <!--
     <v-card-text class="mt-3">
       <p style="text-align: center; font-size: 1.2em;">
         Já possui conta?
-        <a href style="text-decoration: none;">
+        <a href="#" style="text-decoration: none;">
           <strong>ENTRE</strong>
         </a>.
       </p>
     </v-card-text>
+    -->
+    <!--
+    <div class="text-center">
+      <v-dialog v-model="dialog" width="500">
+        <v-card>
+          <v-card-title
+            class="headline primary"
+            primary-title
+            style="color:white;"
+          >Cadastro Realizado!</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">Para prosseguir, faça seu login!</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text>Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
     -->
   </v-card>
 </template>
@@ -92,12 +112,13 @@ export default {
   name: "SignUp",
   data() {
     return {
+      dialog: false,
       username: "",
       usernameRules: [
         v => !!v || "É necessário inserir seu username",
         v =>
-          (v && v.length <= 10) ||
-          "Seu username deve possuir menos de 30 caracteres"
+          (v && v.length <= 25) ||
+          "Seu username deve possuir menos de 25 caracteres"
       ],
       name: "",
       nameRules: [
@@ -120,10 +141,50 @@ export default {
       ],
       password: "",
       passwordRules: [v => !!v || "É necessário inserir sua senha"],
-      passwordConfirm: "",
-      passwordConfirmRules: [v => !!v || "É necessário confirmar sua senha"]
+      passwordConfirm: ""
     };
   },
-  methods: {}
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.passwordConfirm || "As senhas devem ser iguais";
+    }
+  },
+  methods: {
+    async postUser() {
+      await this.axios.post(
+        "http://localhost:8000/users/",
+        {
+          username: this.username.toLowerCase(),
+          email: this.email,
+          first_name: this.name,
+          last_name: this.lastname,
+          password: this.password
+        },
+        {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        }
+      );
+    },
+    async validate() {
+      if (this.$refs.form.validate()) {
+        await this.$refs.form.validate();
+        await this.postUser();
+        await this.firstLogin();
+      }
+    },
+    async firstLogin() {
+      await this.$store.dispatch("obtainToken", {
+        username: this.username,
+        password: this.password
+      });
+      await this.$router.push({
+        name: "home"
+      });
+    }
+  }
 };
 </script>

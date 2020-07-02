@@ -1,9 +1,9 @@
 <template>
   <v-card class="elevation-12">
-    <v-toolbar color="#63B0B0" flat>
-      <v-toolbar-title style="color:white;">Faça seu login no Educom.ML</v-toolbar-title>
+    <v-toolbar color="black" flat>
+      <v-toolbar-title style="color:#FFCC00;">Faça seu login no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-img class="mt-1" src="../assets/logo.svg" style="width: 20px;"></v-img>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
       <v-tooltip bottom>
         <span>Source</span>
       </v-tooltip>
@@ -38,7 +38,7 @@
     <v-card-text class="mt-3">
       <p style="text-align: center; font-size: 1.2em;">
         Não tem conta?
-        <a href style="text-decoration: none;">
+        <a href="#" style="text-decoration: none;">
           <strong>CADASTRE-SE</strong>
         </a>.
       </p>

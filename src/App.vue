@@ -43,7 +43,7 @@
           dark
           @click="$store.dispatch('logout');$router.push({path:'/'})"
         >Sair</v-btn>
-        <v-img class="ml-5" src="@/assets/logo.svg" style="width: 150px;"></v-img>
+        <v-img class="ml-5" src="@/assets/logoblack.png" style="width: 150px;"></v-img>
       </div>
     </v-app-bar>
 
