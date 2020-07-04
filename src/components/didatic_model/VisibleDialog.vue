@@ -1,48 +1,169 @@
 <template>
-  <v-container class="pa-0">
-    <v-card>
-      <v-card-title style="background-color:purple; color:white;">
-        <span class="headline">
-          <p>Defina as informações equivalentes ao modelo didático.</p>
-        </span>
-      </v-card-title>
-      <v-card-text>
-        <v-row class="mt-2 ml-3">
-          <v-btn
-            color="warning"
-            height="40px"
-            dark
-            x-small
-            small
-            @click="deselectAll()"
-            class="mr-1"
-          >Deselecionar tudo</v-btn>
-          <v-btn color="primary" height="40" dark small @click="selectAll()">Selecionar tudo</v-btn>
-        </v-row>
+  <v-card>
+    <v-card-title style="background-color:purple; color:white;">
+      <span class="headline">
+        <p>Defina as informações equivalentes ao modelo didático.</p>
+      </span>
+    </v-card-title>
+    <v-row style="width : 100%">
+      <v-col cols="4">
+        <v-card-text>
+          <v-row class="ml-2">
+            <v-btn
+              color="warning"
+              height="40px"
+              dark
+              x-small
+              small
+              @click="deselectAll()"
+            >Deselecionar tudo</v-btn>
+            <v-btn
+              class="ml-1"
+              color="primary"
+              height="40"
+              dark
+              small
+              @click="selectAll()"
+            >Selecionar tudo</v-btn>
+          </v-row>
 
-        <v-treeview
-          @update:active="test"
-          v-model="selection"
-          :selection-type="'independent'"
-          :items="treeData"
-          return-object
-          selectable
-          selected-color="success"
-        ></v-treeview>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red" height="49" dark large @click="reset">
-          Close
-          <v-icon dark right>mdi-close</v-icon>
-        </v-btn>
-        <v-btn color="success" height="49" dark large @click="validate">
-          Save
-          <v-icon dark right>mdi-content-save</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-container>
+          <v-treeview
+            @update:active="test"
+            v-model="selection"
+            :selection-type="'independent'"
+            :items="treeData"
+            return-object
+            selectable
+            selected-color="success"
+          ></v-treeview>
+        </v-card-text>
+      </v-col>
+      <v-col cols="8">
+        <v-row>
+          <h3 class="mt-5">Parâmetros de avaliação</h3>
+          <v-btn icon="icon" class="mb-1">
+            <v-icon large class="mt-9 ml-2" color="primary" @click="addAssessment()">mdi-plus-box</v-icon>
+          </v-btn>
+        </v-row>
+        <v-row v-for="(assessment, i) in assessmentControl" :key="i" style="margin-bottom: -20px;">
+          <v-col cols="2">
+            <v-select
+              v-model="assessmentControl[i].scopo"
+              :items="scopoTypes"
+              :rules="[v => !!v || 'Conceito é requerido']"
+              label="Scopo"
+              style="margin:0px;"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="3">
+            <v-select
+              v-model="assessmentControl[i].fk_element"
+              :items="elementData"
+              :rules="[v => !!v || 'O tipo do conceito é requerido']"
+              label="Elemento"
+              style="margin:0px;"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="3" v-if="assessmentControl[i].scopo===1">
+            <v-select
+              v-model="assessmentControl[i].typeThreshold"
+              :items="typesThreshold"
+              :rules="[v => !!v || 'O tipo do conceito é requerido']"
+              label="Tipo de Threshold"
+              style="margin:0px;"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="2" v-if="assessmentControl[i].scopo">
+            <v-select
+              style="margin-top: -1px;"
+              v-if="assessmentControl[i].scopo===1"
+              v-model="assessmentControl[i].valueType"
+              :items="valueTypes"
+              :rules="[v => !!v || 'O tipo de dado é requerido']"
+              label="Tipo de Dado"
+              required
+            ></v-select>
+            <v-text-field
+              style="margin-top: -1px; margin-bottom: -10px;"
+              v-if="assessmentControl[i].scopo===2 || assessmentControl[i].valueType==='Single'"
+              v-model="assessmentControl[i].single.threshold"
+              label="Valor"
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="2" class="mt-2">
+            <v-btn icon="icon" class="mb-1" v-if="assessmentControl[i].valueType==='Range'">
+              <v-icon large class="mb-1" color="primary" @click="addRange(i)">mdi-plus-box</v-icon>
+            </v-btn>
+            <v-btn icon="icon" class="mb-1">
+              <v-icon large class="mb-1" color="red" @click="deletaAssessment(i)">mdi-minus-box</v-icon>
+            </v-btn>
+          </v-col>
+          <v-row v-if="assessmentControl[i].valueType === 'Single'" style="margin-top: -40px;">
+            <v-col cols="7"></v-col>
+            <v-col cols="2" class="ml-10"></v-col>
+          </v-row>
+          <div v-else>
+            <v-row
+              v-for="(range, idRange) in assessment.ranges"
+              :key="idRange"
+              style="margin-top: -30px;"
+            >
+              <v-col cols="3"></v-col>
+              <v-col cols="3">
+                <v-text-field
+                  v-model="assessmentControl[i].ranges[idRange].namerange"
+                  counter="15"
+                  label="Nome do range"
+                  style="margin:0px;"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2">
+                <v-text-field
+                  v-model="assessmentControl[i].ranges[idRange].initialvalue"
+                  label="Valor inicial"
+                  style="margin:0px;"
+                  type="number"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2">
+                <v-text-field
+                  v-model="assessmentControl[i].ranges[idRange].limitvalue"
+                  label="Valor Limite"
+                  style="margin:0px;"
+                  type="number"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="1">
+                <v-btn icon="icon" class="mt-4">
+                  <v-icon
+                    large
+                    class="mb-1"
+                    color="red"
+                    @click="deletaRange(i, idRange)"
+                  >mdi-minus-box</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </div>
+        </v-row>
+      </v-col>
+    </v-row>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="red" height="49" dark large @click="reset">
+        Close
+        <v-icon dark right>mdi-close</v-icon>
+      </v-btn>
+      <v-btn color="success" height="49" dark large @click="validate">
+        Save
+        <v-icon dark right>mdi-content-save</v-icon>
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -54,7 +175,30 @@ export default {
   data: () => ({
     valid: true,
     treeData: [],
+    elementData: [],
     selection: [],
+    scopoTypes: [
+      {
+        text: "Avaliação",
+        value: 1
+      },
+      {
+        text: "Domínio",
+        value: 2
+      }
+    ],
+    typesThreshold: [
+      {
+        text: "Porcentagem",
+        value: 1
+      },
+      {
+        text: "Literal",
+        value: 2
+      }
+    ],
+    valueTypes: ["Single", "Range"],
+    assessmentControl: [],
     newItems: [],
     checkbox: true
   }),
@@ -65,6 +209,15 @@ export default {
         this.selection = [];
         await this.setDomainVariables();
       }
+    },
+    assessmentControl: function() {
+      this.assessmentControl.forEach(assess => {
+        if (assess.valueType === "Single") {
+          assess.ranges = [];
+        } else if (assess.valueType === "Range") {
+          assess.single.threshold = "";
+        }
+      });
     }
   },
   methods: {
@@ -79,6 +232,10 @@ export default {
     },
     setDomainVariables() {
       this.treeData = [];
+      this.elementData.push({
+        text: "[DOMINIO] " + this.domain.nameknowledgedomain,
+        value: this.domain.url
+      });
       var indexmodulo = 0;
       if (this.domain.mobilemedias.length) {
         this.domain.mobilemedias.forEach(mobilemedia => {
@@ -123,6 +280,10 @@ export default {
               children: []
             };
             this.treeData.push(object);
+            this.elementData.push({
+              text: object.name,
+              value: object.id
+            });
             if (object.visible) {
               this.selection.push(object);
             }
@@ -173,6 +334,10 @@ export default {
                   children: []
                 };
                 this.treeData[indexmodulo].children.push(object);
+                this.elementData.push({
+                  text: object.name,
+                  value: object.id
+                });
                 if (object.visible) {
                   this.selection.push(object);
                 }
@@ -226,6 +391,11 @@ export default {
                     this.treeData[indexmodulo].children[
                       indexsubmodulo
                     ].children.push(object);
+
+                    this.elementData.push({
+                      text: object.name,
+                      value: object.id
+                    });
                     if (object.visible) {
                       this.selection.push(object);
                     }
@@ -308,6 +478,11 @@ export default {
                   children: []
                 };
                 this.treeData[indexmodulo].children.push(object);
+
+                this.elementData.push({
+                  text: object.name,
+                  value: object.id
+                });
                 if (object.visible) {
                   this.selection.push(object);
                 }
@@ -375,6 +550,76 @@ export default {
           }
         });
       }
+    },
+    async postAssessment() {
+      var vm = this;
+      var header = await this.$store.dispatch("getHeader");
+      await this.assessmentControl.forEach(async assessment => {
+        var auxAssessment = {
+          typethreshold:
+            `http://127.0.0.1:8000/typethreshold/` +
+            assessment.typeThreshold +
+            `/`,
+          scopo: `http://127.0.0.1:8000/scopo/` + assessment.scopo + `/`,
+          fk_idknowledgedomain: null,
+          fk_idmodule: null,
+          fk_idconcept: null
+        };
+        if (assessment.scopo === 2) {
+          auxAssessment.typethreshold = `http://127.0.0.1:8000/typethreshold/1/`;
+        }
+        if (assessment.fk_element.split("/")[3] === "knowledgedomain") {
+          auxAssessment.fk_idknowledgedomain = assessment.fk_element;
+        } else if (assessment.fk_element.split("/")[3] === "module") {
+          auxAssessment.fk_idmodule = assessment.fk_element;
+        } else if (assessment.fk_element.split("/")[3] === "concept") {
+          auxAssessment.fk_idconcept = assessment.fk_element;
+        }
+        await this.axios
+          .post(
+            "http://127.0.0.1:8000/assessmentparameter/",
+            auxAssessment,
+            header
+          )
+          .then(async function(resposta) {
+            if (resposta.data.scopo === `http://127.0.0.1:8000/scopo/1/`) {
+              if (assessment.valueType === "Single") {
+                await vm.axios.post(
+                  "http://127.0.0.1:8000/single/",
+                  {
+                    fk_idassessmentparameter: resposta.data.url,
+                    threshold: assessment.single.threshold
+                  },
+                  header
+                );
+              } else if (assessment.valueType === "Range") {
+                assessment.ranges.forEach(async range => {
+                  await vm.axios.post(
+                    "http://127.0.0.1:8000/range/",
+                    {
+                      namerange: range.namerange,
+                      fk_idassessmentparameter: resposta.data.url,
+                      initialvalue: range.initialvalue,
+                      limitvalue: range.limitvalue
+                    },
+                    header
+                  );
+                });
+              }
+            } else if (
+              resposta.data.scopo === `http://127.0.0.1:8000/scopo/2/`
+            ) {
+              await vm.axios.post(
+                "http://127.0.0.1:8000/single/",
+                {
+                  fk_idassessmentparameter: resposta.data.url,
+                  threshold: assessment.single.threshold
+                },
+                header
+              );
+            }
+          });
+      });
     },
     async putVisible() {
       var vm = this;
@@ -740,8 +985,56 @@ export default {
         }
       });
     },
+    addRange(idAssessment) {
+      this.assessmentControl[idAssessment].ranges.push({
+        namerange: "",
+        initialvalue: "",
+        limitvalue: "",
+        url: ""
+      });
+    },
+    async deletaRange(idAssessment, idRange) {
+      // if (this.assessmentControl[idAssessment].ranges[idRange].url !== null) {
+      //   var header = await this.$store.dispatch("getHeader");
+      //   this.axios.delete(
+      //     this.assessmentControl[idAssessment].ranges[idRange].url,
+      //     header
+      //   );
+      // }
+      if (idRange == 0) {
+        this.assessmentControl[idAssessment].ranges.shift();
+      } else {
+        this.assessmentControl[idAssessment].ranges.splice(idRange, 1);
+      }
+    },
+    addAssessment() {
+      this.assessmentControl.push({
+        typeThreshold: "",
+        scopo: "",
+        fk_element: "",
+        valueType: "",
+        single: {
+          threshold: "",
+          url: ""
+        },
+        ranges: [],
+        url: ""
+      });
+    },
+    async deletaAssessment(idAssessment) {
+      // if (this.assessmentControl[idAssessment].url !== null) {
+      //   var header = await this.$store.dispatch("getHeader");
+      //   this.axios.delete(this.assessmentControl[idAssessment].url, header);
+      // }
+      if (idAssessment == 0) {
+        this.assessmentControl.shift();
+      } else {
+        this.assessmentControl.splice(idAssessment, 1);
+      }
+    },
     async validate() {
       await this.putVisible();
+      await this.postAssessment();
     },
     reset() {
       this.$emit("close_or_save", "close");

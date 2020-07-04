@@ -41,7 +41,7 @@
       </template>
     </v-navigation-drawer>
     <!-- FORM DO DOMÍNIO -->
-    <v-col class="ml-6 mr-6">
+    <v-col class="mr-6">
       <v-row>
         <v-app-bar color="#63B0B0" style="width:100%;">
           <v-toolbar-title style="font-size:1.4em; color:white;">Seus Domínios</v-toolbar-title>
@@ -209,16 +209,10 @@ export default {
 
     async deleteDominio(urlDomain) {
       var vm = this;
-      await this.axios
-        .delete(urlDomain, {
-          auth: {
-            username: "admin",
-            password: "admin"
-          }
-        })
-        .then(function() {
-          vm.getDominios();
-        });
+      var header = await this.$store.dispatch("getHeader");
+      await this.axios.delete(urlDomain, header).then(function() {
+        vm.getDominios();
+      });
     },
     async postDominio() {
       var vm = this;

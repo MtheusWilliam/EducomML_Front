@@ -12,7 +12,6 @@ import Cookie from "js-cookie";
 import UserHome from './components/UserHome';
 import Home from './components/Home';
 import CreateConceitual from './components/CreateConceitual';
-import VisibleDialog from './components/didatic_model/VisibleDialog';
 import * as firebase from "firebase";
 
 var config = {
@@ -123,11 +122,6 @@ const router = new VueRouter({
       path: '/create/',
       name: 'create',
       component: CreateConceitual
-    },
-    {
-      path: '/teste',
-      name: 'teste',
-      component: VisibleDialog
     },
     {
       path: '/',

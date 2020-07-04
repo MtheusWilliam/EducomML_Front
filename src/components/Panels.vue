@@ -206,7 +206,7 @@
                 />
               </v-dialog>
               <!--Formulario para criação de atividade colaborativa -->
-              <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1000px">
+              <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1100px">
                 <VisibleDialog
                   :domain="dominio"
                   :dialog="dialog_visible"
