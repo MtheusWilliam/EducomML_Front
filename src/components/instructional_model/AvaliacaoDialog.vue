@@ -730,7 +730,7 @@ export default {
       var auxPathQuestions = "";
       this.questionsControl.forEach(async function(question) {
         if (question.mobileMedias) {
-          await question.mobileMedias.forEach(mobilemedia => {
+          await question.mobileMedias.forEach(async mobilemedia => {
             if (mobilemedia.url) {
               if (mobilemedia.type !== 5) {
                 firebase
@@ -740,11 +740,11 @@ export default {
                   .put(mobilemedia.object);
               }
             } else {
-              setTimeout(function() {
+               
                 auxPathQuestions =
                   vm.domain.idknowledgedomain.toString() +
                   "/" +
-                  Date.now().toString();
+                  await setTimeout(async function() {await Date.now().toString()}, 1);
                 if (mobilemedia.type !== 5) {
                   firebase
                     .storage()
@@ -754,7 +754,7 @@ export default {
 
                   mobilemedia.path = auxPathQuestions;
                 }
-              }, 41);
+              
             }
           });
         }

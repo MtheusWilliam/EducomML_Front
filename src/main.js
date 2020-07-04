@@ -32,8 +32,8 @@ Vue.config.productionTip = false;
 
 var store = new Vuex.Store({
   state: {
-    jwt: null,
-    username: '',
+    jwt: localStorage.getItem('t'),
+    username: localStorage.getItem('u'),
     endpoints: {
       obtainJWT: 'http://127.0.0.1:8000/api-token-auth/',
       refreshJWT: 'http://127.0.0.1:8000/api-token-refresh/'
@@ -45,6 +45,7 @@ var store = new Vuex.Store({
       state.jwt = newToken;
     },
     updateUsername(state, username) {
+      localStorage.setItem('u', username);
       state.username = username;
     },
     removeToken(state) {

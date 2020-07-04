@@ -180,6 +180,7 @@ export default {
   }),
   mounted: function() {
     this.getDominios();
+    console.log(this.$store.dispatch('getHeader'))
   },
   methods: {
     async getDominios() {
