@@ -62,11 +62,10 @@
                 <v-card-subtitle class="pb-0 mb-6" style="color:black;">{{dominio.subtitle}}</v-card-subtitle>
 
                 <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="red" dark @click="deleteDominio(dominio.url)">
-                    Excluir
-                    <v-icon class="ml-2" small>mdi-close</v-icon>
+                  <v-btn color="red" dark @click="getAlertDelete(dominio.url)">
+                    <v-icon>mdi-delete</v-icon>
                   </v-btn>
+                  <v-spacer></v-spacer>
                   <v-btn color="primary" @click="putDominio(dominio.idknowledgedomain)">
                     Editar
                     <v-icon class="ml-2" small>mdi-pencil</v-icon>
@@ -136,6 +135,23 @@
         </v-container>
       </v-row>
     </v-col>
+    <div class="text-center">
+      <v-dialog v-model="alertDelete" width="500" persistent="persistent">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text
+            class="mt-3"
+            style="font-size: 1.3em;"
+          >Tem certeza que deseja apagar esse domínio?</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="red" dark @click="auxUrlDomain = ''; alertDelete=false">Não</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="deleteDominio(auxUrlDomain);">Sim</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-row>
 </template>
 
@@ -146,6 +162,8 @@ export default {
     valid: true,
     dialog: false,
     lastversion: "versao_teste",
+    alertDelete: false,
+    auxUrlDomain: "",
     idDomain: 0,
     userName: "",
     nameknowledgedomain: "",
@@ -180,7 +198,6 @@ export default {
   }),
   mounted: function() {
     this.getDominios();
-    console.log(this.$store.dispatch('getHeader'))
   },
   methods: {
     async getDominios() {
@@ -207,12 +224,17 @@ export default {
         }
       });
     },
-
-    async deleteDominio(urlDomain) {
+    getAlertDelete(urlDomain) {
+      this.auxUrlDomain = urlDomain;
+      this.alertDelete = true;
+    },
+    async deleteDominio() {
       var vm = this;
       var header = await this.$store.dispatch("getHeader");
-      await this.axios.delete(urlDomain, header).then(function() {
+      await this.axios.delete(this.auxUrlDomain, header).then(function() {
         vm.getDominios();
+        vm.alertDelete = false;
+        vm.auxUrlDomain = "";
       });
     },
     async postDominio() {
