@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div class="ml-4">
-      <v-app-bar color="#63B0B0" dense dark>
+      <v-app-bar color="#B19114" dense dark>
         <v-spacer />
         <v-toolbar-title>Modelo Conceitual</v-toolbar-title>
         <v-spacer></v-spacer>

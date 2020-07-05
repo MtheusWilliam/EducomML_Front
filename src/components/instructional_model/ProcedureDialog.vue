@@ -153,6 +153,7 @@ export default {
   },
   mounted: function() {
     this.getProcedure();
+    this.$refs.form.resetValidation();
   },
   methods: {
     getProcedure() {

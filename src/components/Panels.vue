@@ -749,8 +749,11 @@
                           <v-expansion-panel-content>
                             <!--INÍCIO DO CONTENT DOS CONCEITOS DOS SUBMÓDULOS-->
                             <!-- Listagem dos relacionamentos dos conceitos adicionados dentro de submódulos -->
-                            <h3 class="mt-2">Relacionamentos:</h3>
-                            <v-simple-table>
+                            <h3
+                              class="mt-2"
+                              v-if="conceito.sourceconcept.length > 0"
+                            >Relacionamentos:</h3>
+                            <v-simple-table v-if="conceito.sourceconcept.length > 0">
                               <template v-slot:default>
                                 <thead>
                                   <tr>
@@ -1034,8 +1037,8 @@
 
                     <v-expansion-panel-content>
                       <!-- Listagem dos relacionamentos do conceito dos módulos -->
-                      <h3 class="mt-2">Relacionamentos:</h3>
-                      <v-simple-table>
+                      <h3 class="mt-2" v-if="conceito.sourceconcept.length > 0">Relacionamentos:</h3>
+                      <v-simple-table v-if="conceito.sourceconcept.length > 0">
                         <template v-slot:default>
                           <thead>
                             <tr>

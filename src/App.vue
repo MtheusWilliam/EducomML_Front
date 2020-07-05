@@ -3,7 +3,7 @@
     <v-app-bar app color="white darken-3" dark dense flat style="height:60px;">
       <div class="mt-5 d-flex align-center">
         <v-btn icon @click="$router.push({path:'/home'})">
-          <v-icon size="40" color="#63B0B0">mdi-home</v-icon>
+          <v-icon size="40" color="#B19114">mdi-home</v-icon>
         </v-btn>
       </div>
 
@@ -14,7 +14,7 @@
             <v-btn
               v-if="!$store.state.jwt"
               outlined
-              color="indigo lighten-1"
+              color="#B19114"
               v-on="on"
               dark
               @click="dialog_signup=true"
@@ -28,7 +28,7 @@
             <v-btn
               class="ml-2"
               outlined
-              color="indigo lighten-1"
+              color="#B19114"
               v-on="on"
               dark
               @click="dialog_login=true"
@@ -39,7 +39,7 @@
         <v-btn
           v-else
           outlined
-          color="indigo lighten-1"
+          color="#B19114"
           dark
           @click="$store.dispatch('logout');$router.push({path:'/'})"
         >Sair</v-btn>

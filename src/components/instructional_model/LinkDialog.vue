@@ -97,6 +97,7 @@ export default {
   },
   mounted: function() {
     this.getMobileMedia();
+    this.$refs.form.resetValidation();
   },
   methods: {
     getMobileMedia() {

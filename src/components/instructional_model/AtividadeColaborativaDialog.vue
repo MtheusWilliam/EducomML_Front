@@ -576,6 +576,7 @@ export default {
   },
   mounted: function() {
     this.getColaborative();
+    this.$refs.form.resetValidation();
   },
   methods: {
     async getColaborative() {

@@ -12,7 +12,7 @@
       <v-form style="margin-bottom: -20px;">
         <v-text-field
           v-model="username"
-          label="Login"
+          label="Username"
           name="login"
           prepend-icon="mdi-account"
           type="text"
@@ -21,7 +21,7 @@
 
         <v-text-field
           id="password"
-          label="Password"
+          label="Senha"
           name="password"
           v-model="password"
           prepend-icon="mdi-lock"

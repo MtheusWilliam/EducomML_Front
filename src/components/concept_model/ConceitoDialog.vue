@@ -150,6 +150,7 @@ export default {
   },
   mounted: function() {
     this.getConceito();
+    this.$refs.form.resetValidation();
   },
   methods: {
     getConceito() {

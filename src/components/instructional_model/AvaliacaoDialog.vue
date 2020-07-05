@@ -508,6 +508,7 @@ export default {
   },
   mounted: function() {
     this.getAvaliacao();
+    this.$refs.form.resetValidation();
   },
   methods: {
     async getAvaliacao() {
@@ -740,21 +741,21 @@ export default {
                   .put(mobilemedia.object);
               }
             } else {
-               
-                auxPathQuestions =
-                  vm.domain.idknowledgedomain.toString() +
-                  "/" +
-                  await setTimeout(async function() {await Date.now().toString()}, 1);
-                if (mobilemedia.type !== 5) {
-                  firebase
-                    .storage()
-                    .ref()
-                    .child(auxPathQuestions)
-                    .put(mobilemedia.object);
+              auxPathQuestions =
+                vm.domain.idknowledgedomain.toString() +
+                "/" +
+                (await setTimeout(async function() {
+                  await Date.now().toString();
+                }, 1));
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(auxPathQuestions)
+                  .put(mobilemedia.object);
 
-                  mobilemedia.path = auxPathQuestions;
-                }
-              
+                mobilemedia.path = auxPathQuestions;
+              }
             }
           });
         }

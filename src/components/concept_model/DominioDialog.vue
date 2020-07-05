@@ -55,7 +55,6 @@ export default {
   data: () => ({
     domainName: "",
     domainContentTitle: "",
-    domainAuthorsName: "",
     lastversion: "",
     valid: true,
     dialog_dominio: false,

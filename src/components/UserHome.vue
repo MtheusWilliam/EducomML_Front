@@ -6,7 +6,7 @@
       v-model="drawer"
       :mini-variant.sync="mini"
       permanent
-      color="#63B0B0"
+      color="#B19114"
       dark
     >
       <v-list-item class="px-2">
@@ -43,7 +43,7 @@
     <!-- FORM DO DOMÍNIO -->
     <v-col class="mr-6">
       <v-row>
-        <v-app-bar color="#63B0B0" style="width:100%;">
+        <v-app-bar color="#B19114" style="width:100%;">
           <v-toolbar-title style="font-size:1.4em; color:white;">Seus Domínios</v-toolbar-title>
         </v-app-bar>
         <v-container>

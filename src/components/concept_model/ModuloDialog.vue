@@ -76,6 +76,7 @@ export default {
   },
   mounted: function() {
     this.getModulo();
+    this.$refs.form.resetValidation();
   },
   methods: {
     getModulo() {
