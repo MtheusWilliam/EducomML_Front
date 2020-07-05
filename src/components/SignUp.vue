@@ -73,6 +73,7 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
+      {{ messageError }}
       <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
     <!--
@@ -141,7 +142,8 @@ export default {
       ],
       password: "",
       passwordRules: [v => !!v || "É necessário inserir sua senha"],
-      passwordConfirm: ""
+      passwordConfirm: "",
+      messageError: "",
     };
   },
   computed: {
@@ -152,6 +154,7 @@ export default {
   },
   methods: {
     async postUser() {
+      
       await this.axios.post(
         "http://localhost:8000/users/",
         {
@@ -159,7 +162,8 @@ export default {
           email: this.email,
           first_name: this.name,
           last_name: this.lastname,
-          password: this.password
+          password: this.password,
+          is_active: false
         },
         {
           auth: {
@@ -171,9 +175,14 @@ export default {
     },
     async validate() {
       if (this.$refs.form.validate()) {
+        try{
         await this.$refs.form.validate();
         await this.postUser();
-        await this.firstLogin();
+        this.messageError = "Porfavor verifique o seu email";
+        this.dialog = false;
+        }catch(err){
+        this.messageError = "O username já existe"
+      }
       }
     },
     async firstLogin() {
