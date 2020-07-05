@@ -70,7 +70,7 @@
               <v-dialog v-model="dialog_dominio" persistent="persistent" max-width="600px">
                 <template v-slot:activator="{ on }">
                   <v-btn icon="icon" color="white" v-on="on">
-                    <v-icon>mdi-view-headline</v-icon>
+                    <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
                 <!--Formulario para criação de módulo-->
@@ -246,16 +246,16 @@
                       color="white"
                       @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
                     >
-                      <v-icon>mdi-view-headline</v-icon>
+                      <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                     <!--Função para excluir arquivo/mobilemedia-->
                     <v-btn
                       class="mt-2"
                       icon="icon"
                       color="white"
-                      @click="deleteelemento(mobilemedia)"
+                      @click="auxElementDelete = mobilemedia; alertDelete=true"
                     >
-                      <v-icon>mdi-close</v-icon>
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -284,11 +284,15 @@
                       color="white"
                       @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
                     >
-                      <v-icon>mdi-view-headline</v-icon>
+                      <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                     <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
-                    <v-btn icon="icon" color="white" @click="deleteelemento(instrucelement)">
-                      <v-icon>mdi-close</v-icon>
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @click="auxElementDelete = instrucelement; alertDelete=true"
+                    >
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -381,11 +385,15 @@
                     </v-menu>
                     <!--Formulario para edição do modulo-->
                     <v-btn icon="icon" color="white" @click="dialog_modulo=true;setmodulo(modulo)">
-                      <v-icon>mdi-view-headline</v-icon>
+                      <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                     <!--Função para excluir módulo-->
-                    <v-btn icon="icon" color="white" @click="deleteelemento(modulo)">
-                      <v-icon>mdi-close</v-icon>
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @click="auxElementDelete = modulo; alertDelete = true"
+                    >
+                      <v-icon>mdi-delete</v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -421,16 +429,16 @@
                             color="white"
                             @click="setmobilemedia(mobilemedia, modulo, 'modulo')"
                           >
-                            <v-icon>mdi-view-headline</v-icon>
+                            <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                           <!--Função para excluir arquivo/mobilemedia-->
                           <v-btn
                             class="mt-2"
                             icon="icon"
                             color="white"
-                            @click="deleteelemento(mobilemedia)"
+                            @click="auxElementDelete = mobilemedia; alertDelete = true"
                           >
-                            <v-icon>mdi-close</v-icon>
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -459,11 +467,15 @@
                             color="white"
                             @click="setinstructionalelement(instrucelement, modulo, 'modulo')"
                           >
-                            <v-icon>mdi-view-headline</v-icon>
+                            <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                           <!--Função para excluir ELEMENTOS INSTRUCIONAIS do módulo-->
-                          <v-btn icon="icon" color="white" @click="deleteelemento(instrucelement)">
-                            <v-icon>mdi-close</v-icon>
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @click="auxElementDelete = instrucelement; alertDelete = true"
+                          >
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -545,11 +557,15 @@
                             color="white"
                             @click="setsubmodulo(submodulo);dialog_submodulo=true"
                           >
-                            <v-icon>mdi-view-headline</v-icon>
+                            <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                           <!--Função para excluir submódulo-->
-                          <v-btn icon="icon" color="white" @click="deleteelemento(submodulo)">
-                            <v-icon>mdi-close</v-icon>
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @click="auxElementDelete = submodulo; alertDelete = true"
+                          >
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -588,16 +604,16 @@
                                   color="white"
                                   @click="setmobilemedia(mobilemedia, submodulo, 'modulo')"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="deleteelemento(mobilemedia)"
+                                  @click="auxElementDelete = mobilemedia; alertDelete = true"
                                 >
-                                  <v-icon>mdi-close</v-icon>
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -629,15 +645,15 @@
                                   color="white"
                                   @click="setinstructionalelement(instrucelement, submodulo, 'modulo')"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="deleteelemento(instrucelement)"
+                                  @click="auxElementDelete = instrucelement; alertDelete = true"
                                 >
-                                  <v-icon>mdi-close</v-icon>
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -735,11 +751,15 @@
                                   color="white"
                                   @click="setconceito(conceito, submodulo);dialog_conceito=true"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir conceito-->
-                                <v-btn icon="icon" color="white" @click="deleteelemento(conceito)">
-                                  <v-icon>mdi-close</v-icon>
+                                <v-btn
+                                  icon="icon"
+                                  color="white"
+                                  @click="auxElementDelete = conceito; alertDelete = true"
+                                >
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -801,15 +821,15 @@
                                         color="white"
                                         @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
                                       >
-                                        <v-icon>mdi-view-headline</v-icon>
+                                        <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
                                       <!--Função para excluir arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="deleteelemento(mobilemedia)"
+                                        @click="auxElementDelete = mobilemedia; alertDelete = true"
                                       >
-                                        <v-icon>mdi-close</v-icon>
+                                        <v-icon>mdi-delete</v-icon>
                                       </v-btn>
                                     </v-col>
                                   </v-row>
@@ -844,16 +864,16 @@
                                         color="white"
                                         @click="setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
                                       >
-                                        <v-icon>mdi-view-headline</v-icon>
+                                        <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
                                       <!--Função para excluir arquivo/mobilemedia-->
                                       <v-btn
                                         class="mt-2"
                                         icon="icon"
                                         color="white"
-                                        @click="deleteelemento(procedure)"
+                                        @click="auxElementDelete = procedure; alertDelete = true"
                                       >
-                                        <v-icon>mdi-close</v-icon>
+                                        <v-icon>mdi-delete</v-icon>
                                       </v-btn>
                                     </v-col>
                                   </v-row>
@@ -911,15 +931,15 @@
                                         color="white"
                                         @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
                                       >
-                                        <v-icon>mdi-view-headline</v-icon>
+                                        <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
                                       <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="deleteelemento(instrucelement)"
+                                        @click="auxElementDelete = instrucelement; alertDelete = true"
                                       >
-                                        <v-icon>mdi-close</v-icon>
+                                        <v-icon>mdi-delete</v-icon>
                                       </v-btn>
                                     </v-col>
                                   </v-row>
@@ -1024,11 +1044,15 @@
                             color="white"
                             @click="setconceito(conceito, modulo);dialog_conceito=true"
                           >
-                            <v-icon>mdi-view-headline</v-icon>
+                            <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                           <!--Função para excluir conceito-->
-                          <v-btn icon="icon" color="white" @click="deleteelemento(conceito)">
-                            <v-icon>mdi-close</v-icon>
+                          <v-btn
+                            icon="icon"
+                            color="white"
+                            @click="auxElementDelete = conceito; alertDelete = true"
+                          >
+                            <v-icon>mdi-delete</v-icon>
                           </v-btn>
                         </v-col>
                       </v-row>
@@ -1086,16 +1110,16 @@
                                   color="white"
                                   @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="deleteelemento(mobilemedia)"
+                                  @click="auxElementDelete = mobilemedia; alertDelete = true"
                                 >
-                                  <v-icon>mdi-close</v-icon>
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -1129,16 +1153,16 @@
                                   color="white"
                                   @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir arquivo/mobilemedia-->
                                 <v-btn
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="deleteelemento(procedure)"
+                                  @click="auxElementDelete = procedure; alertDelete = true"
                                 >
-                                  <v-icon>mdi-close</v-icon>
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -1191,15 +1215,15 @@
                                   color="white"
                                   @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
                                 >
-                                  <v-icon>mdi-view-headline</v-icon>
+                                  <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
                                 <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="deleteelemento(instrucelement)"
+                                  @click="auxElementDelete = (instrucelement); alertDelete = true"
                                 >
-                                  <v-icon>mdi-close</v-icon>
+                                  <v-icon>mdi-delete</v-icon>
                                 </v-btn>
                               </v-col>
                             </v-row>
@@ -1228,6 +1252,23 @@
         <v-icon dark right>mdi-content-save</v-icon>
       </v-btn>
     </v-row>
+    <div class="text-center">
+      <v-dialog v-model="alertDelete" width="500" persistent="persistent">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text
+            class="mt-3"
+            style="font-size: 1.3em;"
+          >Tem certeza que deseja apagar esse elemento?</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="red" dark @click="auxElementDelete = ''; alertDelete=false">Não</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="deleteelemento(auxElementDelete);">Sim</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-row>
 </template>
 
@@ -1298,6 +1339,8 @@ export default {
       "mdi-file-document",
       "mdi-link-variant"
     ],
+    auxElementDelete: "",
+    alertDelete: false,
     objectFile: {},
     type: "",
     instrucObjectFile: {},
@@ -1802,13 +1845,18 @@ export default {
             .delete();
         }
       }
-      await axios.delete(value.url, {
-        auth: {
-          username: "admin",
-          password: "admin"
-        }
-      });
-      await vm.getDominio();
+      await axios
+        .delete(value.url, {
+          auth: {
+            username: "admin",
+            password: "admin"
+          }
+        })
+        .then(function() {
+          vm.getDominio();
+          vm.alertDelete = false;
+          vm.auxElementDelete = "";
+        });
     },
 
     controlTreeView(value) {
