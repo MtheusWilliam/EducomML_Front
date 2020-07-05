@@ -66,7 +66,7 @@
               required
             ></v-select>
           </v-col>
-          <v-col cols="3" v-if="assessmentControl[i].scopo===1">
+          <v-col cols="3">
             <v-select
               v-model="assessmentControl[i].typeThreshold"
               :items="typesThreshold"
@@ -76,10 +76,9 @@
               required
             ></v-select>
           </v-col>
-          <v-col cols="2" v-if="assessmentControl[i].scopo">
+          <v-col cols="2">
             <v-select
               style="margin-top: -1px;"
-              v-if="assessmentControl[i].scopo===1"
               v-model="assessmentControl[i].valueType"
               :items="valueTypes"
               :rules="[v => !!v || 'O tipo de dado é requerido']"
@@ -88,9 +87,11 @@
             ></v-select>
             <v-text-field
               style="margin-top: -1px; margin-bottom: -10px;"
-              v-if="assessmentControl[i].scopo===2 || assessmentControl[i].valueType==='Single'"
+              v-if="assessmentControl[i].valueType==='Single'"
               v-model="assessmentControl[i].single.threshold"
               label="Valor"
+              :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+              required
             ></v-text-field>
           </v-col>
 
@@ -112,13 +113,14 @@
               :key="idRange"
               style="margin-top: -30px;"
             >
-              <v-col cols="3"></v-col>
+              <v-col cols="4"></v-col>
               <v-col cols="3">
                 <v-text-field
                   v-model="assessmentControl[i].ranges[idRange].namerange"
                   counter="15"
                   label="Nome do range"
                   style="margin:0px;"
+                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="2">
@@ -127,6 +129,8 @@
                   label="Valor inicial"
                   style="margin:0px;"
                   type="number"
+                  :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="2">
@@ -135,6 +139,8 @@
                   label="Valor Limite"
                   style="margin:0px;"
                   type="number"
+                  :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="1">
@@ -204,23 +210,254 @@ export default {
   }),
   watch: {
     domain: async function() {
+      this.assessmentControl = [];
       if (this.domain) {
         this.treeData = [];
         this.selection = [];
+        await this.getAssessments();
         await this.setDomainVariables();
       }
     },
     assessmentControl: function() {
       this.assessmentControl.forEach(assess => {
         if (assess.valueType === "Single") {
+          assess.ranges.forEach(range => {
+            if (range.url) {
+              this.deletaSingle(range.url);
+            }
+          });
           assess.ranges = [];
         } else if (assess.valueType === "Range") {
+          if (assess.single.url) {
+            this.deletaSingle(assess.single.url);
+            assess.single.url = "";
+          }
           assess.single.threshold = "";
         }
       });
     }
   },
   methods: {
+    getAssessments() {
+      // var vm = this;
+      if (this.domain) {
+        if (this.domain.assessmentparameter.length > 0) {
+          var assess = {
+            typeThreshold: parseInt(
+              this.domain.assessmentparameter[0].typethreshold.split("/")[4]
+            ),
+            scopo: parseInt(
+              this.domain.assessmentparameter[0].scopo.split("/")[4]
+            ),
+            fk_element: this.domain.assessmentparameter[0].fk_idknowledgedomain,
+            valueType: "",
+            single: {
+              threshold: "",
+              url: ""
+            },
+            ranges: [],
+            url: this.domain.assessmentparameter[0].url
+          };
+          if (this.domain.assessmentparameter[0].single.length > 0) {
+            assess.valueType = "Single";
+            assess.single.threshold = this.domain.assessmentparameter[0].single[0].threshold;
+            assess.single.url = this.domain.assessmentparameter[0].single[0].url;
+          } else if (this.domain.assessmentparameter[0].ranges.length > 0) {
+            assess.valueType = "Range";
+            this.domain.assessmentparameter[0].ranges.forEach(range => {
+              assess.ranges.push({
+                namerange: range.namerange,
+                initialvalue: range.initialvalue,
+                limitvalue: range.limitvalue,
+                url: range.url
+              });
+            });
+          }
+          this.assessmentControl.push(assess);
+        }
+        if (this.domain.modules) {
+          this.domain.modules.forEach(module => {
+            if (module.assessmentparameter.length > 0) {
+              var assess = {
+                typeThreshold: parseInt(
+                  module.assessmentparameter[0].typethreshold.split("/")[4]
+                ),
+                scopo: parseInt(
+                  module.assessmentparameter[0].scopo.split("/")[4]
+                ),
+                fk_element: module.url,
+                valueType: "",
+                single: {
+                  threshold: "",
+                  url: ""
+                },
+                ranges: [],
+                url: module.assessmentparameter[0].url
+              };
+              if (module.assessmentparameter[0].single.length > 0) {
+                assess.valueType = "Single";
+                assess.single.threshold =
+                  module.assessmentparameter[0].single[0].threshold;
+                assess.single.url = module.assessmentparameter[0].single[0].url;
+              } else if (module.assessmentparameter[0].ranges.length > 0) {
+                assess.valueType = "Range";
+                module.assessmentparameter[0].ranges.forEach(range => {
+                  assess.ranges.push({
+                    namerange: range.namerange,
+                    initialvalue: range.initialvalue,
+                    limitvalue: range.limitvalue,
+                    url: range.url
+                  });
+                });
+              }
+              this.assessmentControl.push(assess);
+            }
+            if (module.concepts) {
+              module.concepts.forEach(moduleConcept => {
+                if (moduleConcept.assessmentparameter.length > 0) {
+                  var assess = {
+                    typeThreshold: parseInt(
+                      moduleConcept.assessmentparameter[0].typethreshold.split(
+                        "/"
+                      )[4]
+                    ),
+                    scopo: parseInt(
+                      moduleConcept.assessmentparameter[0].scopo.split("/")[4]
+                    ),
+                    fk_element: moduleConcept.url,
+                    valueType: "",
+                    single: {
+                      threshold: "",
+                      url: ""
+                    },
+                    ranges: [],
+                    url: moduleConcept.assessmentparameter[0].url
+                  };
+                  if (moduleConcept.assessmentparameter[0].single.length > 0) {
+                    assess.valueType = "Single";
+                    assess.single.threshold =
+                      moduleConcept.assessmentparameter[0].single[0].threshold;
+                    assess.single.url =
+                      moduleConcept.assessmentparameter[0].single[0].url;
+                  } else if (
+                    moduleConcept.assessmentparameter[0].ranges.length > 0
+                  ) {
+                    assess.valueType = "Range";
+                    moduleConcept.assessmentparameter[0].ranges.forEach(
+                      range => {
+                        assess.ranges.push({
+                          namerange: range.namerange,
+                          initialvalue: range.initialvalue,
+                          limitvalue: range.limitvalue,
+                          url: range.url
+                        });
+                      }
+                    );
+                  }
+                  this.assessmentControl.push(assess);
+                }
+              });
+            }
+            if (module.submodules) {
+              module.submodules.forEach(submodule => {
+                if (submodule.assessmentparameter.length > 0) {
+                  var assess = {
+                    typeThreshold: parseInt(
+                      submodule.assessmentparameter[0].typethreshold.split(
+                        "/"
+                      )[4]
+                    ),
+                    scopo: parseInt(
+                      submodule.assessmentparameter[0].scopo.split("/")[4]
+                    ),
+                    fk_element: submodule.url,
+                    valueType: "",
+                    single: {
+                      threshold: "",
+                      url: ""
+                    },
+                    ranges: [],
+                    url: submodule.assessmentparameter[0].url
+                  };
+                  if (submodule.assessmentparameter[0].single.length > 0) {
+                    assess.valueType = "Single";
+                    assess.single.threshold =
+                      submodule.assessmentparameter[0].single[0].threshold;
+                    assess.single.url =
+                      submodule.assessmentparameter[0].single[0].url;
+                  } else if (
+                    submodule.assessmentparameter[0].ranges.length > 0
+                  ) {
+                    assess.valueType = "Range";
+                    submodule.assessmentparameter[0].ranges.forEach(range => {
+                      assess.ranges.push({
+                        namerange: range.namerange,
+                        initialvalue: range.initialvalue,
+                        limitvalue: range.limitvalue,
+                        url: range.url
+                      });
+                    });
+                  }
+                  this.assessmentControl.push(assess);
+                }
+                if (submodule.concepts) {
+                  submodule.concepts.forEach(submoduleConcept => {
+                    if (submoduleConcept.assessmentparameter.length > 0) {
+                      var assess = {
+                        typeThreshold: parseInt(
+                          submoduleConcept.assessmentparameter[0].typethreshold.split(
+                            "/"
+                          )[4]
+                        ),
+                        scopo: parseInt(
+                          submoduleConcept.assessmentparameter[0].scopo.split(
+                            "/"
+                          )[4]
+                        ),
+                        fk_element: submoduleConcept.url,
+                        valueType: "",
+                        single: {
+                          threshold: "",
+                          url: ""
+                        },
+                        ranges: [],
+                        url: submoduleConcept.assessmentparameter[0].url
+                      };
+                      if (
+                        submoduleConcept.assessmentparameter[0].single.length >
+                        0
+                      ) {
+                        assess.valueType = "Single";
+                        assess.single.threshold =
+                          submoduleConcept.assessmentparameter[0].single[0].threshold;
+                        assess.single.url =
+                          submoduleConcept.assessmentparameter[0].single[0].url;
+                      } else if (
+                        submoduleConcept.assessmentparameter[0].ranges.length >
+                        0
+                      ) {
+                        assess.valueType = "Range";
+                        submoduleConcept.assessmentparameter[0].ranges.forEach(
+                          range => {
+                            assess.ranges.push({
+                              namerange: range.namerange,
+                              initialvalue: range.initialvalue,
+                              limitvalue: range.limitvalue,
+                              url: range.url
+                            });
+                          }
+                        );
+                      }
+                      this.assessmentControl.push(assess);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      }
+    },
     test(value) {
       if (value.length) {
         if (value[0].split("/")[5] === "sub") {
@@ -565,9 +802,6 @@ export default {
           fk_idmodule: null,
           fk_idconcept: null
         };
-        if (assessment.scopo === 2) {
-          auxAssessment.typethreshold = `http://127.0.0.1:8000/typethreshold/1/`;
-        }
         if (assessment.fk_element.split("/")[3] === "knowledgedomain") {
           auxAssessment.fk_idknowledgedomain = assessment.fk_element;
         } else if (assessment.fk_element.split("/")[3] === "module") {
@@ -575,14 +809,66 @@ export default {
         } else if (assessment.fk_element.split("/")[3] === "concept") {
           auxAssessment.fk_idconcept = assessment.fk_element;
         }
-        await this.axios
-          .post(
-            "http://127.0.0.1:8000/assessmentparameter/",
-            auxAssessment,
-            header
-          )
-          .then(async function(resposta) {
-            if (resposta.data.scopo === `http://127.0.0.1:8000/scopo/1/`) {
+
+        if (assessment.url) {
+          await this.axios
+            .put(assessment.url, auxAssessment, header)
+            .then(async function(resposta) {
+              if (assessment.valueType === "Single") {
+                if (assessment.ranges) {
+                  assessment.ranges.forEach(range => {
+                    if (range.url) {
+                      vm.axios.delete(range.url, header);
+                    }
+                  });
+                }
+                await vm.axios.put(
+                  assessment.single.url,
+                  {
+                    fk_idassessmentparameter: resposta.data.url,
+                    threshold: assessment.single.threshold
+                  },
+                  header
+                );
+              } else if (assessment.valueType === "Range") {
+                if (assessment.single.url) {
+                  vm.axios.delete(assessment.single.url, header);
+                }
+                assessment.ranges.forEach(async range => {
+                  if (range.url) {
+                    await vm.axios.put(
+                      range.url,
+                      {
+                        namerange: range.namerange,
+                        fk_idassessmentparameter: resposta.data.url,
+                        initialvalue: range.initialvalue,
+                        limitvalue: range.limitvalue
+                      },
+                      header
+                    );
+                  } else {
+                    await vm.axios.post(
+                      "http://127.0.0.1:8000/range/",
+                      {
+                        namerange: range.namerange,
+                        fk_idassessmentparameter: resposta.data.url,
+                        initialvalue: range.initialvalue,
+                        limitvalue: range.limitvalue
+                      },
+                      header
+                    );
+                  }
+                });
+              }
+            });
+        } else {
+          await this.axios
+            .post(
+              "http://127.0.0.1:8000/assessmentparameter/",
+              auxAssessment,
+              header
+            )
+            .then(async function(resposta) {
               if (assessment.valueType === "Single") {
                 await vm.axios.post(
                   "http://127.0.0.1:8000/single/",
@@ -606,19 +892,8 @@ export default {
                   );
                 });
               }
-            } else if (
-              resposta.data.scopo === `http://127.0.0.1:8000/scopo/2/`
-            ) {
-              await vm.axios.post(
-                "http://127.0.0.1:8000/single/",
-                {
-                  fk_idassessmentparameter: resposta.data.url,
-                  threshold: assessment.single.threshold
-                },
-                header
-              );
-            }
-          });
+            });
+        }
       });
     },
     async putVisible() {
@@ -994,13 +1269,13 @@ export default {
       });
     },
     async deletaRange(idAssessment, idRange) {
-      // if (this.assessmentControl[idAssessment].ranges[idRange].url !== null) {
-      //   var header = await this.$store.dispatch("getHeader");
-      //   this.axios.delete(
-      //     this.assessmentControl[idAssessment].ranges[idRange].url,
-      //     header
-      //   );
-      // }
+      if (this.assessmentControl[idAssessment].ranges[idRange].url) {
+        var header = await this.$store.dispatch("getHeader");
+        this.axios.delete(
+          this.assessmentControl[idAssessment].ranges[idRange].url,
+          header
+        );
+      }
       if (idRange == 0) {
         this.assessmentControl[idAssessment].ranges.shift();
       } else {
@@ -1022,22 +1297,31 @@ export default {
       });
     },
     async deletaAssessment(idAssessment) {
-      // if (this.assessmentControl[idAssessment].url !== null) {
-      //   var header = await this.$store.dispatch("getHeader");
-      //   this.axios.delete(this.assessmentControl[idAssessment].url, header);
-      // }
+      if (this.assessmentControl[idAssessment].url !== null) {
+        var header = await this.$store.dispatch("getHeader");
+        await this.axios.delete(
+          this.assessmentControl[idAssessment].url,
+          header
+        );
+      }
       if (idAssessment == 0) {
         this.assessmentControl.shift();
       } else {
         this.assessmentControl.splice(idAssessment, 1);
       }
     },
+    async deletaSingle(urlSingle) {
+      var header = await this.$store.dispatch("getHeader");
+      await this.axios.delete(urlSingle, header);
+    },
     async validate() {
       await this.putVisible();
       await this.postAssessment();
+      this.assessmentControl = [];
     },
     reset() {
       this.$emit("close_or_save", "close");
+      this.assessmentControl = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();
