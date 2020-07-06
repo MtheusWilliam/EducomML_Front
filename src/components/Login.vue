@@ -32,9 +32,11 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
+      {{ messageError }}
       <v-btn color="primary" @click="login" large class="mr-4">Login</v-btn>
     </v-card-actions>
     <!--
+    ---
     <v-card-text class="mt-3">
       <p style="text-align: center; font-size: 1.2em;">
         Não tem conta?
@@ -53,18 +55,23 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      messageError: ""
     };
   },
   methods: {
     async login() {
-      await this.$store.dispatch("obtainToken", {
-        username: this.username,
-        password: this.password
-      });
-      await this.$router.push({
-        name: "home"
-      });
+      try {
+        await this.$store.dispatch("obtainToken", {
+          username: this.username,
+          password: this.password
+        });
+        await this.$router.push({
+          name: "home"
+        });
+      } catch (err) {
+        this.messageError = "Você ainda nao verificou o seu email";
+      }
     }
   }
 };
