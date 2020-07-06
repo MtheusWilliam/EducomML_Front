@@ -143,7 +143,11 @@ export default {
       password: "",
       passwordRules: [v => !!v || "É necessário inserir sua senha"],
       passwordConfirm: "",
+<<<<<<< HEAD
       messageError: "",
+=======
+      messageError: ""
+>>>>>>> faf20846e2465b0eb49131e9e8d7fcb82f13231a
     };
   },
   computed: {
@@ -175,14 +179,14 @@ export default {
     },
     async validate() {
       if (this.$refs.form.validate()) {
-        try{
-        await this.$refs.form.validate();
-        await this.postUser();
-        this.messageError = "Porfavor verifique o seu email";
-        this.dialog = false;
-        }catch(err){
-        this.messageError = "O username já existe"
-      }
+        try {
+          await this.$refs.form.validate();
+          await this.postUser();
+          this.messageError = "Porfavor verifique o seu email";
+          this.dialog = false;
+        } catch (err) {
+          this.messageError = "O username já existe";
+        }
       }
     },
     async firstLogin() {

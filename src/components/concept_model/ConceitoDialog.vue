@@ -16,9 +16,42 @@
               :rules="conceptNameRules"
               label="Nome do conceito"
               required
-              class="mt-2 mb-4"
+              class="mt-2"
             ></v-text-field>
-            <div style="width:102.5%; position:relative;right:1.2%;margin-top:-1.3%;">
+            <v-row>
+              <v-col cols="4">
+                <v-select
+                  v-model="priorKnowledge"
+                  :items="priorKnowledgeItems"
+                  label="Este conceito é prioritário?"
+                  style="margin:0px;"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="4">
+                <v-text-field
+                  v-if="priorKnowledge === 1"
+                  v-model="priorKnowledgeName"
+                  counter="15"
+                  :rules="[v => !!v || 'Necessário informar o nome da prioridade']"
+                  label="Nome da Prioridade"
+                  style="margin:0px;"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4">
+                <v-select
+                  v-if="priorKnowledge === 1"
+                  v-model="priorLevel"
+                  :items="priorLevelItems"
+                  :rules="[v => !!v || 'Necessário informar o nível de prioridade']"
+                  label="Nível de prioridade"
+                  style="margin:0px;"
+                  required
+                ></v-select>
+              </v-col>
+            </v-row>
+            <div>
               <v-app-bar color="#D2A64D" dense dark height="45px">
                 <v-toolbar-title style="font-size:1.2em;">
                   <strong>Lista de relacionamentos</strong>
@@ -138,7 +171,30 @@ export default {
         "O nome da relação deve ter no máximo 15 caracteres"
     ],
     relacaoType: [""],
-    relacaoTypes: ["typeOf", "partOf"]
+    relacaoTypes: ["typeOf", "partOf"],
+    priorKnowledge: 2,
+    priorKnowledgeItems: [
+      {
+        text: "Sim",
+        value: 1
+      },
+      {
+        text: "Não",
+        value: 2
+      }
+    ],
+    priorKnowledgeName: "",
+    priorLevel: "",
+    priorLevelItems: [
+      {
+        text: "Obrigatório",
+        value: 1
+      },
+      {
+        text: "Desejável",
+        value: 2
+      }
+    ]
   }),
   watch: {
     dialog: function() {
@@ -169,6 +225,15 @@ export default {
         });
       }
       if (this.concept !== "") {
+        if (this.concept.priorknowledge.length > 0) {
+          vm.priorKnowledge = 1;
+          vm.priorKnowledgeName = this.concept.priorknowledge[0].namepriorknowledge;
+          vm.priorLevel = parseInt(
+            this.concept.priorknowledge[0].priorlevel.split("/")[4]
+          );
+        } else {
+          vm.priorKnowledge = 2;
+        }
         var i = 0;
         this.concept.sourceconcept.forEach(element => {
           var conceptSelect = this.targetconcepts.find(function(conceito) {
@@ -194,6 +259,8 @@ export default {
           });
           i++;
         });
+      } else {
+        vm.priorKnowledge = 2;
       }
     },
     async altera_Cria_Conceito() {
@@ -214,24 +281,93 @@ export default {
               }
             }
           )
-          .then(function(resposta) {
+          .then(async function(resposta) {
             vm.auxConceito = resposta.data.url;
+            if (vm.priorKnowledge === 1) {
+              await axios.post(
+                `http://localhost:8000/priorknowledge/`,
+                {
+                  namepriorknowledge: vm.priorKnowledgeName,
+                  priorlevel:
+                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                  fk_idconcept: resposta.data.url
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              );
+            }
           });
       } else {
-        await axios.put(
-          "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
-          {
-            nameconcept: this.conceptName,
-            fk_idknowledgedomain: this.domain.url,
-            fk_idmodule: this.module.url
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin"
+        await axios
+          .put(
+            "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
+            {
+              nameconcept: this.conceptName,
+              fk_idknowledgedomain: this.domain.url,
+              fk_idmodule: this.module.url
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
             }
-          }
-        );
+          )
+          .then(async function(resposta) {
+            if (
+              vm.concept.priorknowledge.length > 0 &&
+              vm.priorKnowledge === 1
+            ) {
+              await axios.put(
+                vm.concept.priorknowledge[0].url,
+                {
+                  namepriorknowledge: vm.priorKnowledgeName,
+                  priorlevel:
+                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                  fk_idconcept: resposta.data.url
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              );
+            } else if (
+              vm.concept.priorknowledge.length > 0 &&
+              vm.priorKnowledge === 2
+            ) {
+              axios.delete(vm.concept.priorknowledge[0].url, {
+                auth: {
+                  username: "admin",
+                  password: "admin"
+                }
+              });
+            } else if (
+              vm.concept.priorknowledge.length === 0 &&
+              vm.priorKnowledge === 1
+            ) {
+              await axios.post(
+                `http://localhost:8000/priorknowledge/`,
+                {
+                  namepriorknowledge: vm.priorKnowledgeName,
+                  priorlevel:
+                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                  fk_idconcept: vm.concept.url
+                },
+                {
+                  auth: {
+                    username: "admin",
+                    password: "admin"
+                  }
+                }
+              );
+            }
+          });
       }
     },
     async altera_Cria_Relacoes() {
@@ -292,12 +428,14 @@ export default {
         await this.altera_Cria_Relacoes();
         //await this.$refs.form.reset();
         this.relationForControl = [];
+        this.resetVariables();
         this.$emit("close_or_save", "save");
       }
     },
     reset() {
       this.$refs.form.reset();
       this.relationForControl = [];
+      this.resetVariables();
       this.$emit("close_or_save", "close");
     },
     resetValidation() {
@@ -325,6 +463,11 @@ export default {
       } else {
         this.relationForControl.splice(idRelacao, 1);
       }
+    },
+    resetVariables() {
+      this.priorLevel = "";
+      this.priorKnowledge = 2;
+      this.priorKnowledgeName = "";
     }
   }
 };
