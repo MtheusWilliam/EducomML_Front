@@ -35,6 +35,7 @@
             return-object
             selectable
             selected-color="success"
+            open-all
           ></v-treeview>
         </v-card-text>
       </v-col>
@@ -45,117 +46,179 @@
             <v-icon large class="mt-9 ml-2" color="primary" @click="addAssessment()">mdi-plus-box</v-icon>
           </v-btn>
         </v-row>
-        <v-row v-for="(assessment, i) in assessmentControl" :key="i" style="margin-bottom: -20px;">
-          <v-col cols="2">
-            <v-select
-              v-model="assessmentControl[i].scopo"
-              :items="scopoTypes"
-              :rules="[v => !!v || 'Conceito é requerido']"
-              label="Scopo"
-              style="margin:0px;"
-              required
-            ></v-select>
-          </v-col>
-          <v-col cols="3">
-            <v-select
-              v-model="assessmentControl[i].fk_element"
-              :items="elementData"
-              :rules="[v => !!v || 'O tipo do conceito é requerido']"
-              label="Elemento"
-              style="margin:0px;"
-              required
-            ></v-select>
-          </v-col>
-          <v-col cols="3">
-            <v-select
-              v-model="assessmentControl[i].typeThreshold"
-              :items="typesThreshold"
-              :rules="[v => !!v || 'O tipo do conceito é requerido']"
-              label="Tipo de Threshold"
-              style="margin:0px;"
-              required
-            ></v-select>
-          </v-col>
-          <v-col cols="2">
-            <v-select
-              style="margin-top: -1px;"
-              v-model="assessmentControl[i].valueType"
-              :items="valueTypes"
-              :rules="[v => !!v || 'O tipo de dado é requerido']"
-              label="Tipo de Dado"
-              required
-            ></v-select>
-            <v-text-field
-              style="margin-top: -1px; margin-bottom: -10px;"
-              v-if="assessmentControl[i].valueType==='Single'"
-              v-model="assessmentControl[i].single.threshold"
-              label="Valor"
-              :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-              required
-            ></v-text-field>
-          </v-col>
+        <v-form ref="form" v-model="valid" lazy-validation>
+          <v-row
+            v-for="(assessment, i) in assessmentControl"
+            :key="i"
+            style="margin-bottom: -20px;"
+          >
+            <v-col cols="2">
+              <v-select
+                v-model="assessmentControl[i].scopo"
+                :items="scopoTypes"
+                :rules="[v => !!v || 'Conceito é requerido']"
+                label="Scopo"
+                style="margin:0px;"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="assessmentControl[i].fk_element"
+                :items="elementData"
+                :rules="[v => !!v || 'O tipo do conceito é requerido']"
+                label="Elemento"
+                style="margin:0px;"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="assessmentControl[i].typeThreshold"
+                :items="typesThreshold"
+                :rules="[v => !!v || 'O tipo do conceito é requerido']"
+                label="Tipo de Threshold"
+                style="margin:0px;"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="2">
+              <v-select
+                style="margin-top: -1px;"
+                v-model="assessmentControl[i].valueType"
+                :items="valueTypes"
+                :rules="[v => !!v || 'O tipo de dado é requerido']"
+                label="Tipo de Dado"
+                required
+              ></v-select>
+              <v-text-field
+                style="margin-top: -1px; margin-bottom: -10px;"
+                v-if="assessmentControl[i].valueType==='Single'"
+                v-model="assessmentControl[i].single.threshold"
+                label="Valor"
+                :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+                required
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="2" class="mt-2">
-            <v-btn icon="icon" class="mb-1" v-if="assessmentControl[i].valueType==='Range'">
-              <v-icon large class="mb-1" color="primary" @click="addRange(i)">mdi-plus-box</v-icon>
-            </v-btn>
-            <v-btn icon="icon" class="mb-1">
-              <v-icon large class="mb-1" color="red" @click="deletaAssessment(i)">mdi-minus-box</v-icon>
-            </v-btn>
-          </v-col>
-          <v-row v-if="assessmentControl[i].valueType === 'Single'" style="margin-top: -40px;">
-            <v-col cols="7"></v-col>
-            <v-col cols="2" class="ml-10"></v-col>
-          </v-row>
-          <div v-else>
-            <v-row
-              v-for="(range, idRange) in assessment.ranges"
-              :key="idRange"
-              style="margin-top: -30px;"
-            >
-              <v-col cols="4"></v-col>
-              <v-col cols="3">
-                <v-text-field
-                  v-model="assessmentControl[i].ranges[idRange].namerange"
-                  counter="15"
-                  label="Nome do range"
-                  style="margin:0px;"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="2">
-                <v-text-field
-                  v-model="assessmentControl[i].ranges[idRange].initialvalue"
-                  label="Valor inicial"
-                  style="margin:0px;"
-                  type="number"
-                  :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="2">
-                <v-text-field
-                  v-model="assessmentControl[i].ranges[idRange].limitvalue"
-                  label="Valor Limite"
-                  style="margin:0px;"
-                  type="number"
-                  :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="1">
-                <v-btn icon="icon" class="mt-4">
-                  <v-icon
-                    large
-                    class="mb-1"
-                    color="red"
-                    @click="deletaRange(i, idRange)"
-                  >mdi-minus-box</v-icon>
-                </v-btn>
-              </v-col>
+            <v-col cols="2" class="mt-2">
+              <v-btn icon="icon" class="mb-1" v-if="assessmentControl[i].valueType==='Range'">
+                <v-icon large class="mb-1" color="primary" @click="addRange(i)">mdi-plus-box</v-icon>
+              </v-btn>
+              <v-btn icon="icon" class="mb-1">
+                <v-icon large class="mb-1" color="red" @click="deletaAssessment(i)">mdi-minus-box</v-icon>
+              </v-btn>
+            </v-col>
+            <v-row v-if="assessmentControl[i].valueType === 'Single'" style="margin-top: -40px;">
+              <v-col cols="7"></v-col>
+              <v-col cols="2" class="ml-10"></v-col>
             </v-row>
-          </div>
-        </v-row>
+            <div v-else>
+              <v-row
+                v-for="(range, idRange) in assessment.ranges"
+                :key="idRange"
+                style="margin-top: -30px;"
+              >
+                <v-col cols="4"></v-col>
+                <v-col cols="3">
+                  <v-text-field
+                    v-model="assessmentControl[i].ranges[idRange].namerange"
+                    counter="15"
+                    label="Nome do range"
+                    style="margin:0px;"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                    v-model="assessmentControl[i].ranges[idRange].initialvalue"
+                    label="Valor inicial"
+                    style="margin:0px;"
+                    type="number"
+                    :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field
+                    v-model="assessmentControl[i].ranges[idRange].limitvalue"
+                    label="Valor Limite"
+                    style="margin:0px;"
+                    type="number"
+                    :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="1">
+                  <v-btn icon="icon" class="mt-4">
+                    <v-icon
+                      large
+                      class="mb-1"
+                      color="red"
+                      @click="deletaRange(i, idRange)"
+                    >mdi-minus-box</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </div>
+          </v-row>
+          <v-row>
+            <h3 class="mt-5">Conhecimentos prioritários</h3>
+            <v-btn icon="icon" class="mb-1">
+              <v-icon
+                large
+                class="mt-9 ml-2"
+                color="primary"
+                @click="addPriorKnowledge()"
+              >mdi-plus-box</v-icon>
+            </v-btn>
+          </v-row>
+          <v-row
+            v-for="(prior, idPrior) in priorControl"
+            :key="idPrior"
+            style="margin-bottom: -25px;"
+          >
+            <v-col cols="4">
+              <v-select
+                v-model="priorControl[idPrior].fk_idconcept"
+                :items="conceptsPrior"
+                :rules="[v => !!v || 'Necessário informar o conceito prioritário']"
+                label="Conceito Prioritário"
+                style="margin:0px;"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="3">
+              <v-text-field
+                style="margin-top: -1px; margin-bottom: -10px;"
+                :rules="[v => !!v || 'Necessário informar identificador da prioridade']"
+                v-model="priorControl[idPrior].namepriorknowledge"
+                label="Identificador da prioridade"
+                required
+              ></v-text-field>
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                v-model="priorControl[idPrior].priorlevel"
+                :items="priorLevels"
+                :rules="[v => !!v || 'Necessário informar o nível de prioridade']"
+                label="Nível de prioridade"
+                style="margin:0px;"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="1">
+              <v-btn icon="icon" class="mt-4">
+                <v-icon
+                  large
+                  class="mb-1"
+                  color="red"
+                  @click="deletaPriorKnowledge(idPrior)"
+                >mdi-minus-box</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
       </v-col>
     </v-row>
     <v-card-actions>
@@ -181,8 +244,8 @@ export default {
   data: () => ({
     valid: true,
     treeData: [],
-    elementData: [],
     selection: [],
+    elementData: [],
     scopoTypes: [
       {
         text: "Avaliação",
@@ -205,12 +268,26 @@ export default {
     ],
     valueTypes: ["Single", "Range"],
     assessmentControl: [],
+    conceptsPrior: [],
+    priorControl: [],
+    priorLevels: [
+      {
+        text: "Obrigatório",
+        value: 1
+      },
+      {
+        text: "Desejável",
+        value: 2
+      }
+    ],
     newItems: [],
     checkbox: true
   }),
   watch: {
     domain: async function() {
+      console.log("oi domain");
       this.assessmentControl = [];
+      this.priorControl = [];
       if (this.domain) {
         this.treeData = [];
         this.selection = [];
@@ -235,6 +312,16 @@ export default {
           assess.single.threshold = "";
         }
       });
+    }
+  },
+  mounted: async function() {
+    this.assessmentControl = [];
+    this.priorControl = [];
+    if (this.domain) {
+      this.treeData = [];
+      this.selection = [];
+      await this.getAssessments();
+      await this.setDomainVariables();
     }
   },
   methods: {
@@ -356,6 +443,17 @@ export default {
                   }
                   this.assessmentControl.push(assess);
                 }
+                if (moduleConcept.priorknowledge.length > 0) {
+                  this.priorControl.push({
+                    namepriorknowledge:
+                      moduleConcept.priorknowledge[0].namepriorknowledge,
+                    priorlevel: parseInt(
+                      moduleConcept.priorknowledge[0].priorlevel.split("/")[4]
+                    ),
+                    fk_idconcept: moduleConcept.priorknowledge[0].fk_idconcept,
+                    url: moduleConcept.priorknowledge[0].url
+                  });
+                }
               });
             }
             if (module.submodules) {
@@ -449,6 +547,20 @@ export default {
                         );
                       }
                       this.assessmentControl.push(assess);
+                    }
+                    if (submoduleConcept.priorknowledge.length > 0) {
+                      this.priorControl.push({
+                        namepriorknowledge:
+                          submoduleConcept.priorknowledge[0].namepriorknowledge,
+                        priorlevel: parseInt(
+                          submoduleConcept.priorknowledge[0].priorlevel.split(
+                            "/"
+                          )[4]
+                        ),
+                        fk_idconcept:
+                          submoduleConcept.priorknowledge[0].fk_idconcept,
+                        url: submoduleConcept.priorknowledge[0].url
+                      });
                     }
                   });
                 }
@@ -636,6 +748,10 @@ export default {
                     if (object.visible) {
                       this.selection.push(object);
                     }
+                    this.conceptsPrior.push({
+                      text: object.name,
+                      value: object.id
+                    });
 
                     if (conceito.mobilemedias.length) {
                       conceito.mobilemedias.forEach(mobilemedia => {
@@ -723,7 +839,10 @@ export default {
                 if (object.visible) {
                   this.selection.push(object);
                 }
-
+                this.conceptsPrior.push({
+                  text: object.name,
+                  value: object.id
+                });
                 if (conceito.mobilemedias.length) {
                   conceito.mobilemedias.forEach(mobilemedia => {
                     var object = {
@@ -893,6 +1012,36 @@ export default {
                 });
               }
             });
+        }
+      });
+    },
+    async postPriorKnowledges() {
+      var vm = this;
+      var header = await this.$store.dispatch("getHeader");
+      console.log("Felipe Prior", vm.priorControl);
+      await this.priorControl.forEach(async prior => {
+        if (prior.url) {
+          await vm.axios.put(
+            prior.url,
+            {
+              namepriorknowledge: prior.namepriorknowledge,
+              priorlevel:
+                `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
+              fk_idconcept: prior.fk_idconcept
+            },
+            header
+          );
+        } else {
+          await vm.axios.post(
+            `http://127.0.0.1:8000/priorknowledge/`,
+            {
+              namepriorknowledge: prior.namepriorknowledge,
+              priorlevel:
+                `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
+              fk_idconcept: prior.fk_idconcept
+            },
+            header
+          );
         }
       });
     },
@@ -1235,6 +1384,7 @@ export default {
         vm.$emit("close_or_save", "close");
       }, 300);
     },
+
     deselectAll() {
       this.selection = [];
     },
@@ -1314,14 +1464,41 @@ export default {
       var header = await this.$store.dispatch("getHeader");
       await this.axios.delete(urlSingle, header);
     },
+    addPriorKnowledge() {
+      this.priorControl.push({
+        namepriorknowledge: "",
+        priorlevel: "",
+        fk_idconcept: "",
+        url: ""
+      });
+    },
+    async deletaPriorKnowledge(idPrior) {
+      if (this.priorControl[idPrior].url) {
+        var header = await this.$store.dispatch("getHeader");
+        await this.axios.delete(this.priorControl[idPrior].url, header);
+      }
+      if (idPrior == 0) {
+        this.priorControl.shift();
+      } else {
+        this.priorControl.splice(idPrior, 1);
+      }
+    },
     async validate() {
-      await this.putVisible();
-      await this.postAssessment();
-      this.assessmentControl = [];
+      if (this.$refs.form.validate()) {
+        await this.postAssessment();
+        await this.postPriorKnowledges();
+        await this.putVisible();
+        await this.resetVariables();
+      }
     },
     reset() {
       this.$emit("close_or_save", "close");
       this.assessmentControl = [];
+      this.priorControl = [];
+    },
+    resetVariables() {
+      this.assessmentControl = [];
+      this.priorControl = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();
