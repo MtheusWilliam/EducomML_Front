@@ -232,6 +232,19 @@
         <v-icon dark right>mdi-content-save</v-icon>
       </v-btn>
     </v-card-actions>
+    <div class="text-center">
+      <v-dialog v-model="dialogError" width="500">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">{{messageError}}</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogError = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
@@ -280,12 +293,13 @@ export default {
         value: 2
       }
     ],
+    dialogError: false,
+    messageError: "",
     newItems: [],
     checkbox: true
   }),
   watch: {
     domain: async function() {
-      console.log("oi domain");
       this.assessmentControl = [];
       this.priorControl = [];
       if (this.domain) {
@@ -1484,10 +1498,53 @@ export default {
     },
     async validate() {
       if (this.$refs.form.validate()) {
-        await this.postAssessment();
-        await this.postPriorKnowledges();
-        await this.putVisible();
-        await this.resetVariables();
+        var auxLoopValidation = 1;
+        for (var i = 0; i < this.assessmentControl.length; i++) {
+          for (var j = 0; j < this.assessmentControl.length; j++) {
+            if (
+              this.assessmentControl[i].fk_element ===
+                this.assessmentControl[j].fk_element &&
+              i !== j
+            ) {
+              auxLoopValidation = 0;
+              this.messageError =
+                "Não pode existir mais de um parâmetro de avaliação para o mesmo elemento. Verifique os parâmetros de avaliação " +
+                (j + 1) +
+                " e " +
+                (i + 1) +
+                ".";
+              this.dialogError = true;
+              break;
+            }
+          }
+        }
+        if (auxLoopValidation === 1) {
+          for (var m = 0; m < this.priorControl.length; m++) {
+            for (var n = 0; n < this.priorControl.length; n++) {
+              if (
+                this.priorControl[m].fk_idconcept ===
+                  this.priorControl[n].fk_idconcept &&
+                m !== n
+              ) {
+                auxLoopValidation = 0;
+                this.messageError =
+                  "Não é possível definir um conhecimento prioritário mais de uma vez. Verifique os conhecimentos prioritários " +
+                  (n + 1) +
+                  " e " +
+                  (m + 1) +
+                  ".";
+                this.dialogError = true;
+                break;
+              }
+            }
+          }
+        }
+        if (auxLoopValidation === 1) {
+          await this.postAssessment();
+          await this.postPriorKnowledges();
+          await this.putVisible();
+          await this.resetVariables();
+        }
       }
     },
     reset() {

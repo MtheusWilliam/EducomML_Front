@@ -73,9 +73,21 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      {{ messageError }}
       <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
+    <div class="text-center">
+      <v-dialog v-model="dialogError" width="500">
+        <v-card>
+          <v-card-title :class="messageClass" primary-title style="color:white;">{{messageTitle}}</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">{{messageError}}</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogError = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
@@ -114,7 +126,10 @@ export default {
       password: "",
       passwordRules: [v => !!v || "É necessário inserir sua senha"],
       passwordConfirm: "",
-      messageError: ""
+      messageClass: "",
+      messageTitle: "",
+      messageError: "",
+      dialogError: ""
     };
   },
   computed: {
@@ -148,11 +163,17 @@ export default {
         try {
           await this.$refs.form.validate();
           await this.postUser();
+          this.messageClass = "headline green";
+          this.messageTitle = "Email de confirmação enviado com sucesso";
           this.messageError =
-            "Verifique se você recebeu o email de confirmação e ative a sua conta";
-          this.dialog = false;
+            "Enviamos um email de confirmação para você. Verifique a caixa de mensagens do seu email para ativar sua conta.";
+          this.dialogError = true;
         } catch (err) {
-          this.messageError = "O username já existe";
+          this.messageClass = "headline red";
+          this.messageTitle = "Erro";
+          this.messageError =
+            "O username ou email já estão sendo utilizados na plataforma";
+          this.dialogError = true;
         }
       }
     },
