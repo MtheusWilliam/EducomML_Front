@@ -11,6 +11,7 @@
     <v-card-text>
       <v-form style="margin-bottom: -20px;">
         <v-text-field
+          v-if="resetPassword"
           v-model="username"
           label="Username"
           name="login"
@@ -20,6 +21,7 @@
         ></v-text-field>
 
         <v-text-field
+          v-if="resetPassword"
           id="password"
           label="Senha"
           name="password"
@@ -28,12 +30,26 @@
           type="password"
           required
         ></v-text-field>
+
+        <v-text-field
+          v-if="!resetPassword"
+          id="email"
+          label="E-mail"
+          name="email"
+          :rules="emailRules"
+          v-model="email"
+          prepend-icon="mdi-email"
+          type="email"
+          required
+        ></v-text-field>
+
       </v-form>
     </v-card-text>
     <v-card-actions>
+      <a @click="resetPassword = !resetPassword;messageError=''" class="ml-5"><span v-if="resetPassword">Esqueceu a senha?</span><span v-else>Voltar</span></a>
       <v-spacer></v-spacer>
       {{ messageError }}
-      <v-btn color="primary" @click="login" large class="mr-4">Login</v-btn>
+      <v-btn color="primary" @click="login" large class="mr-4"><span v-if="resetPassword">Login</span><span v-else>Enviar Email</span></v-btn>
     </v-card-actions>
     <!--
     ---
@@ -56,12 +72,29 @@ export default {
     return {
       username: "",
       password: "",
+      email: "",
+      emailRules: [
+        v => !!v || "É necessário inserir seu e-mail",
+        v => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido"
+      ],
+      resetPassword: false,
       messageError: ""
     };
   },
   methods: {
     async login() {
-      try {
+      if(!this.resetPassword){
+        await this.axios.post('http://localhost:8000/reset-password/',{
+          email: this.email,
+        },{
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            }
+          }).then(response => {
+          this.messageError = response.data.message;
+        });
+      }else{
+        try {
         await this.$store.dispatch("obtainToken", {
           username: this.username,
           password: this.password
@@ -70,8 +103,10 @@ export default {
           name: "home"
         });
       } catch (err) {
-        this.messageError = "Você ainda nao verificou o seu email";
+        this.messageError = "Você ainda nao verificou o seu email ou username já existe";
       }
+      }
+      
     }
   }
 };

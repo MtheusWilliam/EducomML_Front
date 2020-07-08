@@ -143,11 +143,7 @@ export default {
       password: "",
       passwordRules: [v => !!v || "É necessário inserir sua senha"],
       passwordConfirm: "",
-<<<<<<< HEAD
-      messageError: "",
-=======
       messageError: ""
->>>>>>> faf20846e2465b0eb49131e9e8d7fcb82f13231a
     };
   },
   computed: {
