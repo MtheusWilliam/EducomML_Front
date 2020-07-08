@@ -130,15 +130,15 @@ const router = new VueRouter({
       component: Home
     },
     {
-      path: '/reset-password/:username/:token',
-      name: 'reset-password',
+      path: '/reset_password/:username/:token',
+      name: 'reset_password',
       component: ResetPassword
     },
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.name === 'reset-password') next();
+  if(to.name === 'reset_password') next();
   else if (to.path !== '/' && store.state.jwt === null) next({ path: '/' })
   else next()
 })

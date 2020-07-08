@@ -11,7 +11,7 @@
     <v-card-text>
       <v-form style="margin-bottom: -20px;">
         <v-text-field
-          v-if="resetPassword"
+          v-if="!resetPassword"
           v-model="username"
           label="Username"
           name="login"
@@ -21,7 +21,7 @@
         ></v-text-field>
 
         <v-text-field
-          v-if="resetPassword"
+          v-if="!resetPassword"
           id="password"
           label="Senha"
           name="password"
@@ -32,7 +32,7 @@
         ></v-text-field>
 
         <v-text-field
-          v-if="!resetPassword"
+          v-if="resetPassword"
           id="email"
           label="E-mail"
           name="email"
@@ -46,10 +46,10 @@
       </v-form>
     </v-card-text>
     <v-card-actions>
-      <a @click="resetPassword = !resetPassword;messageError=''" class="ml-5"><span v-if="resetPassword">Esqueceu a senha?</span><span v-else>Voltar</span></a>
+      <a @click="resetPassword = !resetPassword;messageError=''" class="ml-5"><span v-if="!resetPassword">Esqueceu a senha?</span><span v-else>Voltar</span></a>
       <v-spacer></v-spacer>
       {{ messageError }}
-      <v-btn color="primary" @click="login" large class="mr-4"><span v-if="resetPassword">Login</span><span v-else>Enviar Email</span></v-btn>
+      <v-btn color="primary" @click="login" large class="mr-4"><span v-if="!resetPassword">Login</span><span v-else>Enviar Email</span></v-btn>
     </v-card-actions>
     <!--
     ---
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     async login() {
-      if(!this.resetPassword){
+      if(this.resetPassword){
         await this.axios.post('http://localhost:8000/reset-password/',{
           email: this.email,
         },{

@@ -90,9 +90,6 @@ export default {
   },
   methods: {
     async validate() {
-        await this.$store.commit('updateToken', this.$route.params.token);
-        await this.$store.commit('updateUsername', this.$route.params.username);
-        await this.$store.dispatch('refreshToken');
         await this.axios.post('http://localhost:8000/update-password/',{
             username: this.$route.params.username,
             password: this.password,
@@ -100,6 +97,10 @@ export default {
             headers: {
                 "Authorization": "JWT " + this.$route.params.token,
             }
+        }).then(response => {
+          this.$store.commit('updateToken',response.data.token);
+          this.$store.commit('updateUsername',response.data.username);
+          this.$router.push('/home');
         });
     }
   }
