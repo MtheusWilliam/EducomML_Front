@@ -76,35 +76,6 @@
       {{ messageError }}
       <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
-    <!--
-    <v-card-text class="mt-3">
-      <p style="text-align: center; font-size: 1.2em;">
-        Já possui conta?
-        <a href="#" style="text-decoration: none;">
-          <strong>ENTRE</strong>
-        </a>.
-      </p>
-    </v-card-text>
-    -->
-    <!--
-    <div class="text-center">
-      <v-dialog v-model="dialog" width="500">
-        <v-card>
-          <v-card-title
-            class="headline primary"
-            primary-title
-            style="color:white;"
-          >Cadastro Realizado!</v-card-title>
-          <v-card-text class="mt-3" style="font-size: 1.3em;">Para prosseguir, faça seu login!</v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text>Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
-    -->
   </v-card>
 </template>
 
@@ -154,7 +125,6 @@ export default {
   },
   methods: {
     async postUser() {
-      
       await this.axios.post(
         "http://localhost:8000/users/",
         {
@@ -178,7 +148,8 @@ export default {
         try {
           await this.$refs.form.validate();
           await this.postUser();
-          this.messageError = "Porfavor verifique o seu email";
+          this.messageError =
+            "Verifique se você recebeu o email de confirmação e ative a sua conta";
           this.dialog = false;
         } catch (err) {
           this.messageError = "O username já existe";

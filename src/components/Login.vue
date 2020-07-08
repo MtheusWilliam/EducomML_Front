@@ -42,26 +42,32 @@
           type="email"
           required
         ></v-text-field>
-
       </v-form>
     </v-card-text>
     <v-card-actions>
-      <a @click="resetPassword = !resetPassword;messageError=''" class="ml-5"><span v-if="!resetPassword">Esqueceu a senha?</span><span v-else>Voltar</span></a>
+      <a @click="resetPassword = !resetPassword;" class="ml-5">
+        <span v-if="!resetPassword">Esqueceu a senha?</span>
+        <span v-else>Voltar</span>
+      </a>
       <v-spacer></v-spacer>
-      {{ messageError }}
-      <v-btn color="primary" @click="login" large class="mr-4"><span v-if="!resetPassword">Login</span><span v-else>Enviar Email</span></v-btn>
+      <v-btn color="primary" @click="login" large class="mr-4">
+        <span v-if="!resetPassword">Login</span>
+        <span v-else>Enviar Email</span>
+      </v-btn>
     </v-card-actions>
-    <!--
-    ---
-    <v-card-text class="mt-3">
-      <p style="text-align: center; font-size: 1.2em;">
-        Não tem conta?
-        <a href="#" style="text-decoration: none;">
-          <strong>CADASTRE-SE</strong>
-        </a>.
-      </p>
-    </v-card-text>
-    -->
+    <div class="text-center">
+      <v-dialog v-model="dialogError" width="500">
+        <v-card>
+          <v-card-title :class="messageClass" primary-title style="color:white;">{{messageTitle}}</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">{{message}}</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogError = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
@@ -78,35 +84,55 @@ export default {
         v => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido"
       ],
       resetPassword: false,
-      messageError: ""
+      dialogError: false,
+      messageClass: "",
+      messageTitle: "",
+      message: ""
     };
   },
   methods: {
     async login() {
-      if(this.resetPassword){
-        await this.axios.post('http://localhost:8000/reset-password/',{
-          email: this.email,
-        },{
-          headers: {
-            'Access-Control-Allow-Origin': '*',
+      if (this.resetPassword) {
+        await this.axios
+          .post(
+            "http://localhost:8000/reset-password/",
+            {
+              email: this.email
+            },
+            {
+              headers: {
+                "Access-Control-Allow-Origin": "*"
+              }
             }
-          }).then(response => {
-          this.messageError = response.data.message;
-        });
-      }else{
+          )
+          .then(response => {
+            if (response.data.status) {
+              this.messageTitle = "Email enviado!";
+              this.messageClass = "headline green";
+            } else {
+              this.messageTitle = "Erro na redefinição de senha!";
+              this.messageClass = "headline red";
+            }
+            this.message = response.data.message;
+            this.dialogError = true;
+          });
+      } else {
         try {
-        await this.$store.dispatch("obtainToken", {
-          username: this.username,
-          password: this.password
-        });
-        await this.$router.push({
-          name: "home"
-        });
-      } catch (err) {
-        this.messageError = "Você ainda nao verificou o seu email ou username já existe";
+          await this.$store.dispatch("obtainToken", {
+            username: this.username,
+            password: this.password
+          });
+          await this.$router.push({
+            name: "home"
+          });
+        } catch (err) {
+          this.messageClass = "headline red";
+          this.messageTitle = "Erro no Login!";
+          this.message =
+            "Verifique login e senha inseridos e se o cadastro da sua conta já foi confirmada";
+          this.dialogError = true;
+        }
       }
-      }
-      
     }
   }
 };

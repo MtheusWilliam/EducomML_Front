@@ -116,7 +116,7 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/home',
+      path: '/home/',
       name: 'home',
       component: UserHome
     },
@@ -126,8 +126,9 @@ const router = new VueRouter({
       component: CreateConceitual
     },
     {
-      path: '/',
-      component: Home
+      path: '/:emailconfirmation',
+      component: Home,
+      name: 'root'
     },
     {
       path: '/reset_password/:username/:token',
@@ -138,8 +139,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.name === 'reset_password') next();
-  else if (to.path !== '/' && store.state.jwt === null) next({ path: '/' })
+  if (to.name === 'reset_password') next();
+  else if (to.name !== 'root' && store.state.jwt === null) next({ path: '/ ' })
   else next()
 })
 

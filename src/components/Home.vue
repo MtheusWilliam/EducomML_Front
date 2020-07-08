@@ -33,15 +33,49 @@
         <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
       </v-row>
     </v-row>
+    <div class="text-center">
+      <v-dialog v-model="dialogMessage" width="500">
+        <v-card>
+          <v-card-title :class="messageClass" primary-title style="color:white;">{{messageTitle}}</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">{{message}}</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="dialogMessage = false">Ok</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-row>
 </template>
 
 <script>
 export default {
   name: "UserHome",
-  data: () => ({
-    buttons: ["contato", "publicações", "projetos"]
-  })
+  data() {
+    return {
+      dialogMessage: false,
+      messageClass: "",
+      messageTitle: "",
+      message: "",
+      buttons: ["contato", "publicações", "projetos"]
+    };
+  },
+  mounted() {
+    if (this.$route.params.emailconfirmation === "1") {
+      this.messageClass = "headline green";
+      this.messageTitle = "Email confirmado com sucesso";
+      this.message =
+        "Seu cadastro foi confirmado! Faça login para começar a usar a plataforma EducomML.";
+      this.dialogMessage = true;
+    } else if (this.$route.params.emailconfirmation === "0") {
+      this.messageClass = "headline red";
+      this.messageTitle = "Erro na confirmação";
+      this.message =
+        "Houve um problema na confirmação da sua conta, realize o cadastro novamente.";
+      this.dialogMessage = true;
+    }
+  }
 };
 </script>
 

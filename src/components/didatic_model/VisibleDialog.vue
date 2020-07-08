@@ -1018,7 +1018,6 @@ export default {
     async postPriorKnowledges() {
       var vm = this;
       var header = await this.$store.dispatch("getHeader");
-      console.log("Felipe Prior", vm.priorControl);
       await this.priorControl.forEach(async prior => {
         if (prior.url) {
           await vm.axios.put(
