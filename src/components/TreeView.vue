@@ -3,15 +3,34 @@
     <div class="ml-4">
       <v-app-bar color="#B19114" dense dark>
         <v-spacer />
-        <v-toolbar-title>Modelo Conceitual</v-toolbar-title>
+        <v-toolbar-title v-if="auxAppbarElement === 0">Modelo Conceitual</v-toolbar-title>
+        <v-text-field
+          background-color="#B19114"
+          style="color:white;"
+          v-if="auxAppbarElement === 1"
+          v-model="search"
+          dark
+          hide-details
+          clearable
+          clear-icon="mdi-close-circle-outline"
+        ></v-text-field>
         <v-spacer></v-spacer>
 
-        <v-btn icon>
+        <v-btn icon v-if="auxAppbarIcon === 0" @click="auxAppbarIcon = 1; auxAppbarElement = 1">
           <v-icon>mdi-magnify</v-icon>
+        </v-btn>
+        <v-btn icon v-if="auxAppbarIcon === 1" @click="auxAppbarIcon = 0; auxAppbarElement = 0">
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-app-bar>
     </div>
-    <v-treeview open-all @update:active="test" :items="treeData" activatable :showCheckBox="true"></v-treeview>
+    <v-treeview
+      @update:active="test"
+      :items="treeData"
+      :search="search"
+      activatable
+      :showCheckBox="true"
+    ></v-treeview>
   </v-container>
 </template>
 
@@ -20,6 +39,9 @@ export default {
   name: "TreeView",
   props: ["dominio"],
   data: () => ({
+    auxAppbarElement: 0,
+    auxAppbarIcon: 0,
+    search: null,
     treeData: [],
     elementTypes: {
       dominio: "Domínio",
@@ -38,6 +60,7 @@ export default {
         }
       }
     },
+
     setDomainVariables() {
       this.treeData = [];
       var indexmodulo = 0;

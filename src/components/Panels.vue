@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <!--Panel do Domínio-->
-    <v-expansion-panels>
+    <v-expansion-panels v-model="vModelPanelDomain" multiple>
       <v-expansion-panel v-for="(item,i) in 1" :key="i">
         <v-expansion-panel-header color="#666666" style="color:white; height: 55px;">
           <!--HEADER DO DOMÍNIO-->
@@ -303,12 +303,12 @@
           </v-expansion-panels>
           <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <!--Panels dos Módulos-->
-          <v-expansion-panels
-            v-for="(modulo) in dominio_data.modules"
-            :key="modulo.url"
-            class="mt-2 mb-2"
-          >
-            <v-expansion-panel v-if="modulo.fk_idmodule === null">
+          <v-expansion-panels v-model="vModelPanelModules" multiple>
+            <v-expansion-panel
+              v-for="(modulo, imodulo) in getNotSubmodules(dominio)"
+              :key="imodulo"
+              class="mt-2 mb-2"
+            >
               <v-expansion-panel-header color="#7FD15E" style="color:white; height: 55px;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
@@ -486,12 +486,12 @@
                 </v-expansion-panels>
                 <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <!--Panels dos SubMódulos-->
-                <v-expansion-panels
-                  v-for="(submodulo) in modulo.submodules"
-                  :key="submodulo.url"
-                  class="mt-2 mb-2"
-                >
-                  <v-expansion-panel>
+                <v-expansion-panels v-model="vModelPanelSubmodules" multiple>
+                  <v-expansion-panel
+                    v-for="(submodulo, isubmodulo) in modulo.submodules"
+                    :key="isubmodulo"
+                    class="mt-2 mb-2"
+                  >
                     <v-expansion-panel-header color="#71CB97" style="color:white; height: 55px;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
@@ -664,12 +664,12 @@
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
-                      <v-expansion-panels
-                        v-for="(conceito) in submodulo.concepts"
-                        :key="conceito.url"
-                        class="mt-2 mb-2"
-                      >
-                        <v-expansion-panel>
+                      <v-expansion-panels v-model="vModelPanelConceptsSubmodule" multiple>
+                        <v-expansion-panel
+                          v-for="(conceito, iconceitosubmodulo) in submodulo.concepts"
+                          :key="iconceitosubmodulo"
+                          class="mt-2 mb-2"
+                        >
                           <v-expansion-panel-header
                             color="#3B83FF"
                             style="color:white; height: 55px;"
@@ -784,7 +784,7 @@
                                 </thead>
                                 <tbody>
                                   <tr v-for="relacao in conceito.sourceconcept" :key="relacao.url">
-                                    <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
+                                    <td>{{findNameTarget(submodulo.concepts, relacao)}}</td>
                                     <td>{{relacao.namereference}}</td>
                                     <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
                                   </tr>
@@ -960,12 +960,12 @@
                 </v-expansion-panels>
 
                 <!-- Panels dos Conceitos dos Módulos-->
-                <v-expansion-panels
-                  v-for="(conceito) in modulo.concepts"
-                  :key="conceito.url"
-                  class="mt-2 mb-2"
-                >
-                  <v-expansion-panel>
+                <v-expansion-panels v-model="vModelPanelConceptsModule" multiple>
+                  <v-expansion-panel
+                    v-for="(conceito, iconceitomodulo) in modulo.concepts"
+                    :key="iconceitomodulo"
+                    class="mt-2 mb-2"
+                  >
                     <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
@@ -1246,7 +1246,14 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <v-row class="d-flex justify-end mt-2">
-      <v-btn color="primary" height="49" dark @click="openDidatic();" class="mr-1">Modelo Didático</v-btn>
+      <v-btn
+        color="primary"
+        height="49"
+        dark
+        :disabled="disableBtnDidatic"
+        @click="openDidatic();"
+        class="mr-1"
+      >Modelo Didático</v-btn>
       <v-btn color="success" height="49" dark @click="saveDominio" class="mr-3">
         Salvar Domínio
         <v-icon dark right>mdi-content-save</v-icon>
@@ -1324,6 +1331,11 @@ export default {
     "dialog_instructionalelementtree"
   ],
   data: () => ({
+    vModelPanelDomain: [0],
+    vModelPanelModules: [0],
+    vModelPanelSubmodules: [0],
+    vModelPanelConceptsModule: [],
+    vModelPanelConceptsSubmodule: [],
     itemsMenuNewModulo: [
       {
         type: "Conceito"
@@ -1339,6 +1351,8 @@ export default {
       "mdi-file-document",
       "mdi-link-variant"
     ],
+    enableOpenPanels: 0,
+    disableBtnDidatic: true,
     auxElementDelete: "",
     alertDelete: false,
     objectFile: {},
@@ -1370,10 +1384,44 @@ export default {
     /*ATRIBUTOS DO DOMINIO*/
     dominio_data: {}
   }),
-
+  mounted: function() {
+    setTimeout(function() {}, 2000);
+  },
   watch: {
     dominio: function() {
+      var vm = this;
       this.setDomainVariables(this.dominio);
+      if (this.dominio.modules.length > 0) {
+        this.disableBtnDidatic = false;
+        if (this.dominio && this.enableOpenPanels === 0) {
+          this.vModelPanelModules = [];
+          this.vModelPanelSubmodules = [];
+          this.vModelPanelConceptsModule = [];
+          this.vModelPanelConceptsSubmodule = [];
+          this.dominio.modules.forEach((module, imodule) => {
+            vm.vModelPanelModules.push(imodule);
+            if (module.submodules.length > 0) {
+              module.submodules.forEach((submodule, isubmodule) => {
+                vm.vModelPanelSubmodules.push(isubmodule);
+                if (submodule.concepts.length > 0) {
+                  submodule.concepts.forEach((concept, iconceptsubmodule) => {
+                    vm.vModelPanelConceptsSubmodule.push(iconceptsubmodule);
+                  });
+                }
+              });
+            }
+            if (module.concepts.length > 0) {
+              module.concepts.forEach((concept, iconceptmodule) => {
+                vm.vModelPanelConceptsModule.push(iconceptmodule);
+              });
+            }
+          });
+
+          this.enableOpenPanels = 1;
+        }
+      } else {
+        this.disableBtnDidatic = true;
+      }
     },
     dialog_knowledgedomain: function() {
       if (this.dialog_knowledgedomain === true) {
@@ -1960,6 +2008,17 @@ export default {
           vm.getDominio();
         }, 1800);
       }
+    },
+    getNotSubmodules(domain) {
+      var modulesfinded = "";
+      function checkModules(modulo) {
+        return modulo.fk_idmodule === null;
+      }
+      if (typeof domain.modules !== "undefined" && domain.modules.length > 0) {
+        modulesfinded = domain.modules.filter(checkModules);
+      }
+
+      return modulesfinded;
     },
     proceduresUnderConcept(concept) {
       function checkProcedure(proc) {

@@ -110,12 +110,7 @@
                       required
                     ></v-text-field>
 
-                    <v-text-field
-                      v-model="subtitle"
-                      :rules="subtitleRules"
-                      label="Título para o conteúdo modelado"
-                      required
-                    ></v-text-field>
+                    <v-text-field v-model="subtitle" label="Subítulo para o conteúdo modelado"></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -174,19 +169,6 @@ export default {
         "Nome do domínio deve ter no máximo 25 caracteres"
     ],
     subtitle: "",
-    subtitleRules: [
-      v => !!v || "É necessário descrever o título para o conteúdo modelado",
-      v =>
-        (v && v.length <= 60) ||
-        "O título do conteúdo modelado deve ter no máximo 40 caracteres"
-    ],
-    author: "",
-    authorRules: [
-      v => !!v || "É necessário descrever o(s) autores da modelagem",
-      v =>
-        (v && v.length <= 60) ||
-        "Os nomes dos autores devem ter no máximo 60 caracteres"
-    ],
     dominios: [],
     drawer: true,
     items: [

@@ -18,9 +18,7 @@
 
           <v-text-field
             v-model="domainContentTitle"
-            :rules="domainContentTitleRules"
-            label="Título para o conteúdo modelado"
-            required="required"
+            label="Subtítulo para o conteúdo modelado"
             ref="refSubtitleDominio"
           ></v-text-field>
         </v-form>
@@ -64,18 +62,6 @@ export default {
       v =>
         (v && v.length <= 25) ||
         "Nome do domínio deve ter no máximo 25 caracteres"
-    ],
-    domainContentTitleRules: [
-      v => !!v || "É necessário descrever o título para o conteúdo modelado",
-      v =>
-        (v && v.length <= 40) ||
-        "O título do conteúdo modelado deve ter no máximo 40 caracteres"
-    ],
-    domainAuthorsNameRules: [
-      v => !!v || "É necessário descrever o(s) autores da modelagem",
-      v =>
-        (v && v.length <= 60) ||
-        "Os nomes dos autores devem ter no máximo 60 caracteres"
     ],
     domains: ""
   }),

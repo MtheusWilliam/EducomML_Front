@@ -16,12 +16,7 @@
             required
           ></v-text-field>
 
-          <v-text-field
-            v-model="moduloSubtitle"
-            :rules="moduloSubtitleRules"
-            label="Subtítulo do módulo"
-            required
-          ></v-text-field>
+          <v-text-field v-model="moduloSubtitle" label="Subtítulo do módulo"></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -54,12 +49,6 @@ export default {
         "O título do módulo deve ter no máximo 40 caracteres"
     ],
     moduloSubtitle: "",
-    moduloSubtitleRules: [
-      v => !!v || "É necessário descrever o subtítulo do submódulo",
-      v =>
-        (v && v.length <= 40) ||
-        "O subtítulo do módulo deve ter no máximo 40 caracteres"
-    ],
     select: null,
     newItems: [],
     checkbox: false,
