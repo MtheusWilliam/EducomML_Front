@@ -94,11 +94,10 @@
               </v-dialog>
               <!--Formulario para criação de conceito-->
               <v-dialog
-                style="overflow-y:hidden; overflow-x:hidden;"
                 v-model="dialog_conceito"
+                style="overflow-y: hidden;"
                 persistent="persistent"
-                max-width="745px"
-                max-height="530px"
+                max-width="755px"
               >
                 <ConceitoDialog
                   :concept="conceito"
@@ -235,7 +234,7 @@
                         color="white"
                         large
                       >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                      {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                      {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
                     </p>
                   </v-col>
                   <v-col cols="4" class="d-flex justify-end mr-1">
@@ -261,7 +260,22 @@
                 </v-row>
               </v-expansion-panel-header>
 
-              <v-expansion-panel-content></v-expansion-panel-content>
+              <v-expansion-panel-content>
+                <br />
+                <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                  <strong>Texto completo:</strong>
+                  <br />
+                  {{mobilemedia.textfull}}
+                  <br />
+                </span>
+
+                <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                  <strong>Texto resumido:</strong>
+                  <br />
+                  {{mobilemedia.textshort}}
+                </span>
+              </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
           <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
@@ -418,7 +432,7 @@
                               color="white"
                               large
                             >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                            {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                            {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
                           </p>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
@@ -593,7 +607,7 @@
                                     color="white"
                                     large
                                   >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                  {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
                                 </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
@@ -811,7 +825,7 @@
                                           color="white"
                                           large
                                         >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                        {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                        {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
                                       </p>
                                     </v-col>
                                     <v-col cols="4" class="d-flex justify-end mr-1">
@@ -1099,7 +1113,7 @@
                                     color="white"
                                     large
                                   >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                  {{((mobilemedia.fk_idmediatype).split("/")[4]-1) > 2 ? (((mobilemedia.fk_idmediatype).split("/")[4]-1) > 3 ? mobilemedia.urllink : mobilemedia.textshort) : mobilemedia.namefile }}
+                                  {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
                                 </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
@@ -1276,6 +1290,25 @@
         </v-card>
       </v-dialog>
     </div>
+    <div class="text-center">
+      <v-dialog v-model="dialogLoading" max-width="290" persistent="persistent">
+        <v-card color="primary" dark>
+          <v-card-text style="color:white;">
+            <v-row class="pt-2 pb-3">
+              <br />
+              <v-spacer></v-spacer>
+              <span style="font-size: 1.3em; color:white;">{{dialogLoadingMessage}}</span>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-progress-circular indeterminate color="white" class="mb-0"></v-progress-circular>
+              <v-spacer></v-spacer>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-row>
 </template>
 
@@ -1331,6 +1364,13 @@ export default {
     "dialog_instructionalelementtree"
   ],
   data: () => ({
+    dialogLoading: false,
+    dialogLoadingMessage: "Carregando o domínio",
+    dialogLoadingMessages: [
+      "Carregando o domínio",
+      "Salvando o elemento",
+      "Excluindo o elemento"
+    ],
     vModelPanelDomain: [0],
     vModelPanelModules: [0],
     vModelPanelSubmodules: [0],
@@ -1351,6 +1391,7 @@ export default {
       "mdi-file-document",
       "mdi-link-variant"
     ],
+    mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
     enableOpenPanels: 0,
     disableBtnDidatic: true,
     auxElementDelete: "",
@@ -1385,7 +1426,11 @@ export default {
     dominio_data: {}
   }),
   mounted: function() {
-    setTimeout(function() {}, 2000);
+    var vm = this;
+    this.dialogLoading = true;
+    setTimeout(function() {
+      vm.dialogLoading = false;
+    }, 2000);
   },
   watch: {
     dominio: function() {
@@ -1416,7 +1461,6 @@ export default {
               });
             }
           });
-
           this.enableOpenPanels = 1;
         }
       } else {
@@ -1742,6 +1786,7 @@ export default {
       this.$emit("dominio_data", this.dominio_data);
     },
     getDominio() {
+      this.dialogLoading = true;
       var vm = this;
       var csrftoken = Cookie.get("csrftoken");
       var headers = {
@@ -1764,6 +1809,7 @@ export default {
         )
         .then(function(resposta) {
           vm.setDomainVariables(resposta.data);
+          vm.dialogLoading = false;
         });
     },
 
@@ -1844,6 +1890,7 @@ export default {
       }
     },
     close_or_save_modulo(value) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
         vm.getDominio();
@@ -1855,6 +1902,7 @@ export default {
       this.controlTreeView("modulo");
     },
     close_or_save_submodulo(value) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
         vm.getDominio();
@@ -1867,6 +1915,7 @@ export default {
       this.controlTreeView("submodulo");
     },
     close_or_save_conceito(value) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
         vm.getDominio();
@@ -1879,6 +1928,7 @@ export default {
       this.controlTreeView("conceito");
     },
     async deleteelemento(value) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[2];
       var vm = this;
       if (
         value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/` ||
@@ -1942,6 +1992,7 @@ export default {
       this.type = value.type;
     },
     async dialogclose(rounds) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       this.dialog_imagem = false;
       this.dialog_audio = false;
@@ -1982,6 +2033,7 @@ export default {
       this.instrucValueType = value.valueType;
     },
     async instrucdialogclose(numberQuestions) {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       this.dialog_avaliacao = false;
       this.dialog_atividadecolaborativa = false;

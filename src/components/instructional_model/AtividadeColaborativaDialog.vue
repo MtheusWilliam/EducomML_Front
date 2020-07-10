@@ -407,6 +407,30 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
+        <v-menu
+          v-if="questionsControl.length > 0"
+          top="top"
+          width="300px"
+          origin="center center"
+          :offset-y="true"
+          transition="scale-transition"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" color="primary" height="49">
+              <strong>Adicionar Questão</strong>
+              <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item @click="addQuestion(1)">
+              <v-list-item-title>Questão Objetiva</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="addQuestion(2)">
+              <v-list-item-title>Questão Discussiva</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-btn color="red" height="49" dark large @click="reset()">
           Close
           <v-icon dark right>mdi-close</v-icon>
