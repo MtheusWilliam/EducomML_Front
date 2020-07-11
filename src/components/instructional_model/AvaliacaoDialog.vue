@@ -7,7 +7,8 @@
             <p>{{labelMessage[instrucValueType - 1]}}</p>
           </span>
         </v-col>
-        <v-col cols="4">
+        <v-col cols="7" class="pl-11" style="margin-right: -16px;">
+          <v-spacer></v-spacer>
           <v-menu
             top="top"
             width="300px"
@@ -35,6 +36,14 @@
               </v-list-item>
             </v-list>
           </v-menu>
+          <v-btn color="red" dark large @click="reset()" class="ml-2 mb-3">
+            Close
+            <v-icon dark right>mdi-close</v-icon>
+          </v-btn>
+          <v-btn color="success" dark large @click="validate()" class="ml-2 mb-3">
+            Save
+            <v-icon dark right>mdi-content-save</v-icon>
+          </v-btn>
         </v-col>
       </v-card-title>
       <v-card-text>
@@ -359,9 +368,9 @@
           transition="scale-transition"
         >
           <template v-slot:activator="{ on }">
-            <v-btn v-on="on" color="white" style="color:black; font-size: 1.2em;">
+            <v-btn v-on="on" color="primary" height="49">
               <strong>Adicionar Questão</strong>
-              <v-icon class="ml-2" large color="black">mdi-plus-box</v-icon>
+              <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
             </v-btn>
           </template>
 

@@ -2,9 +2,22 @@
   <v-container class="pa-0">
     <v-card>
       <v-card-title style="background-color:#63B0B0; color:white;">
-        <span class="headline">
-          <p>Descreva a atividade colaborativa a ser criada.</p>
-        </span>
+        <v-col cols="8">
+          <span class="headline">
+            <p>Descreva a atividade colaborativa a ser criada.</p>
+          </span>
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col cols="4" class="pl-11" style="margin-right: -16px;">
+          <v-btn color="red" dark large @click="reset()" class="ml-2 mb-3">
+            Close
+            <v-icon dark right>mdi-close</v-icon>
+          </v-btn>
+          <v-btn color="success" dark large @click="validate()" class="ml-2 mb-3">
+            Save
+            <v-icon dark right>mdi-content-save</v-icon>
+          </v-btn>
+        </v-col>
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">

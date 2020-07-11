@@ -458,7 +458,22 @@
                       </v-row>
                     </v-expansion-panel-header>
 
-                    <v-expansion-panel-content></v-expansion-panel-content>
+                    <v-expansion-panel-content>
+                      <br />
+                      <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                      <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                        <strong>Texto completo:</strong>
+                        <br />
+                        {{mobilemedia.textfull}}
+                        <br />
+                      </span>
+
+                      <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                        <strong>Texto resumido:</strong>
+                        <br />
+                        {{mobilemedia.textshort}}
+                      </span>
+                    </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
@@ -633,7 +648,22 @@
                             </v-row>
                           </v-expansion-panel-header>
 
-                          <v-expansion-panel-content></v-expansion-panel-content>
+                          <v-expansion-panel-content>
+                            <br />
+                            <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                            <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                              <strong>Texto completo:</strong>
+                              <br />
+                              {{mobilemedia.textfull}}
+                              <br />
+                            </span>
+
+                            <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                              <strong>Texto resumido:</strong>
+                              <br />
+                              {{mobilemedia.textshort}}
+                            </span>
+                          </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
@@ -849,7 +879,22 @@
                                   </v-row>
                                 </v-expansion-panel-header>
 
-                                <v-expansion-panel-content></v-expansion-panel-content>
+                                <v-expansion-panel-content>
+                                  <br />
+                                  <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                                  <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                                    <strong>Texto completo:</strong>
+                                    <br />
+                                    {{mobilemedia.textfull}}
+                                    <br />
+                                  </span>
+
+                                  <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                                    <strong>Texto resumido:</strong>
+                                    <br />
+                                    {{mobilemedia.textshort}}
+                                  </span>
+                                </v-expansion-panel-content>
                               </v-expansion-panel>
                             </v-expansion-panels>
                             <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
@@ -1139,7 +1184,22 @@
                             </v-row>
                           </v-expansion-panel-header>
 
-                          <v-expansion-panel-content></v-expansion-panel-content>
+                          <v-expansion-panel-content>
+                            <br />
+                            <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                            <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                              <strong>Texto completo:</strong>
+                              <br />
+                              {{mobilemedia.textfull}}
+                              <br />
+                            </span>
+
+                            <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                              <strong>Texto resumido:</strong>
+                              <br />
+                              {{mobilemedia.textshort}}
+                            </span>
+                          </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS -->
