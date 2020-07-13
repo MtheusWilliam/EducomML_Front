@@ -2,18 +2,40 @@
   <v-row>
     <!--Panel do Domínio-->
     <v-expansion-panels v-model="vModelPanelDomain" multiple>
-      <v-expansion-panel v-for="(item,i) in 1" :key="i">
-        <v-expansion-panel-header color="#666666" style="color:white; height: 55px;">
+      <v-expansion-panel v-for="(item, i) in 1" :key="i" >
+        <v-expansion-panel-header
+          color="#666666"
+          style="color:white; height: 55px;"
+        >
           <!--HEADER DO DOMÍNIO-->
           <v-row>
             <v-col>
               <p class="mt-3">
-                [Dominio]
-                {{ dominio_data.nameknowledgedomain }}
+                [Dominio] {{ dominio_data.nameknowledgedomain }}<br />
+                <span class="ml-5">{{ dominio_data.subtitle }}</span>
               </p>
             </v-col>
             <v-col cols="4" class="d-flex justify-end mr-1">
               <!--Menu para criação de elementos instrucionais do Domínio-->
+              <v-btn
+                color="primary"
+                height="40"
+                dark
+                :disabled="disableBtnDidatic"
+                @click="openDidatic()"
+                class="ma-3"
+                >Modelo Didático</v-btn
+              >
+              <v-btn
+                color="success"
+                height="40"
+                dark
+                @click="saveDominio"
+                class="ma-3"
+              >
+                Salvar Domínio
+                <v-icon dark right>mdi-content-save</v-icon>
+              </v-btn>
               <v-menu
                 top="top"
                 width="300px"
@@ -48,10 +70,18 @@
                   </v-btn>
                 </template>
 
-                <MenuFiles @dialogoption="openFileDialog" :optionCall="dominio" :type="'dominio'" />
+                <MenuFiles
+                  @dialogoption="openFileDialog"
+                  :optionCall="dominio"
+                  :type="'dominio'"
+                />
               </v-menu>
               <!--Formulario para adição do módulo-->
-              <v-dialog v-model="dialog_modulo" persistent="persistent" max-width="600px">
+              <v-dialog
+                v-model="dialog_modulo"
+                persistent="persistent"
+                max-width="600px"
+              >
                 <template v-slot:activator="{ on }">
                   <v-btn icon="icon" color="white" v-on="on">
                     <v-icon>mdi-plus</v-icon>
@@ -67,7 +97,11 @@
               </v-dialog>
 
               <!--Formulario para edição do domínio-->
-              <v-dialog v-model="dialog_dominio" persistent="persistent" max-width="600px">
+              <v-dialog
+                v-model="dialog_dominio"
+                persistent="persistent"
+                max-width="600px"
+              >
                 <template v-slot:activator="{ on }">
                   <v-btn icon="icon" color="white" v-on="on">
                     <v-icon>mdi-pencil</v-icon>
@@ -83,11 +117,15 @@
               </v-dialog>
 
               <!--Formulario para criação de submódulo-->
-              <v-dialog v-model="dialog_submodulo" persistent="persistent" max-width="600px">
+              <v-dialog
+                v-model="dialog_submodulo"
+                persistent="persistent"
+                max-width="600px"
+              >
                 <SubModuloDialog
                   :submodule="submodulo"
                   :module="modulo"
-                  @close_or_save="close_or_save_submodulo "
+                  @close_or_save="close_or_save_submodulo"
                   :domain="dominio"
                   :dialog="dialog_submodulo"
                 />
@@ -109,7 +147,11 @@
               </v-dialog>
               <!--FORMULARIOS PARA CRIAÇÃO DE ARQUIVOS-->
               <!--Formulario para criação de imagem-->
-              <v-dialog v-model="dialog_imagem" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_imagem"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <ImageDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -120,7 +162,11 @@
                 />
               </v-dialog>
               <!--Formulario para criação de video-->
-              <v-dialog v-model="dialog_video" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_video"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <VideoDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -131,7 +177,11 @@
                 />
               </v-dialog>
               <!--Formulario para criação de audio-->
-              <v-dialog v-model="dialog_audio" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_audio"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <AudioDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -142,7 +192,11 @@
                 />
               </v-dialog>
               <!--Formulario para criação de texto-->
-              <v-dialog v-model="dialog_texto" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_texto"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <TextDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -153,7 +207,11 @@
                 />
               </v-dialog>
               <!--Formulario para criação de link-->
-              <v-dialog v-model="dialog_link" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_link"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <LinkDialog
                   @close="dialogclose"
                   :optionCall="objectFile"
@@ -166,7 +224,11 @@
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ITENS DE INFORMAÇÃO -->
               <!--Formulario para criação de procedimento -->
-              <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="800px">
+              <v-dialog
+                v-model="dialog_procedure"
+                persistent="persistent"
+                max-width="800px"
+              >
                 <ProcedureDialog
                   @close="dialogclose"
                   :dialog="dialog_procedure"
@@ -178,7 +240,11 @@
 
               <!--FORMULARIOS PARA CRIAÇÃO DE ELEMENTOS INSTRUCIONAIS -->
               <!--Formulario para criação de exercício e avaliação -->
-              <v-dialog v-model="dialog_avaliacao" persistent="persistent" max-width="1000px">
+              <v-dialog
+                v-model="dialog_avaliacao"
+                persistent="persistent"
+                max-width="1000px"
+              >
                 <AvaliacaoDialog
                   @instrucclose="instrucdialogclose"
                   :instrucOptionCall="instrucObjectFile"
@@ -205,7 +271,11 @@
                 />
               </v-dialog>
               <!--Formulario para criação de atividade colaborativa -->
-              <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1100px">
+              <v-dialog
+                v-model="dialog_visible"
+                persistent="persistent"
+                max-width="1100px"
+              >
                 <VisibleDialog
                   :domain="dominio"
                   :dialog="dialog_visible"
@@ -217,24 +287,30 @@
         </v-expansion-panel-header>
         <!--FIM DO HEADER DO DOMÍNIO-->
         <v-expansion-panel-content>
-          <!--CONTENT DO DOMÍNIO-->
-          <v-row class="mt-2 ml-1">{{ dominio_data.subtitle }}</v-row>
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
-            v-for="(mobilemedia) in dominio.mobilemedias"
+            v-for="mobilemedia in dominio.mobilemedias"
             :key="mobilemedia.url"
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
+              <v-expansion-panel-header
+                color="#A5A5A5"
+                style="color:white; height: 55px;"
+              >
                 <v-row>
                   <v-col>
                     <p class="mt-3">
-                      <v-icon
-                        color="white"
-                        large
-                      >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                      {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                      <v-icon color="white" large>{{
+                        fileTypesIcon[
+                          mobilemedia.fk_idmediatype.split("/")[4] - 1
+                        ]
+                      }}</v-icon>
+                      {{
+                        mobilemediaTypeLabel[
+                          parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+                        ]
+                      }}
                     </p>
                   </v-col>
                   <v-col cols="4" class="d-flex justify-end mr-1">
@@ -252,7 +328,10 @@
                       class="mt-2"
                       icon="icon"
                       color="white"
-                      @click="auxElementDelete = mobilemedia; alertDelete=true"
+                      @click="
+                        auxElementDelete = mobilemedia;
+                        alertDelete = true;
+                      "
                     >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
@@ -262,18 +341,23 @@
 
               <v-expansion-panel-content>
                 <br />
-                <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                <span v-if="mobilemedia.urllink">{{
+                  mobilemedia.urllink
+                }}</span>
                 <span v-if="mobilemedia.textfull" style="white-space: pre-line">
                   <strong>Texto completo:</strong>
                   <br />
-                  {{mobilemedia.textfull}}
+                  {{ mobilemedia.textfull }}
                   <br />
                 </span>
 
-                <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                <span
+                  v-if="mobilemedia.textshort"
+                  style="white-space: pre-line"
+                >
                   <strong>Texto resumido:</strong>
                   <br />
-                  {{mobilemedia.textshort}}
+                  {{ mobilemedia.textshort }}
                 </span>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -281,22 +365,33 @@
           <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
           <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <v-expansion-panels
-            v-for="(instrucelement) in instrucElementsSearch(dominio)"
+            v-for="instrucelement in instrucElementsSearch(dominio)"
             :key="instrucelement.url"
             class="mt-2 mb-2"
           >
             <v-expansion-panel>
-              <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
+              <v-expansion-panel-header
+                color="#A5A5A5"
+                style="color:white; height: 55px;"
+              >
                 <v-row>
                   <v-col>
-                    <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                    <p class="mt-3">
+                      [Elemento Instrucional] {{ instrucelement.label }}
+                    </p>
                   </v-col>
                   <v-col cols="4" class="d-flex justify-end mr-1">
                     <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
                     <v-btn
                       icon="icon"
                       color="white"
-                      @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                      @click="
+                        setinstructionalelement(
+                          instrucelement,
+                          dominio,
+                          'dominio'
+                        )
+                      "
                     >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
@@ -304,7 +399,10 @@
                     <v-btn
                       icon="icon"
                       color="white"
-                      @click="auxElementDelete = instrucelement; alertDelete=true"
+                      @click="
+                        auxElementDelete = instrucelement;
+                        alertDelete = true;
+                      "
                     >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
@@ -323,13 +421,16 @@
               :key="imodulo"
               class="mt-2 mb-2"
             >
-              <v-expansion-panel-header color="#7FD15E" style="color:white; height: 55px;">
+              <v-expansion-panel-header
+                color="#7FD15E"
+                style="color:white; height: 55px;"
+              >
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col>
                     <p class="mt-3">
-                      [Modulo]
-                      {{ modulo.namemodule }}
+                      [Módulo] {{ modulo.namemodule }}<br />
+                      <span class="ml-5">{{ modulo.subtitle }}</span>
                     </p>
                   </v-col>
                   <v-col cols="4" class="d-flex justify-end mr-1">
@@ -389,23 +490,43 @@
                       </template>
 
                       <v-list>
-                        <v-list-item @click="setmodulo(modulo);dialog_conceito=true">
+                        <v-list-item
+                          @click="
+                            setmodulo(modulo);
+                            dialog_conceito = true;
+                          "
+                        >
                           <v-list-item-title>Conceito</v-list-item-title>
                         </v-list-item>
-                        <v-list-item @click="setmodulo(modulo);dialog_submodulo=true">
+                        <v-list-item
+                          @click="
+                            setmodulo(modulo);
+                            dialog_submodulo = true;
+                          "
+                        >
                           <v-list-item-title>Submódulo</v-list-item-title>
                         </v-list-item>
                       </v-list>
                     </v-menu>
                     <!--Formulario para edição do modulo-->
-                    <v-btn icon="icon" color="white" @click="dialog_modulo=true;setmodulo(modulo)">
+                    <v-btn
+                      icon="icon"
+                      color="white"
+                      @click="
+                        dialog_modulo = true;
+                        setmodulo(modulo);
+                      "
+                    >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
                     <!--Função para excluir módulo-->
                     <v-btn
                       icon="icon"
                       color="white"
-                      @click="auxElementDelete = modulo; alertDelete = true"
+                      @click="
+                        auxElementDelete = modulo;
+                        alertDelete = true;
+                      "
                     >
                       <v-icon>mdi-delete</v-icon>
                     </v-btn>
@@ -415,24 +536,32 @@
               <!--FIM DO HEADER DO MÓDULO-->
 
               <v-expansion-panel-content>
-                <!--CONTENT DO MÓDULO-->
-                <v-row class="mt-2 ml-1">{{ modulo.subtitle }}</v-row>
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-for="(mobilemedia) in modulo.mobilemedias"
+                  v-for="mobilemedia in modulo.mobilemedias"
                   :key="mobilemedia.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
+                    <v-expansion-panel-header
+                      color="#A5A5A5"
+                      style="color:white; height: 55px;"
+                    >
                       <v-row>
                         <v-col>
                           <p class="mt-3">
-                            <v-icon
-                              color="white"
-                              large
-                            >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                            {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                            <v-icon color="white" large>{{
+                              fileTypesIcon[
+                                mobilemedia.fk_idmediatype.split("/")[4] - 1
+                              ]
+                            }}</v-icon>
+                            {{
+                              mobilemediaTypeLabel[
+                                parseInt(
+                                  mobilemedia.fk_idmediatype.split("/")[4] - 1
+                                )
+                              ]
+                            }}
                           </p>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
@@ -441,7 +570,9 @@
                             class="mt-2"
                             icon="icon"
                             color="white"
-                            @click="setmobilemedia(mobilemedia, modulo, 'modulo')"
+                            @click="
+                              setmobilemedia(mobilemedia, modulo, 'modulo')
+                            "
                           >
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
@@ -450,7 +581,10 @@
                             class="mt-2"
                             icon="icon"
                             color="white"
-                            @click="auxElementDelete = mobilemedia; alertDelete = true"
+                            @click="
+                              auxElementDelete = mobilemedia;
+                              alertDelete = true;
+                            "
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -460,18 +594,26 @@
 
                     <v-expansion-panel-content>
                       <br />
-                      <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
-                      <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                      <span v-if="mobilemedia.urllink">{{
+                        mobilemedia.urllink
+                      }}</span>
+                      <span
+                        v-if="mobilemedia.textfull"
+                        style="white-space: pre-line"
+                      >
                         <strong>Texto completo:</strong>
                         <br />
-                        {{mobilemedia.textfull}}
+                        {{ mobilemedia.textfull }}
                         <br />
                       </span>
 
-                      <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                      <span
+                        v-if="mobilemedia.textshort"
+                        style="white-space: pre-line"
+                      >
                         <strong>Texto resumido:</strong>
                         <br />
-                        {{mobilemedia.textshort}}
+                        {{ mobilemedia.textshort }}
                       </span>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -479,22 +621,33 @@
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-for="(instrucelement) in instrucElementsSearch(modulo)"
+                  v-for="instrucelement in instrucElementsSearch(modulo)"
                   :key="instrucelement.url"
                   class="mt-2 mb-2"
                 >
                   <v-expansion-panel>
-                    <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
+                    <v-expansion-panel-header
+                      color="#A5A5A5"
+                      style="color:white; height: 55px;"
+                    >
                       <v-row>
                         <v-col>
-                          <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                          <p class="mt-3">
+                            [Elemento Instrucional] {{ instrucelement.label }}
+                          </p>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
                           <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do módulo-->
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="setinstructionalelement(instrucelement, modulo, 'modulo')"
+                            @click="
+                              setinstructionalelement(
+                                instrucelement,
+                                modulo,
+                                'modulo'
+                              )
+                            "
                           >
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
@@ -502,7 +655,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="auxElementDelete = instrucelement; alertDelete = true"
+                            @click="
+                              auxElementDelete = instrucelement;
+                              alertDelete = true;
+                            "
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -521,7 +677,10 @@
                     :key="isubmodulo"
                     class="mt-2 mb-2"
                   >
-                    <v-expansion-panel-header color="#71CB97" style="color:white; height: 55px;">
+                    <v-expansion-panel-header
+                      color="#71CB97"
+                      style="color:white; height: 55px;"
+                    >
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col>
@@ -540,7 +699,12 @@
                             transition="scale-transition"
                           >
                             <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                              <v-btn
+                                icon="icon"
+                                color="white"
+                                dark="dark"
+                                v-on="on"
+                              >
                                 <v-icon>mdi-text-box-plus-outline</v-icon>
                               </v-btn>
                             </template>
@@ -560,7 +724,12 @@
                             transition="scale-transition"
                           >
                             <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                              <v-btn
+                                icon="icon"
+                                color="white"
+                                dark="dark"
+                                v-on="on"
+                              >
                                 <v-icon>mdi-dots-horizontal</v-icon>
                               </v-btn>
                             </template>
@@ -575,7 +744,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="setmodulo(submodulo);dialog_conceito=true"
+                            @click="
+                              setmodulo(submodulo);
+                              dialog_conceito = true;
+                            "
                           >
                             <v-icon>mdi-plus</v-icon>
                           </v-btn>
@@ -584,7 +756,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="setsubmodulo(submodulo);dialog_submodulo=true"
+                            @click="
+                              setsubmodulo(submodulo);
+                              dialog_submodulo = true;
+                            "
                           >
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
@@ -592,7 +767,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="auxElementDelete = submodulo; alertDelete = true"
+                            @click="
+                              auxElementDelete = submodulo;
+                              alertDelete = true;
+                            "
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -606,7 +784,7 @@
                       <v-row class="mt-2 ml-1">{{ submodulo.subtitle }}</v-row>
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-for="(mobilemedia) in submodulo.mobilemedias"
+                        v-for="mobilemedia in submodulo.mobilemedias"
                         :key="mobilemedia.url"
                         class="mt-2 mb-2"
                       >
@@ -618,11 +796,21 @@
                             <v-row>
                               <v-col>
                                 <p class="mt-3">
-                                  <v-icon
-                                    color="white"
-                                    large
-                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                  {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                                  <v-icon color="white" large>{{
+                                    fileTypesIcon[
+                                      mobilemedia.fk_idmediatype.split("/")[4] -
+                                        1
+                                    ]
+                                  }}</v-icon>
+                                  {{
+                                    mobilemediaTypeLabel[
+                                      parseInt(
+                                        mobilemedia.fk_idmediatype.split(
+                                          "/"
+                                        )[4] - 1
+                                      )
+                                    ]
+                                  }}
                                 </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
@@ -631,7 +819,13 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="setmobilemedia(mobilemedia, submodulo, 'modulo')"
+                                  @click="
+                                    setmobilemedia(
+                                      mobilemedia,
+                                      submodulo,
+                                      'modulo'
+                                    )
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -640,7 +834,10 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = mobilemedia; alertDelete = true"
+                                  @click="
+                                    auxElementDelete = mobilemedia;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -650,18 +847,26 @@
 
                           <v-expansion-panel-content>
                             <br />
-                            <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
-                            <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                            <span v-if="mobilemedia.urllink">{{
+                              mobilemedia.urllink
+                            }}</span>
+                            <span
+                              v-if="mobilemedia.textfull"
+                              style="white-space: pre-line"
+                            >
                               <strong>Texto completo:</strong>
                               <br />
-                              {{mobilemedia.textfull}}
+                              {{ mobilemedia.textfull }}
                               <br />
                             </span>
 
-                            <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                            <span
+                              v-if="mobilemedia.textshort"
+                              style="white-space: pre-line"
+                            >
                               <strong>Texto resumido:</strong>
                               <br />
-                              {{mobilemedia.textshort}}
+                              {{ mobilemedia.textshort }}
                             </span>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -669,7 +874,9 @@
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in instrucElementsSearch(submodulo)"
+                        v-for="instrucelement in instrucElementsSearch(
+                          submodulo
+                        )"
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                       >
@@ -680,14 +887,23 @@
                           >
                             <v-row>
                               <v-col>
-                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                                <p class="mt-3">
+                                  [Elemento Instrucional]
+                                  {{ instrucelement.label }}
+                                </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="setinstructionalelement(instrucelement, submodulo, 'modulo')"
+                                  @click="
+                                    setinstructionalelement(
+                                      instrucelement,
+                                      submodulo,
+                                      'modulo'
+                                    )
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -695,7 +911,10 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = instrucelement; alertDelete = true"
+                                  @click="
+                                    auxElementDelete = instrucelement;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -708,9 +927,13 @@
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
-                      <v-expansion-panels v-model="vModelPanelConceptsSubmodule" multiple>
+                      <v-expansion-panels
+                        v-model="vModelPanelConceptsSubmodule"
+                        multiple
+                      >
                         <v-expansion-panel
-                          v-for="(conceito, iconceitosubmodulo) in submodulo.concepts"
+                          v-for="(conceito,
+                          iconceitosubmodulo) in submodulo.concepts"
                           :key="iconceitosubmodulo"
                           class="mt-2 mb-2"
                         >
@@ -736,7 +959,12 @@
                                   transition="scale-transition"
                                 >
                                   <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                    <v-btn
+                                      icon="icon"
+                                      color="white"
+                                      dark="dark"
+                                      v-on="on"
+                                    >
                                       <v-icon>mdi-text-box-plus-outline</v-icon>
                                     </v-btn>
                                   </template>
@@ -757,7 +985,12 @@
                                   transition="scale-transition"
                                 >
                                   <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                    <v-btn
+                                      icon="icon"
+                                      color="white"
+                                      dark="dark"
+                                      v-on="on"
+                                    >
                                       <v-icon>mdi-dots-horizontal</v-icon>
                                     </v-btn>
                                   </template>
@@ -777,15 +1010,25 @@
                                   transition="scale-transition"
                                 >
                                   <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                    <v-btn
+                                      icon="icon"
+                                      color="white"
+                                      dark="dark"
+                                      v-on="on"
+                                    >
                                       <v-icon>mdi-plus</v-icon>
                                     </v-btn>
                                   </template>
                                   <v-list>
                                     <v-list-item
-                                      @click="setconceito(conceito, modulo);dialog_procedure=true"
+                                      @click="
+                                        setconceito(conceito, modulo);
+                                        dialog_procedure = true;
+                                      "
                                     >
-                                      <v-list-item-title>Procedimento</v-list-item-title>
+                                      <v-list-item-title
+                                        >Procedimento</v-list-item-title
+                                      >
                                     </v-list-item>
                                   </v-list>
                                 </v-menu>
@@ -793,7 +1036,10 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="setconceito(conceito, submodulo);dialog_conceito=true"
+                                  @click="
+                                    setconceito(conceito, submodulo);
+                                    dialog_conceito = true;
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -801,7 +1047,10 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = conceito; alertDelete = true"
+                                  @click="
+                                    auxElementDelete = conceito;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -816,8 +1065,12 @@
                             <h3
                               class="mt-2"
                               v-if="conceito.sourceconcept.length > 0"
-                            >Relacionamentos:</h3>
-                            <v-simple-table v-if="conceito.sourceconcept.length > 0">
+                            >
+                              Relacionamentos:
+                            </h3>
+                            <v-simple-table
+                              v-if="conceito.sourceconcept.length > 0"
+                            >
                               <template v-slot:default>
                                 <thead>
                                   <tr>
@@ -827,17 +1080,33 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr v-for="relacao in conceito.sourceconcept" :key="relacao.url">
-                                    <td>{{findNameTarget(submodulo.concepts, relacao)}}</td>
-                                    <td>{{relacao.namereference}}</td>
-                                    <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
+                                  <tr
+                                    v-for="relacao in conceito.sourceconcept"
+                                    :key="relacao.url"
+                                  >
+                                    <td>
+                                      {{
+                                        findNameTarget(
+                                          submodulo.concepts,
+                                          relacao
+                                        )
+                                      }}
+                                    </td>
+                                    <td>{{ relacao.namereference }}</td>
+                                    <td>
+                                      {{
+                                        findTipoRelation(
+                                          relacao.fk_referencetype
+                                        )
+                                      }}
+                                    </td>
                                   </tr>
                                 </tbody>
                               </template>
                             </v-simple-table>
                             <!-- Listagem dos arquivos dos conceitos DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(mobilemedia) in conceito.mobilemedias"
+                              v-for="mobilemedia in conceito.mobilemedias"
                               :key="mobilemedia.url"
                               class="mt-2 mb-2"
                             >
@@ -851,19 +1120,39 @@
                                   <v-row>
                                     <v-col>
                                       <p class="mt-3">
-                                        <v-icon
-                                          color="white"
-                                          large
-                                        >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                        {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                                        <v-icon color="white" large>{{
+                                          fileTypesIcon[
+                                            mobilemedia.fk_idmediatype.split(
+                                              "/"
+                                            )[4] - 1
+                                          ]
+                                        }}</v-icon>
+                                        {{
+                                          mobilemediaTypeLabel[
+                                            parseInt(
+                                              mobilemedia.fk_idmediatype.split(
+                                                "/"
+                                              )[4] - 1
+                                            )
+                                          ]
+                                        }}
                                       </p>
                                     </v-col>
-                                    <v-col cols="4" class="d-flex justify-end mr-1">
+                                    <v-col
+                                      cols="4"
+                                      class="d-flex justify-end mr-1"
+                                    >
                                       <!--Formulario para edição do arquivo/mobilemedia dos conceitos adicionados dentro de submódulos-->
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
+                                        @click="
+                                          setmobilemedia(
+                                            mobilemedia,
+                                            conceito,
+                                            'conceito'
+                                          )
+                                        "
                                       >
                                         <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
@@ -871,7 +1160,10 @@
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="auxElementDelete = mobilemedia; alertDelete = true"
+                                        @click="
+                                          auxElementDelete = mobilemedia;
+                                          alertDelete = true;
+                                        "
                                       >
                                         <v-icon>mdi-delete</v-icon>
                                       </v-btn>
@@ -881,18 +1173,26 @@
 
                                 <v-expansion-panel-content>
                                   <br />
-                                  <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
-                                  <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                                  <span v-if="mobilemedia.urllink">{{
+                                    mobilemedia.urllink
+                                  }}</span>
+                                  <span
+                                    v-if="mobilemedia.textfull"
+                                    style="white-space: pre-line"
+                                  >
                                     <strong>Texto completo:</strong>
                                     <br />
-                                    {{mobilemedia.textfull}}
+                                    {{ mobilemedia.textfull }}
                                     <br />
                                   </span>
 
-                                  <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                                  <span
+                                    v-if="mobilemedia.textshort"
+                                    style="white-space: pre-line"
+                                  >
                                     <strong>Texto resumido:</strong>
                                     <br />
-                                    {{mobilemedia.textshort}}
+                                    {{ mobilemedia.textshort }}
                                   </span>
                                 </v-expansion-panel-content>
                               </v-expansion-panel>
@@ -900,7 +1200,9 @@
                             <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
                             <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(procedure) in proceduresUnderConcept(conceito)"
+                              v-for="procedure in proceduresUnderConcept(
+                                conceito
+                              )"
                               :key="procedure.url"
                               class="mt-2 mb-2"
                             >
@@ -911,17 +1213,28 @@
                                 >
                                   <v-row>
                                     <v-col>
-                                      <p
-                                        class="mt-3"
-                                      >[Procedimento] {{procedure.nameinformationitem}}</p>
+                                      <p class="mt-3">
+                                        [Procedimento]
+                                        {{ procedure.nameinformationitem }}
+                                      </p>
                                     </v-col>
-                                    <v-col cols="4" class="d-flex justify-end mr-1">
+                                    <v-col
+                                      cols="4"
+                                      class="d-flex justify-end mr-1"
+                                    >
                                       <!--Formulario para edição do procedure-->
                                       <v-btn
                                         class="mt-2"
                                         icon="icon"
                                         color="white"
-                                        @click="setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
+                                        @click="
+                                          setprocedimento(
+                                            procedure,
+                                            conceito,
+                                            submodulo
+                                          );
+                                          dialog_procedure = true;
+                                        "
                                       >
                                         <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
@@ -930,7 +1243,10 @@
                                         class="mt-2"
                                         icon="icon"
                                         color="white"
-                                        @click="auxElementDelete = procedure; alertDelete = true"
+                                        @click="
+                                          auxElementDelete = procedure;
+                                          alertDelete = true;
+                                        "
                                       >
                                         <v-icon>mdi-delete</v-icon>
                                       </v-btn>
@@ -939,14 +1255,21 @@
                                 </v-expansion-panel-header>
 
                                 <v-expansion-panel-content>
-                                  <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
+                                  <v-row class="mt-2 ml-1">{{
+                                    procedure.descriptioninformationitem
+                                  }}</v-row>
                                   <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                                   <h3 class="mt-2">Fases do procedimento:</h3>
                                   <v-simple-table>
                                     <template v-slot:default>
                                       <thead>
                                         <tr>
-                                          <th class="text-left" style="width:160px;">Ordem da fase</th>
+                                          <th
+                                            class="text-left"
+                                            style="width:160px;"
+                                          >
+                                            Ordem da fase
+                                          </th>
                                           <th class="text-left">Descrição</th>
                                         </tr>
                                       </thead>
@@ -955,8 +1278,8 @@
                                           v-for="fase in procedure.phaseprocedures"
                                           :key="fase.url"
                                         >
-                                          <td>{{fase.order}}</td>
-                                          <td>{{fase.description}}</td>
+                                          <td>{{ fase.order }}</td>
+                                          <td>{{ fase.description }}</td>
                                         </tr>
                                       </tbody>
                                     </template>
@@ -968,7 +1291,9 @@
                             <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS -->
                             <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                              v-for="instrucelement in instrucElementsSearch(
+                                conceito
+                              )"
                               :key="instrucelement.url"
                               class="mt-2 mb-2"
                             >
@@ -979,16 +1304,26 @@
                                 >
                                   <v-row>
                                     <v-col>
-                                      <p
-                                        class="mt-3"
-                                      >[Elemento Instrucional] {{instrucelement.label}}</p>
+                                      <p class="mt-3">
+                                        [Elemento Instrucional]
+                                        {{ instrucelement.label }}
+                                      </p>
                                     </v-col>
-                                    <v-col cols="4" class="d-flex justify-end mr-1">
+                                    <v-col
+                                      cols="4"
+                                      class="d-flex justify-end mr-1"
+                                    >
                                       <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
+                                        @click="
+                                          setinstructionalelement(
+                                            instrucelement,
+                                            conceito,
+                                            'conceito'
+                                          )
+                                        "
                                       >
                                         <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
@@ -996,7 +1331,10 @@
                                       <v-btn
                                         icon="icon"
                                         color="white"
-                                        @click="auxElementDelete = instrucelement; alertDelete = true"
+                                        @click="
+                                          auxElementDelete = instrucelement;
+                                          alertDelete = true;
+                                        "
                                       >
                                         <v-icon>mdi-delete</v-icon>
                                       </v-btn>
@@ -1019,13 +1357,19 @@
                 </v-expansion-panels>
 
                 <!-- Panels dos Conceitos dos Módulos-->
-                <v-expansion-panels v-model="vModelPanelConceptsModule" multiple>
+                <v-expansion-panels
+                  v-model="vModelPanelConceptsModule"
+                  multiple
+                >
                   <v-expansion-panel
                     v-for="(conceito, iconceitomodulo) in modulo.concepts"
                     :key="iconceitomodulo"
                     class="mt-2 mb-2"
                   >
-                    <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
+                    <v-expansion-panel-header
+                      color="#3B83FF"
+                      style="color:white; height: 55px;"
+                    >
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col>
@@ -1044,7 +1388,12 @@
                             transition="scale-transition"
                           >
                             <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                              <v-btn
+                                icon="icon"
+                                color="white"
+                                dark="dark"
+                                v-on="on"
+                              >
                                 <v-icon>mdi-text-box-plus-outline</v-icon>
                               </v-btn>
                             </template>
@@ -1064,7 +1413,12 @@
                             transition="scale-transition"
                           >
                             <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                              <v-btn
+                                icon="icon"
+                                color="white"
+                                dark="dark"
+                                v-on="on"
+                              >
                                 <v-icon>mdi-dots-horizontal</v-icon>
                               </v-btn>
                             </template>
@@ -1084,16 +1438,26 @@
                             transition="scale-transition"
                           >
                             <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                              <v-btn
+                                icon="icon"
+                                color="white"
+                                dark="dark"
+                                v-on="on"
+                              >
                                 <v-icon>mdi-plus</v-icon>
                               </v-btn>
                             </template>
 
                             <v-list>
                               <v-list-item
-                                @click="setconceito(conceito, modulo);dialog_procedure=true"
+                                @click="
+                                  setconceito(conceito, modulo);
+                                  dialog_procedure = true;
+                                "
                               >
-                                <v-list-item-title>Procedimento</v-list-item-title>
+                                <v-list-item-title
+                                  >Procedimento</v-list-item-title
+                                >
                               </v-list-item>
                             </v-list>
                           </v-menu>
@@ -1101,7 +1465,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="setconceito(conceito, modulo);dialog_conceito=true"
+                            @click="
+                              setconceito(conceito, modulo);
+                              dialog_conceito = true;
+                            "
                           >
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
@@ -1109,7 +1476,10 @@
                           <v-btn
                             icon="icon"
                             color="white"
-                            @click="auxElementDelete = conceito; alertDelete = true"
+                            @click="
+                              auxElementDelete = conceito;
+                              alertDelete = true;
+                            "
                           >
                             <v-icon>mdi-delete</v-icon>
                           </v-btn>
@@ -1120,7 +1490,9 @@
 
                     <v-expansion-panel-content>
                       <!-- Listagem dos relacionamentos do conceito dos módulos -->
-                      <h3 class="mt-2" v-if="conceito.sourceconcept.length > 0">Relacionamentos:</h3>
+                      <h3 class="mt-2" v-if="conceito.sourceconcept.length > 0">
+                        Relacionamentos:
+                      </h3>
                       <v-simple-table v-if="conceito.sourceconcept.length > 0">
                         <template v-slot:default>
                           <thead>
@@ -1131,10 +1503,17 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="relacao in conceito.sourceconcept" :key="relacao.url">
-                              <td>{{findNameTarget(modulo.concepts, relacao)}}</td>
-                              <td>{{relacao.namereference}}</td>
-                              <td>{{findTipoRelation(relacao.fk_referencetype)}}</td>
+                            <tr
+                              v-for="relacao in conceito.sourceconcept"
+                              :key="relacao.url"
+                            >
+                              <td>
+                                {{ findNameTarget(modulo.concepts, relacao) }}
+                              </td>
+                              <td>{{ relacao.namereference }}</td>
+                              <td>
+                                {{ findTipoRelation(relacao.fk_referencetype) }}
+                              </td>
                             </tr>
                           </tbody>
                         </template>
@@ -1142,7 +1521,7 @@
 
                       <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(mobilemedia) in conceito.mobilemedias"
+                        v-for="mobilemedia in conceito.mobilemedias"
                         :key="mobilemedia.url"
                         class="mt-2 mb-2"
                       >
@@ -1154,11 +1533,21 @@
                             <v-row>
                               <v-col>
                                 <p class="mt-3">
-                                  <v-icon
-                                    color="white"
-                                    large
-                                  >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
-                                  {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                                  <v-icon color="white" large>{{
+                                    fileTypesIcon[
+                                      mobilemedia.fk_idmediatype.split("/")[4] -
+                                        1
+                                    ]
+                                  }}</v-icon>
+                                  {{
+                                    mobilemediaTypeLabel[
+                                      parseInt(
+                                        mobilemedia.fk_idmediatype.split(
+                                          "/"
+                                        )[4] - 1
+                                      )
+                                    ]
+                                  }}
                                 </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
@@ -1167,7 +1556,13 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="setmobilemedia(mobilemedia, conceito, 'conceito')"
+                                  @click="
+                                    setmobilemedia(
+                                      mobilemedia,
+                                      conceito,
+                                      'conceito'
+                                    )
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -1176,7 +1571,10 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = mobilemedia; alertDelete = true"
+                                  @click="
+                                    auxElementDelete = mobilemedia;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -1186,18 +1584,26 @@
 
                           <v-expansion-panel-content>
                             <br />
-                            <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
-                            <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                            <span v-if="mobilemedia.urllink">{{
+                              mobilemedia.urllink
+                            }}</span>
+                            <span
+                              v-if="mobilemedia.textfull"
+                              style="white-space: pre-line"
+                            >
                               <strong>Texto completo:</strong>
                               <br />
-                              {{mobilemedia.textfull}}
+                              {{ mobilemedia.textfull }}
                               <br />
                             </span>
 
-                            <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                            <span
+                              v-if="mobilemedia.textshort"
+                              style="white-space: pre-line"
+                            >
                               <strong>Texto resumido:</strong>
                               <br />
-                              {{mobilemedia.textshort}}
+                              {{ mobilemedia.textshort }}
                             </span>
                           </v-expansion-panel-content>
                         </v-expansion-panel>
@@ -1206,7 +1612,7 @@
 
                       <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(procedure) in proceduresUnderConcept(conceito)"
+                        v-for="procedure in proceduresUnderConcept(conceito)"
                         :key="procedure.url"
                         class="mt-2 mb-2"
                       >
@@ -1217,7 +1623,10 @@
                           >
                             <v-row>
                               <v-col>
-                                <p class="mt-3">[Procedimento] {{procedure.nameinformationitem}}</p>
+                                <p class="mt-3">
+                                  [Procedimento]
+                                  {{ procedure.nameinformationitem }}
+                                </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do procedure-->
@@ -1225,7 +1634,14 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
+                                  @click="
+                                    setprocedimento(
+                                      procedure,
+                                      conceito,
+                                      modulo
+                                    );
+                                    dialog_procedure = true;
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -1234,7 +1650,10 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = procedure; alertDelete = true"
+                                  @click="
+                                    auxElementDelete = procedure;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -1243,21 +1662,28 @@
                           </v-expansion-panel-header>
 
                           <v-expansion-panel-content>
-                            <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
+                            <v-row class="mt-2 ml-1">{{
+                              procedure.descriptioninformationitem
+                            }}</v-row>
                             <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                             <h3 class="mt-2">Fases do procedimento:</h3>
                             <v-simple-table>
                               <template v-slot:default>
                                 <thead>
                                   <tr>
-                                    <th class="text-left" style="width:160px;">Ordem da fase</th>
+                                    <th class="text-left" style="width:160px;">
+                                      Ordem da fase
+                                    </th>
                                     <th class="text-left">Descrição</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr v-for="fase in procedure.phaseprocedures" :key="fase.url">
-                                    <td>{{fase.order}}</td>
-                                    <td>{{fase.description}}</td>
+                                  <tr
+                                    v-for="fase in procedure.phaseprocedures"
+                                    :key="fase.url"
+                                  >
+                                    <td>{{ fase.order }}</td>
+                                    <td>{{ fase.description }}</td>
                                   </tr>
                                 </tbody>
                               </template>
@@ -1269,7 +1695,9 @@
                       <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                        v-for="instrucelement in instrucElementsSearch(
+                          conceito
+                        )"
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                       >
@@ -1280,14 +1708,23 @@
                           >
                             <v-row>
                               <v-col>
-                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                                <p class="mt-3">
+                                  [Elemento Instrucional]
+                                  {{ instrucelement.label }}
+                                </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
                                 <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
+                                  @click="
+                                    setinstructionalelement(
+                                      instrucelement,
+                                      conceito,
+                                      'conceito'
+                                    )
+                                  "
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -1295,7 +1732,10 @@
                                 <v-btn
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = (instrucelement); alertDelete = true"
+                                  @click="
+                                    auxElementDelete = instrucelement;
+                                    alertDelete = true;
+                                  "
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -1325,9 +1765,10 @@
         height="49"
         dark
         :disabled="disableBtnDidatic"
-        @click="openDidatic();"
+        @click="openDidatic()"
         class="mr-1"
-      >Modelo Didático</v-btn>
+        >Modelo Didático</v-btn
+      >
       <v-btn color="success" height="49" dark @click="saveDominio" class="mr-3">
         Salvar Domínio
         <v-icon dark right>mdi-content-save</v-icon>
@@ -1336,16 +1777,27 @@
     <div class="text-center">
       <v-dialog v-model="alertDelete" width="500" persistent="persistent">
         <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
-          <v-card-text
-            class="mt-3"
-            style="font-size: 1.3em;"
-          >Tem certeza que deseja apagar esse elemento?</v-card-text>
+          <v-card-title class="headline red" primary-title style="color:white;"
+            >ALERTA!</v-card-title
+          >
+          <v-card-text class="mt-3" style="font-size: 1.3em;"
+            >Tem certeza que deseja apagar esse elemento?</v-card-text
+          >
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="red" dark @click="auxElementDelete = ''; alertDelete=false">Não</v-btn>
+            <v-btn
+              color="red"
+              dark
+              @click="
+                auxElementDelete = '';
+                alertDelete = false;
+              "
+              >Não</v-btn
+            >
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="deleteelemento(auxElementDelete);">Sim</v-btn>
+            <v-btn color="primary" @click="deleteelemento(auxElementDelete)"
+              >Sim</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -1357,12 +1809,18 @@
             <v-row class="pt-2 pb-3">
               <br />
               <v-spacer></v-spacer>
-              <span style="font-size: 1.3em; color:white;">{{dialogLoadingMessage}}</span>
+              <span style="font-size: 1.3em; color:white;">{{
+                dialogLoadingMessage
+              }}</span>
               <v-spacer></v-spacer>
             </v-row>
             <v-row>
               <v-spacer></v-spacer>
-              <v-progress-circular indeterminate color="white" class="mb-0"></v-progress-circular>
+              <v-progress-circular
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-circular>
               <v-spacer></v-spacer>
             </v-row>
           </v-card-text>
@@ -1409,7 +1867,7 @@ export default {
     InstrucMenuFiles,
     AvaliacaoDialog,
     AtividadeColaborativaDialog,
-    VisibleDialog
+    VisibleDialog,
   },
   props: [
     "dominio",
@@ -1421,7 +1879,7 @@ export default {
     "dialog_proceduretree",
     "dialog_mobilemediatree",
     "dialog_elementoinstrucionaltree",
-    "dialog_instructionalelementtree"
+    "dialog_instructionalelementtree",
   ],
   data: () => ({
     dialogLoading: false,
@@ -1429,7 +1887,7 @@ export default {
     dialogLoadingMessages: [
       "Carregando o domínio",
       "Salvando o elemento",
-      "Excluindo o elemento"
+      "Excluindo o elemento",
     ],
     vModelPanelDomain: [0],
     vModelPanelModules: [0],
@@ -1438,18 +1896,18 @@ export default {
     vModelPanelConceptsSubmodule: [],
     itemsMenuNewModulo: [
       {
-        type: "Conceito"
+        type: "Conceito",
       },
       {
-        type: "Submódulo"
-      }
+        type: "Submódulo",
+      },
     ],
     fileTypesIcon: [
       "mdi-file-image",
       "mdi-file-video",
       "mdi-file-music",
       "mdi-file-document",
-      "mdi-link-variant"
+      "mdi-link-variant",
     ],
     mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
     enableOpenPanels: 0,
@@ -1483,7 +1941,7 @@ export default {
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
-    dominio_data: {}
+    dominio_data: {},
   }),
   mounted: function() {
     var vm = this;
@@ -1537,20 +1995,20 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_modulo = this.dialog_module;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1563,7 +2021,7 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_submodulo = this.dialog_submodule;
         axios
@@ -1573,13 +2031,13 @@ export default {
               this.objectTreeView.url.length - 3
             ),
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1592,20 +2050,20 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_conceito = this.dialog_concept;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1614,13 +2072,13 @@ export default {
               .patch(
                 resposta.data.fk_idmodule,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
               .then(function(resposta2) {
@@ -1634,20 +2092,20 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_procedure = this.dialog_proceduretree;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1656,13 +2114,13 @@ export default {
               .patch(
                 resposta.data.fk_idconcept,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
               .then(function(resposta2) {
@@ -1671,13 +2129,13 @@ export default {
                   .patch(
                     resposta2.data.fk_idmodule,
                     {
-                      headers: headers
+                      headers: headers,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   )
                   .then(function(resposta3) {
@@ -1692,19 +2150,19 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1715,13 +2173,13 @@ export default {
                 .patch(
                   resposta.data.fk_module,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
                 .then(function(resposta2) {
@@ -1732,13 +2190,13 @@ export default {
                 .patch(
                   resposta.data.fk_idconcept,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
                 .then(function(resposta2) {
@@ -1753,19 +2211,19 @@ export default {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
           .then(function(resposta) {
@@ -1776,13 +2234,13 @@ export default {
                 .patch(
                   resposta.data.fk_module,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
                 .then(function(resposta2) {
@@ -1797,13 +2255,13 @@ export default {
                 .patch(
                   resposta.data.fk_idconcept,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
                 .then(function(resposta2) {
@@ -1816,12 +2274,12 @@ export default {
             }
           });
       }
-    }
+    },
   },
   computed: {
     nomeDominioPanel: function() {
       return this.domainName;
-    }
+    },
   },
   methods: {
     validate() {
@@ -1850,7 +2308,7 @@ export default {
       var vm = this;
       var csrftoken = Cookie.get("csrftoken");
       var headers = {
-        "X-CSRFTOKEN": csrftoken
+        "X-CSRFTOKEN": csrftoken,
       };
       axios
         .patch(
@@ -1858,13 +2316,13 @@ export default {
             this.dominio_data.idknowledgedomain +
             "/",
           {
-            headers: headers
+            headers: headers,
           },
           {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           }
         )
         .then(function(resposta) {
@@ -2007,8 +2465,8 @@ export default {
         .delete(value.url, {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         })
         .then(function() {
           vm.getDominio();
@@ -2177,8 +2635,8 @@ export default {
     },
     saveDominio() {
       console.log("");
-    }
-  }
+    },
+  },
 };
 </script>
 

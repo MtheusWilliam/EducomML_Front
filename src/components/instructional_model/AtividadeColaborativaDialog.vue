@@ -819,11 +819,12 @@ export default {
                 .put(mobilemedia.object);
             }
           } else {
-            setTimeout(function() {
               auxPath =
                 vm.domain.idknowledgedomain.toString() +
                 "/" +
-                Date.now().toString();
+                (await setTimeout(async function() {
+                  await Date.now().toString();
+                }, 1));
               if (mobilemedia.type !== 5) {
                 firebase
                   .storage()
@@ -833,8 +834,7 @@ export default {
 
                 mobilemedia.path = auxPath;
               }
-            }, 30);
-          }
+            }
         });
       }
       var auxPathQuestions = "";
