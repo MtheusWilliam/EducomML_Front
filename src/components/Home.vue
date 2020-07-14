@@ -28,11 +28,28 @@
       <v-col cols="4">
         <v-img src="@/assets/home.png"></v-img>
       </v-col>
-
       <v-row>
         <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
       </v-row>
     </v-row>
+
+    <!--
+    <v-tabs v-model="tab" background-color="transparent" grow>
+      <v-tab v-for="(item, i) in menu" :key="item" @click="currentTabInfo = tabsInfo[i]">{{item}}</v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab">
+      <v-tab-item>
+        <PaginaInicial/>
+      </v-tab-item>
+      <v-tab-item>
+        <Projeto />
+      </v-tab-item>
+      <v-tab-item>
+        <Equipe />
+      </v-tab-item>
+    </v-tabs-items>
+    -->
+
     <div class="text-center">
       <v-dialog v-model="dialogMessage" width="500">
         <v-card>
@@ -50,8 +67,17 @@
 </template>
 
 <script>
+/**import PaginaInicial from "./home_pages/PaginaInicial";
+import Projeto from "./home_pages/Projeto";
+import Equipe from "./home_pages/Equipe";**/
+
 export default {
   name: "UserHome",
+  /**components: {
+    PaginaInicial,
+    Projeto,
+    Equipe
+  },**/
   data() {
     return {
       dialogMessage: false,
