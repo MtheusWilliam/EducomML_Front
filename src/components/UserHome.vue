@@ -104,7 +104,7 @@
                   <v-form ref="form" v-model="valid" lazy-validation>
                     <v-text-field
                       v-model="nameknowledgedomain"
-                      :counter="40"
+                      :counter="100"
                       :rules="nameknowledgedomainRules"
                       label="Dominío modelado"
                       required
@@ -185,8 +185,8 @@ export default {
     nameknowledgedomainRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
       v =>
-        (v && v.length <= 40) ||
-        "Nome do domínio deve ter no máximo 25 caracteres"
+        (v && v.length <= 100) ||
+        "Nome do domínio deve ter no máximo 100 caracteres"
     ],
     subtitle: "",
     dominios: [],

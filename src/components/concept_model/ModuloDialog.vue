@@ -11,6 +11,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field
             v-model="moduloTitle"
+            :counter="100"
             :rules="moduloTitleRules"
             label="Título do módulo"
             required
@@ -45,8 +46,8 @@ export default {
     moduloTitleRules: [
       v => !!v || "É necessário descrever o título do submódulo",
       v =>
-        (v && v.length <= 40) ||
-        "O título do módulo deve ter no máximo 40 caracteres"
+        (v && v.length <= 100) ||
+        "O título do módulo deve ter no máximo 100 caracteres"
     ],
     moduloSubtitle: "",
     select: null,
@@ -77,6 +78,7 @@ export default {
     },
     async postModulo() {
       // var vm = this;
+      console.log("sub", this.moduloSubtitle);
       await axios
         .post(
           `http://localhost:8000/module/`,

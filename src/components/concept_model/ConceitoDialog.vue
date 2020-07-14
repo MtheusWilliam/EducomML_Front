@@ -12,7 +12,7 @@
           <v-form ref="form" v-model="valid" lazy-validation="lazy-validation">
             <v-text-field
               v-model="conceptName"
-              :counter="25"
+              :counter="100"
               :rules="conceptNameRules"
               label="Nome do conceito"
               required="required"
@@ -32,8 +32,8 @@
                 <v-text-field
                   v-if="priorKnowledge === 1"
                   v-model="priorKnowledgeName"
-                  counter="15"
-                  :rules="[v => !!v || 'Necessário informar o nome da prioridade']"
+                  :counter="100"
+                  :rules="priorKnowledgeNameRules"
                   label="Nome da Prioridade"
                   style="margin:0px;"
                   required="required"
@@ -103,7 +103,7 @@
                   <v-col>
                     <v-text-field
                       v-model="relationForControl[i].relacaoName"
-                      counter="15"
+                      counter="100"
                       label="Nome da Relação"
                       style="margin:0px;"
                     ></v-text-field>
@@ -170,15 +170,15 @@ export default {
     conceptNameRules: [
       v => !!v || "É necessário descrever o nome do conceito",
       v =>
-        (v && v.length <= 25) ||
-        "Nome do conceito deve ter no máximo 25 caracteres"
+        (v && v.length <= 100) ||
+        "Nome do conceito deve ter no máximo 100 caracteres"
     ],
     relacaoName: [""],
     relacaoNameRules: [
       v => !!v || "Necessário descrever o nome da relação",
       v =>
-        (v && v.length <= 15) ||
-        "O nome da relação deve ter no máximo 15 caracteres"
+        (v && v.length <= 100) ||
+        "O nome da relação deve ter no máximo 100 caracteres"
     ],
     relacaoType: [""],
     relacaoTypes: ["typeOf", "partOf"],
@@ -194,6 +194,12 @@ export default {
       }
     ],
     priorKnowledgeName: "",
+    priorKnowledgeNameRules: [
+      v => !!v || "Necessário descrever identificador para a prioridade",
+      v =>
+        (v && v.length <= 100) ||
+        "O identificador da prioridade deve ter no máximo 100 caracteres"
+    ],
     priorLevel: "",
     priorLevelItems: [
       {

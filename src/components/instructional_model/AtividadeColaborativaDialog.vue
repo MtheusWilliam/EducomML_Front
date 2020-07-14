@@ -27,7 +27,7 @@
           <v-text-field
             id="colaborativeNameArea"
             v-model="colaborativeName"
-            :counter="25"
+            :counter="100"
             :rules="colaborativeNameRules"
             required
             class="mt-2 mb-4"
@@ -536,8 +536,8 @@ export default {
         !!v ||
         "É necessário descrever um identificador para a atividade colaborativa",
       v =>
-        (v && v.length <= 25) ||
-        "Nome do identificador da atividade colaborativa deve ter no máximo 25 caracteres"
+        (v && v.length <= 100) ||
+        "Nome do identificador da atividade colaborativa deve ter no máximo 100 caracteres"
     ],
     memberAmount: "",
     memberAmountRules: [
@@ -819,22 +819,22 @@ export default {
                 .put(mobilemedia.object);
             }
           } else {
-              auxPath =
-                vm.domain.idknowledgedomain.toString() +
-                "/" +
-                (await setTimeout(async function() {
-                  await Date.now().toString();
-                }, 1));
-              if (mobilemedia.type !== 5) {
-                firebase
-                  .storage()
-                  .ref()
-                  .child(auxPath)
-                  .put(mobilemedia.object);
+            auxPath =
+              vm.domain.idknowledgedomain.toString() +
+              "/" +
+              (await setTimeout(async function() {
+                await Date.now().toString();
+              }, 1));
+            if (mobilemedia.type !== 5) {
+              firebase
+                .storage()
+                .ref()
+                .child(auxPath)
+                .put(mobilemedia.object);
 
-                mobilemedia.path = auxPath;
-              }
+              mobilemedia.path = auxPath;
             }
+          }
         });
       }
       var auxPathQuestions = "";

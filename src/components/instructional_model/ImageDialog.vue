@@ -140,8 +140,8 @@ export default {
     imagemDescriptionRules: [
       v => !!v || "É necessário descrever a imagem a ser inserida",
       v =>
-        (v && v.length <= 50) ||
-        "A descrição da imagem deve ter no máximo 50 caracteres"
+        (v && v.length <= 100) ||
+        "A descrição da imagem deve ter no máximo 100 caracteres"
     ]
   }),
   watch: {

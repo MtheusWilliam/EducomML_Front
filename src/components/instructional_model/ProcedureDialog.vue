@@ -14,7 +14,7 @@
           <v-text-field
             id="procedureNameArea"
             v-model="procedureName"
-            :counter="25"
+            :counter="100"
             :rules="procedureNameRules"
             required
             class="mt-2 mb-4"
@@ -133,7 +133,7 @@ export default {
     procedureNameRules: [
       v => !!v || "É necessário descrever o nome do procedimento",
       v =>
-        (v && v.length <= 25) ||
+        (v && v.length <= 100) ||
         "Nome do procedimento deve ter no máximo 25 caracteres"
     ],
     procedureDescription: "",

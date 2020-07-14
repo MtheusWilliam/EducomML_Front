@@ -10,7 +10,7 @@
         <v-form ref="form" v-model="valid" lazy-validation="lazy-validation">
           <v-text-field
             v-model="domainName"
-            :counter="25"
+            :counter="100"
             :rules="domainNameRules"
             label="Dominío modelado"
             required="required"
@@ -60,8 +60,8 @@ export default {
     domainNameRules: [
       v => !!v || "É necessário descrever o nome do domínio modelado",
       v =>
-        (v && v.length <= 25) ||
-        "Nome do domínio deve ter no máximo 25 caracteres"
+        (v && v.length <= 100) ||
+        "Nome do domínio deve ter no máximo 100 caracteres"
     ],
     domains: ""
   }),
@@ -69,7 +69,6 @@ export default {
     var vm = this;
     vm.domainName = vm.domain.nameknowledgedomain;
     vm.domainContentTitle = vm.domain.subtitle;
-    vm.domainAuthorsName = vm.domain.author;
   },
   watch: {
     dialog: function() {
@@ -77,7 +76,6 @@ export default {
       this.$nextTick(function() {
         vm.domainName = vm.domain.nameknowledgedomain;
         vm.domainContentTitle = vm.domain.subtitle;
-        vm.domainAuthorsName = vm.domain.author;
       });
     }
   },
@@ -93,7 +91,7 @@ export default {
             nameknowledgedomain: this.domainName,
             subtitle: this.domainContentTitle,
             lastversion: this.lastversion,
-            author: this.domainAuthorsName
+            fk_iduser: this.domain.fk_iduser
           },
           {
             auth: {

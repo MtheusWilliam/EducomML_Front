@@ -54,7 +54,7 @@
           <v-text-field
             id="avaliacaoNameArea"
             v-model="avaliacaoName"
-            :counter="25"
+            :counter="100"
             :rules="avaliacaoNameRules"
             required
             class="mt-2 mb-4"
@@ -524,8 +524,8 @@ export default {
     avaliacaoNameRules: [
       v => !!v || "É necessário descrever um identificador para a avaliação",
       v =>
-        (v && v.length <= 25) ||
-        "Nome do identificador da avaliação deve ter no máximo 25 caracteres"
+        (v && v.length <= 100) ||
+        "Nome do identificador da avaliação deve ter no máximo 100 caracteres"
     ],
     questionTypes: ["Questão Objetiva", "Questão Discussiva"],
     alternativeDescriptionRules: [
@@ -743,22 +743,22 @@ export default {
                 .put(mobilemedia.object);
             }
           } else {
-              auxPath =
-                vm.domain.idknowledgedomain.toString() +
-                "/" +
-                (await setTimeout(async function() {
-                  await Date.now().toString();
-                }, 1));
-              if (mobilemedia.type !== 5) {
-                firebase
-                  .storage()
-                  .ref()
-                  .child(auxPath)
-                  .put(mobilemedia.object);
+            auxPath =
+              vm.domain.idknowledgedomain.toString() +
+              "/" +
+              (await setTimeout(async function() {
+                await Date.now().toString();
+              }, 1));
+            if (mobilemedia.type !== 5) {
+              firebase
+                .storage()
+                .ref()
+                .child(auxPath)
+                .put(mobilemedia.object);
 
-                mobilemedia.path = auxPath;
-              }
+              mobilemedia.path = auxPath;
             }
+          }
         });
       }
       var auxPathQuestions = "";

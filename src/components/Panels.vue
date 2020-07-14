@@ -9,12 +9,23 @@
             <v-col class="d-flex align-center" style="height:100%;">
               <div style="vertical-align:middle;" class="mt-3">
                 <p>
-                  <strong style="font-size:1.2em;">{{ dominio_data.nameknowledgedomain}}</strong>
+                  <strong
+                    v-if="dominio_data.nameknowledgedomain.length <= 40"
+                    style="font-size:1.2em;"
+                  >{{dominio_data.nameknowledgedomain}}</strong>
+                  <strong
+                    v-else
+                    style="font-size:1.2em;"
+                  >{{dominio_data.nameknowledgedomain.slice(0,40)}}...</strong>
                   <br />
                   <span
                     style="font-size:0.9em;"
-                    v-if="dominio_data.subtitle"
+                    v-if="dominio_data.subtitle && dominio_data.subtitle.length <=40"
                   >{{dominio_data.subtitle}}</span>
+                  <span
+                    style="font-size:0.9em;"
+                    v-if="dominio_data.subtitle && dominio_data.subtitle.length > 40"
+                  >{{dominio_data.subtitle.slice(0,40)}}...</span>
                 </p>
               </div>
             </v-col>
@@ -231,7 +242,6 @@
         <!--FIM DO HEADER DO DOMÍNIO-->
         <v-expansion-panel-content>
           <!--CONTENT DO DOMÍNIO-->
-          <v-row class="mt-2 ml-1">{{ dominio_data.subtitle }}</v-row>
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
             v-for="(mobilemedia) in dominio.mobilemedias"
@@ -303,26 +313,37 @@
             <v-expansion-panel>
               <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                 <v-row>
-                  <v-col>
-                    <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                  <v-col class="d-flex align-center" style="height:100%;">
+                    <div style="vertical-align:middle;" class="mt-3">
+                      <p>
+                        <v-icon
+                          color="white"
+                          large
+                        >{{instrucTypesIcon[(instrucelement.fk_instructionalelementtype).split("/")[4]-1]}}</v-icon>
+                        <span v-if="instrucelement.label.length <= 40">{{instrucelement.label}}</span>
+                        <span v-else>{{instrucelement.label.slice(0,40)}}...</span>
+                      </p>
+                    </div>
                   </v-col>
-                  <v-col cols="4" class="d-flex justify-end mr-1">
-                    <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
-                    <v-btn
-                      icon="icon"
-                      color="white"
-                      @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
-                    >
-                      <v-icon>mdi-pencil</v-icon>
-                    </v-btn>
-                    <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
-                    <v-btn
-                      icon="icon"
-                      color="white"
-                      @click="auxElementDelete = instrucelement; alertDelete=true"
-                    >
-                      <v-icon>mdi-delete</v-icon>
-                    </v-btn>
+                  <v-col cols="4" class="d-flex align-center justify-end">
+                    <div class="d-flex justify-end mr-1 align-center">
+                      <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                      <v-btn
+                        icon="icon"
+                        color="white"
+                        @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                      <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                      <v-btn
+                        icon="icon"
+                        color="white"
+                        @click="auxElementDelete = instrucelement; alertDelete=true"
+                      >
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </div>
                   </v-col>
                 </v-row>
               </v-expansion-panel-header>
@@ -344,9 +365,20 @@
                   <v-col class="d-flex align-center" style="height:100%;">
                     <div style="vertical-align:middle;" class="mt-3">
                       <p>
-                        <strong style="font-size:1.2em;">{{ modulo.namemodule }}</strong>
+                        <strong
+                          v-if="modulo.namemodule.length <= 40"
+                          style="font-size:1.2em;"
+                        >{{ modulo.namemodule }}</strong>
+                        <strong v-else style="font-size:1.2em;">{{modulo.namemodule.slice(0,40)}}...</strong>
                         <br />
-                        <span style="font-size:0.9em;" v-if="modulo.subtitle">{{modulo.subtitle}}</span>
+                        <span
+                          style="font-size:0.9em;"
+                          v-if="modulo.subtitle && modulo.subtitle.length <= 40"
+                        >{{modulo.subtitle}}</span>
+                        <span
+                          style="font-size:0.9em;"
+                          v-if="modulo.subtitle && modulo.subtitle.length > 40"
+                        >{{modulo.subtitle.slice(0,40)}}...</span>
                       </p>
                     </div>
                   </v-col>
@@ -440,7 +472,6 @@
 
               <v-expansion-panel-content>
                 <!--CONTENT DO MÓDULO-->
-                <v-row class="mt-2 ml-1">{{ modulo.subtitle }}</v-row>
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
                   v-for="(mobilemedia) in modulo.mobilemedias"
@@ -512,26 +543,39 @@
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                       <v-row>
-                        <v-col>
-                          <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                        <v-col class="d-flex align-center" style="height:100%;">
+                          <div style="vertical-align:middle;" class="mt-3">
+                            <p>
+                              <v-icon
+                                color="white"
+                                large
+                              >{{instrucTypesIcon[(instrucelement.fk_instructionalelementtype).split("/")[4]-1]}}</v-icon>
+                              <span
+                                v-if="instrucelement.label.length <= 40"
+                              >{{instrucelement.label}}</span>
+                              <span v-else>{{instrucelement.label.slice(0,40)}}...</span>
+                            </p>
+                          </div>
                         </v-col>
-                        <v-col cols="4" class="d-flex justify-end mr-1">
-                          <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do módulo-->
-                          <v-btn
-                            icon="icon"
-                            color="white"
-                            @click="setinstructionalelement(instrucelement, modulo, 'modulo')"
-                          >
-                            <v-icon>mdi-pencil</v-icon>
-                          </v-btn>
-                          <!--Função para excluir ELEMENTOS INSTRUCIONAIS do módulo-->
-                          <v-btn
-                            icon="icon"
-                            color="white"
-                            @click="auxElementDelete = instrucelement; alertDelete = true"
-                          >
-                            <v-icon>mdi-delete</v-icon>
-                          </v-btn>
+                        <v-col cols="4" class="d-flex align-center justify-end">
+                          <div class="d-flex justify-end mr-1 align-center">
+                            <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                            <v-btn
+                              icon="icon"
+                              color="white"
+                              @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                            >
+                              <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
+                            <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                            <v-btn
+                              icon="icon"
+                              color="white"
+                              @click="auxElementDelete = instrucelement; alertDelete=true"
+                            >
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </div>
                         </v-col>
                       </v-row>
                     </v-expansion-panel-header>
@@ -552,13 +596,20 @@
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
                           <div style="vertical-align:middle;" class="mt-2">
-                            <p class="mt-3">
-                              <strong style="font-size:1.2em;">{{submodulo.namemodule}}</strong>
-
+                            <p>
+                              <strong
+                                v-if="submodulo.namemodule <= 40"
+                                style="font-size:1.2em;"
+                              >{{submodulo.namemodule}}</strong>
+                              <strong v-else style="font-size:1.2em;">{{submodulo.namemodule}}</strong>
                               <br />
                               <span
                                 style="font-size:0.9em;"
-                                v-if="submodulo.subtitle"
+                                v-if="submodulo.subtitle && submodulo.subtitle.length <= 40"
+                              >{{submodulo.subtitle}}</span>
+                              <span
+                                style="font-size:0.9em;"
+                                v-if="submodulo.subtitle && submodulo.subtitle.length > 40"
                               >{{submodulo.subtitle}}</span>
                             </p>
                           </div>
@@ -638,7 +689,6 @@
 
                     <v-expansion-panel-content>
                       <!--CONTENT DO SUBMODULO-->
-                      <v-row class="mt-2 ml-1">{{ submodulo.subtitle }}</v-row>
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
                         v-for="(mobilemedia) in submodulo.mobilemedias"
@@ -716,26 +766,39 @@
                             style="color:white; height: 55px;"
                           >
                             <v-row>
-                              <v-col>
-                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                              <v-col class="d-flex align-center" style="height:100%;">
+                                <div style="vertical-align:middle;" class="mt-3">
+                                  <p>
+                                    <v-icon
+                                      color="white"
+                                      large
+                                    >{{instrucTypesIcon[(instrucelement.fk_instructionalelementtype).split("/")[4]-1]}}</v-icon>
+                                    <span
+                                      v-if="instrucelement.label.length <= 40"
+                                    >{{instrucelement.label}}</span>
+                                    <span v-else>{{instrucelement.label.slice(0,40)}}...</span>
+                                  </p>
+                                </div>
                               </v-col>
-                              <v-col cols="4" class="d-flex justify-end mr-1">
-                                <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="setinstructionalelement(instrucelement, submodulo, 'modulo')"
-                                >
-                                  <v-icon>mdi-pencil</v-icon>
-                                </v-btn>
-                                <!--Função para excluir ELEMENTOS INSTRUCIONAIS do SUBMODULO-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="auxElementDelete = instrucelement; alertDelete = true"
-                                >
-                                  <v-icon>mdi-delete</v-icon>
-                                </v-btn>
+                              <v-col cols="4" class="d-flex align-center justify-end">
+                                <div class="d-flex justify-end mr-1 align-center">
+                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                  >
+                                    <v-icon>mdi-pencil</v-icon>
+                                  </v-btn>
+                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="auxElementDelete = instrucelement; alertDelete=true"
+                                  >
+                                    <v-icon>mdi-delete</v-icon>
+                                  </v-btn>
+                                </div>
                               </v-col>
                             </v-row>
                           </v-expansion-panel-header>
@@ -759,8 +822,15 @@
                             <v-row>
                               <v-col>
                                 <p class="mt-3">
-                                  [Conceito]
-                                  {{ conceito.nameconcept }}
+                                  <span
+                                    v-if="conceito.nameconcept.length <= 40"
+                                    style="font-size:1.2em;"
+                                  >
+                                    <strong>{{ conceito.nameconcept }}</strong>
+                                  </span>
+                                  <span v-else style="font-size:1.2em;">
+                                    <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
+                                  </span>
                                 </p>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
@@ -1018,28 +1088,39 @@
                                   style="color:white; height: 55px;"
                                 >
                                   <v-row>
-                                    <v-col>
-                                      <p
-                                        class="mt-3"
-                                      >[Elemento Instrucional] {{instrucelement.label}}</p>
+                                    <v-col class="d-flex align-center" style="height:100%;">
+                                      <div style="vertical-align:middle;" class="mt-3">
+                                        <p>
+                                          <v-icon
+                                            color="white"
+                                            large
+                                          >{{instrucTypesIcon[(instrucelement.fk_instructionalelementtype).split("/")[4]-1]}}</v-icon>
+                                          <span
+                                            v-if="instrucelement.label.length <= 40"
+                                          >{{instrucelement.label}}</span>
+                                          <span v-else>{{instrucelement.label.slice(0,40)}}...</span>
+                                        </p>
+                                      </div>
                                     </v-col>
-                                    <v-col cols="4" class="d-flex justify-end mr-1">
-                                      <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
-                                      <v-btn
-                                        icon="icon"
-                                        color="white"
-                                        @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
-                                      >
-                                        <v-icon>mdi-pencil</v-icon>
-                                      </v-btn>
-                                      <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
-                                      <v-btn
-                                        icon="icon"
-                                        color="white"
-                                        @click="auxElementDelete = instrucelement; alertDelete = true"
-                                      >
-                                        <v-icon>mdi-delete</v-icon>
-                                      </v-btn>
+                                    <v-col cols="4" class="d-flex align-center justify-end">
+                                      <div class="d-flex justify-end mr-1 align-center">
+                                        <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                        >
+                                          <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="auxElementDelete = instrucelement; alertDelete=true"
+                                        >
+                                          <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                      </div>
                                     </v-col>
                                   </v-row>
                                 </v-expansion-panel-header>
@@ -1070,8 +1151,12 @@
                       <v-row>
                         <v-col>
                           <p class="mt-3">
-                            [Conceito]
-                            {{ conceito.nameconcept }}
+                            <span v-if="conceito.nameconcept.length <= 40" style="font-size:1.2em;">
+                              <strong>{{ conceito.nameconcept }}</strong>
+                            </span>
+                            <span v-else style="font-size:1.2em;">
+                              <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
+                            </span>
                           </p>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
@@ -1321,26 +1406,39 @@
                             style="color:white; height: 55px;"
                           >
                             <v-row>
-                              <v-col>
-                                <p class="mt-3">[Elemento Instrucional] {{instrucelement.label}}</p>
+                              <v-col class="d-flex align-center" style="height:100%;">
+                                <div style="vertical-align:middle;" class="mt-3">
+                                  <p>
+                                    <v-icon
+                                      color="white"
+                                      large
+                                    >{{instrucTypesIcon[(instrucelement.fk_instructionalelementtype).split("/")[4]-1]}}</v-icon>
+                                    <span
+                                      v-if="instrucelement.label.length <= 40"
+                                    >{{instrucelement.label}}</span>
+                                    <span v-else>{{instrucelement.label.slice(0,40)}}...</span>
+                                  </p>
+                                </div>
                               </v-col>
-                              <v-col cols="4" class="d-flex justify-end mr-1">
-                                <!--Formulario para edição do ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="setinstructionalelement(instrucelement, conceito, 'conceito')"
-                                >
-                                  <v-icon>mdi-pencil</v-icon>
-                                </v-btn>
-                                <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="auxElementDelete = (instrucelement); alertDelete = true"
-                                >
-                                  <v-icon>mdi-delete</v-icon>
-                                </v-btn>
+                              <v-col cols="4" class="d-flex align-center justify-end">
+                                <div class="d-flex justify-end mr-1 align-center">
+                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                  >
+                                    <v-icon>mdi-pencil</v-icon>
+                                  </v-btn>
+                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="auxElementDelete = instrucelement; alertDelete=true"
+                                  >
+                                    <v-icon>mdi-delete</v-icon>
+                                  </v-btn>
+                                </div>
                               </v-col>
                             </v-row>
                           </v-expansion-panel-header>
@@ -1492,6 +1590,11 @@ export default {
       "mdi-file-music",
       "mdi-file-document",
       "mdi-link-variant"
+    ],
+    instrucTypesIcon: [
+      "mdi-clipboard-text",
+      "mdi-clipboard-check",
+      "mdi-account-switch"
     ],
     mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
     enableOpenPanels: 0,
