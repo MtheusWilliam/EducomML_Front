@@ -3,7 +3,7 @@
     <div class="ml-4">
       <v-app-bar color="#B19114" dense dark>
         <v-spacer />
-        <v-toolbar-title v-if="auxAppbarElement === 0">Modelo Conceitual</v-toolbar-title>
+        <v-toolbar-title v-if="auxAppbarElement === 0">{{dominio.nameknowledgedomain}}</v-toolbar-title>
         <v-text-field
           background-color="#B19114"
           style="color:white;"
