@@ -78,7 +78,6 @@ export default {
     },
     async postModulo() {
       // var vm = this;
-      console.log("sub", this.moduloSubtitle);
       await axios
         .post(
           `http://localhost:8000/module/`,

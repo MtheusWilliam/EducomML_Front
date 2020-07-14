@@ -30,7 +30,12 @@
       :search="search"
       activatable
       :showCheckBox="true"
-    ></v-treeview>
+    >
+      <template v-slot:prepend="{item}">
+        <v-icon v-if="item.icon">{{item.icon}}</v-icon>
+        <span v-else>[{{item.type}}]</span>
+      </template>
+    </v-treeview>
   </v-container>
 </template>
 
@@ -48,7 +53,20 @@ export default {
       modulo: "Módulo",
       subModulo: "SubMódulo",
       conceito: "Conceito"
-    }
+    },
+    fileTypesIcon: [
+      "mdi-file-image",
+      "mdi-file-video",
+      "mdi-file-music",
+      "mdi-file-document",
+      "mdi-link-variant"
+    ],
+    instrucTypesIcon: [
+      "mdi-clipboard-text",
+      "mdi-clipboard-check",
+      "mdi-account-switch"
+    ],
+    mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"]
   }),
   methods: {
     test(value) {
@@ -66,14 +84,21 @@ export default {
       var indexmodulo = 0;
       this.treeData.push({
         id: this.dominio.url,
-        name: "[DOMINIO] " + this.dominio.nameknowledgedomain,
+        name: this.dominio.nameknowledgedomain,
+        type: "DOMÍNIO",
         children: []
       });
       if (this.dominio.mobilemedias.length) {
         this.dominio.mobilemedias.forEach(mobilemedia => {
           this.treeData[0].children.push({
             id: mobilemedia.url,
-            name: "[MOBILEMEDIA] " + mobilemedia.label
+            name: this.mobilemediaTypeLabel[
+              parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+            ],
+            type: "MOBILEMEDIA",
+            icon: this.fileTypesIcon[
+              mobilemedia.fk_idmediatype.split("/")[4] - 1
+            ]
           });
           indexmodulo++;
         });
@@ -86,7 +111,12 @@ export default {
           ) {
             this.treeData[0].children.push({
               id: instructionalelement.url,
-              name: "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label
+              name: instructionalelement.label,
+              type: "INSTRUCTIONAL ELEMENT",
+              icon: this.instrucTypesIcon[
+                instructionalelement.fk_instructionalelementtype.split("/")[4] -
+                  1
+              ]
             });
             indexmodulo++;
           }
@@ -98,7 +128,8 @@ export default {
             var indexsubmodulo = 0;
             this.treeData[0].children.push({
               id: modulo.url,
-              name: "[MODULO] " + modulo.namemodule,
+              name: modulo.namemodule,
+              type: "MODULO",
               children: []
             });
 
@@ -106,7 +137,13 @@ export default {
               modulo.mobilemedias.forEach(mobilemedia => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: mobilemedia.url,
-                  name: "[MOBILEMEDIA] " + mobilemedia.label
+                  name: this.mobilemediaTypeLabel[
+                    parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+                  ],
+                  type: "MOBILEMEDIA",
+                  icon: this.fileTypesIcon[
+                    mobilemedia.fk_idmediatype.split("/")[4] - 1
+                  ]
                 });
                 indexsubmodulo++;
               });
@@ -121,8 +158,13 @@ export default {
                 ) {
                   this.treeData[0].children[indexmodulo].children.push({
                     id: instructionalelement.url,
-                    name:
-                      "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label
+                    name: instructionalelement.label,
+                    type: "INSTRUCTIONAL ELEMENT",
+                    icon: this.instrucTypesIcon[
+                      instructionalelement.fk_instructionalelementtype.split(
+                        "/"
+                      )[4] - 1
+                    ]
                   });
                   indexsubmodulo++;
                 }
@@ -134,7 +176,8 @@ export default {
               modulo.submodules.forEach(submodulo => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: submodulo.url + "sub",
-                  name: "[SUBMODULO] " + submodulo.namemodule,
+                  name: submodulo.namemodule,
+                  type: "SUBMODULO",
                   children: []
                 });
 
@@ -144,7 +187,13 @@ export default {
                       indexsubmodulo
                     ].children.push({
                       id: mobilemedia.url,
-                      name: "[MOBILEMEDIA] " + mobilemedia.label
+                      name: this.mobilemediaTypeLabel[
+                        parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+                      ],
+                      type: "MOBILEMEDIA",
+                      icon: this.fileTypesIcon[
+                        mobilemedia.fk_idmediatype.split("/")[4] - 1
+                      ]
                     });
                     indexconceito++;
                   });
@@ -162,9 +211,13 @@ export default {
                           indexsubmodulo
                         ].children.push({
                           id: instructionalelement.url,
-                          name:
-                            "[INSTRUCTIONAL ELEMENT] " +
-                            instructionalelement.label
+                          name: instructionalelement.label,
+                          type: "INSTRUCTIONAL ELEMENT",
+                          icon: this.instrucTypesIcon[
+                            instructionalelement.fk_instructionalelementtype.split(
+                              "/"
+                            )[4] - 1
+                          ]
                         });
 
                         indexconceito++;
@@ -179,7 +232,8 @@ export default {
                       indexsubmodulo
                     ].children.push({
                       id: conceito.url,
-                      name: "[CONCEITO] " + conceito.nameconcept,
+                      name: conceito.nameconcept,
+                      type: "CONCEITO",
                       children: []
                     });
 
@@ -189,7 +243,15 @@ export default {
                           indexsubmodulo
                         ].children[indexconceito].children.push({
                           id: mobilemedia.url,
-                          name: "[MOBILEMEDIA] " + mobilemedia.label
+                          name: this.mobilemediaTypeLabel[
+                            parseInt(
+                              mobilemedia.fk_idmediatype.split("/")[4] - 1
+                            )
+                          ],
+                          type: "MOBILEMEDIA",
+                          icon: this.fileTypesIcon[
+                            mobilemedia.fk_idmediatype.split("/")[4] - 1
+                          ]
                         });
                       });
                     }
@@ -206,9 +268,13 @@ export default {
                               indexsubmodulo
                             ].children[indexconceito].children.push({
                               id: instructionalelement.url,
-                              name:
-                                "[INSTRUCTIONAL ELEMENT] " +
-                                instructionalelement.label
+                              name: instructionalelement.label,
+                              type: "INSTRUCTIONAL ELEMENT",
+                              icon: this.instrucTypesIcon[
+                                instructionalelement.fk_instructionalelementtype.split(
+                                  "/"
+                                )[4] - 1
+                              ]
                             });
                           }
                         }
@@ -225,8 +291,8 @@ export default {
                             indexsubmodulo
                           ].children[indexconceito].children.push({
                             id: procedure.url,
-                            name:
-                              "[PROCEDIMENTO] " + procedure.nameinformationitem
+                            name: procedure.nameinformationitem,
+                            type: "PROCEDIMENTO"
                           });
                         }
                       });
@@ -247,7 +313,8 @@ export default {
               modulo.concepts.forEach(conceito => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: conceito.url,
-                  name: "[CONCEITO] " + conceito.nameconcept,
+                  name: conceito.nameconcept,
+                  type: "CONCEITO",
                   children: []
                 });
                 if (conceito.mobilemedias.length) {
@@ -256,7 +323,13 @@ export default {
                       indexconceito
                     ].children.push({
                       id: mobilemedia.url,
-                      name: "[MOBILEMEDIA] " + mobilemedia.label
+                      name: this.mobilemediaTypeLabel[
+                        parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+                      ],
+                      type: "MOBILEMEDIA",
+                      icon: this.fileTypesIcon[
+                        mobilemedia.fk_idmediatype.split("/")[4] - 1
+                      ]
                     });
                   });
                 }
@@ -273,9 +346,13 @@ export default {
                           indexconceito
                         ].children.push({
                           id: instructionalelement.url,
-                          name:
-                            "[INSTRUCTIONAL ELEMENT] " +
-                            instructionalelement.label
+                          name: instructionalelement.label,
+                          type: "INSTRUCTIONAL ELEMENT",
+                          icon: this.instrucTypesIcon[
+                            instructionalelement.fk_instructionalelementtype.split(
+                              "/"
+                            )[4] - 1
+                          ]
                         });
                       }
                     }
@@ -292,7 +369,8 @@ export default {
                         indexconceito
                       ].children.push({
                         id: procedure.url,
-                        name: "[PROCEDIMENTO] " + procedure.nameinformationitem
+                        name: procedure.nameinformationitem,
+                        type: "PROCEDIMENTO"
                       });
                     }
                   });
