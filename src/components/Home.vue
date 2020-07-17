@@ -1,83 +1,49 @@
 <template>
-  <v-row class="mt-4">
-    <v-row>
-      <v-app-bar color="black" z-index="1">
-        <v-toolbar-title style="font-size:1.4em; color:white;" class="ml-6 mb-2">
-          <div class="mt-5 d-flex align-center">
-            <v-img src="@/assets/logo.png" style="width: 170px;" class="mr-3 mb-2"></v-img>
-          </div>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <a href="#" style="text-decoration: none; color:#FFCC00;" class="mr-6">
-          <strong>Documentação</strong>
-        </a>
-      </v-app-bar>
-    </v-row>
-    <v-row style="background-image: linear-gradient(#7993a5, #101223); color:white; width: 100%">
-      <v-col cols="7" class="mx-3" justify-center>
-        <h3 class="ml-3">
-          <strong>Criar contéudo educacional para aplicações móveis</strong>
-        </h3>
-        <br />
-        <v-row class="mx-4 ml-5">
-          A educomML é uma abordagem que auxilia o time de produçao de contéudo na estruturação de material didático destinados a aplicativos móveis.
-          <br />
-          <br />Com educomML.ml é possivel gerar uma aplicação móvel com o contéudo educacional produzido.
-        </v-row>
-      </v-col>
-      <v-col cols="4">
-        <v-img src="@/assets/home.png"></v-img>
-      </v-col>
-      <v-row>
-        <v-btn class="mx-auto mb-7" v-for="(btn,i) in buttons" :key="i" outlined dark>{{btn}}</v-btn>
+  <v-row class="text-center">
+    <v-img src="@/assets/home.jpg" height="40vh">
+      <v-toolbar class="black"  style="opacity:0.6;">
+
+      <v-toolbar-title dark class="ml-5"><v-img src="@/assets/logoblack.png" style="width: 8vw;"></v-img></v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn  dark class="black" style="opacity:0.6;">
+        Pagina Inicial
+      </v-btn>
+
+      <v-btn  dark class="black" style="opacity:0.6;">
+        Equipe
+      </v-btn>
+
+      <v-btn  dark class="black" style="opacity:0.6;">
+        Projeto
+      </v-btn>
+      <v-btn  icon dark class="black" style="opacity:0.6;">
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-toolbar>
+    
+      <v-row style="height:50%;opacity:0.6;" align="end" class="black" justify="center">
+        <h1 style="color:white; font-size: 4.4em;">Educom Tool!</h1>
       </v-row>
+      <v-row style="height:50%;opacity:0.6;font-size: 1.4em" align="start" class="black white--text" justify="center">
+        Educational content modelling
+      </v-row>
+    </v-img>
+    <v-row align="start" class="grey white--text" style="padding:4vh;width:100vw;" justify="center">
+        <h4 >Educom é uma abordagem de modelagem que auxilia<br>
+         professores e autores a modelar conteúdo didático de domínio<br> do conhecimento. </h4>
+      </v-row>
+    <v-row align="start" justify="center">
+      <v-btn outlined color="primary" class="ma-8" width="15vw" dark>Acesse aqui</v-btn>
     </v-row>
-
-    <!--
-    <v-tabs v-model="tab" background-color="transparent" grow>
-      <v-tab v-for="(item, i) in menu" :key="item" @click="currentTabInfo = tabsInfo[i]">{{item}}</v-tab>
-    </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item>
-        <PaginaInicial/>
-      </v-tab-item>
-      <v-tab-item>
-        <Projeto />
-      </v-tab-item>
-      <v-tab-item>
-        <Equipe />
-      </v-tab-item>
-    </v-tabs-items>
-    -->
-
-    <div class="text-center">
-      <v-dialog v-model="dialogMessage" width="500">
-        <v-card>
-          <v-card-title :class="messageClass" primary-title style="color:white;">{{messageTitle}}</v-card-title>
-          <v-card-text class="mt-3" style="font-size: 1.3em;">{{message}}</v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialogMessage = false">Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
+      
   </v-row>
 </template>
 
 <script>
-/**import PaginaInicial from "./home_pages/PaginaInicial";
-import Projeto from "./home_pages/Projeto";
-import Equipe from "./home_pages/Equipe";**/
-
 export default {
   name: "UserHome",
-  /**components: {
-    PaginaInicial,
-    Projeto,
-    Equipe
-  },**/
   data() {
     return {
       dialogMessage: false,
