@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="4">
-      <TreeView @type="typeOfDialog" :dominio="dominio" />
+      <TreeView @type="typeOfDialog" @elementToScroll="scrollElement" :dominio="dominio" />
     </v-col>
     <v-col cols="8">
       <div class="mt-3 mr-8 ml-3 mb-0">
@@ -18,6 +18,7 @@
           :dialog_mobilemediatree="dialog_mobilemedia"
           :dialog_instructionalelementtree="dialog_instructionalelement"
           :dominio="dominio"
+          :elementToScroll="elementToScrollUrl"
         />
       </div>
     </v-col>
@@ -42,7 +43,8 @@ export default {
     dialog_concept: false,
     dialog_procedure: false,
     dialog_mobilemedia: false,
-    dialog_instructionalelement: false
+    dialog_instructionalelement: false,
+    elementToScrollUrl: ""
   }),
   components: {
     TreeView,
@@ -103,6 +105,9 @@ export default {
       } else if (value === "elementoinstrucional") {
         this.dialog_instructionalelement = false;
       }
+    },
+    scrollElement(value) {
+      this.elementToScrollUrl = value;
     }
   }
 };

@@ -3,7 +3,7 @@
     <div class="ml-4">
       <v-app-bar color="#B19114" dense dark>
         <v-spacer />
-        <v-toolbar-title v-if="auxAppbarElement === 0">{{dominio.nomeknowledgedomain}}</v-toolbar-title>
+        <v-toolbar-title v-if="auxAppbarElement === 0">{{dominio.nameknowledgedomain}}</v-toolbar-title>
         <v-text-field
           background-color="#B19114"
           style="color:white;"
@@ -26,7 +26,7 @@
     </div>
     <v-treeview :items="treeData" :search="search">
       <template v-slot:prepend="{item}">
-        <v-btn text @dblclick="test({item})">
+        <v-btn text @click="callScroll({item})" @dblclick="callEdit({item})">
           <v-icon v-if="item.icon">{{item.icon}}</v-icon>
           <span v-else>[{{item.type}}]</span>
           <span class="ml-1">{{item.nome}}</span>
@@ -66,8 +66,7 @@ export default {
     mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"]
   }),
   methods: {
-    test(item) {
-      console.log("item", item.item.id);
+    callEdit(item) {
       if (item.item.id) {
         if (item.item.id.split("/")[5] === "SUBMODULO") {
           this.$emit("type", { type: "submodulo", url: item.item.id });
@@ -79,7 +78,21 @@ export default {
         }
       }
     },
-
+    callScroll(item) {
+      if (item.item.id) {
+        if (item.item.id.split("/")[5] === "SUBMODULO") {
+          this.$emit("elementToScroll", {
+            type: "submodulo",
+            url: item.item.id
+          });
+        } else {
+          this.$emit("elementToScroll", {
+            type: item.item.id.split("/")[3],
+            url: item.item.id
+          });
+        }
+      }
+    },
     setDomainVariables() {
       this.treeData = [];
       var indexmodulo = 0;
