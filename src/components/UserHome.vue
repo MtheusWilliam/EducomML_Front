@@ -140,9 +140,9 @@
           >Tem certeza que deseja apagar esse domínio?</v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="red" dark @click="auxUrlDomain = ''; alertDelete=false">Não</v-btn>
-            <v-spacer></v-spacer>
             <v-btn color="primary" @click="deleteDominio(auxUrlDomain);">Sim</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="red" dark @click="auxUrlDomain = ''; alertDelete=false">Não</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>

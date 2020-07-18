@@ -7,6 +7,9 @@
           <!--HEADER DO DOMÍNIO-->
           <v-row>
             <v-col class="d-flex align-center" style="height:100%;">
+              <v-avatar color="white" size="40" class="mr-2">
+                <span class="black--text" style="font-size:1.2em;">DM</span>
+              </v-avatar>
               <div style="vertical-align:middle;" class="mt-3">
                 <p>
                   <strong
@@ -363,6 +366,9 @@
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
+                    <v-avatar color="white" size="40" class="mr-2">
+                      <span class="black--text" style="font-size:1.2em;">MD</span>
+                    </v-avatar>
                     <div style="vertical-align:middle;" class="mt-3">
                       <p>
                         <strong
@@ -595,6 +601,9 @@
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
+                          <v-avatar color="white" size="38" class="mr-2">
+                            <span class="black--text" style="font-size:1.2em;">SM</span>
+                          </v-avatar>
                           <div style="vertical-align:middle;" class="mt-2">
                             <p>
                               <strong
@@ -1483,9 +1492,9 @@
           >Tem certeza que deseja apagar esse elemento?</v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
-            <v-btn color="red" dark @click="auxElementDelete = ''; alertDelete=false">Não</v-btn>
-            <v-spacer></v-spacer>
             <v-btn color="primary" @click="deleteelemento(auxElementDelete);">Sim</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn color="red" dark @click="auxElementDelete = ''; alertDelete=false">Não</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
