@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-12">
+  <v-card class="elevation-12 mx-auto" style="position:relative;top:20vh;" width="30vw">
     <v-toolbar color="black" flat>
       <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>

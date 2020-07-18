@@ -9,11 +9,9 @@
         <v-spacer></v-spacer>
         <v-tabs
           class="d-flex justify-end mr-1"
-          v-model="tab"
           background-color="transparent"
           active-class="white--text"
           hide-slider
-          show-arrows="false"
         >
           <v-tab
             @click="atual_page = pages[0]"
@@ -40,7 +38,7 @@
       >{{atual_page.subtitle}}</v-row>
     </v-img>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items >
       <v-tab-item>
         <v-row
           align="start"
@@ -188,22 +186,6 @@ export default {
       ]
     };
   },
-  mounted() {
-    this.atual_page = this.pages[0];
-    if (this.$route.params.emailconfirmation === "1") {
-      this.messageClass = "headline green";
-      this.messageTitle = "Email confirmado com sucesso";
-      this.message =
-        "Seu cadastro foi confirmado! Faça login para começar a usar a plataforma EducomML.";
-      this.dialogMessage = true;
-    } else if (this.$route.params.emailconfirmation === "0") {
-      this.messageClass = "headline red";
-      this.messageTitle = "Erro na confirmação";
-      this.message =
-        "Houve um problema na confirmação da sua conta, realize o cadastro novamente.";
-      this.dialogMessage = true;
-    }
-  }
 };
 </script>
 

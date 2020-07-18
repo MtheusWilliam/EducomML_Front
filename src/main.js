@@ -12,6 +12,8 @@ import Cookie from "js-cookie";
 import UserHome from './components/UserHome';
 import Home from './components/Home';
 import ResetPassword from './components/ResetPassword';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
 import CreateConceitual from './components/CreateConceitual';
 import * as firebase from "firebase";
 
@@ -126,7 +128,7 @@ const router = new VueRouter({
       component: CreateConceitual
     },
     {
-      path: '/:emailconfirmation',
+      path: '/',
       component: Home,
       name: 'root'
     },
@@ -135,12 +137,22 @@ const router = new VueRouter({
       name: 'reset_password',
       component: ResetPassword
     },
+    {
+      path: '/login/:emailconfirmation',
+      name: 'login',
+      component: Login,
+    },
+    {
+      path: '/signup/',
+      name: 'signup',
+      component: SignUp,
+    },
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name === 'reset_password') next();
-  else if (to.name !== 'root' && store.state.jwt === null) next({ path: '/ ' })
+  if (to.name === 'reset_password' || to.name === 'login' || to.name === 'signup') next();
+  else if (to.name !== 'root' && store.state.jwt === null) next({ path: '/' })
   else next()
 })
 
