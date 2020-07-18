@@ -87,9 +87,7 @@ export default {
     callScroll(item) {
       var vm = this;
       setTimeout(function() {
-        console.log(vm.stopDblclick, "o");
         if (vm.stopDblclick === 0) {
-          console.log("oi");
           if (item.item.id) {
             if (item.item.id.split("/")[5] === "SUBMODULO") {
               vm.$emit("elementToScroll", {

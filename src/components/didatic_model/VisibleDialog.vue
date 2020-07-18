@@ -245,6 +245,25 @@
         </v-card>
       </v-dialog>
     </div>
+    <div class="text-center">
+      <v-dialog v-model="dialogLoading" max-width="890" persistent="persistent">
+        <v-card color="primary" dark>
+          <v-card-text style="color:white;">
+            <v-row class="pt-2 pb-3">
+              <br />
+              <v-spacer></v-spacer>
+              <span style="font-size: 1.3em; color:white;">Carregando informações do modelo didático</span>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-progress-circular indeterminate color="white" class="mb-0"></v-progress-circular>
+              <v-spacer></v-spacer>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
@@ -256,6 +275,7 @@ export default {
   props: ["domain", "dialog"],
   data: () => ({
     valid: true,
+    dialogLoading: false,
     treeData: [],
     selection: [],
     elementData: [],

@@ -8,8 +8,7 @@
         <v-list-item @click="option(item)">
           <v-spacer></v-spacer>
 
-          <v-list-item-title class="ml-2" style="color: #2196F3
-">
+          <v-list-item-title class="ml-2" style="color: #2196F3">
             <v-icon color="blue">{{item.icon}}</v-icon>
             {{ item.name }}
           </v-list-item-title>
@@ -41,6 +40,11 @@ export default {
         icon: "mdi-account-switch",
         name: "Atividade Colaborativa",
         valueType: 3
+      },
+      {
+        icon: "mdi-lightbulb-outline",
+        name: "Exemplo",
+        valueType: 4
       }
     ]
   }),

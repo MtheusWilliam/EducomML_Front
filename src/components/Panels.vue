@@ -80,6 +80,7 @@
                     :type="'dominio'"
                   />
                 </v-menu>
+
                 <!--Formulario para adição do módulo-->
                 <v-dialog v-model="dialog_modulo" persistent="persistent" max-width="600px">
                   <template v-slot:activator="{ on }">
@@ -111,7 +112,15 @@
                     :dialog="dialog_dominio"
                   />
                 </v-dialog>
+                <!-- Ícone para criação de modelo didático-->
+                <v-btn icon="icon" color="white" dark :disabled="disableBtnDidatic" class="mr-1">
+                  <v-icon>mdi-book-open</v-icon>
+                </v-btn>
 
+                <!--Ícone para gerar arquivo apk-->
+                <v-btn icon="icon" color="white" dark>
+                  <v-icon>mdi-content-save</v-icon>
+                </v-btn>
                 <!--Formulario para criação de submódulo-->
                 <v-dialog v-model="dialog_submodulo" persistent="persistent" max-width="600px">
                   <SubModuloDialog
@@ -234,12 +243,24 @@
                     :instructionalelement="elementoinstrucional"
                   />
                 </v-dialog>
-                <!--Formulario para criação de atividade colaborativa -->
+                <!--Formulario para edição do modelo didático -->
                 <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1100px">
                   <VisibleDialog
                     :domain="dominio"
                     :dialog="dialog_visible"
                     @close_or_save="visibleClose"
+                  />
+                </v-dialog>
+
+                <!--Formulário para criação de exemplo-->
+                <v-dialog v-model="dialog_exemplo" persistent="persistent" max-width="1100px">
+                  <ExemploDialog
+                    @instrucclose="instrucdialogclose"
+                    :instrucOptionCall="instrucObjectFile"
+                    :instrucType="instrucType"
+                    :domain="dominio"
+                    :dialog="dialog_exemplo"
+                    :instructionalelement="elementoinstrucional"
                   />
                 </v-dialog>
               </div>
@@ -1488,6 +1509,7 @@
         <!--FIM DO CONTENT DO DOMÍNIO-->
       </v-expansion-panel>
     </v-expansion-panels>
+
     <v-row class="d-flex justify-end mt-2">
       <v-btn
         color="primary"
@@ -1556,6 +1578,7 @@ import ProcedureDialog from "./instructional_model/ProcedureDialog";
 import InstrucMenuFiles from "./InstrucMenuFiles";
 import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
+import ExemploDialog from "./instructional_model/ExemploDialog";
 import VisibleDialog from "./didatic_model/VisibleDialog";
 import firebase from "firebase/app";
 import axios from "axios";
@@ -1577,6 +1600,7 @@ export default {
     InstrucMenuFiles,
     AvaliacaoDialog,
     AtividadeColaborativaDialog,
+    ExemploDialog,
     VisibleDialog
   },
   props: [
@@ -1653,6 +1677,7 @@ export default {
     dialog_procedure: false,
     dialog_avaliacao: false,
     dialog_atividadecolaborativa: false,
+    dialog_exemplo: false,
     dialog_visible: false,
     select: null,
     checkbox: false,
@@ -2259,6 +2284,8 @@ export default {
         this.dialog_avaliacao = true;
       } else if (value.name === "Atividade Colaborativa") {
         this.dialog_atividadecolaborativa = true;
+      } else if (value.name === "Exemplo") {
+        this.dialog_exemplo = true;
       }
       this.instrucObjectFile = value.optionCall;
       this.instrucType = value.type;
@@ -2269,6 +2296,7 @@ export default {
       var vm = this;
       this.dialog_avaliacao = false;
       this.dialog_atividadecolaborativa = false;
+      this.dialog_exemplo = false;
       this.conceito = "";
       this.modulo = "";
       this.submodulo = "";
