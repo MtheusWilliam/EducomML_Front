@@ -41,6 +41,7 @@ export default {
   name: "TreeView",
   props: ["dominio"],
   data: () => ({
+    stopDblclick: 0,
     auxAppbarElement: 0,
     auxAppbarIcon: 0,
     search: null,
@@ -67,8 +68,10 @@ export default {
   }),
   methods: {
     callEdit(item) {
+      var vm = this;
+      this.stopDblclick = 1;
       if (item.item.id) {
-        if (item.item.id.split("/")[5] === "SUBMODULO") {
+        if (item.item.type === "SUBMODULO") {
           this.$emit("type", { type: "submodulo", url: item.item.id });
         } else {
           this.$emit("type", {
@@ -77,21 +80,31 @@ export default {
           });
         }
       }
+      setTimeout(function() {
+        vm.stopDblclick = 0;
+      }, 400);
     },
     callScroll(item) {
-      if (item.item.id) {
-        if (item.item.id.split("/")[5] === "SUBMODULO") {
-          this.$emit("elementToScroll", {
-            type: "submodulo",
-            url: item.item.id
-          });
-        } else {
-          this.$emit("elementToScroll", {
-            type: item.item.id.split("/")[3],
-            url: item.item.id
-          });
+      var vm = this;
+      setTimeout(function() {
+        console.log(vm.stopDblclick, "o");
+        if (vm.stopDblclick === 0) {
+          console.log("oi");
+          if (item.item.id) {
+            if (item.item.id.split("/")[5] === "SUBMODULO") {
+              vm.$emit("elementToScroll", {
+                type: "submodulo",
+                url: item.item.id
+              });
+            } else {
+              vm.$emit("elementToScroll", {
+                type: item.item.id.split("/")[3],
+                url: item.item.id
+              });
+            }
+          }
         }
-      }
+      }, 200);
     },
     setDomainVariables() {
       this.treeData = [];
