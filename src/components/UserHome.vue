@@ -182,8 +182,6 @@ export default {
     idDomain: 0,
     domainColors: [],
     cardColorsPalette: [
-      "#FFDEAD",
-      "#F5DEB3",
       "#DEB887",
       "#D2B48C",
       "#BC8F8F",
