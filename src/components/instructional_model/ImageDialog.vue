@@ -21,22 +21,9 @@
             <label for="infoItemClassesSelect">Classifique o item de informação</label>
             <v-select
               id="infoItemClassesSelect"
-              class="mt-5"
               v-model="infoClasse"
               :items="infoItemClasses"
               label="Classe"
-              style="margin:0px;"
-            ></v-select>
-          </v-col>
-
-          <v-col cols="3">
-            <label for="infoItemExemplosSelect">Esse conteúdo se trata de um exemplo?</label>
-            <v-select
-              class="mt-5"
-              id="infoItemExemplosSelect"
-              v-model="infoExemplo"
-              :items="infoItemExemplos"
-              label="Resposta"
               style="margin:0px;"
             ></v-select>
           </v-col>
@@ -129,8 +116,6 @@ export default {
     infoLevel: "",
     infoLearning: "",
     infoClasse: "",
-    infoExemplo: "",
-    infoItemExemplos: ["Sim", "Não"],
     infoItemClasses: ["Conceito", "Princípio", "Fato"],
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemLearningStyles: ["Visual", "Textual"],
@@ -177,9 +162,6 @@ export default {
           if (vm.mobilemedia.learningStyle !== null) {
             vm.infoLearning =
               vm.infoItemLearningStyles[vm.mobilemedia.learningStyle];
-          }
-          if (vm.mobilemedia.fk_idinstructionalelement) {
-            vm.infoExemplo = vm.infoItemExemplos[0];
           }
           if (vm.mobilemedia.fk_informationitem) {
             var csrftoken = Cookie.get("csrftoken");
@@ -244,11 +226,6 @@ export default {
         urllink: null
       };
 
-      var instructionalelement = {
-        label: "Exemplo",
-        fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/4/`
-      };
-
       await firebase
         .storage()
         .ref()
@@ -275,30 +252,15 @@ export default {
           fk_informationitemtype: auxinformationitem.auxinfo,
           fk_idconcept: this.optionCall.url
         };
-        if (this.infoExemplo) {
-          Object.assign(instructionalelement, {
-            fk_idconcept: this.optionCall.url
-          });
-        }
+
         Object.assign(mobilemedia, {
           fk_idconcept: this.optionCall.url
         });
       } else if (this.type === "dominio") {
-        if (this.infoExemplo) {
-          Object.assign(instructionalelement, {
-            fk_idknowledgedomain: this.optionCall.url
-          });
-        }
-
         Object.assign(mobilemedia, {
           fk_idknowledgedomain: this.optionCall.url
         });
       } else if (this.type === "modulo") {
-        if (this.infoExemplo) {
-          Object.assign(instructionalelement, {
-            fk_idmodule: this.optionCall.url
-          });
-        }
         Object.assign(mobilemedia, {
           fk_module: this.optionCall.url
         });
@@ -306,32 +268,7 @@ export default {
       /* CÓDIGO PARA EDIÇÃO DO MOBILEMEDIA */
       if (this.mobilemedia) {
         vm = this;
-        if (vm.mobilemedia.fk_idinstructionalelement && !vm.infoExemplo) {
-          await Object.assign(mobilemedia, {
-            fk_idinstructionalelement: null
-          });
-        }
-        if (
-          !vm.mobilemedia.fk_idinstructionalelement &&
-          vm.infoExemplo === vm.infoItemExemplos[0]
-        ) {
-          await axios
-            .post(
-              `http://127.0.0.1:8000/instructionalelement/`,
-              instructionalelement,
-              {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              }
-            )
-            .then(async function(resposta) {
-              Object.assign(mobilemedia, {
-                fk_idinstructionalelement: resposta.data.url
-              });
-            });
-        }
+
         if (this.type === "conceito") {
           await axios
             .put(vm.mobilemedia.fk_informationitem, iteminfo, {
@@ -351,22 +288,7 @@ export default {
                     password: "admin"
                   }
                 })
-                .then(async function(/*resposta*/) {
-                  if (
-                    vm.mobilemedia.fk_idinstructionalelement &&
-                    !vm.infoExemplo
-                  ) {
-                    await axios.delete(
-                      vm.mobilemedia.fk_idinstructionalelement,
-                      {
-                        auth: {
-                          username: "admin",
-                          password: "admin"
-                        }
-                      }
-                    );
-                  }
-                });
+                .then(async function(/*resposta*/) {});
             });
         } else if (this.type === "dominio" || this.type === "modulo") {
           await axios
@@ -376,134 +298,50 @@ export default {
                 password: "admin"
               }
             })
-            .then(async function(/*resposta*/) {
-              if (vm.mobilemedia.fk_idinstructionalelement && !vm.infoExemplo) {
-                await axios.delete(vm.mobilemedia.fk_idinstructionalelement, {
-                  auth: {
-                    username: "admin",
-                    password: "admin"
-                  }
-                });
-              }
-            });
+            .then(async function(/*resposta*/) {});
         }
       } else {
         /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA */
         if (this.type === "conceito") {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEMINFO*/
-          if (this.infoExemplo) {
-            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
-            await axios
-              .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              })
-              .then(async function(resposta) {
-                Object.assign(instructionalelement, {
-                  fk_informationitem: resposta.data.url
-                });
-                await axios
-                  .post(
-                    `http://127.0.0.1:8000/instructionalelement/`,
-                    instructionalelement,
-                    {
-                      auth: {
-                        username: "admin",
-                        password: "admin"
-                      }
-                    }
-                  )
-                  .then(async function(resposta2) {
-                    Object.assign(mobilemedia, {
-                      fk_informationitem: resposta.data.url,
-                      fk_idinstructionalelement: resposta2.data.url
-                    });
-                    await axios
-                      .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                        auth: {
-                          username: "admin",
-                          password: "admin"
-                        }
-                      })
-                      .then(function(/*resposta*/) {
-                        /*vm.moduloTitle = resposta.data.namemodule;
-                                    vm.subTitle = resposta.data.subtitle;*/
-                      });
-                  });
+
+          await axios
+            .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(async function(resposta) {
+              Object.assign(mobilemedia, {
+                fk_informationitem: resposta.data.url
               });
-          } else {
-            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEM INFO E SEM ELEMENTO INSTRUCIONAL*/
-            await axios
-              .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              })
-              .then(async function(resposta) {
-                Object.assign(mobilemedia, {
-                  fk_informationitem: resposta.data.url
-                });
-                await axios
-                  .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                    auth: {
-                      username: "admin",
-                      password: "admin"
-                    }
-                  })
-                  .then(function(/*resposta*/) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
-                                    vm.subTitle = resposta.data.subtitle;*/
-                  });
-              });
-          }
-        } else if (this.type === "dominio" || this.type === "modulo") {
-          /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
-          if (this.infoExemplo) {
-            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E COM ELEMENTO INSTRUCIONAL*/
-            await axios
-              .post(
-                `http://127.0.0.1:8000/instructionalelement/`,
-                instructionalelement,
-                {
+              await axios
+                .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
                   auth: {
                     username: "admin",
                     password: "admin"
                   }
-                }
-              )
-              .then(async function(resposta) {
-                Object.assign(mobilemedia, {
-                  fk_idinstructionalelement: resposta.data.url
+                })
+                .then(function(/*resposta*/) {
+                  /*vm.moduloTitle = resposta.data.namemodule;
+                                    vm.subTitle = resposta.data.subtitle;*/
                 });
-                await axios
-                  .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                    auth: {
-                      username: "admin",
-                      password: "admin"
-                    }
-                  })
-                  .then(function(/*resposta*/) {
-                    /*vm.moduloTitle = resposta.data.namemodule;
+            });
+        } else if (this.type === "dominio" || this.type === "modulo") {
+          /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
+
+          await axios
+            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+              auth: {
+                username: "admin",
+                password: "admin"
+              }
+            })
+            .then(function(/*resposta*/) {
+              /*vm.moduloTitle = resposta.data.namemodule;
                                 vm.subTitle = resposta.data.subtitle;*/
-                  });
-              });
-          } else {
-            /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO E SEM ELEMENTO INSTRUCIONAL*/
-            await axios
-              .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
-                auth: {
-                  username: "admin",
-                  password: "admin"
-                }
-              })
-              .then(function(/*resposta*/) {
-                /*vm.moduloTitle = resposta.data.namemodule;
-                                vm.subTitle = resposta.data.subtitle;*/
-              });
-          }
+            });
         }
       }
     },
@@ -520,9 +358,6 @@ export default {
       ) {
         return value === vm.infoLearning;
       });
-      if (this.infoExemplo === this.infoItemExemplos[1]) {
-        this.infoExemplo = "";
-      }
       if (this.imagemObject) {
         await this.postOrPutMobilemedia();
         await this.$emit("close");
@@ -545,7 +380,6 @@ export default {
       this.infoLevel = "";
       this.infoLearning = "";
       this.infoClasse = "";
-      this.infoExemplo = "";
     },
     getSrcImage() {
       if (this.mobilemedia.path) {
