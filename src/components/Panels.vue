@@ -343,7 +343,7 @@
           <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
           <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <v-expansion-panels
-            v-for="(instrucelement) in instrucElementsSearch(dominio)"
+            v-for="(instrucelement) in dominio.instructionalelements"
             :key="instrucelement.url"
             class="mt-2 mb-2"
             :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
@@ -581,7 +581,7 @@
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-for="(instrucelement) in instrucElementsSearch(modulo)"
+                  v-for="(instrucelement) in modulo.instructionalelements"
                   :key="instrucelement.url"
                   class="mt-2 mb-2"
                   :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
@@ -813,7 +813,7 @@
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in instrucElementsSearch(submodulo)"
+                        v-for="(instrucelement) in submodulo.instructionalelements"
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                         :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
@@ -1153,7 +1153,7 @@
                             <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS -->
                             <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                              v-for="(instrucelement) in conceito.instructionalelements"
                               :key="instrucelement.url"
                               class="mt-2 mb-2"
                               :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
@@ -1492,7 +1492,7 @@
                       <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in instrucElementsSearch(conceito)"
+                        v-for="(instrucelement) in conceito.instructionalelements"
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                         :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
@@ -1682,7 +1682,8 @@ export default {
     instrucTypesIcon: [
       "mdi-clipboard-text",
       "mdi-clipboard-check",
-      "mdi-account-switch"
+      "mdi-account-switch",
+      "mdi-lightbulb-outline"
     ],
     mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
     enableOpenPanels: 0,
@@ -2176,6 +2177,11 @@ export default {
         `http://127.0.0.1:8000/instrucelementtype/3/`
       ) {
         this.dialog_atividadecolaborativa = true;
+      } else if (
+        valueInstructionalElement.fk_instructionalelementtype ===
+        `http://127.0.0.1:8000/instrucelementtype/4/`
+      ) {
+        this.dialog_exemplo = true;
       }
     },
     close_or_save_modulo(value) {
