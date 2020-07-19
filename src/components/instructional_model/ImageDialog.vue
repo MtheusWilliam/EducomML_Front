@@ -68,7 +68,7 @@
           v-if="mobilemedia"
         >mdi-eye</v-icon>
 
-        <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc" v-if="imagemObject"></v-img>
+        <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc" v-if="viewImage"></v-img>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
