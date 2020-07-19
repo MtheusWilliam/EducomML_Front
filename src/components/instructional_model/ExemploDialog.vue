@@ -48,7 +48,7 @@
       </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
-          <label class="pt-2" style="font-size:1.3em;" for="avaliacaoNameArea">
+          <label class="pt-2" style="font-size:1.3em;" for="exemploNameArea">
             <strong>Identificador do exemplo:</strong>
           </label>
           <v-text-field
@@ -175,45 +175,11 @@
           <v-card-text
             class="mt-3"
             style="font-size: 1.3em;"
-          >Para criar uma avaliação, é necessário criar pelo uma questão.</v-card-text>
+          >Para salvar um exemplo, é necessário inserir pelo algum conteúdo (MobileMedia).</v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" text @click="dialog_alert = false">Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
-    <div class="text-center">
-      <v-dialog v-model="dialog_alert2" width="500">
-        <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
-          <v-card-text class="mt-3" style="font-size: 1.3em;">
-            Questões objetivas necessitam de pelo menos uma alternativa correta.
-            <br />
-            Ajuste a questão {{questionAjust}}.
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog_alert2 = false">Ok</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
-    <div class="text-center">
-      <v-dialog v-model="dialog_alert3" width="500">
-        <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
-          <v-card-text class="mt-3" style="font-size: 1.3em;">
-            Questões objetivas necessitam de pelo menos uma alternativa.
-            <br />
-            Ajuste a questão {{questionAjust}}.
-          </v-card-text>
-          <v-divider></v-divider>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog_alert3 = false">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -239,8 +205,6 @@ export default {
   data: () => ({
     valid: true,
     dialog_alert: false,
-    dialog_alert2: false,
-    dialog_alert3: false,
     itemsMobileMedia: [
       {
         icon: "mdi-file-image",
@@ -261,7 +225,7 @@ export default {
     ],
     linkUrlRules: [v => !!v || "É necessário inserir a url do seu link"],
     exemploName: "",
-    avaliacaoNameRules: [
+    exemploNameRules: [
       v => !!v || "É necessário descrever um identificador para o exemplo",
       v =>
         (v && v.length <= 100) ||
@@ -283,7 +247,7 @@ export default {
       if (this.instructionalelement) {
         var vm = this;
         this.$nextTick(function() {
-          this.avaliacaoName = this.instructionalelement.label;
+          this.exemploName = this.instructionalelement.label;
         });
         this.mobileMediasControl = [];
         if (this.instructionalelement !== "") {
@@ -350,13 +314,10 @@ export default {
         this.resetVariables();
       }
     },
-    async postQuestions() {
+    async postMobilesExemplo() {
       var instructionalelement = {
-        label: this.avaliacaoName,
-        fk_instructionalelementtype:
-          `http://127.0.0.1:8000/instrucelementtype/` +
-          this.instrucValueType +
-          `/`
+        label: this.exemploName,
+        fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/4/`
       };
       var vm = this;
       var auxPath = "";
@@ -389,7 +350,6 @@ export default {
           }
         });
       }
-
       if (this.instrucType === "dominio") {
         Object.assign(instructionalelement, {
           fk_idknowledgedomain: this.instrucOptionCall.url
@@ -414,7 +374,6 @@ export default {
           })
           .then(async function(resposta) {
             if (vm.mobileMediasControl) {
-              var i = 0;
               await vm.mobileMediasControl.forEach(async function(
                 mobilemedia,
                 indexmobile
@@ -573,7 +532,6 @@ export default {
                       }
                     );
                   } else if (mobilemedia.type === 2) {
-                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {
@@ -971,12 +929,14 @@ export default {
 
     async validate() {
       if (this.$refs.form.validate()) {
-        await this.postQuestions();
-        this.mobileMediasControl = [];
-        await this.$emit("instrucclose");
-        await this.resetVariables();
-      } else {
-        this.dialog_alert = true;
+        if (this.mobileMediasControl.length === 0) {
+          this.dialog_alert = true;
+        } else {
+          await this.postMobilesExemplo();
+          this.mobileMediasControl = [];
+          await this.$emit("instrucclose");
+          await this.resetVariables();
+        }
       }
     },
     resetVariables() {

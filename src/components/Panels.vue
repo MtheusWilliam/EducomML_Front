@@ -650,7 +650,7 @@
                           <v-avatar color="white" size="38" class="mr-2">
                             <span class="black--text" style="font-size:1.2em;">SM</span>
                           </v-avatar>
-                          <div style="vertical-align:middle;" class="mt-2">
+                          <div style="vertical-align:middle;" class="mt-3">
                             <p>
                               <strong
                                 v-if="submodulo.namemodule <= 40"
@@ -1557,21 +1557,6 @@
         <!--FIM DO CONTENT DO DOMÍNIO-->
       </v-expansion-panel>
     </v-expansion-panels>
-
-    <v-row class="d-flex justify-end mt-2">
-      <v-btn
-        color="primary"
-        height="49"
-        dark
-        :disabled="disableBtnDidatic"
-        @click="openDidatic();"
-        class="mr-1"
-      >Modelo Didático</v-btn>
-      <v-btn color="success" height="49" dark @click="saveDominio" class="mr-3">
-        Salvar Domínio
-        <v-icon dark right>mdi-content-save</v-icon>
-      </v-btn>
-    </v-row>
     <div class="text-center">
       <v-dialog v-model="alertDelete" width="500" persistent="persistent">
         <v-card>
