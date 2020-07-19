@@ -1,15 +1,9 @@
 <template>
-  <v-card
-    class="elevation-12 mx-auto"
-    style="position:relative;top:20vh;"
-    width="30vw"
-  >
+  <v-card class="elevation-12 mx-auto" style="position:relative;top:20vh;" width="50vw">
     <v-toolbar color="black" flat>
-      <v-toolbar-title style="color:#FFCC00;"
-        >Faça seu login no Educom.ML</v-toolbar-title
-      >
+      <v-toolbar-title style="color:#FFCC00;">Faça seu login no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;" max-width="200"></v-img>
       <v-tooltip bottom>
         <span>Source</span>
       </v-tooltip>
@@ -56,6 +50,10 @@
         <span v-else>Voltar</span>
       </a>
       <v-spacer></v-spacer>
+      <a @click="redirectSignUp()" class="ml-5">
+        <span>Não possui uma conta? Faça seu cadastro</span>
+      </a>
+      <v-spacer></v-spacer>
       <v-btn color="primary" @click="login" large class="mr-4">
         <span v-if="!resetPassword">Login</span>
         <span v-else>Enviar Email</span>
@@ -64,21 +62,16 @@
     <div class="text-center">
       <v-dialog v-model="dialogMessage" width="500">
         <v-card>
-          <v-card-title
-            :class="messageClass"
-            primary-title
-            style="color:white;"
-            >{{ messageTitle }}</v-card-title
-          >
-          <v-card-text class="mt-3" style="font-size: 1.3em;">{{
+          <v-card-title :class="messageClass" primary-title style="color:white;">{{ messageTitle }}</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">
+            {{
             message
-          }}</v-card-text>
+            }}
+          </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialogMessage = false"
-              >Ok</v-btn
-            >
+            <v-btn color="primary" text @click="dialogMessage = false">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -95,14 +88,14 @@ export default {
       password: "",
       email: "",
       emailRules: [
-        (v) => !!v || "É necessário inserir seu e-mail",
-        (v) => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido",
+        v => !!v || "É necessário inserir seu e-mail",
+        v => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido"
       ],
       resetPassword: false,
       dialogMessage: false,
       messageClass: "",
       messageTitle: "",
-      message: "",
+      message: ""
     };
   },
   mounted() {
@@ -127,15 +120,15 @@ export default {
           .post(
             "http://localhost:8000/reset-password/",
             {
-              email: this.email,
+              email: this.email
             },
             {
               headers: {
-                "Access-Control-Allow-Origin": "*",
-              },
+                "Access-Control-Allow-Origin": "*"
+              }
             }
           )
-          .then((response) => {
+          .then(response => {
             if (response.data.status) {
               this.messageTitle = "Email enviado!";
               this.messageClass = "headline green";
@@ -150,7 +143,7 @@ export default {
         await this.$store
           .dispatch("obtainToken", {
             username: this.username,
-            password: this.password,
+            password: this.password
           })
           .then(() => {
             if (this.$store.state.jwt) {
@@ -165,6 +158,11 @@ export default {
           });
       }
     },
-  },
+    async redirectSignUp() {
+      this.$router.push({
+        name: "signup"
+      });
+    }
+  }
 };
 </script>

@@ -9,8 +9,8 @@
         <v-spacer></v-spacer>
         <v-tabs
           class="d-flex justify-end mr-1"
-          background-color="transparent"
           active-class="white--text"
+          v-model="tab"
           hide-slider
         >
           <v-tab
@@ -37,8 +37,7 @@
         justify="center"
       >{{atual_page.subtitle}}</v-row>
     </v-img>
-
-    <v-tabs-items>
+    <v-tabs-items v-model="tab">
       <v-tab-item>
         <v-row
           align="start"
@@ -53,7 +52,14 @@
           </h3>
         </v-row>
         <v-row align="start" justify="center">
-          <v-btn outlined color="#B19114" class="ma-8" width="20vw" dark>Acesse aqui</v-btn>
+          <v-btn
+            outlined
+            color="#B19114"
+            class="ma-8"
+            width="20vw"
+            dark
+            @click="redirectLogin()"
+          >Acesse aqui</v-btn>
         </v-row>
       </v-tab-item>
       <v-tab-item></v-tab-item>
@@ -167,6 +173,7 @@ export default {
       messageTitle: "",
       message: "",
       atual_page: "",
+      tab: "",
       pages: [
         {
           title: "Educom Tool!",

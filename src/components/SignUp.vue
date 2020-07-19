@@ -1,9 +1,9 @@
 <template>
-  <v-card class="elevation-12 mx-auto" style="position:relative;top:20vh;" width="30vw">
+  <v-card class="elevation-12 mx-auto" style="position:relative;top:20vh;" width="50vw">
     <v-toolbar color="black" flat>
       <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;" max-width="200"></v-img>
       <v-tooltip bottom>
         <span>Source</span>
       </v-tooltip>
@@ -72,6 +72,9 @@
       </v-form>
     </v-card-text>
     <v-card-actions>
+      <a @click="redirectLogin()" class="ml-5">
+        <span>Já possui uma conta? Faça seu Login</span>
+      </a>
       <v-spacer></v-spacer>
       <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
@@ -184,6 +187,11 @@ export default {
       });
       await this.$router.push({
         name: "home"
+      });
+    },
+    async redirectLogin() {
+      this.$router.push({
+        name: "login"
       });
     }
   }
