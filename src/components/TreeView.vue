@@ -28,7 +28,9 @@
       <template v-slot:prepend="{item}">
         <v-btn text @click="callScroll({item})" @dblclick="callEdit({item})">
           <v-icon v-if="item.icon">{{item.icon}}</v-icon>
-          <span v-else>[{{item.type}}]</span>
+          <v-avatar v-else color="black" size="25" class="mr-2">
+            <span class="white--text" style="font-size:0.7em;">{{item.avatar}}</span>
+          </v-avatar>
           <span class="ml-1">{{item.nome}}</span>
         </v-btn>
       </template>
@@ -111,6 +113,7 @@ export default {
         id: this.dominio.url,
         nome: this.dominio.nameknowledgedomain,
         type: "DOMÍNIO",
+        avatar: "DM",
         children: []
       });
       if (this.dominio.mobilemedias.length) {
@@ -155,6 +158,7 @@ export default {
               id: modulo.url,
               nome: modulo.namemodule,
               type: "MODULO",
+              avatar: "MD",
               children: []
             });
 
@@ -203,6 +207,7 @@ export default {
                   id: submodulo.url + "sub",
                   nome: submodulo.namemodule,
                   type: "SUBMODULO",
+                  avatar: "SM",
                   children: []
                 });
 
@@ -259,6 +264,7 @@ export default {
                       id: conceito.url,
                       nome: conceito.nameconcept,
                       type: "CONCEITO",
+                      avatar: "CC",
                       children: []
                     });
 
@@ -340,6 +346,7 @@ export default {
                   id: conceito.url,
                   nome: conceito.nameconcept,
                   type: "CONCEITO",
+                  avatar: "CC",
                   children: []
                 });
                 if (conceito.mobilemedias.length) {

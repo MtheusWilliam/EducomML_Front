@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <!--Panel do Domínio-->
-    <v-expansion-panels v-model="vModelPanelDomain" multiple>
+    <v-expansion-panels v-model="vModelPanelDomain" multiple readonly>
       <v-expansion-panel
         v-for="(item,i) in 1"
         :key="i"
@@ -113,7 +113,14 @@
                   />
                 </v-dialog>
                 <!-- Ícone para criação de modelo didático-->
-                <v-btn icon="icon" color="white" dark :disabled="disableBtnDidatic" class="mr-1">
+                <v-btn
+                  icon="icon"
+                  color="white"
+                  dark
+                  :disabled="disableBtnDidatic"
+                  @click="openDidatic()"
+                  class="mr-1"
+                >
                   <v-icon>mdi-book-open</v-icon>
                 </v-btn>
 
@@ -244,7 +251,7 @@
                   />
                 </v-dialog>
                 <!--Formulario para edição do modelo didático -->
-                <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1100px">
+                <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1200px">
                   <VisibleDialog
                     :domain="dominio"
                     :dialog="dialog_visible"
@@ -276,6 +283,7 @@
             :key="mobilemedia.url"
             class="mt-2 mb-2"
             :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+            :readonly="readonly_control"
           >
             <v-expansion-panel>
               <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
@@ -297,7 +305,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                        @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
@@ -305,7 +313,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="auxElementDelete = mobilemedia; alertDelete=true"
+                        @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
@@ -339,6 +347,7 @@
             :key="instrucelement.url"
             class="mt-2 mb-2"
             :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+            :readonly="readonly_control"
           >
             <v-expansion-panel>
               <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
@@ -361,7 +370,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                        @click="readonly_control=true; setinstructionalelement(instrucelement, dominio, 'dominio')"
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
@@ -369,7 +378,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="auxElementDelete = instrucelement; alertDelete=true"
+                        @click="readonly_control=true; auxElementDelete = instrucelement; alertDelete=true"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
@@ -383,7 +392,7 @@
           </v-expansion-panels>
           <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <!--Panels dos Módulos-->
-          <v-expansion-panels v-model="vModelPanelModules" multiple>
+          <v-expansion-panels v-model="vModelPanelModules" multiple :readonly="readonly_control">
             <v-expansion-panel
               v-for="(modulo, imodulo) in getNotSubmodules(dominio)"
               :key="imodulo"
@@ -486,7 +495,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="dialog_modulo=true;setmodulo(modulo)"
+                        @click="readonly_control=true; dialog_modulo=true;setmodulo(modulo)"
                       >
                         <v-icon>mdi-pencil</v-icon>
                       </v-btn>
@@ -494,7 +503,7 @@
                       <v-btn
                         icon="icon"
                         color="white"
-                        @click="auxElementDelete = modulo; alertDelete = true"
+                        @click="readonly_control=true; auxElementDelete = modulo; alertDelete = true"
                       >
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
@@ -512,6 +521,7 @@
                   :key="mobilemedia.url"
                   class="mt-2 mb-2"
                   :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                  :readonly="readonly_control"
                 >
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
@@ -533,7 +543,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                              @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
                             >
                               <v-icon>mdi-pencil</v-icon>
                             </v-btn>
@@ -541,7 +551,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="auxElementDelete = mobilemedia; alertDelete=true"
+                              @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
                             >
                               <v-icon>mdi-delete</v-icon>
                             </v-btn>
@@ -575,6 +585,7 @@
                   :key="instrucelement.url"
                   class="mt-2 mb-2"
                   :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                  :readonly="readonly_control"
                 >
                   <v-expansion-panel>
                     <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
@@ -599,7 +610,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                              @click="readonly_control=true; setinstructionalelement(instrucelement, dominio, 'dominio')"
                             >
                               <v-icon>mdi-pencil</v-icon>
                             </v-btn>
@@ -607,7 +618,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="auxElementDelete = instrucelement; alertDelete=true"
+                              @click="readonly_control=true; auxElementDelete = instrucelement; alertDelete=true"
                             >
                               <v-icon>mdi-delete</v-icon>
                             </v-btn>
@@ -621,7 +632,11 @@
                 </v-expansion-panels>
                 <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <!--Panels dos SubMódulos-->
-                <v-expansion-panels v-model="vModelPanelSubmodules" multiple>
+                <v-expansion-panels
+                  v-model="vModelPanelSubmodules"
+                  multiple
+                  :readonly="readonly_control"
+                >
                   <v-expansion-panel
                     v-for="(submodulo, isubmodulo) in modulo.submodules"
                     :key="isubmodulo"
@@ -709,7 +724,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="setsubmodulo(submodulo);dialog_submodulo=true"
+                              @click="readonly_control=true; setsubmodulo(submodulo);dialog_submodulo=true"
                             >
                               <v-icon>mdi-pencil</v-icon>
                             </v-btn>
@@ -717,7 +732,7 @@
                             <v-btn
                               icon="icon"
                               color="white"
-                              @click="auxElementDelete = submodulo; alertDelete = true"
+                              @click="readonly_control=true; auxElementDelete = submodulo; alertDelete = true"
                             >
                               <v-icon>mdi-delete</v-icon>
                             </v-btn>
@@ -735,6 +750,7 @@
                         :key="mobilemedia.url"
                         class="mt-2 mb-2"
                         :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        :readonly="readonly_control"
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header
@@ -759,7 +775,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                                    @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
@@ -767,7 +783,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="auxElementDelete = mobilemedia; alertDelete=true"
+                                    @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
                                   >
                                     <v-icon>mdi-delete</v-icon>
                                   </v-btn>
@@ -801,6 +817,7 @@
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                         :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        :readonly="readonly_control"
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header
@@ -828,7 +845,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                    @click="readonly_control=true; setinstructionalelement(instrucelement, dominio, 'dominio')"
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
@@ -836,7 +853,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="auxElementDelete = instrucelement; alertDelete=true"
+                                    @click="readonly_control=true; auxElementDelete = instrucelement; alertDelete=true"
                                   >
                                     <v-icon>mdi-delete</v-icon>
                                   </v-btn>
@@ -850,7 +867,11 @@
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
-                      <v-expansion-panels v-model="vModelPanelConceptsSubmodule" multiple>
+                      <v-expansion-panels
+                        v-model="vModelPanelConceptsSubmodule"
+                        multiple
+                        :readonly="readonly_control"
+                      >
                         <v-expansion-panel
                           v-for="(conceito, iconceitosubmodulo) in submodulo.concepts"
                           :key="iconceitosubmodulo"
@@ -863,98 +884,105 @@
                           >
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-row>
-                              <v-col>
-                                <p class="mt-3">
-                                  <span
-                                    v-if="conceito.nameconcept.length <= 40"
-                                    style="font-size:1.2em;"
-                                  >
-                                    <strong>{{ conceito.nameconcept }}</strong>
-                                  </span>
-                                  <span v-else style="font-size:1.2em;">
-                                    <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
-                                  </span>
-                                </p>
+                              <v-col class="d-flex align-center" style="width: 100%;">
+                                <v-avatar color="white" size="38" class="mr-2">
+                                  <span class="black--text" style="font-size:1.2em;">CC</span>
+                                </v-avatar>
+                                <div style="vertical-align:middle;">
+                                  <p class="mt-3">
+                                    <span
+                                      v-if="conceito.nameconcept.length <= 40"
+                                      style="font-size:1.2em;"
+                                    >
+                                      <strong>{{ conceito.nameconcept }}</strong>
+                                    </span>
+                                    <span v-else style="font-size:1.2em;">
+                                      <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
+                                    </span>
+                                  </p>
+                                </div>
                               </v-col>
                               <v-col cols="4" class="d-flex justify-end mr-1">
-                                <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
-                                <v-menu
-                                  top="top"
-                                  width="300px"
-                                  origin="center center"
-                                  :offset-y="true"
-                                  transition="scale-transition"
-                                >
-                                  <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                      <v-icon>mdi-text-box-plus-outline</v-icon>
-                                    </v-btn>
-                                  </template>
+                                <div style="vertical-align:middle;">
+                                  <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
+                                  <v-menu
+                                    top="top"
+                                    width="300px"
+                                    origin="center center"
+                                    :offset-y="true"
+                                    transition="scale-transition"
+                                  >
+                                    <template v-slot:activator="{ on }">
+                                      <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                        <v-icon>mdi-text-box-plus-outline</v-icon>
+                                      </v-btn>
+                                    </template>
 
-                                  <InstrucMenuFiles
-                                    @instrucdialogoption="instrucOpenFileDialog"
-                                    :instrucOptionCall="conceito"
-                                    :instrucType="'conceito'"
-                                  />
-                                </v-menu>
+                                    <InstrucMenuFiles
+                                      @instrucdialogoption="instrucOpenFileDialog"
+                                      :instrucOptionCall="conceito"
+                                      :instrucType="'conceito'"
+                                    />
+                                  </v-menu>
 
-                                <!-- Menu para criação de arquivos dos conceitos adicionados dentro de submódulos-->
-                                <v-menu
-                                  top="top"
-                                  width="300px"
-                                  origin="center center"
-                                  :offset-y="true"
-                                  transition="scale-transition"
-                                >
-                                  <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                      <v-icon>mdi-dots-horizontal</v-icon>
-                                    </v-btn>
-                                  </template>
+                                  <!-- Menu para criação de arquivos dos conceitos adicionados dentro de submódulos-->
+                                  <v-menu
+                                    top="top"
+                                    width="300px"
+                                    origin="center center"
+                                    :offset-y="true"
+                                    transition="scale-transition"
+                                  >
+                                    <template v-slot:activator="{ on }">
+                                      <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                        <v-icon>mdi-dots-horizontal</v-icon>
+                                      </v-btn>
+                                    </template>
 
-                                  <MenuFiles
-                                    @dialogoption="openFileDialog"
-                                    :optionCall="conceito"
-                                    :type="'conceito'"
-                                  />
-                                </v-menu>
-                                <!--Formulario para adição de itens de informação dos conceitos adicionados dentro de submódulos-->
-                                <v-menu
-                                  top="top"
-                                  width="300px"
-                                  origin="center center"
-                                  :offset-y="true"
-                                  transition="scale-transition"
-                                >
-                                  <template v-slot:activator="{ on }">
-                                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                      <v-icon>mdi-plus</v-icon>
-                                    </v-btn>
-                                  </template>
-                                  <v-list>
-                                    <v-list-item
-                                      @click="setconceito(conceito, modulo);dialog_procedure=true"
-                                    >
-                                      <v-list-item-title>Procedimento</v-list-item-title>
-                                    </v-list-item>
-                                  </v-list>
-                                </v-menu>
-                                <!--Formulario para edição dos conceitos adicionados dentro de submódulos-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="setconceito(conceito, submodulo);dialog_conceito=true"
-                                >
-                                  <v-icon>mdi-pencil</v-icon>
-                                </v-btn>
-                                <!--Função para excluir conceito-->
-                                <v-btn
-                                  icon="icon"
-                                  color="white"
-                                  @click="auxElementDelete = conceito; alertDelete = true"
-                                >
-                                  <v-icon>mdi-delete</v-icon>
-                                </v-btn>
+                                    <MenuFiles
+                                      @dialogoption="openFileDialog"
+                                      :optionCall="conceito"
+                                      :type="'conceito'"
+                                    />
+                                  </v-menu>
+                                  <!--Formulario para adição de itens de informação dos conceitos adicionados dentro de submódulos-->
+                                  <v-menu
+                                    top="top"
+                                    width="300px"
+                                    origin="center center"
+                                    :offset-y="true"
+                                    transition="scale-transition"
+                                  >
+                                    <template v-slot:activator="{ on }">
+                                      <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                        <v-icon>mdi-plus</v-icon>
+                                      </v-btn>
+                                    </template>
+                                    <v-list>
+                                      <v-list-item
+                                        @click="setconceito(conceito, modulo);dialog_procedure=true"
+                                      >
+                                        <v-list-item-title>Procedimento</v-list-item-title>
+                                      </v-list-item>
+                                    </v-list>
+                                  </v-menu>
+                                  <!--Formulario para edição dos conceitos adicionados dentro de submódulos-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="readonly_control=true; setconceito(conceito, submodulo);dialog_conceito=true"
+                                  >
+                                    <v-icon>mdi-pencil</v-icon>
+                                  </v-btn>
+                                  <!--Função para excluir conceito-->
+                                  <v-btn
+                                    icon="icon"
+                                    color="white"
+                                    @click="readonly_control=true; auxElementDelete = conceito; alertDelete = true"
+                                  >
+                                    <v-icon>mdi-delete</v-icon>
+                                  </v-btn>
+                                </div>
                               </v-col>
                             </v-row>
                           </v-expansion-panel-header>
@@ -991,6 +1019,7 @@
                               :key="mobilemedia.url"
                               class="mt-2 mb-2"
                               :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                              :readonly="readonly_control"
                             >
                               <v-expansion-panel>
                                 <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
@@ -1016,7 +1045,7 @@
                                         <v-btn
                                           icon="icon"
                                           color="white"
-                                          @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                                          @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
                                         >
                                           <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
@@ -1024,7 +1053,7 @@
                                         <v-btn
                                           icon="icon"
                                           color="white"
-                                          @click="auxElementDelete = mobilemedia; alertDelete=true"
+                                          @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
                                         >
                                           <v-icon>mdi-delete</v-icon>
                                         </v-btn>
@@ -1058,6 +1087,7 @@
                               :key="procedure.url"
                               class="mt-2 mb-2"
                               :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                              :readonly="readonly_control"
                             >
                               <v-expansion-panel>
                                 <v-expansion-panel-header
@@ -1076,7 +1106,7 @@
                                         class="mt-2"
                                         icon="icon"
                                         color="white"
-                                        @click="setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
+                                        @click="readonly_control=true; setprocedimento(procedure, conceito, submodulo); dialog_procedure=true"
                                       >
                                         <v-icon>mdi-pencil</v-icon>
                                       </v-btn>
@@ -1085,7 +1115,7 @@
                                         class="mt-2"
                                         icon="icon"
                                         color="white"
-                                        @click="auxElementDelete = procedure; alertDelete = true"
+                                        @click="readonly_control=true; auxElementDelete = procedure; alertDelete = true"
                                       >
                                         <v-icon>mdi-delete</v-icon>
                                       </v-btn>
@@ -1127,6 +1157,7 @@
                               :key="instrucelement.url"
                               class="mt-2 mb-2"
                               :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                              :readonly="readonly_control"
                             >
                               <v-expansion-panel>
                                 <v-expansion-panel-header
@@ -1154,7 +1185,7 @@
                                         <v-btn
                                           icon="icon"
                                           color="white"
-                                          @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                          @click="readonly_control=true; setinstructionalelement(instrucelement, dominio, 'dominio')"
                                         >
                                           <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
@@ -1162,7 +1193,7 @@
                                         <v-btn
                                           icon="icon"
                                           color="white"
-                                          @click="auxElementDelete = instrucelement; alertDelete=true"
+                                          @click="readonly_control=true; auxElementDelete = instrucelement; alertDelete=true"
                                         >
                                           <v-icon>mdi-delete</v-icon>
                                         </v-btn>
@@ -1186,7 +1217,11 @@
                 </v-expansion-panels>
 
                 <!-- Panels dos Conceitos dos Módulos-->
-                <v-expansion-panels v-model="vModelPanelConceptsModule" multiple>
+                <v-expansion-panels
+                  v-model="vModelPanelConceptsModule"
+                  multiple
+                  :readonly="readonly_control"
+                >
                   <v-expansion-panel
                     v-for="(conceito, iconceitomodulo) in modulo.concepts"
                     :key="iconceitomodulo"
@@ -1196,95 +1231,105 @@
                     <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
-                        <v-col>
-                          <p class="mt-3">
-                            <span v-if="conceito.nameconcept.length <= 40" style="font-size:1.2em;">
-                              <strong>{{ conceito.nameconcept }}</strong>
-                            </span>
-                            <span v-else style="font-size:1.2em;">
-                              <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
-                            </span>
-                          </p>
+                        <v-col class="d-flex align-center" style="width: 100%;">
+                          <v-avatar color="white" size="38" class="mr-2">
+                            <span class="black--text" style="font-size:1.2em;">CC</span>
+                          </v-avatar>
+                          <div style="vertical-align:middle;">
+                            <p class="mt-3">
+                              <span
+                                v-if="conceito.nameconcept.length <= 40"
+                                style="font-size:1.2em;"
+                              >
+                                <strong>{{ conceito.nameconcept }}</strong>
+                              </span>
+                              <span v-else style="font-size:1.2em;">
+                                <strong>{{ conceito.nameconcept.slice(0,40)}}</strong>...
+                              </span>
+                            </p>
+                          </div>
                         </v-col>
                         <v-col cols="4" class="d-flex justify-end mr-1">
-                          <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
-                          <v-menu
-                            top="top"
-                            width="300px"
-                            origin="center center"
-                            :offset-y="true"
-                            transition="scale-transition"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                <v-icon>mdi-text-box-plus-outline</v-icon>
-                              </v-btn>
-                            </template>
+                          <div style="vertical-align:middle;">
+                            <!--Menu para criação de elementos instrucionais dos conceitos adicionados dentro de submódulos-->
+                            <v-menu
+                              top="top"
+                              width="300px"
+                              origin="center center"
+                              :offset-y="true"
+                              transition="scale-transition"
+                            >
+                              <template v-slot:activator="{ on }">
+                                <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                  <v-icon>mdi-text-box-plus-outline</v-icon>
+                                </v-btn>
+                              </template>
 
-                            <InstrucMenuFiles
-                              @instrucdialogoption="instrucOpenFileDialog"
-                              :instrucOptionCall="conceito"
-                              :instrucType="'conceito'"
-                            />
-                          </v-menu>
-                          <!-- Menu para criação de arquivos dos conceitos dos modulos-->
-                          <v-menu
-                            top="top"
-                            width="300px"
-                            origin="center center"
-                            :offset-y="true"
-                            transition="scale-transition"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                <v-icon>mdi-dots-horizontal</v-icon>
-                              </v-btn>
-                            </template>
+                              <InstrucMenuFiles
+                                @instrucdialogoption="instrucOpenFileDialog"
+                                :instrucOptionCall="conceito"
+                                :instrucType="'conceito'"
+                              />
+                            </v-menu>
+                            <!-- Menu para criação de arquivos dos conceitos dos modulos-->
+                            <v-menu
+                              top="top"
+                              width="300px"
+                              origin="center center"
+                              :offset-y="true"
+                              transition="scale-transition"
+                            >
+                              <template v-slot:activator="{ on }">
+                                <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                  <v-icon>mdi-dots-horizontal</v-icon>
+                                </v-btn>
+                              </template>
 
-                            <MenuFiles
-                              @dialogoption="openFileDialog"
-                              :optionCall="conceito"
-                              :type="'conceito'"
-                            />
-                          </v-menu>
-                          <!--Formulario para adição de itens de informação dos conceitos dos modulos-->
-                          <v-menu
-                            top="top"
-                            width="300px"
-                            origin="center center"
-                            :offset-y="true"
-                            transition="scale-transition"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                <v-icon>mdi-plus</v-icon>
-                              </v-btn>
-                            </template>
+                              <MenuFiles
+                                @dialogoption="openFileDialog"
+                                :optionCall="conceito"
+                                :type="'conceito'"
+                              />
+                            </v-menu>
+                            <!--Formulario para adição de itens de informação dos conceitos dos modulos-->
+                            <v-menu
+                              top="top"
+                              width="300px"
+                              origin="center center"
+                              :offset-y="true"
+                              transition="scale-transition"
+                            >
+                              <template v-slot:activator="{ on }">
+                                <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                                  <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                              </template>
 
-                            <v-list>
-                              <v-list-item
-                                @click="setconceito(conceito, modulo);dialog_procedure=true"
-                              >
-                                <v-list-item-title>Procedimento</v-list-item-title>
-                              </v-list-item>
-                            </v-list>
-                          </v-menu>
-                          <!--Formulario para edição do conceito-->
-                          <v-btn
-                            icon="icon"
-                            color="white"
-                            @click="setconceito(conceito, modulo);dialog_conceito=true"
-                          >
-                            <v-icon>mdi-pencil</v-icon>
-                          </v-btn>
-                          <!--Função para excluir conceito-->
-                          <v-btn
-                            icon="icon"
-                            color="white"
-                            @click="auxElementDelete = conceito; alertDelete = true"
-                          >
-                            <v-icon>mdi-delete</v-icon>
-                          </v-btn>
+                              <v-list>
+                                <v-list-item
+                                  @click="setconceito(conceito, modulo);dialog_procedure=true"
+                                >
+                                  <v-list-item-title>Procedimento</v-list-item-title>
+                                </v-list-item>
+                              </v-list>
+                            </v-menu>
+                            <!--Formulario para edição do conceito-->
+                            <v-btn
+                              icon="icon"
+                              color="white"
+                              @click="readonly_control=true; setconceito(conceito, modulo);dialog_conceito=true"
+                            >
+                              <v-icon>mdi-pencil</v-icon>
+                            </v-btn>
+                            <!--Função para excluir conceito-->
+                            <v-btn
+                              icon="icon"
+                              color="white"
+                              @click="readonly_control=true; auxElementDelete = conceito; alertDelete = true"
+                            >
+                              <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                          </div>
                         </v-col>
                       </v-row>
                     </v-expansion-panel-header>
@@ -1318,6 +1363,7 @@
                         :key="mobilemedia.url"
                         class="mt-2 mb-2"
                         :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        :readonly="readonly_control"
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header
@@ -1342,7 +1388,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="setmobilemedia(mobilemedia, dominio, 'dominio')"
+                                    @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
@@ -1350,7 +1396,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="auxElementDelete = mobilemedia; alertDelete=true"
+                                    @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
                                   >
                                     <v-icon>mdi-delete</v-icon>
                                   </v-btn>
@@ -1385,6 +1431,7 @@
                         :key="procedure.url"
                         class="mt-2 mb-2"
                         :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                        :readonly="readonly_control"
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header
@@ -1401,7 +1448,7 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
+                                  @click="readonly_control=true; setprocedimento(procedure, conceito, modulo); dialog_procedure=true"
                                 >
                                   <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
@@ -1410,7 +1457,7 @@
                                   class="mt-2"
                                   icon="icon"
                                   color="white"
-                                  @click="auxElementDelete = procedure; alertDelete = true"
+                                  @click="readonly_control=true; auxElementDelete = procedure; alertDelete = true"
                                 >
                                   <v-icon>mdi-delete</v-icon>
                                 </v-btn>
@@ -1449,6 +1496,7 @@
                         :key="instrucelement.url"
                         class="mt-2 mb-2"
                         :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        :readonly="readonly_control"
                       >
                         <v-expansion-panel>
                           <v-expansion-panel-header
@@ -1476,7 +1524,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="setinstructionalelement(instrucelement, dominio, 'dominio')"
+                                    @click="readonly_control=true; setinstructionalelement(instrucelement, dominio, 'dominio')"
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
@@ -1484,7 +1532,7 @@
                                   <v-btn
                                     icon="icon"
                                     color="white"
-                                    @click="auxElementDelete = instrucelement; alertDelete=true"
+                                    @click="readonly_control=true; auxElementDelete = instrucelement; alertDelete=true"
                                   >
                                     <v-icon>mdi-delete</v-icon>
                                   </v-btn>
@@ -1622,11 +1670,13 @@ export default {
     dialogLoadingMessages: [
       "Carregando o domínio",
       "Salvando o elemento",
-      "Excluindo o elemento"
+      "Excluindo o elemento",
+      "Carregando informações do modelo didático"
     ],
+    readonly_control: false,
     vModelPanelDomain: [0],
-    vModelPanelModules: [0],
-    vModelPanelSubmodules: [0],
+    vModelPanelModules: [],
+    vModelPanelSubmodules: [],
     vModelPanelConceptsModule: [],
     vModelPanelConceptsSubmodule: [],
     itemsMenuNewModulo: [
@@ -1991,11 +2041,6 @@ export default {
       }
     },
     elementToScroll: function() {
-      console.log(
-        "#" +
-          this.elementToScroll.url.split("/")[3] +
-          this.elementToScroll.url.split("/")[4]
-      );
       var auxQuerySelector =
         "#" +
         this.elementToScroll.url.split("/")[3] +
@@ -2043,6 +2088,7 @@ export default {
       this.$emit("dominio_data", this.dominio_data);
     },
     getDominio() {
+      this.readonly_control = false;
       this.dialogLoading = true;
       var vm = this;
       var csrftoken = Cookie.get("csrftoken");
@@ -2071,6 +2117,7 @@ export default {
     },
 
     close_or_save_dominio() {
+      this.readonly_control = false;
       this.dialog_dominio = !this.dialog_dominio;
       this.controlTreeView("dominio");
     },
@@ -2147,6 +2194,7 @@ export default {
       }
     },
     close_or_save_modulo(value) {
+      this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
@@ -2159,6 +2207,7 @@ export default {
       this.controlTreeView("modulo");
     },
     close_or_save_submodulo(value) {
+      this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
@@ -2172,6 +2221,7 @@ export default {
       this.controlTreeView("submodulo");
     },
     close_or_save_conceito(value) {
+      this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
@@ -2215,6 +2265,7 @@ export default {
     },
 
     controlTreeView(value) {
+      this.readonly_control = false;
       this.$emit("close", value);
     },
 
@@ -2249,6 +2300,7 @@ export default {
       this.type = value.type;
     },
     async dialogclose(rounds) {
+      this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       this.dialog_imagem = false;
@@ -2292,6 +2344,7 @@ export default {
       this.instrucValueType = value.valueType;
     },
     async instrucdialogclose(numberQuestions) {
+      this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       this.dialog_avaliacao = false;
@@ -2365,6 +2418,7 @@ export default {
       }
     },
     async visibleClose() {
+      this.readonly_control = false;
       var vm = this;
       this.dialog_visible = false;
       await setTimeout(function() {
@@ -2372,8 +2426,10 @@ export default {
       }, 2000);
     },
     openDidatic() {
+      this.dialogLoadingMessage = this.dialogLoadingMessages[3];
       this.getDominio();
       this.dialog_visible = true;
+      this.dialogLoadingMessage = this.dialogLoadingMessages[0];
     },
     saveDominio() {
       console.log("");

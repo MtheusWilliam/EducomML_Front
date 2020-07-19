@@ -38,7 +38,7 @@
       >{{atual_page.subtitle}}</v-row>
     </v-img>
 
-    <v-tabs-items >
+    <v-tabs-items>
       <v-tab-item>
         <v-row
           align="start"
@@ -159,7 +159,7 @@
 
 <script>
 export default {
-  name: "UserHome",
+  name: "Home",
   data() {
     return {
       dialogMessage: false,
@@ -186,6 +186,9 @@ export default {
       ]
     };
   },
+  created: function() {
+    this.atual_page = this.pages[0];
+  }
 };
 </script>
 

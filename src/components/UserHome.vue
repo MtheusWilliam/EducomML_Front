@@ -54,7 +54,7 @@
                 <v-img
                   class="white--text align-end"
                   height="200px"
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  :style="'background-color: ' + domainColors[i]"
                 >
                   <v-card-title>{{dominio.nameknowledgedomain}}</v-card-title>
                 </v-img>
@@ -180,6 +180,22 @@ export default {
     alertDelete: false,
     auxUrlDomain: "",
     idDomain: 0,
+    domainColors: [],
+    cardColorsPalette: [
+      "#FFDEAD",
+      "#F5DEB3",
+      "#DEB887",
+      "#D2B48C",
+      "#BC8F8F",
+      "#F4A460",
+      "#DAA520",
+      "#CD853F",
+      "#D2691E",
+      "#8B4513",
+      "#A0522D",
+      "#A52A2A",
+      "#800000"
+    ],
     userName: "",
     nameknowledgedomain: "",
     nameknowledgedomainRules: [
@@ -218,6 +234,7 @@ export default {
         vm.dominios = response2.data.knowledgedomains;
         vm.userName = response2.data.username;
         vm.dialogLoading = false;
+        vm.getDomainCardColors();
       });
     },
     putDominio(idDomain) {
@@ -274,6 +291,16 @@ export default {
               });
             });
         });
+    },
+    getDomainCardColors() {
+      if (this.dominios.length > 0) {
+        for (var i = 0; i < this.dominios.length; i++) {
+          var randomElement = this.cardColorsPalette[
+            Math.floor(Math.random() * this.cardColorsPalette.length)
+          ];
+          this.domainColors.push(randomElement);
+        }
+      }
     },
     validate() {
       if (this.$refs.form.validate()) {
