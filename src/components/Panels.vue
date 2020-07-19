@@ -399,7 +399,7 @@
               class="mt-2 mb-2"
               :id="modulo.url.split('/')[3] + modulo.idmodule"
             >
-              <v-expansion-panel-header color="#7FD15E" style="color:white; height: 55px;">
+              <v-expansion-panel-header color="#666644" style="color:white; height: 55px;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
