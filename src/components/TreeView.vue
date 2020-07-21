@@ -100,6 +100,8 @@ export default {
             } else {
               vm.$emit("elementToScroll", {
                 type: item.item.id.split("/")[3],
+                indexPanel: item.item.indexPanel,
+                panelFather: item.item.panelFather,
                 url: item.item.id
               });
             }
@@ -118,13 +120,15 @@ export default {
         children: []
       });
       if (this.dominio.mobilemedias.length) {
-        this.dominio.mobilemedias.forEach(mobilemedia => {
+        this.dominio.mobilemedias.forEach((mobilemedia, imobilemedia) => {
           this.treeData[0].children.push({
             id: mobilemedia.url,
             nome: this.mobilemediaTypeLabel[
               parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
             ],
             type: "MOBILEMEDIA",
+            indexPanel: imobilemedia,
+            panelFather: "domain",
             icon: this.fileTypesIcon[
               mobilemedia.fk_idmediatype.split("/")[4] - 1
             ]
@@ -133,20 +137,25 @@ export default {
         });
       }
       if (this.dominio.instructionalelements.length) {
-        this.dominio.instructionalelements.forEach(instructionalelement => {
-          this.treeData[0].children.push({
-            id: instructionalelement.url,
-            nome: instructionalelement.label,
-            type: "INSTRUCTIONAL ELEMENT",
-            icon: this.instrucTypesIcon[
-              instructionalelement.fk_instructionalelementtype.split("/")[4] - 1
-            ]
-          });
-          indexmodulo++;
-        });
+        this.dominio.instructionalelements.forEach(
+          (instructionalelement, iinstructionalelement) => {
+            this.treeData[0].children.push({
+              id: instructionalelement.url,
+              nome: instructionalelement.label,
+              type: "INSTRUCTIONAL ELEMENT",
+              indexPanel: iinstructionalelement,
+              panelFather: "domain",
+              icon: this.instrucTypesIcon[
+                instructionalelement.fk_instructionalelementtype.split("/")[4] -
+                  1
+              ]
+            });
+            indexmodulo++;
+          }
+        );
       }
       if (Array.isArray(this.dominio.modules) && this.dominio.modules.length) {
-        this.dominio.modules.forEach(modulo => {
+        this.dominio.modules.forEach((modulo, imodulo) => {
           if (modulo.fk_idmodule === null) {
             var indexsubmodulo = 0;
             this.treeData[0].children.push({
@@ -154,17 +163,20 @@ export default {
               nome: modulo.namemodule,
               type: "MODULO",
               avatar: "MD",
+              indexPanel: imodulo,
               children: []
             });
 
             if (modulo.mobilemedias.length) {
-              modulo.mobilemedias.forEach(mobilemedia => {
+              modulo.mobilemedias.forEach((mobilemedia, imobilemedia) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: mobilemedia.url,
                   nome: this.mobilemediaTypeLabel[
                     parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
                   ],
                   type: "MOBILEMEDIA",
+                  indexPanel: imobilemedia,
+                  panelFather: "module",
                   icon: this.fileTypesIcon[
                     mobilemedia.fk_idmediatype.split("/")[4] - 1
                   ]
@@ -174,59 +186,70 @@ export default {
             }
 
             if (modulo.instructionalelements.length) {
-              modulo.instructionalelements.forEach(instructionalelement => {
-                this.treeData[0].children[indexmodulo].children.push({
-                  id: instructionalelement.url,
-                  nome: instructionalelement.label,
-                  type: "INSTRUCTIONAL ELEMENT",
-                  icon: this.instrucTypesIcon[
-                    instructionalelement.fk_instructionalelementtype.split(
-                      "/"
-                    )[4] - 1
-                  ]
-                });
-                indexsubmodulo++;
-              });
+              modulo.instructionalelements.forEach(
+                (instructionalelement, iinstructionalelement) => {
+                  this.treeData[0].children[indexmodulo].children.push({
+                    id: instructionalelement.url,
+                    nome: instructionalelement.label,
+                    type: "INSTRUCTIONAL ELEMENT",
+                    indexPanel: iinstructionalelement,
+                    panelFather: "module",
+                    icon: this.instrucTypesIcon[
+                      instructionalelement.fk_instructionalelementtype.split(
+                        "/"
+                      )[4] - 1
+                    ]
+                  });
+                  indexsubmodulo++;
+                }
+              );
             }
 
             if (modulo.submodules.length) {
               var indexconceito = 0;
-              modulo.submodules.forEach(submodulo => {
+              modulo.submodules.forEach((submodulo, isubmodulo) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: submodulo.url + "sub",
                   nome: submodulo.namemodule,
                   type: "SUBMODULO",
                   avatar: "SM",
+                  indexPanel: isubmodulo,
                   children: []
                 });
 
                 if (submodulo.mobilemedias.length) {
-                  submodulo.mobilemedias.forEach(mobilemedia => {
-                    this.treeData[0].children[indexmodulo].children[
-                      indexsubmodulo
-                    ].children.push({
-                      id: mobilemedia.url,
-                      nome: this.mobilemediaTypeLabel[
-                        parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
-                      ],
-                      type: "MOBILEMEDIA",
-                      icon: this.fileTypesIcon[
-                        mobilemedia.fk_idmediatype.split("/")[4] - 1
-                      ]
-                    });
-                    indexconceito++;
-                  });
+                  submodulo.mobilemedias.forEach(
+                    (mobilemedia, imobilemedia) => {
+                      this.treeData[0].children[indexmodulo].children[
+                        indexsubmodulo
+                      ].children.push({
+                        id: mobilemedia.url,
+                        nome: this.mobilemediaTypeLabel[
+                          parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
+                        ],
+                        type: "MOBILEMEDIA",
+                        indexPanel: imobilemedia,
+                        panelFather: "submodule",
+                        icon: this.fileTypesIcon[
+                          mobilemedia.fk_idmediatype.split("/")[4] - 1
+                        ]
+                      });
+                      indexconceito++;
+                    }
+                  );
                 }
 
                 if (submodulo.instructionalelements.length) {
                   submodulo.instructionalelements.forEach(
-                    instructionalelement => {
+                    (instructionalelement, iinstructionalelement) => {
                       this.treeData[0].children[indexmodulo].children[
                         indexsubmodulo
                       ].children.push({
                         id: instructionalelement.url,
                         nome: instructionalelement.label,
                         type: "INSTRUCTIONAL ELEMENT",
+                        indexPanel: iinstructionalelement,
+                        panelFather: "submodule",
                         icon: this.instrucTypesIcon[
                           instructionalelement.fk_instructionalelementtype.split(
                             "/"
@@ -240,7 +263,7 @@ export default {
                 }
 
                 if (submodulo.concepts.length) {
-                  submodulo.concepts.forEach(conceito => {
+                  submodulo.concepts.forEach((conceito, iconceito) => {
                     this.treeData[0].children[indexmodulo].children[
                       indexsubmodulo
                     ].children.push({
@@ -248,37 +271,45 @@ export default {
                       nome: conceito.nameconcept,
                       type: "CONCEITO",
                       avatar: "CC",
+                      indexPanel: iconceito,
+                      panelFather: "submodule",
                       children: []
                     });
 
                     if (conceito.mobilemedias.length) {
-                      conceito.mobilemedias.forEach(mobilemedia => {
-                        this.treeData[0].children[indexmodulo].children[
-                          indexsubmodulo
-                        ].children[indexconceito].children.push({
-                          id: mobilemedia.url,
-                          nome: this.mobilemediaTypeLabel[
-                            parseInt(
+                      conceito.mobilemedias.forEach(
+                        (mobilemedia, imobilemedia) => {
+                          this.treeData[0].children[indexmodulo].children[
+                            indexsubmodulo
+                          ].children[indexconceito].children.push({
+                            id: mobilemedia.url,
+                            nome: this.mobilemediaTypeLabel[
+                              parseInt(
+                                mobilemedia.fk_idmediatype.split("/")[4] - 1
+                              )
+                            ],
+                            type: "MOBILEMEDIA",
+                            indexPanel: imobilemedia,
+                            panelFather: "conceptsubmodule",
+                            icon: this.fileTypesIcon[
                               mobilemedia.fk_idmediatype.split("/")[4] - 1
-                            )
-                          ],
-                          type: "MOBILEMEDIA",
-                          icon: this.fileTypesIcon[
-                            mobilemedia.fk_idmediatype.split("/")[4] - 1
-                          ]
-                        });
-                      });
+                            ]
+                          });
+                        }
+                      );
                     }
 
                     if (conceito.instructionalelements.length) {
                       conceito.instructionalelements.forEach(
-                        instructionalelement => {
+                        (instructionalelement, iinstructionalelement) => {
                           this.treeData[0].children[indexmodulo].children[
                             indexsubmodulo
                           ].children[indexconceito].children.push({
                             id: instructionalelement.url,
                             nome: instructionalelement.label,
                             type: "INSTRUCTIONAL ELEMENT",
+                            indexPanel: iinstructionalelement,
+                            panelFather: "conceptsubmodule",
                             icon: this.instrucTypesIcon[
                               instructionalelement.fk_instructionalelementtype.split(
                                 "/"
@@ -290,20 +321,24 @@ export default {
                     }
 
                     if (conceito.informationitems.length) {
-                      conceito.informationitems.forEach(procedure => {
-                        if (
-                          procedure.fk_informationitemtype ===
-                          "http://127.0.0.1:8000/informationitemtype/4/"
-                        ) {
-                          this.treeData[0].children[indexmodulo].children[
-                            indexsubmodulo
-                          ].children[indexconceito].children.push({
-                            id: procedure.url,
-                            nome: procedure.nomeinformationitem,
-                            type: "PROCEDIMENTO"
-                          });
+                      conceito.informationitems.forEach(
+                        (procedure, iprocedure) => {
+                          if (
+                            procedure.fk_informationitemtype ===
+                            "http://127.0.0.1:8000/informationitemtype/4/"
+                          ) {
+                            this.treeData[0].children[indexmodulo].children[
+                              indexsubmodulo
+                            ].children[indexconceito].children.push({
+                              id: procedure.url,
+                              nome: procedure.nomeinformationitem,
+                              type: "PROCEDIMENTO",
+                              indexPanel: iprocedure,
+                              panelFather: "conceptsubmodule"
+                            });
+                          }
                         }
-                      });
+                      );
                     }
 
                     indexconceito++;
@@ -318,16 +353,18 @@ export default {
               } else {
                 indexconceito = 0;
               }
-              modulo.concepts.forEach(conceito => {
+              modulo.concepts.forEach((conceito, iconceito) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: conceito.url,
                   nome: conceito.nameconcept,
                   type: "CONCEITO",
                   avatar: "CC",
+                  indexPanel: iconceito,
+                  panelFather: "module",
                   children: []
                 });
                 if (conceito.mobilemedias.length) {
-                  conceito.mobilemedias.forEach(mobilemedia => {
+                  conceito.mobilemedias.forEach((mobilemedia, imobilemedia) => {
                     this.treeData[0].children[indexmodulo].children[
                       indexconceito
                     ].children.push({
@@ -336,6 +373,8 @@ export default {
                         parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
                       ],
                       type: "MOBILEMEDIA",
+                      indexPanel: imobilemedia,
+                      panelFather: "conceptmodule",
                       icon: this.fileTypesIcon[
                         mobilemedia.fk_idmediatype.split("/")[4] - 1
                       ]
@@ -345,13 +384,15 @@ export default {
 
                 if (conceito.instructionalelements.length) {
                   conceito.instructionalelements.forEach(
-                    instructionalelement => {
+                    (instructionalelement, iinstructionalelement) => {
                       this.treeData[0].children[indexmodulo].children[
                         indexconceito
                       ].children.push({
                         id: instructionalelement.url,
                         nome: instructionalelement.label,
                         type: "INSTRUCTIONAL ELEMENT",
+                        indexPanel: iinstructionalelement,
+                        panelFather: "conceptmodule",
                         icon: this.instrucTypesIcon[
                           instructionalelement.fk_instructionalelementtype.split(
                             "/"
@@ -363,7 +404,7 @@ export default {
                 }
 
                 if (conceito.informationitems.length) {
-                  conceito.informationitems.forEach(procedure => {
+                  conceito.informationitems.forEach((procedure, iprocedure) => {
                     if (
                       procedure.fk_informationitemtype ===
                       "http://127.0.0.1:8000/informationitemtype/4/"
@@ -373,7 +414,9 @@ export default {
                       ].children.push({
                         id: procedure.url,
                         nome: procedure.nomeinformationitem,
-                        type: "PROCEDIMENTO"
+                        type: "PROCEDIMENTO",
+                        indexPanel: iprocedure,
+                        panelFather: "conceptmodule"
                       });
                     }
                   });

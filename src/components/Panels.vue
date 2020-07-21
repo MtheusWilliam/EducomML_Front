@@ -279,13 +279,16 @@
           <!--CONTENT DO DOMÍNIO-->
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
-            v-for="(mobilemedia) in dominio.mobilemedias"
-            :key="mobilemedia.url"
-            class="mt-2 mb-2"
-            :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+            v-model="vModelPanelMobilemediasDomain"
+            multiple
             :readonly="readonly_control"
           >
-            <v-expansion-panel>
+            <v-expansion-panel
+              v-for="(mobilemedia, imobilemedia) in dominio.mobilemedias"
+              :key="imobilemedia"
+              class="mt-2 mb-2"
+              :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+            >
               <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
@@ -343,13 +346,16 @@
           <!-- FIM DOS PANELS DOS ARQUIVOS DO DOMÍNIO-->
           <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
           <v-expansion-panels
-            v-for="(instrucelement) in dominio.instructionalelements"
-            :key="instrucelement.url"
-            class="mt-2 mb-2"
-            :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+            v-model="vModelPanelInstrucsDomain"
+            multiple
             :readonly="readonly_control"
           >
-            <v-expansion-panel>
+            <v-expansion-panel
+              v-for="(instrucelement, iinstrucelement) in dominio.instructionalelements"
+              :key="iinstrucelement"
+              class="mt-2 mb-2"
+              :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+            >
               <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
@@ -517,13 +523,16 @@
                 <!--CONTENT DO MÓDULO-->
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-for="(mobilemedia) in modulo.mobilemedias"
-                  :key="mobilemedia.url"
-                  class="mt-2 mb-2"
-                  :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                  v-model="vModelPanelMobilemediasModule"
+                  multiple
                   :readonly="readonly_control"
                 >
-                  <v-expansion-panel>
+                  <v-expansion-panel
+                    v-for="(mobilemedia, imobilemedia) in modulo.mobilemedias"
+                    :key="imobilemedia"
+                    class="mt-2 mb-2"
+                    :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                  >
                     <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
@@ -581,13 +590,16 @@
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-for="(instrucelement) in modulo.instructionalelements"
-                  :key="instrucelement.url"
-                  class="mt-2 mb-2"
-                  :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                  v-model="vModelPanelInstrucsModule"
+                  multiple
                   :readonly="readonly_control"
                 >
-                  <v-expansion-panel>
+                  <v-expansion-panel
+                    v-for="(instrucelement, iinstrucelement) in modulo.instructionalelements"
+                    :key="iinstrucelement"
+                    class="mt-2 mb-2"
+                    :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                  >
                     <v-expansion-panel-header color="#A5A5A5" style="color:white; height: 55px;">
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
@@ -746,13 +758,16 @@
                       <!--CONTENT DO SUBMODULO-->
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-for="(mobilemedia) in submodulo.mobilemedias"
-                        :key="mobilemedia.url"
-                        class="mt-2 mb-2"
-                        :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        v-model="vModelPanelMobilemediasSubmodule"
+                        multiple
                         :readonly="readonly_control"
                       >
-                        <v-expansion-panel>
+                        <v-expansion-panel
+                          v-for="(mobilemedia, imobilemedia) in submodulo.mobilemedias"
+                          :key="imobilemedia"
+                          class="mt-2 mb-2"
+                          :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        >
                           <v-expansion-panel-header
                             color="#A5A5A5"
                             style="color:white; height: 55px;"
@@ -813,13 +828,16 @@
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in submodulo.instructionalelements"
-                        :key="instrucelement.url"
-                        class="mt-2 mb-2"
-                        :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        v-model="vModelPanelInstrucsSubmodule"
+                        multiple
                         :readonly="readonly_control"
                       >
-                        <v-expansion-panel>
+                        <v-expansion-panel
+                          v-for="(instrucelement, iinstrucelement) in submodulo.instructionalelements"
+                          :key="iinstrucelement"
+                          class="mt-2 mb-2"
+                          :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        >
                           <v-expansion-panel-header
                             color="#A5A5A5"
                             style="color:white; height: 55px;"
@@ -1015,13 +1033,16 @@
                             </v-simple-table>
                             <!-- Listagem dos arquivos dos conceitos DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(mobilemedia) in conceito.mobilemedias"
-                              :key="mobilemedia.url"
-                              class="mt-2 mb-2"
-                              :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                              v-model="vModelPanelMobilemediasConceptSubmodule"
+                              multiple
                               :readonly="readonly_control"
                             >
-                              <v-expansion-panel>
+                              <v-expansion-panel
+                                v-for="(mobilemedia, imobilemedia) in conceito.mobilemedias"
+                                :key="imobilemedia"
+                                class="mt-2 mb-2"
+                                :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                              >
                                 <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
                                 <v-expansion-panel-header
                                   color="#A5A5A5"
@@ -1083,13 +1104,16 @@
                             <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
                             <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(procedure) in proceduresUnderConcept(conceito)"
-                              :key="procedure.url"
-                              class="mt-2 mb-2"
-                              :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                              v-model="vModelPanelProceduresConceptSubmodule"
+                              multiple
                               :readonly="readonly_control"
                             >
-                              <v-expansion-panel>
+                              <v-expansion-panel
+                                v-for="(procedure, iprocedure) in proceduresUnderConcept(conceito)"
+                                :key="iprocedure"
+                                class="mt-2 mb-2"
+                                :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                              >
                                 <v-expansion-panel-header
                                   color="#A5A5A5"
                                   style="color:white; height: 55px;"
@@ -1153,13 +1177,16 @@
                             <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS -->
                             <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-for="(instrucelement) in conceito.instructionalelements"
-                              :key="instrucelement.url"
-                              class="mt-2 mb-2"
-                              :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                              v-model="vModelPanelInstrucsConceptSubmodule"
+                              multiple
                               :readonly="readonly_control"
                             >
-                              <v-expansion-panel>
+                              <v-expansion-panel
+                                v-for="(instrucelement, iinstrucelement) in conceito.instructionalelements"
+                                :key="iinstrucelement"
+                                class="mt-2 mb-2"
+                                :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                              >
                                 <v-expansion-panel-header
                                   color="#A5A5A5"
                                   style="color:white; height: 55px;"
@@ -1359,13 +1386,16 @@
 
                       <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(mobilemedia) in conceito.mobilemedias"
-                        :key="mobilemedia.url"
-                        class="mt-2 mb-2"
-                        :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        v-model="vModelPanelMobilemediasConceptModule"
+                        multiple
                         :readonly="readonly_control"
                       >
-                        <v-expansion-panel>
+                        <v-expansion-panel
+                          v-for="(mobilemedia, imobilemedia) in conceito.mobilemedias"
+                          :key="imobilemedia"
+                          class="mt-2 mb-2"
+                          :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                        >
                           <v-expansion-panel-header
                             color="#A5A5A5"
                             style="color:white; height: 55px;"
@@ -1427,13 +1457,16 @@
 
                       <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(procedure) in proceduresUnderConcept(conceito)"
-                        :key="procedure.url"
-                        class="mt-2 mb-2"
-                        :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                        v-model="vModelPanelProceduresConceptModule"
+                        multiple
                         :readonly="readonly_control"
                       >
-                        <v-expansion-panel>
+                        <v-expansion-panel
+                          v-for="(procedure, iprocedure) in proceduresUnderConcept(conceito)"
+                          :key="iprocedure"
+                          class="mt-2 mb-2"
+                          :id="procedure.url.split('/')[3] + procedure.idinformationitem"
+                        >
                           <v-expansion-panel-header
                             color="#A5A5A5"
                             style="color:white; height: 55px;"
@@ -1492,13 +1525,16 @@
                       <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-for="(instrucelement) in conceito.instructionalelements"
-                        :key="instrucelement.url"
-                        class="mt-2 mb-2"
-                        :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        v-model="vModelPanelInstrucsConceptSubmodule"
+                        multiple
                         :readonly="readonly_control"
                       >
-                        <v-expansion-panel>
+                        <v-expansion-panel
+                          v-for="(instrucelement, iinstrucelement) in conceito.instructionalelements"
+                          :key="iinstrucelement"
+                          class="mt-2 mb-2"
+                          :id="instrucelement.url.split('/')[3] + instrucelement.idinstructionalelement"
+                        >
                           <v-expansion-panel-header
                             color="#A5A5A5"
                             style="color:white; height: 55px;"
@@ -1664,6 +1700,18 @@ export default {
     vModelPanelSubmodules: [],
     vModelPanelConceptsModule: [],
     vModelPanelConceptsSubmodule: [],
+    vModelPanelMobilemediasDomain: [],
+    vModelPanelMobilemediasModule: [],
+    vModelPanelMobilemediasSubmodule: [],
+    vModelPanelMobilemediasConceptModule: [],
+    vModelPanelMobilemediasConceptSubmodule: [],
+    vModelPanelInstrucsDomain: [],
+    vModelPanelInstrucsModule: [],
+    vModelPanelInstrucsSubmodule: [],
+    vModelPanelInstrucsConceptModule: [],
+    vModelPanelInstrucsConceptSubmodule: [],
+    vModelPanelProceduresConceptModule: [],
+    vModelPanelProceduresConceptSubmodule: [],
     itemsMenuNewModulo: [
       {
         type: "Conceito"
@@ -2034,10 +2082,87 @@ export default {
 
       if (this.elementToScroll) {
         if (this.elementToScroll.type === "module") {
-          this.vModelPanelModules.push(this.elementToScroll.url);
+          this.vModelPanelModules.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "submodule") {
-          this.vModelPanelSubmodules.push(this.elementToScroll.url);
+          this.vModelPanelSubmodules.push(this.elementToScroll.indexPanel);
+        } else if (this.elementToScroll.type === "concept") {
+          if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelConceptsModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "submodulo") {
+            this.vModelPanelConceptsSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          }
+        } else if (this.elementToScroll.type === "mobilemedia") {
+          if (this.elementToScroll.panelFather === "domain") {
+            this.vModelPanelMobilemediasDomain.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelMobilemediasModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelMobilemediasSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelMobilemediasConceptModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelMobilemediasConceptSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          }
+        } else if (this.elementToScroll.type === "instructionalelement") {
+          if (this.elementToScroll.panelFather === "domain") {
+            this.vModelPanelInstrucsDomain.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelInstrucsModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelInstrucsSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelInstrucsConceptModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelInstrucsConceptSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          }
+        } else if (this.elementToScroll.type === "informationitem") {
+          if (this.elementToScroll.panelFather === "domain") {
+            this.vModelPanelProceduresDomain.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelProceduresModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelProceduresSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelProceduresConceptModule.push(
+              this.elementToScroll.indexPanel
+            );
+          } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelProceduresConceptSubmodule.push(
+              this.elementToScroll.indexPanel
+            );
+          }
         }
+
         this.$vuetify.goTo(auxQuerySelector, {
           duration: 1000,
           offset: 0,
