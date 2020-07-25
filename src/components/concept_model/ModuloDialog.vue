@@ -23,11 +23,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" height="49" dark large @click="reset">
-          Close
+          Cancelar
           <v-icon dark right>mdi-close</v-icon>
         </v-btn>
         <v-btn color="success" height="49" dark large @click="validate">
-          Save
+          Salvar
           <v-icon dark right>mdi-content-save</v-icon>
         </v-btn>
       </v-card-actions>
@@ -44,34 +44,34 @@ export default {
     valid: true,
     moduloTitle: "",
     moduloTitleRules: [
-      v => !!v || "É necessário descrever o título do submódulo",
-      v =>
+      (v) => !!v || "É necessário descrever o título do submódulo",
+      (v) =>
         (v && v.length <= 100) ||
-        "O título do módulo deve ter no máximo 100 caracteres"
+        "O título do módulo deve ter no máximo 100 caracteres",
     ],
     moduloSubtitle: "",
     select: null,
     newItems: [],
     checkbox: false,
-    modulos: ""
+    modulos: "",
   }),
   watch: {
-    dialog: function() {
+    dialog: function () {
       this.getModulo();
     },
-    module: function() {
+    module: function () {
       this.$refs.form.reset();
       this.getModulo();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getModulo();
     this.$refs.form.resetValidation();
   },
   methods: {
     getModulo() {
       var vm = this;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         vm.moduloTitle = vm.module.namemodule;
         vm.moduloSubtitle = vm.module.subtitle;
       });
@@ -85,11 +85,11 @@ export default {
             fkidmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.domain.url
+            idknowledgedomain: this.domain.url,
           },
           { auth: { username: "admin", password: "admin" } }
         )
-        .then(function(/*resposta*/) {
+        .then(function (/*resposta*/) {
           /*vm.moduloTitle = resposta.data.namemodule;
           vm.subTitle = resposta.data.subtitle;*/
         });
@@ -103,11 +103,11 @@ export default {
             fk_idmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
-            idknowledgedomain: this.domain.url
+            idknowledgedomain: this.domain.url,
           },
           { auth: { username: "admin", password: "admin" } }
         )
-        .then(function(resposta) {
+        .then(function (resposta) {
           vm.moduloTitle = resposta.data.namemodule;
           vm.moduloSubtitle = resposta.data.subtitle;
         });
@@ -130,7 +130,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }
-  }
+    },
+  },
 };
 </script>

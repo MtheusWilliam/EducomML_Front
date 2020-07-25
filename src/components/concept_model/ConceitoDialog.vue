@@ -137,11 +137,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" height="49" dark="dark" large="large" @click="reset">
-            Close
+            Cancelar
             <v-icon dark="dark" right="right">mdi-close</v-icon>
           </v-btn>
           <v-btn color="success" height="49" dark="dark" large="large" @click="validate">
-            Save
+            Salvar
             <v-icon dark="dark" right="right">mdi-content-save</v-icon>
           </v-btn>
         </v-card-actions>
@@ -168,17 +168,17 @@ export default {
     conceptSelect: [""],
     conceptName: "",
     conceptNameRules: [
-      v => !!v || "É necessário descrever o nome do conceito",
-      v =>
+      (v) => !!v || "É necessário descrever o nome do conceito",
+      (v) =>
         (v && v.length <= 100) ||
-        "Nome do conceito deve ter no máximo 100 caracteres"
+        "Nome do conceito deve ter no máximo 100 caracteres",
     ],
     relacaoName: [""],
     relacaoNameRules: [
-      v => !!v || "Necessário descrever o nome da relação",
-      v =>
+      (v) => !!v || "Necessário descrever o nome da relação",
+      (v) =>
         (v && v.length <= 100) ||
-        "O nome da relação deve ter no máximo 100 caracteres"
+        "O nome da relação deve ter no máximo 100 caracteres",
     ],
     relacaoType: [""],
     relacaoTypes: ["typeOf", "partOf"],
@@ -186,58 +186,58 @@ export default {
     priorKnowledgeItems: [
       {
         text: "Sim",
-        value: 1
+        value: 1,
       },
       {
         text: "Não",
-        value: 2
-      }
+        value: 2,
+      },
     ],
     priorKnowledgeName: "",
     priorKnowledgeNameRules: [
-      v => !!v || "Necessário descrever identificador para a prioridade",
-      v =>
+      (v) => !!v || "Necessário descrever identificador para a prioridade",
+      (v) =>
         (v && v.length <= 100) ||
-        "O identificador da prioridade deve ter no máximo 100 caracteres"
+        "O identificador da prioridade deve ter no máximo 100 caracteres",
     ],
     priorLevel: "",
     priorLevelItems: [
       {
         text: "Obrigatório",
-        value: 1
+        value: 1,
       },
       {
         text: "Desejável",
-        value: 2
-      }
-    ]
+        value: 2,
+      },
+    ],
   }),
   watch: {
-    dialog: function() {
+    dialog: function () {
       this.getConceito();
     },
-    module: function() {
+    module: function () {
       this.getConceito();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getConceito();
     this.$refs.form.resetValidation();
   },
   methods: {
     getConceito() {
       var vm = this;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         vm.conceptName = vm.concept.nameconcept;
       });
       this.targetconcepts = [];
       if (this.module.concepts) {
         this.conceptName = this.concept.nameconcept;
-        this.module.concepts.forEach(element => {
+        this.module.concepts.forEach((element) => {
           if (!this.concept || this.concept.url !== element.url) {
             this.targetconcepts.push({
               text: element.nameconcept,
-              value: element
+              value: element,
             });
           }
         });
@@ -253,11 +253,11 @@ export default {
           vm.priorKnowledge = 2;
         }
         var i = 0;
-        this.concept.sourceconcept.forEach(element => {
-          var conceptSelect = this.targetconcepts.find(function(conceito) {
+        this.concept.sourceconcept.forEach((element) => {
+          var conceptSelect = this.targetconcepts.find(function (conceito) {
             return conceito.value.url === element.sourceconcept;
           });
-          var auxConceptTarget = this.targetconcepts.find(function(conceito) {
+          var auxConceptTarget = this.targetconcepts.find(function (conceito) {
             return (
               conceito.value.url ===
               conceptSelect.value.sourceconcept[i].targetconcept
@@ -273,7 +273,7 @@ export default {
             conceptSelect: auxConceptTarget,
             relacaoName: element.namereference,
             relacaoType: type,
-            url: element.url
+            url: element.url,
           });
           i++;
         });
@@ -290,16 +290,16 @@ export default {
             {
               nameconcept: this.conceptName,
               fk_idknowledgedomain: this.domain.url,
-              fk_idmodule: this.module.url
+              fk_idmodule: this.module.url,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(async function(resposta) {
+          .then(async function (resposta) {
             vm.auxConceito = resposta.data.url;
             if (vm.priorKnowledge === 1) {
               await axios.post(
@@ -308,13 +308,13 @@ export default {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
                     `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: resposta.data.url
+                  fk_idconcept: resposta.data.url,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               );
             }
@@ -326,16 +326,16 @@ export default {
             {
               nameconcept: this.conceptName,
               fk_idknowledgedomain: this.domain.url,
-              fk_idmodule: this.module.url
+              fk_idmodule: this.module.url,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(async function(resposta) {
+          .then(async function (resposta) {
             if (
               vm.concept.priorknowledge.length > 0 &&
               vm.priorKnowledge === 1
@@ -346,13 +346,13 @@ export default {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
                     `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: resposta.data.url
+                  fk_idconcept: resposta.data.url,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               );
             } else if (
@@ -362,8 +362,8 @@ export default {
               axios.delete(vm.concept.priorknowledge[0].url, {
                 auth: {
                   username: "admin",
-                  password: "admin"
-                }
+                  password: "admin",
+                },
               });
             } else if (
               vm.concept.priorknowledge.length === 0 &&
@@ -375,13 +375,13 @@ export default {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
                     `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: vm.concept.url
+                  fk_idconcept: vm.concept.url,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               );
             }
@@ -389,7 +389,7 @@ export default {
       }
     },
     async altera_Cria_Relacoes() {
-      this.relationForControl.forEach(async element => {
+      this.relationForControl.forEach(async (element) => {
         if (element.url === null) {
           var auxReferencia = 0;
           if (element.relacaoType == "typeOf") {
@@ -404,13 +404,13 @@ export default {
               sourceconcept: this.auxConceito,
               targetconcept: element.conceptSelect.url,
               fk_referencetype:
-                `http://localhost:8000/referencetype/` + auxReferencia + "/"
+                `http://localhost:8000/referencetype/` + auxReferencia + "/",
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           );
         } else {
@@ -427,13 +427,13 @@ export default {
               sourceconcept: this.auxConceito,
               targetconcept: element.conceptSelect.value.url,
               fk_referencetype:
-                `http://localhost:8000/referencetype/` + auxReferencia + "/"
+                `http://localhost:8000/referencetype/` + auxReferencia + "/",
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           );
         }
@@ -464,7 +464,7 @@ export default {
         conceptSelect: null,
         relacaoName: null,
         relacaoType: null,
-        url: null
+        url: null,
       });
     },
     deletaRelacao(idRelacao) {
@@ -472,8 +472,8 @@ export default {
         axios.delete(this.relationForControl[idRelacao].url, {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         });
       }
       if (idRelacao == 0) {
@@ -486,7 +486,7 @@ export default {
       this.priorLevel = "";
       this.priorKnowledge = 2;
       this.priorKnowledgeName = "";
-    }
-  }
+    },
+  },
 };
 </script>

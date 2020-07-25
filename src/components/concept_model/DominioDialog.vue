@@ -26,7 +26,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" height="49" dark="dark" large="large" @click="reset">
-          Close
+          Cancelar
           <v-icon dark="dark" right="right">mdi-close</v-icon>
         </v-btn>
         <v-btn
@@ -37,7 +37,7 @@
           @click="validate"
           :disabled="!valid"
         >
-          Save
+          Salvar
           <v-icon dark="dark" right="right">mdi-content-save</v-icon>
         </v-btn>
       </v-card-actions>
@@ -58,12 +58,12 @@ export default {
     dialog_dominio: false,
     /*REGRAS PARA VALIDAÇÃO DO FORMULÁRIO DOMÍNIO*/
     domainNameRules: [
-      v => !!v || "É necessário descrever o nome do domínio modelado",
-      v =>
+      (v) => !!v || "É necessário descrever o nome do domínio modelado",
+      (v) =>
         (v && v.length <= 100) ||
-        "Nome do domínio deve ter no máximo 100 caracteres"
+        "Nome do domínio deve ter no máximo 100 caracteres",
     ],
-    domains: ""
+    domains: "",
   }),
   mounted() {
     var vm = this;
@@ -71,13 +71,13 @@ export default {
     vm.domainContentTitle = vm.domain.subtitle;
   },
   watch: {
-    dialog: function() {
+    dialog: function () {
       var vm = this;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         vm.domainName = vm.domain.nameknowledgedomain;
         vm.domainContentTitle = vm.domain.subtitle;
       });
-    }
+    },
   },
   methods: {
     putDominio() {
@@ -91,16 +91,16 @@ export default {
             nameknowledgedomain: this.domainName,
             subtitle: this.domainContentTitle,
             lastversion: this.lastversion,
-            fk_iduser: this.domain.fk_iduser
+            fk_iduser: this.domain.fk_iduser,
           },
           {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           }
         )
-        .then(function(resposta) {
+        .then(function (resposta) {
           vm.$emit("dominio_data", resposta.data);
         });
     },
@@ -117,7 +117,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }
-  }
+    },
+  },
 };
 </script>

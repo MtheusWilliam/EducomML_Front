@@ -1039,7 +1039,7 @@
                               :readonly="readonly_control"
                             >
                               <v-expansion-panel
-                                v-for="(mobilemedia, imobilemedia) in conceito.mobilemedias"
+                                v-for="(mobilemedia, imobilemedia) in mobileMediasInformationItem(conceito)"
                                 :key="imobilemedia"
                                 class="mt-2 mb-2"
                                 :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
@@ -1500,7 +1500,6 @@
                           </v-expansion-panel-header>
 
                           <v-expansion-panel-content>
-
                             <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
 
                             <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
@@ -1744,7 +1743,7 @@ export default {
     AvaliacaoDialog,
     AtividadeColaborativaDialog,
     ExemploDialog,
-    VisibleDialog
+    VisibleDialog,
   },
   props: [
     "dominio",
@@ -1757,7 +1756,7 @@ export default {
     "dialog_mobilemediatree",
     "dialog_elementoinstrucionaltree",
     "dialog_instructionalelementtree",
-    "elementToScroll"
+    "elementToScroll",
   ],
   data: () => ({
     dialogLoading: false,
@@ -1766,7 +1765,7 @@ export default {
       "Carregando o domínio",
       "Salvando o elemento",
       "Excluindo o elemento",
-      "Carregando informações do modelo didático"
+      "Carregando informações do modelo didático",
     ],
     readonly_control: false,
     vModelPanelDomain: [0],
@@ -1788,24 +1787,24 @@ export default {
     vModelPanelProceduresConceptSubmodule: [],
     itemsMenuNewModulo: [
       {
-        type: "Conceito"
+        type: "Conceito",
       },
       {
-        type: "Submódulo"
-      }
+        type: "Submódulo",
+      },
     ],
     fileTypesIcon: [
       "mdi-file-image",
       "mdi-file-video",
       "mdi-file-music",
       "mdi-file-document",
-      "mdi-link-variant"
+      "mdi-link-variant",
     ],
     instrucTypesIcon: [
       "mdi-clipboard-text",
       "mdi-clipboard-check",
       "mdi-account-switch",
-      "mdi-lightbulb-outline"
+      "mdi-lightbulb-outline",
     ],
     mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
     enableOpenPanels: 0,
@@ -1840,17 +1839,17 @@ export default {
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
-    dominio_data: {}
+    dominio_data: {},
   }),
-  mounted: function() {
+  mounted: function () {
     var vm = this;
     this.dialogLoading = true;
-    setTimeout(function() {
+    setTimeout(function () {
       vm.dialogLoading = false;
     }, 2000);
   },
   watch: {
-    dominio: function() {
+    dominio: function () {
       this.setDomainVariables(this.dominio);
       if (this.dominio.modules.length > 0) {
         this.disableBtnDidatic = false;
@@ -1858,43 +1857,43 @@ export default {
         this.disableBtnDidatic = true;
       }
     },
-    dialog_knowledgedomain: function() {
+    dialog_knowledgedomain: function () {
       if (this.dialog_knowledgedomain === true) {
         this.dialog_dominio = this.dialog_knowledgedomain;
       }
     },
-    dialog_module: function() {
+    dialog_module: function () {
       if (this.dialog_module === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_modulo = this.dialog_module;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             vm.modulo = resposta.data;
           });
       }
     },
-    dialog_submodule: function() {
+    dialog_submodule: function () {
       if (this.dialog_submodule === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_submodulo = this.dialog_submodule;
         axios
@@ -1904,141 +1903,141 @@ export default {
               this.objectTreeView.url.length - 3
             ),
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             vm.submodulo = resposta.data;
           });
       }
     },
-    dialog_concept: function() {
+    dialog_concept: function () {
       if (this.dialog_concept === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_conceito = this.dialog_concept;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             vm.conceito = resposta.data;
             axios
               .patch(
                 resposta.data.fk_idmodule,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
-              .then(function(resposta2) {
+              .then(function (resposta2) {
                 vm.modulo = resposta2.data;
               });
           });
       }
     },
-    dialog_proceduretree: function() {
+    dialog_proceduretree: function () {
       if (this.dialog_proceduretree === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         this.dialog_procedure = this.dialog_proceduretree;
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             vm.procedimento = resposta.data;
             axios
               .patch(
                 resposta.data.fk_idconcept,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
-              .then(function(resposta2) {
+              .then(function (resposta2) {
                 vm.conceito = resposta2.data;
                 axios
                   .patch(
                     resposta2.data.fk_idmodule,
                     {
-                      headers: headers
+                      headers: headers,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   )
-                  .then(function(resposta3) {
+                  .then(function (resposta3) {
                     vm.modulo = resposta3.data;
                   });
               });
           });
       }
     },
-    dialog_mobilemediatree: function() {
+    dialog_mobilemediatree: function () {
       if (this.dialog_mobilemediatree === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             if (resposta.data.fk_idknowledgedomain) {
               vm.setmobilemedia(resposta.data, vm.dominio, "dominio");
             } else if (resposta.data.fk_module) {
@@ -2046,16 +2045,16 @@ export default {
                 .patch(
                   resposta.data.fk_module,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(function(resposta2) {
+                .then(function (resposta2) {
                   vm.setmobilemedia(resposta.data, resposta2.data, "modulo");
                 });
             } else if (resposta.data.fk_idconcept) {
@@ -2063,43 +2062,43 @@ export default {
                 .patch(
                   resposta.data.fk_idconcept,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(function(resposta2) {
+                .then(function (resposta2) {
                   vm.setmobilemedia(resposta.data, resposta2.data, "conceito");
                 });
             }
           });
       }
     },
-    dialog_instructionalelementtree: function() {
+    dialog_instructionalelementtree: function () {
       if (this.dialog_instructionalelementtree === true) {
         var vm = this;
         var csrftoken = Cookie.get("csrftoken");
         var headers = {
-          "X-CSRFTOKEN": csrftoken
+          "X-CSRFTOKEN": csrftoken,
         };
         axios
           .patch(
             this.objectTreeView.url,
             {
-              headers: headers
+              headers: headers,
             },
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(function(resposta) {
+          .then(function (resposta) {
             if (resposta.data.fk_idknowledgedomain) {
               vm.setinstructionalelement(resposta.data, vm.dominio, "dominio");
             } else if (resposta.data.fk_module) {
@@ -2107,16 +2106,16 @@ export default {
                 .patch(
                   resposta.data.fk_module,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(function(resposta2) {
+                .then(function (resposta2) {
                   vm.setinstructionalelement(
                     resposta.data,
                     resposta2.data,
@@ -2128,16 +2127,16 @@ export default {
                 .patch(
                   resposta.data.fk_idconcept,
                   {
-                    headers: headers
+                    headers: headers,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(function(resposta2) {
+                .then(function (resposta2) {
                   vm.setinstructionalelement(
                     resposta.data,
                     resposta2.data,
@@ -2148,7 +2147,7 @@ export default {
           });
       }
     },
-    elementToScroll: function() {
+    elementToScroll: function () {
       var auxQuerySelector =
         "#" +
         this.elementToScroll.url.split("/")[3] +
@@ -2240,15 +2239,15 @@ export default {
         this.$vuetify.goTo(auxQuerySelector, {
           duration: 1000,
           offset: 0,
-          easing: "easeInOutCubic"
+          easing: "easeInOutCubic",
         });
       }
-    }
+    },
   },
   computed: {
-    nomeDominioPanel: function() {
+    nomeDominioPanel: function () {
       return this.domainName;
-    }
+    },
   },
   methods: {
     validate() {
@@ -2278,7 +2277,7 @@ export default {
       var vm = this;
       var csrftoken = Cookie.get("csrftoken");
       var headers = {
-        "X-CSRFTOKEN": csrftoken
+        "X-CSRFTOKEN": csrftoken,
       };
       axios
         .patch(
@@ -2286,16 +2285,16 @@ export default {
             this.dominio_data.idknowledgedomain +
             "/",
           {
-            headers: headers
+            headers: headers,
           },
           {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           }
         )
-        .then(function(resposta) {
+        .then(function (resposta) {
           vm.setDomainVariables(resposta.data);
           vm.dialogLoading = false;
         });
@@ -2433,21 +2432,17 @@ export default {
         value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
       ) {
         if (value.path !== null && value.url.search("mobilemedia") === 22) {
-          await firebase
-            .storage()
-            .ref()
-            .child(value.path)
-            .delete();
+          await firebase.storage().ref().child(value.path).delete();
         }
       }
       await axios
         .delete(value.url, {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         })
-        .then(function() {
+        .then(function () {
           vm.getDominio();
           vm.alertDelete = false;
           vm.auxElementDelete = "";
@@ -2461,7 +2456,7 @@ export default {
 
     findNameTarget(conceitos, relacao) {
       var targetconcept = relacao.targetconcept;
-      var conceptSelect = conceitos.find(function(conceitofinded) {
+      var conceptSelect = conceitos.find(function (conceitofinded) {
         return conceitofinded.url === targetconcept;
       });
 
@@ -2510,11 +2505,11 @@ export default {
       this.controlTreeView("procedimento");
       this.controlTreeView("mobilemedia");
 
-      await this.$nextTick(function() {
+      await this.$nextTick(function () {
         vm.getDominio();
       }, 3 + rounds);
       if (rounds) {
-        await setTimeout(function() {
+        await setTimeout(function () {
           vm.getDominio();
         }, 1200);
       }
@@ -2550,16 +2545,16 @@ export default {
 
       this.controlTreeView("elementoinstrucional");
 
-      await setTimeout(function() {
+      await setTimeout(function () {
         vm.getDominio();
       }, 1200);
       if (numberQuestions > 5) {
-        await setTimeout(function() {
+        await setTimeout(function () {
           vm.getDominio();
         }, 1500);
       }
       if (numberQuestions > 10) {
-        await setTimeout(function() {
+        await setTimeout(function () {
           vm.getDominio();
         }, 1800);
       }
@@ -2585,33 +2580,29 @@ export default {
 
       var proceduresfinded = concept.informationitems.filter(checkProcedure);
 
+      console.log("proceduresfinded", proceduresfinded);
       return proceduresfinded;
     },
-    instrucElementsSearch(element) {
-      function checkInstrucElements(instruc) {
-        return (
-          instruc.fk_instructionalelementtype ===
-            "http://127.0.0.1:8000/instrucelementtype/1/" ||
-          instruc.fk_instructionalelementtype ===
-            "http://127.0.0.1:8000/instrucelementtype/2/" ||
-          instruc.fk_instructionalelementtype ===
-            "http://127.0.0.1:8000/instrucelementtype/3/"
-        );
-      }
-      if (element !== "") {
-        var instrucsfinded = element.instructionalelements.filter(
-          checkInstrucElements
-        );
-        return instrucsfinded;
-      } else {
-        return [];
-      }
+    mobileMediasInformationItem(concept) {
+      var mobilesfinded = [];
+
+      concept.informationitems.forEach((info) => {
+        if (
+          info.fk_informationitemtype !==
+          "http://127.0.0.1:8000/informationitemtype/4/"
+        ) {
+          info.mobilemedias.forEach((mob) => {
+            mobilesfinded.push(mob);
+          });
+        }
+      });
+      return mobilesfinded;
     },
     async visibleClose() {
       this.readonly_control = false;
       var vm = this;
       this.dialog_visible = false;
-      await setTimeout(function() {
+      await setTimeout(function () {
         vm.getDominio();
       }, 2000);
     },
@@ -2623,8 +2614,8 @@ export default {
     },
     saveDominio() {
       console.log("");
-    }
-  }
+    },
+  },
 };
 </script>
 

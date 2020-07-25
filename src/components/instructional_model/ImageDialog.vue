@@ -73,11 +73,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" height="49" dark large @click="reset()">
-          Close
+          Cancelar
           <v-icon dark right>mdi-close</v-icon>
         </v-btn>
         <v-btn color="success" height="49" dark large @click="validate()">
-          Save
+          Salvar
           <v-icon dark right>mdi-content-save</v-icon>
         </v-btn>
       </v-card-actions>
@@ -123,28 +123,28 @@ export default {
     imagemDescription: "",
     imagemObject: null,
     imagemDescriptionRules: [
-      v => !!v || "É necessário descrever a imagem a ser inserida",
-      v =>
+      (v) => !!v || "É necessário descrever a imagem a ser inserida",
+      (v) =>
         (v && v.length <= 100) ||
-        "A descrição da imagem deve ter no máximo 100 caracteres"
-    ]
+        "A descrição da imagem deve ter no máximo 100 caracteres",
+    ],
   }),
   watch: {
-    imagemObject: function() {
+    imagemObject: function () {
       if (this.imagemObject) {
         var vm = this;
         var img = new Image();
         img.src = URL.createObjectURL(this.imagemObject);
-        img.onload = function() {
+        img.onload = function () {
           vm.resolution = img.width + "X" + img.height;
         };
       }
     },
-    dialog: function() {
+    dialog: function () {
       this.getMobileMedia();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getMobileMedia();
     this.$refs.form.resetValidation();
   },
@@ -152,7 +152,7 @@ export default {
     getMobileMedia() {
       if (this.mobilemedia) {
         var vm = this;
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           if (vm.mobilemedia.path !== null) {
             vm.imagemDescription = this.mobilemedia.description;
           }
@@ -166,23 +166,23 @@ export default {
           if (vm.mobilemedia.fk_informationitem) {
             var csrftoken = Cookie.get("csrftoken");
             var headers = {
-              "X-CSRFTOKEN": csrftoken
+              "X-CSRFTOKEN": csrftoken,
             };
 
             axios
               .patch(
                 vm.mobilemedia.fk_informationitem,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
-              .then(function(resposta) {
+              .then(function (resposta) {
                 vm.infoClasse =
                   vm.infoItemClasses[
                     resposta.data.fk_informationitemtype.split("/")[4] - 1
@@ -201,7 +201,7 @@ export default {
         auxinfo:
           `http://127.0.0.1:8000/informationitemtype/` +
           (this.infoClasse + 1) +
-          "/"
+          "/",
       };
       var vm = this;
       var path = "";
@@ -223,14 +223,10 @@ export default {
         time: null,
         textfull: null,
         textshort: null,
-        urllink: null
+        urllink: null,
       };
 
-      await firebase
-        .storage()
-        .ref()
-        .child(path)
-        .put(this.imagemObject);
+      await firebase.storage().ref().child(path).put(this.imagemObject);
       if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
@@ -238,31 +234,27 @@ export default {
       }
       if (this.infoLevel > -1) {
         Object.assign(mobilemedia, {
-          difficultyLevel: this.infoLevel
+          difficultyLevel: this.infoLevel,
         });
       }
       if (this.infoLearning > -1) {
         Object.assign(mobilemedia, {
-          learningStyle: this.infoLearning
+          learningStyle: this.infoLearning,
         });
       }
       if (this.type === "conceito") {
         var iteminfo = {
           nameinformationitem: "imagem_" + vm.imagemObject.name,
           fk_informationitemtype: auxinformationitem.auxinfo,
-          fk_idconcept: this.optionCall.url
+          fk_idconcept: this.optionCall.url,
         };
-
-        Object.assign(mobilemedia, {
-          fk_idconcept: this.optionCall.url
-        });
       } else if (this.type === "dominio") {
         Object.assign(mobilemedia, {
-          fk_idknowledgedomain: this.optionCall.url
+          fk_idknowledgedomain: this.optionCall.url,
         });
       } else if (this.type === "modulo") {
         Object.assign(mobilemedia, {
-          fk_module: this.optionCall.url
+          fk_module: this.optionCall.url,
         });
       }
       /* CÓDIGO PARA EDIÇÃO DO MOBILEMEDIA */
@@ -274,31 +266,31 @@ export default {
             .put(vm.mobilemedia.fk_informationitem, iteminfo, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               Object.assign(mobilemedia, {
-                fk_informationitem: resposta.data.url
+                fk_informationitem: resposta.data.url,
               });
               await axios
                 .put(vm.mobilemedia.url, mobilemedia, {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 })
-                .then(async function(/*resposta*/) {});
+                .then(async function (/*resposta*/) {});
             });
         } else if (this.type === "dominio" || this.type === "modulo") {
           await axios
             .put(this.mobilemedia.url, mobilemedia, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(/*resposta*/) {});
+            .then(async function (/*resposta*/) {});
         }
       } else {
         /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA */
@@ -309,21 +301,21 @@ export default {
             .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               Object.assign(mobilemedia, {
-                fk_informationitem: resposta.data.url
+                fk_informationitem: resposta.data.url,
               });
               await axios
                 .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 })
-                .then(function(/*resposta*/) {
+                .then(function (/*resposta*/) {
                   /*vm.moduloTitle = resposta.data.namemodule;
                                     vm.subTitle = resposta.data.subtitle;*/
                 });
@@ -335,10 +327,10 @@ export default {
             .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(function(/*resposta*/) {
+            .then(function (/*resposta*/) {
               /*vm.moduloTitle = resposta.data.namemodule;
                                 vm.subTitle = resposta.data.subtitle;*/
             });
@@ -347,13 +339,13 @@ export default {
     },
     async validate() {
       var vm = this;
-      this.infoClasse = this.infoItemClasses.findIndex(function(value) {
+      this.infoClasse = this.infoItemClasses.findIndex(function (value) {
         return value === vm.infoClasse;
       });
-      this.infoLevel = this.infoItemLevels.findIndex(function(value) {
+      this.infoLevel = this.infoItemLevels.findIndex(function (value) {
         return value === vm.infoLevel;
       });
-      this.infoLearning = this.infoItemLearningStyles.findIndex(function(
+      this.infoLearning = this.infoItemLearningStyles.findIndex(function (
         value
       ) {
         return value === vm.infoLearning;
@@ -388,14 +380,14 @@ export default {
           .storage()
           .ref(this.mobilemedia.path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             vm.viewImageSrc = url;
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               const file = new File([blob], vm.mobilemedia.namefile, {
-                type: blob.type
+                type: blob.type,
               });
               vm.imagemObject = file;
             };
@@ -420,7 +412,7 @@ export default {
             window.open(url, "_blank");
           });*/
       }
-    }
-  }
+    },
+  },
 };
 </script>

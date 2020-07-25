@@ -22,11 +22,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="red" height="49" dark="dark" large="large" @click="reset">
-          Close
+          Cancelar
           <v-icon dark="dark" right="right">mdi-close</v-icon>
         </v-btn>
         <v-btn color="success" height="49" dark="dark" large="large" @click="validate">
-          Save
+          Salvar
           <v-icon dark="dark" right="right">mdi-content-save</v-icon>
         </v-btn>
       </v-card-actions>
@@ -43,32 +43,32 @@ export default {
     valid: true,
     subModuloTitle: "",
     subModuloTitleRules: [
-      v => !!v || "É necessário descrever o título do submódulo",
-      v =>
+      (v) => !!v || "É necessário descrever o título do submódulo",
+      (v) =>
         (v && v.length <= 40) ||
-        "O título do módulo deve ter no máximo 40 caracteres"
+        "O título do módulo deve ter no máximo 40 caracteres",
     ],
     subModuloSubtitle: "",
     select: null,
     checkbox: false,
-    modulos: ""
+    modulos: "",
   }),
   watch: {
-    dialog: function() {
+    dialog: function () {
       this.getSubModulo();
     },
-    submodule: function() {
+    submodule: function () {
       this.getSubModulo();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getSubModulo();
     this.$refs.form.resetValidation();
   },
   methods: {
     getSubModulo() {
       var vm = this;
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         vm.subModuloTitle = vm.submodule.namemodule;
         vm.subModuloSubtitle = vm.submodule.subtitle;
       });
@@ -80,13 +80,13 @@ export default {
           fk_idmodule: this.module.url,
           namemodule: this.subModuloTitle,
           subtitle: this.subModuloSubtitle,
-          idknowledgedomain: this.domain.url
+          idknowledgedomain: this.domain.url,
         },
         {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         }
       );
     },
@@ -97,13 +97,13 @@ export default {
           fk_idmodule: this.module.url,
           namemodule: this.subModuloTitle,
           subtitle: this.subModuloSubtitle,
-          idknowledgedomain: this.domain.url
+          idknowledgedomain: this.domain.url,
         },
         {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         }
       );
     },
@@ -126,7 +126,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }
-  }
+    },
+  },
 };
 </script>

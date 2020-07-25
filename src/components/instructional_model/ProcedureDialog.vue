@@ -118,11 +118,11 @@
         <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="red" height="49" dark large @click="reset()">
-                Close
+                Cancelar
                 <v-icon dark right>mdi-close</v-icon>
             </v-btn>
             <v-btn color="success" height="49" dark large @click="validate()">
-                Save
+                Salvar
                 <v-icon dark right>mdi-content-save</v-icon>
             </v-btn>
         </v-card-actions>

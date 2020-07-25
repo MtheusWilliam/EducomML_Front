@@ -10,11 +10,11 @@
         <v-spacer></v-spacer>
         <v-col cols="4" class="pl-11" style="margin-right: -16px;">
           <v-btn color="red" dark large @click="reset()" class="ml-2 mb-3">
-            Close
+            Cancelar
             <v-icon dark right>mdi-close</v-icon>
           </v-btn>
           <v-btn color="success" dark large @click="validate()" class="ml-2 mb-3">
-            Save
+            Salvar
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
         </v-col>
@@ -445,11 +445,11 @@
           </v-list>
         </v-menu>
         <v-btn color="red" height="49" dark large @click="reset()">
-          Close
+          Cancelar
           <v-icon dark right>mdi-close</v-icon>
         </v-btn>
         <v-btn color="success" height="49" dark large @click="validate()">
-          Save
+          Salvar
           <v-icon dark right>mdi-content-save</v-icon>
         </v-btn>
       </v-card-actions>
@@ -520,7 +520,7 @@ export default {
     "procedure",
     "concept",
     "module",
-    "instructionalelement"
+    "instructionalelement",
   ],
   data: () => ({
     i: 0,
@@ -532,44 +532,44 @@ export default {
     questionAjust: "",
     colaborativeName: "",
     colaborativeNameRules: [
-      v =>
+      (v) =>
         !!v ||
         "É necessário descrever um identificador para a atividade colaborativa",
-      v =>
+      (v) =>
         (v && v.length <= 100) ||
-        "Nome do identificador da atividade colaborativa deve ter no máximo 100 caracteres"
+        "Nome do identificador da atividade colaborativa deve ter no máximo 100 caracteres",
     ],
     memberAmount: "",
     memberAmountRules: [
-      v =>
+      (v) =>
         !!v ||
-        "É necessário inserir a quantidade de alunos envolvidos na atividade"
+        "É necessário inserir a quantidade de alunos envolvidos na atividade",
     ],
     colaborativeDescription: "",
     colaborativeDescriptionRules: [
-      v =>
+      (v) =>
         !!v ||
-        "É necessário inserir uma descrição da atividade colaborativa a ser inserida"
+        "É necessário inserir uma descrição da atividade colaborativa a ser inserida",
     ],
     itemsMobileMedia: [
       {
         icon: "mdi-file-image",
-        name: "Imagem"
+        name: "Imagem",
       },
       {
         icon: "mdi-file-video",
-        name: "Video"
+        name: "Video",
       },
       {
         icon: "mdi-file-music",
-        name: "Audio"
+        name: "Audio",
       },
       {
         icon: "mdi-link-variant",
-        name: "Link"
-      }
+        name: "Link",
+      },
     ],
-    linkUrlRules: [v => !!v || "É necessário inserir a url do seu link"],
+    linkUrlRules: [(v) => !!v || "É necessário inserir a url do seu link"],
     mobileMediasControl: [],
     viewQuestions: false,
     questionTypes: ["Questão Objetiva", "Questão Discussiva"],
@@ -600,18 +600,18 @@ export default {
       "W",
       "X",
       "Y",
-      "Z"
+      "Z",
     ],
     alternativeDescriptionRules: [
-      v => !!v || "É necessário descrever a alternativa."
-    ]
+      (v) => !!v || "É necessário descrever a alternativa.",
+    ],
   }),
   watch: {
-    dialog: async function() {
+    dialog: async function () {
       this.getColaborative();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getColaborative();
     this.$refs.form.resetValidation();
   },
@@ -619,7 +619,7 @@ export default {
     async getColaborative() {
       if (this.instructionalelement) {
         var vm = this;
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           this.colaborativeName = this.instructionalelement.label;
           this.colaborativeDescription = this.instructionalelement.description;
           this.memberAmount = parseInt(this.instructionalelement.memberamount);
@@ -627,7 +627,7 @@ export default {
         this.questionsControl = [];
         this.mobileMediasControl = [];
         if (this.instructionalelement.mobilemedias.length > 0) {
-          await this.instructionalelement.mobilemedias.forEach(async function(
+          await this.instructionalelement.mobilemedias.forEach(async function (
             elementMobile,
             indexMobile
           ) {
@@ -643,7 +643,7 @@ export default {
                 resolution: elementMobile.resolution,
                 path: elementMobile.path,
                 namefile: elementMobile.namefile,
-                url: elementMobile.url
+                url: elementMobile.url,
               });
             } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
               vm.getSrcVideo(
@@ -658,7 +658,7 @@ export default {
                 time: elementMobile.time,
                 path: elementMobile.path,
                 namefile: elementMobile.namefile,
-                url: elementMobile.url
+                url: elementMobile.url,
               });
             } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
               vm.getSrcAudio(
@@ -671,20 +671,20 @@ export default {
                 object: null,
                 path: elementMobile.path,
                 namefile: elementMobile.namefile,
-                url: elementMobile.url
+                url: elementMobile.url,
               });
             } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
               await vm.mobileMediasControl.push({
                 type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
                 object: elementMobile.urllink,
-                url: elementMobile.url
+                url: elementMobile.url,
               });
             }
           });
         }
         if (this.instructionalelement.questions.length > 0) {
           this.viewQuestions = true;
-          await this.instructionalelement.questions.forEach(async function(
+          await this.instructionalelement.questions.forEach(async function (
             elementQuestion,
             indexQuestion
           ) {
@@ -699,9 +699,9 @@ export default {
                 descriptionQuestion: elementQuestion.descriptionquestion,
                 answersAlternatives: [],
                 mobileMedias: [],
-                url: elementQuestion.url
+                url: elementQuestion.url,
               });
-              await elementQuestion.answersalternatives.forEach(async function(
+              await elementQuestion.answersalternatives.forEach(async function (
                 elementAlternative
               ) {
                 await vm.questionsControl[
@@ -709,7 +709,7 @@ export default {
                 ].answersAlternatives.push({
                   isTrue: elementAlternative.istrue,
                   answers: elementAlternative.answers,
-                  url: elementAlternative.url
+                  url: elementAlternative.url,
                 });
               });
             } else if (
@@ -725,11 +725,11 @@ export default {
                   elementQuestion.resolutionquestion[0].correctanswer,
                 mobileMedias: [],
                 url: elementQuestion.url,
-                urlCorrectAnswer: elementQuestion.resolutionquestion[0].url
+                urlCorrectAnswer: elementQuestion.resolutionquestion[0].url,
               });
             }
             if (elementQuestion.mobilemedias) {
-              await elementQuestion.mobilemedias.forEach(async function(
+              await elementQuestion.mobilemedias.forEach(async function (
                 elementMobile,
                 indexMobile
               ) {
@@ -746,7 +746,7 @@ export default {
                     resolution: elementMobile.resolution,
                     path: elementMobile.path,
                     namefile: elementMobile.namefile,
-                    url: elementMobile.url
+                    url: elementMobile.url,
                   });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
                   vm.getSrcVideoQuestions(
@@ -762,7 +762,7 @@ export default {
                     time: elementMobile.time,
                     path: elementMobile.path,
                     namefile: elementMobile.namefile,
-                    url: elementMobile.url
+                    url: elementMobile.url,
                   });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
                   vm.getSrcAudioQuestions(
@@ -776,13 +776,13 @@ export default {
                     object: null,
                     path: elementMobile.path,
                     namefile: elementMobile.namefile,
-                    url: elementMobile.url
+                    url: elementMobile.url,
                   });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
                   await vm.questionsControl[indexQuestion].mobileMedias.push({
                     type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
                     object: elementMobile.urllink,
-                    url: elementMobile.url
+                    url: elementMobile.url,
                   });
                 }
               });
@@ -804,12 +804,12 @@ export default {
         label: this.colaborativeName,
         fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/3/`,
         memberamount: this.memberAmount,
-        description: this.colaborativeDescription
+        description: this.colaborativeDescription,
       };
       var vm = this;
       var auxPath = "";
       if (this.mobileMediasControl) {
-        this.mobileMediasControl.forEach(async mobilemedia => {
+        this.mobileMediasControl.forEach(async (mobilemedia) => {
           if (mobilemedia.url) {
             if (mobilemedia.type !== 5) {
               firebase
@@ -822,15 +822,11 @@ export default {
             auxPath =
               vm.domain.idknowledgedomain.toString() +
               "/" +
-              (await setTimeout(async function() {
+              (await setTimeout(async function () {
                 await Date.now().toString();
               }, 1));
             if (mobilemedia.type !== 5) {
-              firebase
-                .storage()
-                .ref()
-                .child(auxPath)
-                .put(mobilemedia.object);
+              firebase.storage().ref().child(auxPath).put(mobilemedia.object);
 
               mobilemedia.path = auxPath;
             }
@@ -838,9 +834,9 @@ export default {
         });
       }
       var auxPathQuestions = "";
-      this.questionsControl.forEach(async function(question) {
+      this.questionsControl.forEach(async function (question) {
         if (question.mobileMedias) {
-          await question.mobileMedias.forEach(mobilemedia => {
+          await question.mobileMedias.forEach((mobilemedia) => {
             if (mobilemedia.url) {
               if (mobilemedia.type !== 5) {
                 firebase
@@ -850,7 +846,7 @@ export default {
                   .put(mobilemedia.object);
               }
             } else {
-              setTimeout(function() {
+              setTimeout(function () {
                 auxPathQuestions =
                   vm.domain.idknowledgedomain.toString() +
                   "/" +
@@ -872,15 +868,15 @@ export default {
 
       if (this.instrucType === "dominio") {
         Object.assign(instructionalelement, {
-          fk_idknowledgedomain: this.instrucOptionCall.url
+          fk_idknowledgedomain: this.instrucOptionCall.url,
         });
       } else if (this.instrucType === "modulo") {
         Object.assign(instructionalelement, {
-          fk_idmodule: this.instrucOptionCall.url
+          fk_idmodule: this.instrucOptionCall.url,
         });
       } else if (this.instrucType === "conceito") {
         Object.assign(instructionalelement, {
-          fk_idconcept: this.instrucOptionCall.url
+          fk_idconcept: this.instrucOptionCall.url,
         });
       }
 
@@ -890,13 +886,13 @@ export default {
           .put(vm.instructionalelement.url, instructionalelement, {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           })
-          .then(async function(resposta) {
+          .then(async function (resposta) {
             if (vm.mobileMediasControl) {
               var i = 0;
-              await vm.mobileMediasControl.forEach(async function(
+              await vm.mobileMediasControl.forEach(async function (
                 mobilemedia,
                 indexmobile
               ) {
@@ -925,13 +921,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 2) {
@@ -953,13 +949,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 3) {
@@ -981,13 +977,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 5) {
@@ -1009,13 +1005,13 @@ export default {
                         urllink: mobilemedia.object,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   }
@@ -1044,13 +1040,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 2) {
@@ -1073,13 +1069,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 3) {
@@ -1101,13 +1097,13 @@ export default {
                         urllink: null,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   } else if (mobilemedia.type === 5) {
@@ -1129,13 +1125,13 @@ export default {
                         urllink: mobilemedia.object,
                         difficultyLevel: null,
                         learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url
+                        fk_idinstructionalelement: resposta.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   }
@@ -1143,7 +1139,7 @@ export default {
               });
             }
 
-            await vm.questionsControl.forEach(async function(
+            await vm.questionsControl.forEach(async function (
               elementQuestion,
               indexQuestion
             ) {
@@ -1159,19 +1155,19 @@ export default {
                         `http://127.0.0.1:8000/questiontype/` +
                         elementQuestion.typeQuestion +
                         `/`,
-                      fk_idinstructionalelement: vm.instructionalelement.url
+                      fk_idinstructionalelement: vm.instructionalelement.url,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   )
-                  .then(async function(resposta2) {
+                  .then(async function (resposta2) {
                     /*DANDO PUT NOS MOBILEMEDIAS DAS QUESTÕES COM URL*/
 
-                    await elementQuestion.mobileMedias.forEach(async function(
+                    await elementQuestion.mobileMedias.forEach(async function (
                       elementMobile,
                       indexMobile
                     ) {
@@ -1199,13 +1195,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 2) {
@@ -1227,13 +1223,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 3) {
@@ -1255,13 +1251,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 5) {
@@ -1283,13 +1279,13 @@ export default {
                               urllink: elementMobile.object,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         }
@@ -1317,13 +1313,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 2) {
@@ -1345,13 +1341,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 3) {
@@ -1373,13 +1369,13 @@ export default {
                               urllink: null,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         } else if (elementMobile.type === 5) {
@@ -1401,13 +1397,13 @@ export default {
                               urllink: elementMobile.object,
                               difficultyLevel: null,
                               learningStyle: null,
-                              fk_idquestion: resposta2.data.url
+                              fk_idquestion: resposta2.data.url,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         }
@@ -1416,7 +1412,7 @@ export default {
 
                     if (elementQuestion.typeQuestion === 1) {
                       await elementQuestion.answersAlternatives.forEach(
-                        async function(elementAlternative, indexAlternative) {
+                        async function (elementAlternative, indexAlternative) {
                           if (elementAlternative.url) {
                             await axios.put(
                               elementAlternative.url,
@@ -1426,13 +1422,13 @@ export default {
                                 answers: elementAlternative.answers,
                                 istrue: elementAlternative.isTrue,
                                 fk_idquestion: resposta2.data.url,
-                                orderansweralternatives: indexAlternative
+                                orderansweralternatives: indexAlternative,
                               },
                               {
                                 auth: {
                                   username: "admin",
-                                  password: "admin"
-                                }
+                                  password: "admin",
+                                },
                               }
                             );
                           } else {
@@ -1444,13 +1440,13 @@ export default {
                                 answers: elementAlternative.answers,
                                 istrue: elementAlternative.isTrue,
                                 fk_idquestion: resposta2.data.url,
-                                orderansweralternatives: indexAlternative
+                                orderansweralternatives: indexAlternative,
                               },
                               {
                                 auth: {
                                   username: "admin",
-                                  password: "admin"
-                                }
+                                  password: "admin",
+                                },
                               }
                             );
                           }
@@ -1460,13 +1456,13 @@ export default {
                       await axios.put(
                         elementQuestion.urlCorrectAnswer,
                         {
-                          correctanswer: elementQuestion.correctAnswer
+                          correctanswer: elementQuestion.correctAnswer,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     }
@@ -1482,19 +1478,19 @@ export default {
                       typequestion:
                         `http://127.0.0.1:8000/questiontype/` +
                         elementQuestion.typeQuestion +
-                        `/`
+                        `/`,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   )
-                  .then(async function(resposta2) {
+                  .then(async function (resposta2) {
                     if (elementQuestion.typeQuestion === 1) {
                       await elementQuestion.answersAlternatives.forEach(
-                        async function(elementAlternative, indexAlternative) {
+                        async function (elementAlternative, indexAlternative) {
                           await axios.post(
                             `http://127.0.0.1:8000/answersalternatives/`,
                             {
@@ -1503,13 +1499,13 @@ export default {
                               answers: elementAlternative.answers,
                               istrue: elementAlternative.isTrue,
                               fk_idquestion: resposta2.data.url,
-                              orderansweralternatives: indexAlternative
+                              orderansweralternatives: indexAlternative,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         }
@@ -1519,13 +1515,13 @@ export default {
                         `http://127.0.0.1:8000/resolutionquestion/`,
                         {
                           correctanswer: elementQuestion.correctAnswer,
-                          fk_idquestion: resposta2.data.url
+                          fk_idquestion: resposta2.data.url,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     }
@@ -1542,14 +1538,14 @@ export default {
             {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             }
           )
-          .then(async function(resposta) {
+          .then(async function (resposta) {
             if (vm.mobileMediasControl) {
               /* INSERÇÃO DOS MOBILEMEDIAS DA ATIVIDADE COLABORATIVA */
-              await vm.mobileMediasControl.forEach(async function(
+              await vm.mobileMediasControl.forEach(async function (
                 mobilemedia,
                 indexmobile
               ) {
@@ -1576,13 +1572,13 @@ export default {
                       urllink: null,
                       difficultyLevel: null,
                       learningStyle: null,
-                      fk_idinstructionalelement: resposta.data.url
+                      fk_idinstructionalelement: resposta.data.url,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   );
                 } else if (mobilemedia.type === 2) {
@@ -1604,13 +1600,13 @@ export default {
                       urllink: null,
                       difficultyLevel: null,
                       learningStyle: null,
-                      fk_idinstructionalelement: resposta.data.url
+                      fk_idinstructionalelement: resposta.data.url,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   );
                 } else if (mobilemedia.type === 3) {
@@ -1632,13 +1628,13 @@ export default {
                       urllink: null,
                       difficultyLevel: null,
                       learningStyle: null,
-                      fk_idinstructionalelement: resposta.data.url
+                      fk_idinstructionalelement: resposta.data.url,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   );
                 } else if (mobilemedia.type === 5) {
@@ -1660,19 +1656,19 @@ export default {
                       urllink: mobilemedia.object,
                       difficultyLevel: null,
                       learningStyle: null,
-                      fk_idinstructionalelement: resposta.data.url
+                      fk_idinstructionalelement: resposta.data.url,
                     },
                     {
                       auth: {
                         username: "admin",
-                        password: "admin"
-                      }
+                        password: "admin",
+                      },
                     }
                   );
                 }
               });
             }
-            await vm.questionsControl.forEach(async function(
+            await vm.questionsControl.forEach(async function (
               elementQuestion,
               indexQuestion
             ) {
@@ -1687,18 +1683,18 @@ export default {
                     typequestion:
                       `http://127.0.0.1:8000/questiontype/` +
                       elementQuestion.typeQuestion +
-                      `/`
+                      `/`,
                   },
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(async function(resposta2) {
+                .then(async function (resposta2) {
                   /* INSERÇÃO DOS MOBILEMEDIAS DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
-                  await elementQuestion.mobileMedias.forEach(async function(
+                  await elementQuestion.mobileMedias.forEach(async function (
                     elementMobile,
                     indexMobile
                   ) {
@@ -1725,13 +1721,13 @@ export default {
                           urllink: null,
                           difficultyLevel: null,
                           learningStyle: null,
-                          fk_idquestion: resposta2.data.url
+                          fk_idquestion: resposta2.data.url,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     } else if (elementMobile.type === 2) {
@@ -1753,13 +1749,13 @@ export default {
                           urllink: null,
                           difficultyLevel: null,
                           learningStyle: null,
-                          fk_idquestion: resposta2.data.url
+                          fk_idquestion: resposta2.data.url,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     } else if (elementMobile.type === 3) {
@@ -1781,13 +1777,13 @@ export default {
                           urllink: null,
                           difficultyLevel: null,
                           learningStyle: null,
-                          fk_idquestion: resposta2.data.url
+                          fk_idquestion: resposta2.data.url,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     } else if (elementMobile.type === 5) {
@@ -1809,13 +1805,13 @@ export default {
                           urllink: elementMobile.object,
                           difficultyLevel: null,
                           learningStyle: null,
-                          fk_idquestion: resposta2.data.url
+                          fk_idquestion: resposta2.data.url,
                         },
                         {
                           auth: {
                             username: "admin",
-                            password: "admin"
-                          }
+                            password: "admin",
+                          },
                         }
                       );
                     }
@@ -1823,7 +1819,7 @@ export default {
                   if (elementQuestion.typeQuestion === 1) {
                     /* INSERÇÃO DAS ALTERNATIVAS DAS QUESTÕES DA ATIVIDADE COLABORATIVA */
                     await elementQuestion.answersAlternatives.forEach(
-                      async function(elementAlternative, indexAlternative) {
+                      async function (elementAlternative, indexAlternative) {
                         await axios.post(
                           `http://127.0.0.1:8000/answersalternatives/`,
                           {
@@ -1831,13 +1827,13 @@ export default {
                             answers: elementAlternative.answers,
                             istrue: elementAlternative.isTrue,
                             fk_idquestion: resposta2.data.url,
-                            orderansweralternatives: indexAlternative
+                            orderansweralternatives: indexAlternative,
                           },
                           {
                             auth: {
                               username: "admin",
-                              password: "admin"
-                            }
+                              password: "admin",
+                            },
                           }
                         );
                       }
@@ -1848,13 +1844,13 @@ export default {
                       `http://127.0.0.1:8000/resolutionquestion/`,
                       {
                         correctanswer: elementQuestion.correctAnswer,
-                        fk_idquestion: resposta2.data.url
+                        fk_idquestion: resposta2.data.url,
                       },
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     );
                   }
@@ -1871,7 +1867,7 @@ export default {
           resolution: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 2) {
         this.mobileMediasControl.push({
@@ -1881,7 +1877,7 @@ export default {
           time: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 3) {
         this.mobileMediasControl.push({
@@ -1889,13 +1885,13 @@ export default {
           object: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 4) {
         this.mobileMediasControl.push({
           type: mobileMediaType + 1,
           object: null,
-          url: null
+          url: null,
         });
       }
     },
@@ -1911,8 +1907,8 @@ export default {
         await axios.delete(this.mobileMediasControl[idMobileMedia].url, {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         });
       }
       if (idMobileMedia == 0) {
@@ -1927,13 +1923,13 @@ export default {
       }
     },
     async deleteQuestionario() {
-      await this.questionsControl.forEach(async question => {
+      await this.questionsControl.forEach(async (question) => {
         if (question.url) {
           await axios.delete(question.url, {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           });
         }
       });
@@ -1947,7 +1943,7 @@ export default {
           descriptionQuestion: null,
           answersAlternatives: [],
           mobileMedias: [],
-          url: null
+          url: null,
         });
       } else if (questionType === 2) {
         this.questionsControl.push({
@@ -1956,7 +1952,7 @@ export default {
           correctAnswer: null,
           mobileMedias: [],
           url: null,
-          urlCorrectAnswer: null
+          urlCorrectAnswer: null,
         });
       }
     },
@@ -1965,8 +1961,8 @@ export default {
         await axios.delete(this.questionsControl[idQuestion].url, {
           auth: {
             username: "admin",
-            password: "admin"
-          }
+            password: "admin",
+          },
         });
       }
       if (idQuestion == 0) {
@@ -1983,7 +1979,7 @@ export default {
           resolution: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 2) {
         this.questionsControl[idQuestion].mobileMedias.push({
@@ -1993,7 +1989,7 @@ export default {
           time: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 3) {
         this.questionsControl[idQuestion].mobileMedias.push({
@@ -2001,13 +1997,13 @@ export default {
           object: null,
           path: null,
           namefile: null,
-          url: null
+          url: null,
         });
       } else if (mobileMediaType === 4) {
         this.questionsControl[idQuestion].mobileMedias.push({
           type: mobileMediaType + 1,
           object: null,
-          url: null
+          url: null,
         });
       }
     },
@@ -2030,8 +2026,8 @@ export default {
           {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           }
         );
       }
@@ -2045,7 +2041,7 @@ export default {
       this.questionsControl[idQuestion].answersAlternatives.push({
         isTrue: false,
         answers: null,
-        url: null
+        url: null,
       });
     },
     async deleteAlternative(idQuestion, idAlternative) {
@@ -2058,8 +2054,8 @@ export default {
           {
             auth: {
               username: "admin",
-              password: "admin"
-            }
+              password: "admin",
+            },
           }
         );
       }
@@ -2154,12 +2150,12 @@ export default {
     },
     atualizaMeta() {
       if (this.mobileMediasControl.length > 0) {
-        this.mobileMediasControl.forEach(mobilemedia => {
+        this.mobileMediasControl.forEach((mobilemedia) => {
           if (mobilemedia.object && !mobilemedia.url) {
             if (mobilemedia.type === 1) {
               var img = new Image();
               img.src = URL.createObjectURL(mobilemedia.object);
-              img.onload = function() {
+              img.onload = function () {
                 mobilemedia.resolution = img.width + "X" + img.height;
               };
             } else if (mobilemedia.type === 2) {
@@ -2170,7 +2166,7 @@ export default {
                 URL.createObjectURL(mobilemedia.object)
               );
               video.appendChild(source);
-              video.oncanplay = function() {
+              video.oncanplay = function () {
                 mobilemedia.resolution =
                   video.videoWidth + "X" + video.videoHeight;
                 mobilemedia.time = video.duration;
@@ -2188,14 +2184,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewImageSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               // vm.auxGetSrc.push(file);
               vm.atualizaObj(file, indexMobile);
@@ -2213,14 +2209,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewVideoSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               // vm.auxGetSrc.push(file);
               vm.atualizaObj(file, indexMobile);
@@ -2238,14 +2234,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewAudioSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               // vm.auxGetSrc.push(file);
               vm.atualizaObj(file, indexMobile);
@@ -2257,14 +2253,14 @@ export default {
     },
     atualizaMetaQuestions() {
       if (this.questionsControl.length > 0) {
-        this.questionsControl.forEach(question => {
+        this.questionsControl.forEach((question) => {
           if (question.mobileMedias) {
-            question.mobileMedias.forEach(mobilemedia => {
+            question.mobileMedias.forEach((mobilemedia) => {
               if (mobilemedia.object && !mobilemedia.url) {
                 if (mobilemedia.type === 1) {
                   var img = new Image();
                   img.src = URL.createObjectURL(mobilemedia.object);
-                  img.onload = function() {
+                  img.onload = function () {
                     mobilemedia.resolution = img.width + "X" + img.height;
                   };
                 } else if (mobilemedia.type === 2) {
@@ -2275,7 +2271,7 @@ export default {
                     URL.createObjectURL(mobilemedia.object)
                   );
                   video.appendChild(source);
-                  video.oncanplay = function() {
+                  video.oncanplay = function () {
                     mobilemedia.resolution =
                       video.videoWidth + "X" + video.videoHeight;
                     mobilemedia.time = video.duration;
@@ -2300,14 +2296,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewImageSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               /*vm.auxGetSrcQuestions.push(file);*/
               vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
@@ -2325,14 +2321,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewVideoSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               // vm.auxGetSrcQuestions.push(file);
               vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
@@ -2350,14 +2346,14 @@ export default {
           .storage()
           .ref(path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             /*vm.viewAudioSrc = url;*/
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               var file = new File([blob], namefile, {
-                type: blob.type
+                type: blob.type,
               });
               // vm.auxGetSrcQuestions.push(file);
               vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
@@ -2369,7 +2365,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }
-  }
+    },
+  },
 };
 </script>

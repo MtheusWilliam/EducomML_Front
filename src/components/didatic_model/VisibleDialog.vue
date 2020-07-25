@@ -224,11 +224,11 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="red" height="49" dark large @click="reset">
-        Close
+        Cancelar
         <v-icon dark right>mdi-close</v-icon>
       </v-btn>
       <v-btn color="success" height="49" dark large @click="validate">
-        Save
+        Salvar
         <v-icon dark right>mdi-content-save</v-icon>
       </v-btn>
     </v-card-actions>
@@ -262,22 +262,22 @@ export default {
     scopoTypes: [
       {
         text: "Avaliação",
-        value: 1
+        value: 1,
       },
       {
         text: "Domínio",
-        value: 2
-      }
+        value: 2,
+      },
     ],
     typesThreshold: [
       {
         text: "Porcentagem",
-        value: 1
+        value: 1,
       },
       {
         text: "Literal",
-        value: 2
-      }
+        value: 2,
+      },
     ],
     valueTypes: ["Single", "Range"],
     assessmentControl: [],
@@ -286,20 +286,20 @@ export default {
     priorLevels: [
       {
         text: "Obrigatório",
-        value: 1
+        value: 1,
       },
       {
         text: "Desejável",
-        value: 2
-      }
+        value: 2,
+      },
     ],
     dialogError: false,
     messageError: "",
     newItems: [],
-    checkbox: true
+    checkbox: true,
   }),
   watch: {
-    domain: async function() {
+    domain: async function () {
       this.assessmentControl = [];
       this.priorControl = [];
       if (this.domain) {
@@ -309,10 +309,10 @@ export default {
         await this.setDomainVariables();
       }
     },
-    assessmentControl: function() {
-      this.assessmentControl.forEach(assess => {
+    assessmentControl: function () {
+      this.assessmentControl.forEach((assess) => {
         if (assess.valueType === "Single") {
-          assess.ranges.forEach(range => {
+          assess.ranges.forEach((range) => {
             if (range.url) {
               this.deletaSingle(range.url);
             }
@@ -326,9 +326,9 @@ export default {
           assess.single.threshold = "";
         }
       });
-    }
+    },
   },
-  mounted: async function() {
+  mounted: async function () {
     this.assessmentControl = [];
     this.priorControl = [];
     if (this.domain) {
@@ -354,10 +354,10 @@ export default {
             valueType: "",
             single: {
               threshold: "",
-              url: ""
+              url: "",
             },
             ranges: [],
-            url: this.domain.assessmentparameter[0].url
+            url: this.domain.assessmentparameter[0].url,
           };
           if (this.domain.assessmentparameter[0].single.length > 0) {
             assess.valueType = "Single";
@@ -365,19 +365,19 @@ export default {
             assess.single.url = this.domain.assessmentparameter[0].single[0].url;
           } else if (this.domain.assessmentparameter[0].ranges.length > 0) {
             assess.valueType = "Range";
-            this.domain.assessmentparameter[0].ranges.forEach(range => {
+            this.domain.assessmentparameter[0].ranges.forEach((range) => {
               assess.ranges.push({
                 namerange: range.namerange,
                 initialvalue: range.initialvalue,
                 limitvalue: range.limitvalue,
-                url: range.url
+                url: range.url,
               });
             });
           }
           this.assessmentControl.push(assess);
         }
         if (this.domain.modules) {
-          this.domain.modules.forEach(module => {
+          this.domain.modules.forEach((module) => {
             if (module.assessmentparameter.length > 0) {
               var assess = {
                 typeThreshold: parseInt(
@@ -390,10 +390,10 @@ export default {
                 valueType: "",
                 single: {
                   threshold: "",
-                  url: ""
+                  url: "",
                 },
                 ranges: [],
-                url: module.assessmentparameter[0].url
+                url: module.assessmentparameter[0].url,
               };
               if (module.assessmentparameter[0].single.length > 0) {
                 assess.valueType = "Single";
@@ -402,19 +402,19 @@ export default {
                 assess.single.url = module.assessmentparameter[0].single[0].url;
               } else if (module.assessmentparameter[0].ranges.length > 0) {
                 assess.valueType = "Range";
-                module.assessmentparameter[0].ranges.forEach(range => {
+                module.assessmentparameter[0].ranges.forEach((range) => {
                   assess.ranges.push({
                     namerange: range.namerange,
                     initialvalue: range.initialvalue,
                     limitvalue: range.limitvalue,
-                    url: range.url
+                    url: range.url,
                   });
                 });
               }
               this.assessmentControl.push(assess);
             }
             if (module.concepts) {
-              module.concepts.forEach(moduleConcept => {
+              module.concepts.forEach((moduleConcept) => {
                 if (moduleConcept.assessmentparameter.length > 0) {
                   var assess = {
                     typeThreshold: parseInt(
@@ -429,10 +429,10 @@ export default {
                     valueType: "",
                     single: {
                       threshold: "",
-                      url: ""
+                      url: "",
                     },
                     ranges: [],
-                    url: moduleConcept.assessmentparameter[0].url
+                    url: moduleConcept.assessmentparameter[0].url,
                   };
                   if (moduleConcept.assessmentparameter[0].single.length > 0) {
                     assess.valueType = "Single";
@@ -445,12 +445,12 @@ export default {
                   ) {
                     assess.valueType = "Range";
                     moduleConcept.assessmentparameter[0].ranges.forEach(
-                      range => {
+                      (range) => {
                         assess.ranges.push({
                           namerange: range.namerange,
                           initialvalue: range.initialvalue,
                           limitvalue: range.limitvalue,
-                          url: range.url
+                          url: range.url,
                         });
                       }
                     );
@@ -465,13 +465,13 @@ export default {
                       moduleConcept.priorknowledge[0].priorlevel.split("/")[4]
                     ),
                     fk_idconcept: moduleConcept.priorknowledge[0].fk_idconcept,
-                    url: moduleConcept.priorknowledge[0].url
+                    url: moduleConcept.priorknowledge[0].url,
                   });
                 }
               });
             }
             if (module.submodules) {
-              module.submodules.forEach(submodule => {
+              module.submodules.forEach((submodule) => {
                 if (submodule.assessmentparameter.length > 0) {
                   var assess = {
                     typeThreshold: parseInt(
@@ -486,10 +486,10 @@ export default {
                     valueType: "",
                     single: {
                       threshold: "",
-                      url: ""
+                      url: "",
                     },
                     ranges: [],
-                    url: submodule.assessmentparameter[0].url
+                    url: submodule.assessmentparameter[0].url,
                   };
                   if (submodule.assessmentparameter[0].single.length > 0) {
                     assess.valueType = "Single";
@@ -501,19 +501,19 @@ export default {
                     submodule.assessmentparameter[0].ranges.length > 0
                   ) {
                     assess.valueType = "Range";
-                    submodule.assessmentparameter[0].ranges.forEach(range => {
+                    submodule.assessmentparameter[0].ranges.forEach((range) => {
                       assess.ranges.push({
                         namerange: range.namerange,
                         initialvalue: range.initialvalue,
                         limitvalue: range.limitvalue,
-                        url: range.url
+                        url: range.url,
                       });
                     });
                   }
                   this.assessmentControl.push(assess);
                 }
                 if (submodule.concepts) {
-                  submodule.concepts.forEach(submoduleConcept => {
+                  submodule.concepts.forEach((submoduleConcept) => {
                     if (submoduleConcept.assessmentparameter.length > 0) {
                       var assess = {
                         typeThreshold: parseInt(
@@ -530,10 +530,10 @@ export default {
                         valueType: "",
                         single: {
                           threshold: "",
-                          url: ""
+                          url: "",
                         },
                         ranges: [],
-                        url: submoduleConcept.assessmentparameter[0].url
+                        url: submoduleConcept.assessmentparameter[0].url,
                       };
                       if (
                         submoduleConcept.assessmentparameter[0].single.length >
@@ -550,12 +550,12 @@ export default {
                       ) {
                         assess.valueType = "Range";
                         submoduleConcept.assessmentparameter[0].ranges.forEach(
-                          range => {
+                          (range) => {
                             assess.ranges.push({
                               namerange: range.namerange,
                               initialvalue: range.initialvalue,
                               limitvalue: range.limitvalue,
-                              url: range.url
+                              url: range.url,
                             });
                           }
                         );
@@ -573,7 +573,7 @@ export default {
                         ),
                         fk_idconcept:
                           submoduleConcept.priorknowledge[0].fk_idconcept,
-                        url: submoduleConcept.priorknowledge[0].url
+                        url: submoduleConcept.priorknowledge[0].url,
                       });
                     }
                   });
@@ -597,15 +597,15 @@ export default {
       this.treeData = [];
       this.elementData.push({
         text: "[DOMINIO] " + this.domain.nameknowledgedomain,
-        value: this.domain.url
+        value: this.domain.url,
       });
       var indexmodulo = 0;
       if (this.domain.mobilemedias.length) {
-        this.domain.mobilemedias.forEach(mobilemedia => {
+        this.domain.mobilemedias.forEach((mobilemedia) => {
           var object = {
             id: mobilemedia.url,
             name: "[MOBILEMEDIA] " + mobilemedia.label,
-            visible: mobilemedia.visible
+            visible: mobilemedia.visible,
           };
           this.treeData.push(object);
           if (object.visible) {
@@ -615,14 +615,14 @@ export default {
         });
       }
       if (this.domain.instructionalelements.length) {
-        this.domain.instructionalelements.forEach(instructionalelement => {
+        this.domain.instructionalelements.forEach((instructionalelement) => {
           if (
             instructionalelement.fk_instructionalelementtype.split("/")[4] !== 4
           ) {
             var object = {
               id: instructionalelement.url,
               name: "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
-              visible: instructionalelement.visible
+              visible: instructionalelement.visible,
             };
             this.treeData.push(object);
             if (object.visible) {
@@ -633,29 +633,29 @@ export default {
         });
       }
       if (Array.isArray(this.domain.modules) && this.domain.modules.length) {
-        this.domain.modules.forEach(modulo => {
+        this.domain.modules.forEach((modulo) => {
           if (modulo.fk_idmodule === null) {
             var indexsubmodulo = 0;
             var object = {
               id: modulo.url,
               name: "[MODULO] " + modulo.namemodule,
               visible: modulo.visible,
-              children: []
+              children: [],
             };
             this.treeData.push(object);
             this.elementData.push({
               text: object.name,
-              value: object.id
+              value: object.id,
             });
             if (object.visible) {
               this.selection.push(object);
             }
             if (modulo.mobilemedias.length) {
-              modulo.mobilemedias.forEach(mobilemedia => {
+              modulo.mobilemedias.forEach((mobilemedia) => {
                 var object = {
                   id: mobilemedia.url,
                   name: "[MOBILEMEDIA] " + mobilemedia.label,
-                  visible: mobilemedia.visible
+                  visible: mobilemedia.visible,
                 };
                 this.treeData[indexmodulo].children.push(object);
                 if (object.visible) {
@@ -666,7 +666,7 @@ export default {
             }
 
             if (modulo.instructionalelements.length) {
-              modulo.instructionalelements.forEach(instructionalelement => {
+              modulo.instructionalelements.forEach((instructionalelement) => {
                 if (
                   instructionalelement.fk_instructionalelementtype.split(
                     "/"
@@ -676,7 +676,7 @@ export default {
                     id: instructionalelement.url,
                     name:
                       "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
-                    visible: instructionalelement.visible
+                    visible: instructionalelement.visible,
                   };
                   this.treeData[indexmodulo].children.push(object);
                   if (object.visible) {
@@ -689,28 +689,28 @@ export default {
 
             if (modulo.submodules.length) {
               var indexconceito = 0;
-              modulo.submodules.forEach(submodulo => {
+              modulo.submodules.forEach((submodulo) => {
                 var object = {
                   id: submodulo.url,
                   name: "[SUBMODULO] " + submodulo.namemodule,
                   visible: submodulo.visible,
-                  children: []
+                  children: [],
                 };
                 this.treeData[indexmodulo].children.push(object);
                 this.elementData.push({
                   text: object.name,
-                  value: object.id
+                  value: object.id,
                 });
                 if (object.visible) {
                   this.selection.push(object);
                 }
 
                 if (submodulo.mobilemedias.length) {
-                  submodulo.mobilemedias.forEach(mobilemedia => {
+                  submodulo.mobilemedias.forEach((mobilemedia) => {
                     var object = {
                       id: mobilemedia.url,
                       name: "[MOBILEMEDIA] " + mobilemedia.label,
-                      visible: mobilemedia.visible
+                      visible: mobilemedia.visible,
                     };
                     this.treeData[indexmodulo].children[
                       indexsubmodulo
@@ -724,13 +724,13 @@ export default {
 
                 if (submodulo.instructionalelements.length) {
                   submodulo.instructionalelements.forEach(
-                    instructionalelement => {
+                    (instructionalelement) => {
                       var object = {
                         id: instructionalelement.url,
                         name:
                           "[INSTRUCTIONAL ELEMENT] " +
                           instructionalelement.label,
-                        visible: instructionalelement.visible
+                        visible: instructionalelement.visible,
                       };
                       this.treeData[indexmodulo].children[
                         indexsubmodulo
@@ -744,12 +744,12 @@ export default {
                 }
 
                 if (submodulo.concepts.length) {
-                  submodulo.concepts.forEach(conceito => {
+                  submodulo.concepts.forEach((conceito) => {
                     var object = {
                       id: conceito.url,
                       name: "[CONCEITO] " + conceito.nameconcept,
                       visible: conceito.visible,
-                      children: []
+                      children: [],
                     };
                     this.treeData[indexmodulo].children[
                       indexsubmodulo
@@ -757,22 +757,22 @@ export default {
 
                     this.elementData.push({
                       text: object.name,
-                      value: object.id
+                      value: object.id,
                     });
                     if (object.visible) {
                       this.selection.push(object);
                     }
                     this.conceptsPrior.push({
                       text: object.name,
-                      value: object.id
+                      value: object.id,
                     });
 
                     if (conceito.mobilemedias.length) {
-                      conceito.mobilemedias.forEach(mobilemedia => {
+                      conceito.mobilemedias.forEach((mobilemedia) => {
                         var object = {
                           id: mobilemedia.url,
                           name: "[MOBILEMEDIA] " + mobilemedia.label,
-                          visible: mobilemedia.visible
+                          visible: mobilemedia.visible,
                         };
                         this.treeData[indexmodulo].children[
                           indexsubmodulo
@@ -785,13 +785,13 @@ export default {
 
                     if (conceito.instructionalelements.length) {
                       conceito.instructionalelements.forEach(
-                        instructionalelement => {
+                        (instructionalelement) => {
                           var object = {
                             id: instructionalelement.url,
                             name:
                               "[INSTRUCTIONAL ELEMENT] " +
                               instructionalelement.label,
-                            visible: instructionalelement.visible
+                            visible: instructionalelement.visible,
                           };
                           this.treeData[indexmodulo].children[
                             indexsubmodulo
@@ -804,7 +804,7 @@ export default {
                     }
 
                     if (conceito.informationitems.length) {
-                      conceito.informationitems.forEach(procedure => {
+                      conceito.informationitems.forEach((procedure) => {
                         if (
                           procedure.fk_informationitemtype ===
                           "http://127.0.0.1:8000/informationitemtype/4/"
@@ -813,7 +813,7 @@ export default {
                             id: procedure.url,
                             name:
                               "[PROCEDIMENTO] " + procedure.nameinformationitem,
-                            visible: procedure.visible
+                            visible: procedure.visible,
                           };
                           this.treeData[indexmodulo].children[
                             indexsubmodulo
@@ -837,32 +837,32 @@ export default {
               } else {
                 indexconceito = 0;
               }
-              modulo.concepts.forEach(conceito => {
+              modulo.concepts.forEach((conceito) => {
                 var object = {
                   id: conceito.url,
                   name: "[CONCEITO] " + conceito.nameconcept,
                   visible: conceito.visible,
-                  children: []
+                  children: [],
                 };
                 this.treeData[indexmodulo].children.push(object);
 
                 this.elementData.push({
                   text: object.name,
-                  value: object.id
+                  value: object.id,
                 });
                 if (object.visible) {
                   this.selection.push(object);
                 }
                 this.conceptsPrior.push({
                   text: object.name,
-                  value: object.id
+                  value: object.id,
                 });
                 if (conceito.mobilemedias.length) {
-                  conceito.mobilemedias.forEach(mobilemedia => {
+                  conceito.mobilemedias.forEach((mobilemedia) => {
                     var object = {
                       id: mobilemedia.url,
                       name: "[MOBILEMEDIA] " + mobilemedia.label,
-                      visible: mobilemedia.visible
+                      visible: mobilemedia.visible,
                     };
                     this.treeData[indexmodulo].children[
                       indexconceito
@@ -875,13 +875,13 @@ export default {
 
                 if (conceito.instructionalelements.length) {
                   conceito.instructionalelements.forEach(
-                    instructionalelement => {
+                    (instructionalelement) => {
                       var object = {
                         id: instructionalelement.url,
                         name:
                           "[INSTRUCTIONAL ELEMENT] " +
                           instructionalelement.label,
-                        visible: instructionalelement.visible
+                        visible: instructionalelement.visible,
                       };
                       this.treeData[indexmodulo].children[
                         indexconceito
@@ -894,7 +894,7 @@ export default {
                 }
 
                 if (conceito.informationitems.length) {
-                  conceito.informationitems.forEach(procedure => {
+                  conceito.informationitems.forEach((procedure) => {
                     if (
                       procedure.fk_informationitemtype ===
                       "http://127.0.0.1:8000/informationitemtype/4/"
@@ -902,7 +902,7 @@ export default {
                       var object = {
                         id: procedure.url,
                         name: "[PROCEDIMENTO] " + procedure.nameinformationitem,
-                        visible: procedure.visible
+                        visible: procedure.visible,
                       };
                       this.treeData[indexmodulo].children[
                         indexconceito
@@ -924,7 +924,7 @@ export default {
     async postAssessment() {
       var vm = this;
       var header = await this.$store.dispatch("getHeader");
-      await this.assessmentControl.forEach(async assessment => {
+      await this.assessmentControl.forEach(async (assessment) => {
         var auxAssessment = {
           typethreshold:
             `http://127.0.0.1:8000/typethreshold/` +
@@ -933,7 +933,7 @@ export default {
           scopo: `http://127.0.0.1:8000/scopo/` + assessment.scopo + `/`,
           fk_idknowledgedomain: null,
           fk_idmodule: null,
-          fk_idconcept: null
+          fk_idconcept: null,
         };
         if (assessment.fk_element.split("/")[3] === "knowledgedomain") {
           auxAssessment.fk_idknowledgedomain = assessment.fk_element;
@@ -946,10 +946,10 @@ export default {
         if (assessment.url) {
           await this.axios
             .put(assessment.url, auxAssessment, header)
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               if (assessment.valueType === "Single") {
                 if (assessment.ranges) {
-                  assessment.ranges.forEach(range => {
+                  assessment.ranges.forEach((range) => {
                     if (range.url) {
                       vm.axios.delete(range.url, header);
                     }
@@ -959,7 +959,7 @@ export default {
                   assessment.single.url,
                   {
                     fk_idassessmentparameter: resposta.data.url,
-                    threshold: assessment.single.threshold
+                    threshold: assessment.single.threshold,
                   },
                   header
                 );
@@ -967,7 +967,7 @@ export default {
                 if (assessment.single.url) {
                   vm.axios.delete(assessment.single.url, header);
                 }
-                assessment.ranges.forEach(async range => {
+                assessment.ranges.forEach(async (range) => {
                   if (range.url) {
                     await vm.axios.put(
                       range.url,
@@ -975,7 +975,7 @@ export default {
                         namerange: range.namerange,
                         fk_idassessmentparameter: resposta.data.url,
                         initialvalue: range.initialvalue,
-                        limitvalue: range.limitvalue
+                        limitvalue: range.limitvalue,
                       },
                       header
                     );
@@ -986,7 +986,7 @@ export default {
                         namerange: range.namerange,
                         fk_idassessmentparameter: resposta.data.url,
                         initialvalue: range.initialvalue,
-                        limitvalue: range.limitvalue
+                        limitvalue: range.limitvalue,
                       },
                       header
                     );
@@ -1001,25 +1001,25 @@ export default {
               auxAssessment,
               header
             )
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               if (assessment.valueType === "Single") {
                 await vm.axios.post(
                   "http://127.0.0.1:8000/single/",
                   {
                     fk_idassessmentparameter: resposta.data.url,
-                    threshold: assessment.single.threshold
+                    threshold: assessment.single.threshold,
                   },
                   header
                 );
               } else if (assessment.valueType === "Range") {
-                assessment.ranges.forEach(async range => {
+                assessment.ranges.forEach(async (range) => {
                   await vm.axios.post(
                     "http://127.0.0.1:8000/range/",
                     {
                       namerange: range.namerange,
                       fk_idassessmentparameter: resposta.data.url,
                       initialvalue: range.initialvalue,
-                      limitvalue: range.limitvalue
+                      limitvalue: range.limitvalue,
                     },
                     header
                   );
@@ -1032,7 +1032,7 @@ export default {
     async postPriorKnowledges() {
       var vm = this;
       var header = await this.$store.dispatch("getHeader");
-      await this.priorControl.forEach(async prior => {
+      await this.priorControl.forEach(async (prior) => {
         if (prior.url) {
           await vm.axios.put(
             prior.url,
@@ -1040,7 +1040,7 @@ export default {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
                 `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
-              fk_idconcept: prior.fk_idconcept
+              fk_idconcept: prior.fk_idconcept,
             },
             header
           );
@@ -1051,7 +1051,7 @@ export default {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
                 `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
-              fk_idconcept: prior.fk_idconcept
+              fk_idconcept: prior.fk_idconcept,
             },
             header
           );
@@ -1062,12 +1062,12 @@ export default {
       var vm = this;
       var csrftoken = Cookie.get("csrftoken");
       var headers = {
-        "X-CSRFTOKEN": csrftoken
+        "X-CSRFTOKEN": csrftoken,
       };
-      this.treeData.forEach(element => {
+      this.treeData.forEach((element) => {
         if (
           element.visible === true &&
-          !this.selection.find(findElement => findElement.id === element.id)
+          !this.selection.find((findElement) => findElement.id === element.id)
         ) {
           axios
             .patch(
@@ -1076,13 +1076,13 @@ export default {
               {
                 auth: {
                   username: "admin",
-                  password: "admin"
-                }
+                  password: "admin",
+                },
               }
             )
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               var aux = resposta.data;
-              await Object.keys(aux).forEach(atributo => {
+              await Object.keys(aux).forEach((atributo) => {
                 if (Array.isArray(aux[atributo])) {
                   delete aux[atributo];
                 } else if (atributo === "url") {
@@ -1096,13 +1096,13 @@ export default {
               await axios.put(element.id, aux, {
                 auth: {
                   username: "admin",
-                  password: "admin"
-                }
+                  password: "admin",
+                },
               });
             });
         } else if (
           element.visible === false &&
-          this.selection.find(findElement => findElement.id === element.id)
+          this.selection.find((findElement) => findElement.id === element.id)
         ) {
           axios
             .patch(
@@ -1111,13 +1111,13 @@ export default {
               {
                 auth: {
                   username: "admin",
-                  password: "admin"
-                }
+                  password: "admin",
+                },
               }
             )
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               var aux = resposta.data;
-              await Object.keys(aux).forEach(atributo => {
+              await Object.keys(aux).forEach((atributo) => {
                 if (Array.isArray(aux[atributo])) {
                   delete aux[atributo];
                 } else if (atributo === "url") {
@@ -1131,17 +1131,17 @@ export default {
               await axios.put(element.id, aux, {
                 auth: {
                   username: "admin",
-                  password: "admin"
-                }
+                  password: "admin",
+                },
               });
             });
         }
         if (Array.isArray(element.children) && element.children.length) {
-          element.children.forEach(element2 => {
+          element.children.forEach((element2) => {
             if (
               element2.visible === true &&
               !this.selection.find(
-                findElement2 => findElement2.id === element2.id
+                (findElement2) => findElement2.id === element2.id
               )
             ) {
               axios
@@ -1151,13 +1151,13 @@ export default {
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(async function(resposta) {
+                .then(async function (resposta) {
                   var aux = resposta.data;
-                  await Object.keys(aux).forEach(atributo => {
+                  await Object.keys(aux).forEach((atributo) => {
                     if (Array.isArray(aux[atributo])) {
                       delete aux[atributo];
                     } else if (atributo === "url") {
@@ -1172,14 +1172,14 @@ export default {
                   await axios.put(element2.id, aux, {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   });
                 });
             } else if (
               element2.visible === false &&
               this.selection.find(
-                findElement2 => findElement2.id === element2.id
+                (findElement2) => findElement2.id === element2.id
               )
             ) {
               axios
@@ -1189,13 +1189,13 @@ export default {
                   {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   }
                 )
-                .then(async function(resposta) {
+                .then(async function (resposta) {
                   var aux = resposta.data;
-                  await Object.keys(aux).forEach(atributo => {
+                  await Object.keys(aux).forEach((atributo) => {
                     if (Array.isArray(aux[atributo])) {
                       delete aux[atributo];
                     } else if (atributo === "url") {
@@ -1210,18 +1210,18 @@ export default {
                   await axios.put(element2.id, aux, {
                     auth: {
                       username: "admin",
-                      password: "admin"
-                    }
+                      password: "admin",
+                    },
                   });
                 });
             }
 
             if (Array.isArray(element2.children) && element2.children.length) {
-              element2.children.forEach(element3 => {
+              element2.children.forEach((element3) => {
                 if (
                   element3.visible === true &&
                   !this.selection.find(
-                    findElement3 => findElement3.id === element3.id
+                    (findElement3) => findElement3.id === element3.id
                   )
                 ) {
                   axios
@@ -1231,13 +1231,13 @@ export default {
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     )
-                    .then(async function(resposta) {
+                    .then(async function (resposta) {
                       var aux = resposta.data;
-                      await Object.keys(aux).forEach(atributo => {
+                      await Object.keys(aux).forEach((atributo) => {
                         if (Array.isArray(aux[atributo])) {
                           delete aux[atributo];
                         } else if (atributo === "url") {
@@ -1251,14 +1251,14 @@ export default {
                       await axios.put(element3.id, aux, {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       });
                     });
                 } else if (
                   element3.visible === false &&
                   this.selection.find(
-                    findElement3 => findElement3.id === element3.id
+                    (findElement3) => findElement3.id === element3.id
                   )
                 ) {
                   axios
@@ -1268,13 +1268,13 @@ export default {
                       {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       }
                     )
-                    .then(async function(resposta) {
+                    .then(async function (resposta) {
                       var aux = resposta.data;
-                      await Object.keys(aux).forEach(atributo => {
+                      await Object.keys(aux).forEach((atributo) => {
                         if (Array.isArray(aux[atributo])) {
                           delete aux[atributo];
                         } else if (atributo === "url") {
@@ -1288,8 +1288,8 @@ export default {
                       await axios.put(element3.id, aux, {
                         auth: {
                           username: "admin",
-                          password: "admin"
-                        }
+                          password: "admin",
+                        },
                       });
                     });
                 }
@@ -1298,11 +1298,11 @@ export default {
                   Array.isArray(element3.children) &&
                   element3.children.length
                 ) {
-                  element3.children.forEach(element4 => {
+                  element3.children.forEach((element4) => {
                     if (
                       element4.visible === true &&
                       !this.selection.find(
-                        findElement4 => findElement4.id === element4.id
+                        (findElement4) => findElement4.id === element4.id
                       )
                     ) {
                       axios
@@ -1312,13 +1312,13 @@ export default {
                           {
                             auth: {
                               username: "admin",
-                              password: "admin"
-                            }
+                              password: "admin",
+                            },
                           }
                         )
-                        .then(async function(resposta) {
+                        .then(async function (resposta) {
                           var aux = resposta.data;
-                          await Object.keys(aux).forEach(atributo => {
+                          await Object.keys(aux).forEach((atributo) => {
                             if (Array.isArray(aux[atributo])) {
                               delete aux[atributo];
                             } else if (atributo === "url") {
@@ -1332,20 +1332,20 @@ export default {
                           await axios.put(
                             element4.id,
                             {
-                              aux
+                              aux,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         });
                     } else if (
                       element4.visible === false &&
                       this.selection.find(
-                        findElement4 => findElement4.id === element4.id
+                        (findElement4) => findElement4.id === element4.id
                       )
                     ) {
                       axios
@@ -1355,13 +1355,13 @@ export default {
                           {
                             auth: {
                               username: "admin",
-                              password: "admin"
-                            }
+                              password: "admin",
+                            },
                           }
                         )
-                        .then(async function(resposta) {
+                        .then(async function (resposta) {
                           var aux = resposta.data;
-                          await Object.keys(aux).forEach(atributo => {
+                          await Object.keys(aux).forEach((atributo) => {
                             if (Array.isArray(aux[atributo])) {
                               delete aux[atributo];
                             } else if (atributo === "url") {
@@ -1375,13 +1375,13 @@ export default {
                           await axios.put(
                             element4.id,
                             {
-                              aux
+                              aux,
                             },
                             {
                               auth: {
                                 username: "admin",
-                                password: "admin"
-                              }
+                                password: "admin",
+                              },
                             }
                           );
                         });
@@ -1393,7 +1393,7 @@ export default {
           });
         }
       });
-      await setTimeout(async function() {
+      await setTimeout(async function () {
         vm.$emit("close_or_save", "close");
       }, 300);
     },
@@ -1404,16 +1404,16 @@ export default {
     selectAll() {
       var vm = this;
       this.selection = [];
-      this.treeData.forEach(element => {
+      this.treeData.forEach((element) => {
         vm.selection.push(element);
         if (element.children) {
-          element.children.forEach(element2 => {
+          element.children.forEach((element2) => {
             vm.selection.push(element2);
             if (element2.children) {
-              element2.children.forEach(element3 => {
+              element2.children.forEach((element3) => {
                 vm.selection.push(element3);
                 if (element3.children) {
-                  element3.children.forEach(element4 => {
+                  element3.children.forEach((element4) => {
                     vm.selection.push(element4);
                   });
                 }
@@ -1428,7 +1428,7 @@ export default {
         namerange: "",
         initialvalue: "",
         limitvalue: "",
-        url: ""
+        url: "",
       });
     },
     async deletaRange(idAssessment, idRange) {
@@ -1453,10 +1453,10 @@ export default {
         valueType: "",
         single: {
           threshold: "",
-          url: ""
+          url: "",
         },
         ranges: [],
-        url: ""
+        url: "",
       });
     },
     async deletaAssessment(idAssessment) {
@@ -1482,7 +1482,7 @@ export default {
         namepriorknowledge: "",
         priorlevel: "",
         fk_idconcept: "",
-        url: ""
+        url: "",
       });
     },
     async deletaPriorKnowledge(idPrior) {
@@ -1558,7 +1558,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }
-  }
+    },
+  },
 };
 </script>

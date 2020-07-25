@@ -67,11 +67,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="red" height="49" dark large @click="reset">
-            Close
+            Cancelar
             <v-icon dark right>mdi-close</v-icon>
           </v-btn>
           <v-btn color="success" height="49" dark large @click="validate">
-            Save
+            Salvar
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
         </v-card-actions>
@@ -101,7 +101,7 @@ import Media from "@dongido/vue-viaudio";
 
 export default {
   components: {
-    Media
+    Media,
   },
   name: "VideoDialog",
   props: ["optionCall", "type", "domain", "dialog", "mobilemedia"],
@@ -120,34 +120,34 @@ export default {
     infoItemLevels: ["0 - Inicial", "1 - Fácil", "2 - Médio", "3 - Difícil"],
     infoItemLearningStyles: ["Visual", "Textual"],
     infoResume: "",
-    videoObject: {}
+    videoObject: {},
   }),
   watch: {
-    videoObject: function() {
+    videoObject: function () {
       if (this.videoObject) {
         var vm = this;
         var video = document.createElement("video");
         var source = document.createElement("source");
         source.setAttribute("src", URL.createObjectURL(vm.videoObject));
         video.appendChild(source);
-        video.oncanplay = function() {
+        video.oncanplay = function () {
           vm.resolution = video.videoWidth + "X" + video.videoHeight;
           vm.time = video.duration;
         };
       }
     },
-    dialog: function() {
+    dialog: function () {
       this.getMobileMedia();
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     this.getMobileMedia();
   },
   methods: {
     getMobileMedia() {
       if (this.mobilemedia) {
         var vm = this;
-        this.$nextTick(function() {
+        this.$nextTick(function () {
           if (vm.mobilemedia.difficultyLevel !== null) {
             vm.infoLevel = vm.infoItemLevels[vm.mobilemedia.difficultyLevel];
           }
@@ -158,22 +158,22 @@ export default {
           if (vm.mobilemedia.fk_informationitem) {
             var csrftoken = Cookie.get("csrftoken");
             var headers = {
-              "X-CSRFTOKEN": csrftoken
+              "X-CSRFTOKEN": csrftoken,
             };
             axios
               .patch(
                 vm.mobilemedia.fk_informationitem,
                 {
-                  headers: headers
+                  headers: headers,
                 },
                 {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 }
               )
-              .then(function(resposta) {
+              .then(function (resposta) {
                 vm.infoClasse =
                   vm.infoItemClasses[
                     resposta.data.fk_informationitemtype.split("/")[4] - 1
@@ -192,7 +192,7 @@ export default {
         auxinfo:
           `http://127.0.0.1:8000/informationitemtype/` +
           (this.infoClasse + 1) +
-          "/"
+          "/",
       };
       var vm = this;
       var path = "";
@@ -205,11 +205,7 @@ export default {
           Date.now().toString();
       }
 
-      await firebase
-        .storage()
-        .ref()
-        .child(path)
-        .put(this.videoObject);
+      await firebase.storage().ref().child(path).put(this.videoObject);
 
       var mobilemedia = {
         fk_idmediatype: "http://localhost:8000/mediatype/2/",
@@ -220,7 +216,7 @@ export default {
         time: this.time,
         textfull: "",
         textshort: "",
-        urllink: ""
+        urllink: "",
       };
 
       if (this.infoClasse == -1) {
@@ -231,13 +227,13 @@ export default {
 
       if (this.infoLevel > -1) {
         Object.assign(mobilemedia, {
-          difficultyLevel: this.infoLevel
+          difficultyLevel: this.infoLevel,
         });
       }
 
       if (this.infoLearning > -1) {
         Object.assign(mobilemedia, {
-          learningStyle: this.infoLearning
+          learningStyle: this.infoLearning,
         });
       }
 
@@ -245,19 +241,15 @@ export default {
         var iteminfo = {
           nameinformationitem: "video_" + vm.videoObject.name,
           fk_informationitemtype: auxinformationitem.auxinfo,
-          fk_idconcept: this.optionCall.url
+          fk_idconcept: this.optionCall.url,
         };
-
-        Object.assign(mobilemedia, {
-          fk_idconcept: this.optionCall.url
-        });
       } else if (this.type === "dominio") {
         Object.assign(mobilemedia, {
-          fk_idknowledgedomain: this.optionCall.url
+          fk_idknowledgedomain: this.optionCall.url,
         });
       } else if (this.type === "modulo") {
         Object.assign(mobilemedia, {
-          fk_module: this.optionCall.url
+          fk_module: this.optionCall.url,
         });
       }
 
@@ -270,31 +262,31 @@ export default {
             .put(vm.mobilemedia.fk_informationitem, iteminfo, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               Object.assign(mobilemedia, {
-                fk_informationitem: resposta.data.url
+                fk_informationitem: resposta.data.url,
               });
               await axios
                 .put(vm.mobilemedia.url, mobilemedia, {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 })
-                .then(async function(/*resposta*/) {});
+                .then(async function (/*resposta*/) {});
             });
         } else if (this.type === "dominio" || this.type === "modulo") {
           await axios
             .put(this.mobilemedia.url, mobilemedia, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(/*resposta*/) {});
+            .then(async function (/*resposta*/) {});
         }
       } else {
         /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA */
@@ -304,21 +296,21 @@ export default {
             .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(async function(resposta) {
+            .then(async function (resposta) {
               Object.assign(mobilemedia, {
-                fk_informationitem: resposta.data.url
+                fk_informationitem: resposta.data.url,
               });
               await axios
                 .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
                   auth: {
                     username: "admin",
-                    password: "admin"
-                  }
+                    password: "admin",
+                  },
                 })
-                .then(function(/*resposta*/) {
+                .then(function (/*resposta*/) {
                   /*vm.moduloTitle = resposta.data.namemodule;
                                     vm.subTitle = resposta.data.subtitle;*/
                 });
@@ -329,10 +321,10 @@ export default {
             .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
               auth: {
                 username: "admin",
-                password: "admin"
-              }
+                password: "admin",
+              },
             })
-            .then(function(/*resposta*/) {
+            .then(function (/*resposta*/) {
               /*vm.moduloTitle = resposta.data.namemodule;
                                 vm.subTitle = resposta.data.subtitle;*/
             });
@@ -341,13 +333,13 @@ export default {
     },
     async validate() {
       var vm = this;
-      this.infoClasse = this.infoItemClasses.findIndex(function(value) {
+      this.infoClasse = this.infoItemClasses.findIndex(function (value) {
         return value === vm.infoClasse;
       });
-      this.infoLevel = this.infoItemLevels.findIndex(function(value) {
+      this.infoLevel = this.infoItemLevels.findIndex(function (value) {
         return value === vm.infoLevel;
       });
-      this.infoLearning = this.infoItemLearningStyles.findIndex(function(
+      this.infoLearning = this.infoItemLearningStyles.findIndex(function (
         value
       ) {
         return value === vm.infoLearning;
@@ -384,14 +376,14 @@ export default {
           .storage()
           .ref(this.mobilemedia.path)
           .getDownloadURL()
-          .then(function(url) {
+          .then(function (url) {
             vm.viewVideoSrc = url;
             var xhr = new XMLHttpRequest();
             xhr.responseType = "blob";
-            xhr.onload = function() {
+            xhr.onload = function () {
               var blob = xhr.response;
               const file = new File([blob], vm.mobilemedia.namefile, {
-                type: blob.type
+                type: blob.type,
               });
               vm.videoObject = file;
             };
@@ -416,7 +408,7 @@ export default {
             window.open(url, "_blank");
           });*/
       }
-    }
-  }
+    },
+  },
 };
 </script>
