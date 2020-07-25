@@ -219,6 +219,7 @@
                     :procedure="procedimento"
                     :concept="conceito"
                     :module="modulo"
+                    :domain="dominio"
                   />
                 </v-dialog>
 
@@ -1499,7 +1500,80 @@
                           </v-expansion-panel-header>
 
                           <v-expansion-panel-content>
+
                             <v-row class="mt-2 ml-1">{{procedure.descriptioninformationitem}}</v-row>
+
+                            <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
+                            <v-expansion-panels
+                              v-model="vModelPanelMobilemediasConceptModule"
+                              multiple
+                              :readonly="readonly_control"
+                            >
+                              <v-expansion-panel
+                                v-for="(mobilemedia, imobilemedia) in procedure.mobilemedias"
+                                :key="imobilemedia"
+                                class="mt-2 mb-2"
+                                :id="mobilemedia.url.split('/')[3] + mobilemedia.idmobilemedia"
+                              >
+                                <v-expansion-panel-header
+                                  color="#A5A5A5"
+                                  style="color:white; height: 55px;"
+                                >
+                                  <v-row>
+                                    <v-col class="d-flex align-center" style="height:100%;">
+                                      <div style="vertical-align:middle;" class="mt-3">
+                                        <p>
+                                          <v-icon
+                                            color="white"
+                                            large
+                                          >{{fileTypesIcon[(mobilemedia.fk_idmediatype).split("/")[4]-1]}}</v-icon>
+                                          {{mobilemediaTypeLabel[parseInt((mobilemedia.fk_idmediatype).split("/")[4]-1)]}}
+                                        </p>
+                                      </div>
+                                    </v-col>
+                                    <v-col cols="4" class="d-flex align-center justify-end">
+                                      <div class="d-flex justify-end mr-1 align-center">
+                                        <!--Formulario para edição do arquivo/mobilemedia-->
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="readonly_control=true; setmobilemedia(mobilemedia, dominio, 'dominio')"
+                                        >
+                                          <v-icon>mdi-pencil</v-icon>
+                                        </v-btn>
+                                        <!--Função para excluir arquivo/mobilemedia-->
+                                        <v-btn
+                                          icon="icon"
+                                          color="white"
+                                          @click="readonly_control=true; auxElementDelete = mobilemedia; alertDelete=true"
+                                        >
+                                          <v-icon>mdi-delete</v-icon>
+                                        </v-btn>
+                                      </div>
+                                    </v-col>
+                                  </v-row>
+                                </v-expansion-panel-header>
+
+                                <v-expansion-panel-content>
+                                  <br />
+                                  <span v-if="mobilemedia.urllink">{{mobilemedia.urllink}}</span>
+                                  <span v-if="mobilemedia.textfull" style="white-space: pre-line">
+                                    <strong>Texto completo:</strong>
+                                    <br />
+                                    {{mobilemedia.textfull}}
+                                    <br />
+                                  </span>
+
+                                  <span v-if="mobilemedia.textshort" style="white-space: pre-line">
+                                    <strong>Texto resumido:</strong>
+                                    <br />
+                                    {{mobilemedia.textshort}}
+                                  </span>
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
+                            </v-expansion-panels>
+                            <!-- FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS -->
+
                             <!--LISTAGEM DAS FASES DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                             <h3 class="mt-2">Fases do procedimento:</h3>
                             <v-simple-table>

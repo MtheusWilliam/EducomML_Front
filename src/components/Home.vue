@@ -58,7 +58,7 @@
             class="ma-8"
             width="20vw"
             dark
-            @click="redirectLogin()"
+            @click="$router.push({ path: '/login/ ' })"
           >Acesse aqui</v-btn>
         </v-row>
       </v-tab-item>

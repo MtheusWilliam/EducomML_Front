@@ -1,7 +1,7 @@
 <template>
   <v-app class="px-0 mx-0">
     <v-app-bar app color="white darken-3" dark dense flat style="height:60px;">
-      <div class="mt-5 d-flex align-center">
+      <div v-if="this.$store.state.jwt" class="mt-5 d-flex align-center">
         <v-btn icon @click="$router.push({ path: '/home' })">
           <v-icon size="40" color="#B19114">mdi-home</v-icon>
         </v-btn>
