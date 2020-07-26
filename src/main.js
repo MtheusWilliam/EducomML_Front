@@ -38,8 +38,8 @@ var store = new Vuex.Store({
     jwt: localStorage.getItem('t'),
     username: localStorage.getItem('u'),
     endpoints: {
-      obtainJWT: 'http://127.0.0.1:8000/api-token-auth/',
-      refreshJWT: 'http://127.0.0.1:8000/api-token-refresh/'
+      obtainJWT: 'https://educomml-back.herokuapp.com//api-token-auth/',
+      refreshJWT: 'https://educomml-back.herokuapp.com//api-token-refresh/'
     },
   },
   mutations: {
@@ -92,7 +92,7 @@ var store = new Vuex.Store({
         if (exp - (Date.now() / 1000) < 1800 && (Date.now() / 1000) - orig_iat < 628200) {
           this.dispatch('refreshToken')
         } else if (exp - (Date.now() / 1000) < 1800) {
-          // DO NOTHING, DO NOT REFRESH          
+          // DO NOTHING, DO NOT REFRESH
         } else {
           // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
         }
