@@ -38,8 +38,8 @@ var store = new Vuex.Store({
     jwt: localStorage.getItem('t'),
     username: localStorage.getItem('u'),
     endpoints: {
-      obtainJWT: 'https://educomml-back.herokuapp.com//api-token-auth/',
-      refreshJWT: 'https://educomml-back.herokuapp.com//api-token-refresh/'
+      obtainJWT: 'https://educomml-back.herokuapp.com/api-token-auth/',
+      refreshJWT: 'https://educomml-back.herokuapp.com/api-token-refresh/'
     },
   },
   mutations: {
