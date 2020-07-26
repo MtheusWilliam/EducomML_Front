@@ -198,13 +198,13 @@ export default {
       // var vm = this;
       var auxinformationitem = {
         auxinfo:
-          `http://127.0.0.1:8000/informationitemtype/` +
+          `https://educomml-back.herokuapp.com/informationitemtype/` +
           (this.infoClasse + 1) +
           "/",
       };
       var mobilemedia = {
         label: "",
-        fk_idmediatype: "http://localhost:8000/mediatype/4/",
+        fk_idmediatype: "https://educomml-back.herokuapp.com/mediatype/4/",
         path: null,
         namefile: null,
         resolution: null,
@@ -216,7 +216,7 @@ export default {
       if (this.infoClasse == -1) {
         this.infoClasse = 1;
         auxinformationitem.auxinfo =
-          `http://127.0.0.1:8000/informationitemtype/` + this.infoClasse + "/";
+          `https://educomml-back.herokuapp.com/informationitemtype/` + this.infoClasse + "/";
       }
 
       if (this.switchTextFull) {
@@ -302,7 +302,7 @@ export default {
         if (this.type === "conceito") {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA COM ITEMINFO*/
           await axios
-            .post(`http://127.0.0.1:8000/informationitem/`, iteminfo, {
+            .post(`https://educomml-back.herokuapp.com/informationitem/`, iteminfo, {
               auth: {
                 username: "admin",
                 password: "admin",
@@ -313,7 +313,7 @@ export default {
                 fk_informationitem: resposta.data.url,
               });
               await axios
-                .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+                .post(`https://educomml-back.herokuapp.com/mobilemedia/`, mobilemedia, {
                   auth: {
                     username: "admin",
                     password: "admin",
@@ -327,7 +327,7 @@ export default {
         } else if (this.type === "dominio" || this.type === "modulo") {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
           await axios
-            .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
+            .post(`https://educomml-back.herokuapp.com/mobilemedia/`, mobilemedia, {
               auth: {
                 username: "admin",
                 password: "admin",

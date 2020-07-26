@@ -75,7 +75,7 @@ export default {
     },
     async postSubModulo() {
       await axios.post(
-        `http://localhost:8000/module/`,
+        `https://educomml-back.herokuapp.com/module/`,
         {
           fk_idmodule: this.module.url,
           namemodule: this.subModuloTitle,
@@ -92,7 +92,7 @@ export default {
     },
     async putSubModulo() {
       await axios.put(
-        "http://127.0.0.1:8000/module/" + this.submodule.idmodule + "/",
+        "https://educomml-back.herokuapp.com/module/" + this.submodule.idmodule + "/",
         {
           fk_idmodule: this.module.url,
           namemodule: this.subModuloTitle,

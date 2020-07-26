@@ -221,7 +221,7 @@ export default {
       var vm = this;
       var header = await this.$store.dispatch("getHeader");
       var response = await this.axios.post(
-        "http://localhost:8000/userId/",
+        "https://educomml-back.herokuapp.com/userId/",
         {
           username: this.$store.state.username
         },
@@ -261,7 +261,7 @@ export default {
       var header = await this.$store.dispatch("getHeader");
       await this.axios
         .post(
-          "http://localhost:8000/userId/",
+          "https://educomml-back.herokuapp.com/userId/",
           {
             username: this.$store.state.username
           },

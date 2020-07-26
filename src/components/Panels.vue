@@ -2281,7 +2281,7 @@ export default {
       };
       axios
         .patch(
-          "http://127.0.0.1:8000/knowledgedomain/" +
+          "https://educomml-back.herokuapp.com/knowledgedomain/" +
             this.dominio_data.idknowledgedomain +
             "/",
           {
@@ -2326,23 +2326,23 @@ export default {
       this.type = valueType;
 
       if (
-        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/`
+        valueMobileMedia.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/1/`
       ) {
         this.dialog_imagem = true;
       } else if (
-        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/`
+        valueMobileMedia.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/2/`
       ) {
         this.dialog_video = true;
       } else if (
-        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
+        valueMobileMedia.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/3/`
       ) {
         this.dialog_audio = true;
       } else if (
-        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/4/`
+        valueMobileMedia.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/4/`
       ) {
         this.dialog_texto = true;
       } else if (
-        valueMobileMedia.fk_idmediatype === `http://127.0.0.1:8000/mediatype/5/`
+        valueMobileMedia.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/5/`
       ) {
         this.dialog_link = true;
       }
@@ -2362,22 +2362,22 @@ export default {
 
       if (
         valueInstructionalElement.fk_instructionalelementtype ===
-        `http://127.0.0.1:8000/instrucelementtype/1/`
+        `https://educomml-back.herokuapp.com/instrucelementtype/1/`
       ) {
         this.dialog_avaliacao = true;
       } else if (
         valueInstructionalElement.fk_instructionalelementtype ===
-        `http://127.0.0.1:8000/instrucelementtype/2/`
+        `https://educomml-back.herokuapp.com/instrucelementtype/2/`
       ) {
         this.dialog_avaliacao = true;
       } else if (
         valueInstructionalElement.fk_instructionalelementtype ===
-        `http://127.0.0.1:8000/instrucelementtype/3/`
+        `https://educomml-back.herokuapp.com/instrucelementtype/3/`
       ) {
         this.dialog_atividadecolaborativa = true;
       } else if (
         valueInstructionalElement.fk_instructionalelementtype ===
-        `http://127.0.0.1:8000/instrucelementtype/4/`
+        `https://educomml-back.herokuapp.com/instrucelementtype/4/`
       ) {
         this.dialog_exemplo = true;
       }
@@ -2427,9 +2427,9 @@ export default {
       this.dialogLoadingMessage = this.dialogLoadingMessages[2];
       var vm = this;
       if (
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/1/` ||
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/2/` ||
-        value.fk_idmediatype === `http://127.0.0.1:8000/mediatype/3/`
+        value.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/1/` ||
+        value.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/2/` ||
+        value.fk_idmediatype === `https://educomml-back.herokuapp.com/mediatype/3/`
       ) {
         if (value.path !== null && value.url.search("mobilemedia") === 22) {
           await firebase.storage().ref().child(value.path).delete();
@@ -2574,7 +2574,7 @@ export default {
       function checkProcedure(proc) {
         return (
           proc.fk_informationitemtype ===
-          "http://127.0.0.1:8000/informationitemtype/4/"
+          "https://educomml-back.herokuapp.com/informationitemtype/4/"
         );
       }
 
@@ -2589,7 +2589,7 @@ export default {
       concept.informationitems.forEach((info) => {
         if (
           info.fk_informationitemtype !==
-          "http://127.0.0.1:8000/informationitemtype/4/"
+          "https://educomml-back.herokuapp.com/informationitemtype/4/"
         ) {
           info.mobilemedias.forEach((mob) => {
             mobilesfinded.push(mob);

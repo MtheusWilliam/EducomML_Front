@@ -84,7 +84,7 @@ export default {
       var vm = this;
       axios
         .put(
-          "http://127.0.0.1:8000/knowledgedomain/" +
+          "https://educomml-back.herokuapp.com/knowledgedomain/" +
             this.domain.idknowledgedomain +
             "/",
           {

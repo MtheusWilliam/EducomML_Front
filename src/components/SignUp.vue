@@ -144,7 +144,7 @@ export default {
   methods: {
     async postUser() {
       await this.axios.post(
-        "http://localhost:8000/users/",
+        "https://educomml-back.herokuapp.com/users/",
         {
           username: this.username.toLowerCase(),
           email: this.email,

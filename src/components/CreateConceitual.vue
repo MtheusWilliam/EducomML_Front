@@ -56,7 +56,7 @@ export default {
     var headers = { "X-CSRFTOKEN": csrftoken };
     axios
       .patch(
-        "http://127.0.0.1:8000/knowledgedomain/" +
+        "https://educomml-back.herokuapp.com/knowledgedomain/" +
           this.$route.params.idDomain +
           "/",
         { headers: headers },

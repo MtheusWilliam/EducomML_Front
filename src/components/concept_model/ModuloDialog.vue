@@ -80,7 +80,7 @@ export default {
       // var vm = this;
       await axios
         .post(
-          `http://localhost:8000/module/`,
+          `https://educomml-back.herokuapp.com/module/`,
           {
             fkidmodule: null,
             namemodule: this.moduloTitle,
@@ -98,7 +98,7 @@ export default {
       var vm = this;
       await axios
         .put(
-          "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
+          "https://educomml-back.herokuapp.com/module/" + this.module.idmodule + "/",
           {
             fk_idmodule: null,
             namemodule: this.moduloTitle,

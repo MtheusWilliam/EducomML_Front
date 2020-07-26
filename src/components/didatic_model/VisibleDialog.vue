@@ -807,7 +807,7 @@ export default {
                       conceito.informationitems.forEach((procedure) => {
                         if (
                           procedure.fk_informationitemtype ===
-                          "http://127.0.0.1:8000/informationitemtype/4/"
+                          "https://educomml-back.herokuapp.com/informationitemtype/4/"
                         ) {
                           var object = {
                             id: procedure.url,
@@ -897,7 +897,7 @@ export default {
                   conceito.informationitems.forEach((procedure) => {
                     if (
                       procedure.fk_informationitemtype ===
-                      "http://127.0.0.1:8000/informationitemtype/4/"
+                      "https://educomml-back.herokuapp.com/informationitemtype/4/"
                     ) {
                       var object = {
                         id: procedure.url,
@@ -927,10 +927,10 @@ export default {
       await this.assessmentControl.forEach(async (assessment) => {
         var auxAssessment = {
           typethreshold:
-            `http://127.0.0.1:8000/typethreshold/` +
+            `https://educomml-back.herokuapp.com/typethreshold/` +
             assessment.typeThreshold +
             `/`,
-          scopo: `http://127.0.0.1:8000/scopo/` + assessment.scopo + `/`,
+          scopo: `https://educomml-back.herokuapp.com/scopo/` + assessment.scopo + `/`,
           fk_idknowledgedomain: null,
           fk_idmodule: null,
           fk_idconcept: null,
@@ -981,7 +981,7 @@ export default {
                     );
                   } else {
                     await vm.axios.post(
-                      "http://127.0.0.1:8000/range/",
+                      "https://educomml-back.herokuapp.com/range/",
                       {
                         namerange: range.namerange,
                         fk_idassessmentparameter: resposta.data.url,
@@ -997,14 +997,14 @@ export default {
         } else {
           await this.axios
             .post(
-              "http://127.0.0.1:8000/assessmentparameter/",
+              "https://educomml-back.herokuapp.com/assessmentparameter/",
               auxAssessment,
               header
             )
             .then(async function (resposta) {
               if (assessment.valueType === "Single") {
                 await vm.axios.post(
-                  "http://127.0.0.1:8000/single/",
+                  "https://educomml-back.herokuapp.com/single/",
                   {
                     fk_idassessmentparameter: resposta.data.url,
                     threshold: assessment.single.threshold,
@@ -1014,7 +1014,7 @@ export default {
               } else if (assessment.valueType === "Range") {
                 assessment.ranges.forEach(async (range) => {
                   await vm.axios.post(
-                    "http://127.0.0.1:8000/range/",
+                    "https://educomml-back.herokuapp.com/range/",
                     {
                       namerange: range.namerange,
                       fk_idassessmentparameter: resposta.data.url,
@@ -1039,18 +1039,18 @@ export default {
             {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
-                `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
+                `https://educomml-back.herokuapp.com/priorlevel/` + prior.priorlevel + `/`,
               fk_idconcept: prior.fk_idconcept,
             },
             header
           );
         } else {
           await vm.axios.post(
-            `http://127.0.0.1:8000/priorknowledge/`,
+            `https://educomml-back.herokuapp.com/priorknowledge/`,
             {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
-                `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
+                `https://educomml-back.herokuapp.com/priorlevel/` + prior.priorlevel + `/`,
               fk_idconcept: prior.fk_idconcept,
             },
             header

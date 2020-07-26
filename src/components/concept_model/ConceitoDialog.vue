@@ -286,7 +286,7 @@ export default {
       if (this.concept === "") {
         await axios
           .post(
-            `http://localhost:8000/concept/`,
+            `https://educomml-back.herokuapp.com/concept/`,
             {
               nameconcept: this.conceptName,
               fk_idknowledgedomain: this.domain.url,
@@ -303,11 +303,11 @@ export default {
             vm.auxConceito = resposta.data.url;
             if (vm.priorKnowledge === 1) {
               await axios.post(
-                `http://localhost:8000/priorknowledge/`,
+                `https://educomml-back.herokuapp.com/priorknowledge/`,
                 {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                    `https://educomml-back.herokuapp.com/priorlevel/` + vm.priorLevel + `/`,
                   fk_idconcept: resposta.data.url,
                 },
                 {
@@ -322,7 +322,7 @@ export default {
       } else {
         await axios
           .put(
-            "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
+            "https://educomml-back.herokuapp.com/concept/" + this.concept.idconcept + "/",
             {
               nameconcept: this.conceptName,
               fk_idknowledgedomain: this.domain.url,
@@ -345,7 +345,7 @@ export default {
                 {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                    `https://educomml-back.herokuapp.com/priorlevel/` + vm.priorLevel + `/`,
                   fk_idconcept: resposta.data.url,
                 },
                 {
@@ -370,11 +370,11 @@ export default {
               vm.priorKnowledge === 1
             ) {
               await axios.post(
-                `http://localhost:8000/priorknowledge/`,
+                `https://educomml-back.herokuapp.com/priorknowledge/`,
                 {
                   namepriorknowledge: vm.priorKnowledgeName,
                   priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
+                    `https://educomml-back.herokuapp.com/priorlevel/` + vm.priorLevel + `/`,
                   fk_idconcept: vm.concept.url,
                 },
                 {
@@ -398,13 +398,13 @@ export default {
             auxReferencia = 2;
           }
           await axios.post(
-            `http://localhost:8000/reference/`,
+            `https://educomml-back.herokuapp.com/reference/`,
             {
               namereference: element.relacaoName,
               sourceconcept: this.auxConceito,
               targetconcept: element.conceptSelect.url,
               fk_referencetype:
-                `http://localhost:8000/referencetype/` + auxReferencia + "/",
+                `https://educomml-back.herokuapp.com/referencetype/` + auxReferencia + "/",
             },
             {
               auth: {
@@ -427,7 +427,7 @@ export default {
               sourceconcept: this.auxConceito,
               targetconcept: element.conceptSelect.value.url,
               fk_referencetype:
-                `http://localhost:8000/referencetype/` + auxReferencia + "/",
+                `https://educomml-back.herokuapp.com/referencetype/` + auxReferencia + "/",
             },
             {
               auth: {

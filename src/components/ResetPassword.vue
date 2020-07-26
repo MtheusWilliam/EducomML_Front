@@ -62,7 +62,7 @@ export default {
     async validate() {
       await this.axios
         .post(
-          "http://localhost:8000/update-password/",
+          "https://educomml-back.herokuapp.com/update-password/",
           {
             username: this.$route.params.username,
             password: this.password

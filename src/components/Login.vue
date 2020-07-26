@@ -118,7 +118,7 @@ export default {
       if (this.resetPassword) {
         await this.axios
           .post(
-            "http://localhost:8000/reset-password/",
+            "https://educomml-back.herokuapp.com/reset-password/",
             {
               email: this.email
             },

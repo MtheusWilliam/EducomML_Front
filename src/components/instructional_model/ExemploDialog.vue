@@ -318,7 +318,7 @@ export default {
     async postMobilesExemplo() {
       var instructionalelement = {
         label: this.exemploName,
-        fk_instructionalelementtype: `http://127.0.0.1:8000/instrucelementtype/4/`,
+        fk_instructionalelementtype: `https://educomml-back.herokuapp.com/instrucelementtype/4/`,
       };
       var vm = this;
       var auxPath = "";
@@ -383,7 +383,7 @@ export default {
                       {
                         label: "Imagem " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -415,7 +415,7 @@ export default {
                       {
                         label: "Video " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -443,7 +443,7 @@ export default {
                       {
                         label: "Audio " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -471,7 +471,7 @@ export default {
                       {
                         label: "Link " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: null,
@@ -498,11 +498,11 @@ export default {
                   /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
                   if (mobilemedia.type === 1) {
                     await axios.post(
-                      `http://localhost:8000/mobilemedia/`,
+                      `https://educomml-back.herokuapp.com/mobilemedia/`,
                       {
                         label: "Imagem " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -530,11 +530,11 @@ export default {
                     );
                   } else if (mobilemedia.type === 2) {
                     await axios.post(
-                      `http://localhost:8000/mobilemedia/`,
+                      `https://educomml-back.herokuapp.com/mobilemedia/`,
                       {
                         label: "Video " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -558,11 +558,11 @@ export default {
                     );
                   } else if (mobilemedia.type === 3) {
                     await axios.post(
-                      `http://localhost:8000/mobilemedia/`,
+                      `https://educomml-back.herokuapp.com/mobilemedia/`,
                       {
                         label: "Audio " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: mobilemedia.path,
@@ -586,11 +586,11 @@ export default {
                     );
                   } else if (mobilemedia.type === 5) {
                     await axios.post(
-                      `http://localhost:8000/mobilemedia/`,
+                      `https://educomml-back.herokuapp.com/mobilemedia/`,
                       {
                         label: "Link " + (indexmobile + 1),
                         fk_idmediatype:
-                          "http://localhost:8000/mediatype/" +
+                          "https://educomml-back.herokuapp.com/mediatype/" +
                           mobilemedia.type +
                           "/",
                         path: null,
@@ -621,7 +621,7 @@ export default {
         /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
         await axios
           .post(
-            `http://127.0.0.1:8000/instructionalelement/`,
+            `https://educomml-back.herokuapp.com/instructionalelement/`,
             instructionalelement,
             {
               auth: {
@@ -639,11 +639,11 @@ export default {
               ) {
                 if (mobilemedia.type === 1) {
                   await axios.post(
-                    `http://localhost:8000/mobilemedia/`,
+                    `https://educomml-back.herokuapp.com/mobilemedia/`,
                     {
                       label: "Imagem " + (indexmobile + 1),
                       fk_idmediatype:
-                        "http://localhost:8000/mediatype/" +
+                        "https://educomml-back.herokuapp.com/mediatype/" +
                         mobilemedia.type +
                         "/",
                       path: mobilemedia.path,
@@ -671,11 +671,11 @@ export default {
                   );
                 } else if (mobilemedia.type === 2) {
                   await axios.post(
-                    `http://localhost:8000/mobilemedia/`,
+                    `https://educomml-back.herokuapp.com/mobilemedia/`,
                     {
                       label: "Video " + (indexmobile + 1),
                       fk_idmediatype:
-                        "http://localhost:8000/mediatype/" +
+                        "https://educomml-back.herokuapp.com/mediatype/" +
                         mobilemedia.type +
                         "/",
                       path: mobilemedia.path,
@@ -699,11 +699,11 @@ export default {
                   );
                 } else if (mobilemedia.type === 3) {
                   await axios.post(
-                    `http://localhost:8000/mobilemedia/`,
+                    `https://educomml-back.herokuapp.com/mobilemedia/`,
                     {
                       label: "Audio " + (indexmobile + 1),
                       fk_idmediatype:
-                        "http://localhost:8000/mediatype/" +
+                        "https://educomml-back.herokuapp.com/mediatype/" +
                         mobilemedia.type +
                         "/",
                       path: mobilemedia.path,
@@ -727,11 +727,11 @@ export default {
                   );
                 } else if (mobilemedia.type === 5) {
                   await axios.post(
-                    `http://localhost:8000/mobilemedia/`,
+                    `https://educomml-back.herokuapp.com/mobilemedia/`,
                     {
                       label: "Link " + (indexmobile + 1),
                       fk_idmediatype:
-                        "http://localhost:8000/mediatype/" +
+                        "https://educomml-back.herokuapp.com/mediatype/" +
                         mobilemedia.type +
                         "/",
                       path: null,
