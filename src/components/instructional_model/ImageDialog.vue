@@ -322,7 +322,6 @@ export default {
             });
         } else if (this.type === "dominio" || this.type === "modulo") {
           /* CÓDIGO PARA CRIAÇÃO DO MOBILEMEDIA SEM ITEM INFO*/
-
           await axios
             .post(`http://localhost:8000/mobilemedia/`, mobilemedia, {
               auth: {

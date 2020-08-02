@@ -47,27 +47,28 @@ export default {
     auxAppbarElement: 0,
     auxAppbarIcon: 0,
     search: null,
+    caseSensitive: true,
     treeData: [],
     elementTypes: {
       dominio: "Domínio",
       modulo: "Módulo",
       subModulo: "SubMódulo",
-      conceito: "Conceito"
+      conceito: "Conceito",
     },
     fileTypesIcon: [
       "mdi-file-image",
       "mdi-file-video",
       "mdi-file-music",
       "mdi-file-document",
-      "mdi-link-variant"
+      "mdi-link-variant",
     ],
     instrucTypesIcon: [
       "mdi-clipboard-text",
       "mdi-clipboard-check",
       "mdi-account-switch",
-      "mdi-lightbulb-outline"
+      "mdi-lightbulb-outline",
     ],
-    mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"]
+    mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
   }),
   methods: {
     callEdit(item) {
@@ -79,30 +80,30 @@ export default {
         } else {
           this.$emit("type", {
             type: item.item.id.split("/")[3],
-            url: item.item.id
+            url: item.item.id,
           });
         }
       }
-      setTimeout(function() {
+      setTimeout(function () {
         vm.stopDblclick = 0;
       }, 400);
     },
     callScroll(item) {
       var vm = this;
-      setTimeout(function() {
+      setTimeout(function () {
         if (vm.stopDblclick === 0) {
           if (item.item.id) {
             if (item.item.id.split("/")[5] === "SUBMODULO") {
               vm.$emit("elementToScroll", {
                 type: "submodulo",
-                url: item.item.id
+                url: item.item.id,
               });
             } else {
               vm.$emit("elementToScroll", {
                 type: item.item.id.split("/")[3],
                 indexPanel: item.item.indexPanel,
                 panelFather: item.item.panelFather,
-                url: item.item.id
+                url: item.item.id,
               });
             }
           }
@@ -117,7 +118,7 @@ export default {
         nome: this.dominio.nameknowledgedomain,
         type: "DOMÍNIO",
         avatar: "DM",
-        children: []
+        children: [],
       });
       if (this.dominio.mobilemedias.length) {
         this.dominio.mobilemedias.forEach((mobilemedia, imobilemedia) => {
@@ -131,7 +132,7 @@ export default {
             panelFather: "domain",
             icon: this.fileTypesIcon[
               mobilemedia.fk_idmediatype.split("/")[4] - 1
-            ]
+            ],
           });
           indexmodulo++;
         });
@@ -148,7 +149,7 @@ export default {
               icon: this.instrucTypesIcon[
                 instructionalelement.fk_instructionalelementtype.split("/")[4] -
                   1
-              ]
+              ],
             });
             indexmodulo++;
           }
@@ -164,7 +165,7 @@ export default {
               type: "MODULO",
               avatar: "MD",
               indexPanel: imodulo,
-              children: []
+              children: [],
             });
 
             if (modulo.mobilemedias.length) {
@@ -179,7 +180,7 @@ export default {
                   panelFather: "module",
                   icon: this.fileTypesIcon[
                     mobilemedia.fk_idmediatype.split("/")[4] - 1
-                  ]
+                  ],
                 });
                 indexsubmodulo++;
               });
@@ -198,7 +199,7 @@ export default {
                       instructionalelement.fk_instructionalelementtype.split(
                         "/"
                       )[4] - 1
-                    ]
+                    ],
                   });
                   indexsubmodulo++;
                 }
@@ -214,7 +215,7 @@ export default {
                   type: "SUBMODULO",
                   avatar: "SM",
                   indexPanel: isubmodulo,
-                  children: []
+                  children: [],
                 });
 
                 if (submodulo.mobilemedias.length) {
@@ -232,7 +233,7 @@ export default {
                         panelFather: "submodule",
                         icon: this.fileTypesIcon[
                           mobilemedia.fk_idmediatype.split("/")[4] - 1
-                        ]
+                        ],
                       });
                       indexconceito++;
                     }
@@ -254,7 +255,7 @@ export default {
                           instructionalelement.fk_instructionalelementtype.split(
                             "/"
                           )[4] - 1
-                        ]
+                        ],
                       });
 
                       indexconceito++;
@@ -273,7 +274,7 @@ export default {
                       avatar: "CC",
                       indexPanel: iconceito,
                       panelFather: "submodule",
-                      children: []
+                      children: [],
                     });
 
                     if (conceito.mobilemedias.length) {
@@ -293,7 +294,7 @@ export default {
                             panelFather: "conceptsubmodule",
                             icon: this.fileTypesIcon[
                               mobilemedia.fk_idmediatype.split("/")[4] - 1
-                            ]
+                            ],
                           });
                         }
                       );
@@ -314,7 +315,7 @@ export default {
                               instructionalelement.fk_instructionalelementtype.split(
                                 "/"
                               )[4] - 1
-                            ]
+                            ],
                           });
                         }
                       );
@@ -334,7 +335,7 @@ export default {
                               nome: procedure.nomeinformationitem,
                               type: "PROCEDIMENTO",
                               indexPanel: iprocedure,
-                              panelFather: "conceptsubmodule"
+                              panelFather: "conceptsubmodule",
                             });
                           }
                         }
@@ -361,7 +362,7 @@ export default {
                   avatar: "CC",
                   indexPanel: iconceito,
                   panelFather: "module",
-                  children: []
+                  children: [],
                 });
                 if (conceito.mobilemedias.length) {
                   conceito.mobilemedias.forEach((mobilemedia, imobilemedia) => {
@@ -377,7 +378,7 @@ export default {
                       panelFather: "conceptmodule",
                       icon: this.fileTypesIcon[
                         mobilemedia.fk_idmediatype.split("/")[4] - 1
-                      ]
+                      ],
                     });
                   });
                 }
@@ -397,7 +398,7 @@ export default {
                           instructionalelement.fk_instructionalelementtype.split(
                             "/"
                           )[4] - 1
-                        ]
+                        ],
                       });
                     }
                   );
@@ -416,7 +417,7 @@ export default {
                         nome: procedure.nomeinformationitem,
                         type: "PROCEDIMENTO",
                         indexPanel: iprocedure,
-                        panelFather: "conceptmodule"
+                        panelFather: "conceptmodule",
                       });
                     }
                   });
@@ -428,12 +429,12 @@ export default {
           }
         });
       }
-    }
+    },
   },
   watch: {
-    dominio: function() {
+    dominio: function () {
       this.setDomainVariables();
-    }
-  }
+    },
+  },
 };
 </script>

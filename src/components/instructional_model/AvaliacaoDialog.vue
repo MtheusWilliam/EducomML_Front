@@ -815,7 +815,6 @@ export default {
           })
           .then(async function (resposta) {
             if (vm.mobileMediasControl) {
-              var i = 0;
               await vm.mobileMediasControl.forEach(async function (
                 mobilemedia,
                 indexmobile
@@ -974,7 +973,6 @@ export default {
                       }
                     );
                   } else if (mobilemedia.type === 2) {
-                    console.log("i", i);
                     await axios.post(
                       `http://localhost:8000/mobilemedia/`,
                       {

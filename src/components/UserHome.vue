@@ -34,11 +34,6 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-      <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block v-if="!mini">Logout</v-btn>
-        </div>
-      </template>
     </v-navigation-drawer>
     <!-- FORM DO DOMÍNIO -->
     <v-col class="mr-6">

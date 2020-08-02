@@ -2580,7 +2580,6 @@ export default {
 
       var proceduresfinded = concept.informationitems.filter(checkProcedure);
 
-      console.log("proceduresfinded", proceduresfinded);
       return proceduresfinded;
     },
     mobileMediasInformationItem(concept) {
