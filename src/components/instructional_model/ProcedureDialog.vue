@@ -375,9 +375,6 @@ export default {
     dialog: function () {
       this.getProcedure();
     },
-    procedure: function () {
-      this.getProcedure();
-    },
   },
   mounted: function () {
     this.getProcedure();
@@ -393,11 +390,75 @@ export default {
       this.phasesControl = [];
       this.mobileMediasControl = [];
       if (this.procedure !== "") {
-        this.procedure.phaseprocedures.forEach((element) => {
-          this.phasesControl.push({
-            description: element.description,
-            url: element.url,
+        this.procedure.phaseprocedures.forEach(async function (
+          phase,
+          indexPhase
+        ) {
+          console.log("index", indexPhase);
+          await vm.phasesControl.push({
+            description: phase.description,
+            mobileMedias: [],
+            url: phase.url,
           });
+          if (phase.mobilemedias) {
+            await phase.mobilemedias.forEach(async function (
+              elementMobile,
+              indexMobile
+            ) {
+              if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                vm.getSrcImageQuestions(
+                  indexPhase,
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.phasesControl[indexPhase].mobileMedias.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  resolution: elementMobile.resolution,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url,
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                vm.getSrcVideoQuestions(
+                  indexPhase,
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.phasesControl[indexPhase].mobileMedias.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  resolution: elementMobile.resolution,
+                  time: elementMobile.time,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url,
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                vm.getSrcAudioQuestions(
+                  indexPhase,
+                  indexMobile,
+                  elementMobile.path,
+                  elementMobile.namefile
+                );
+                await vm.phasesControl[indexPhase].mobileMedias.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: null,
+                  path: elementMobile.path,
+                  namefile: elementMobile.namefile,
+                  url: elementMobile.url,
+                });
+              } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                await vm.phasesControl[indexPhase].mobileMedias.push({
+                  type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                  object: elementMobile.urllink,
+                  url: elementMobile.url,
+                });
+              }
+            });
+          }
         });
 
         await this.procedure.mobilemedias.forEach(async function (
