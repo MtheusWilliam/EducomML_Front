@@ -231,17 +231,39 @@ export default {
         vm.conceptName = vm.concept.nameconcept;
       });
       this.targetconcepts = [];
-      if (this.module.concepts) {
-        this.conceptName = this.concept.nameconcept;
-        this.module.concepts.forEach((element) => {
-          if (!this.concept || this.concept.url !== element.url) {
-            this.targetconcepts.push({
-              text: element.nameconcept,
-              value: element,
+
+      if (this.domain.modules) {
+        this.domain.modules.forEach((module) => {
+          if (module.concepts) {
+            module.concepts.forEach((moduleConcept) => {
+              if (!this.concept || this.concept.url !== moduleConcept.url) {
+                this.targetconcepts.push({
+                  text: moduleConcept.nameconcept,
+                  value: moduleConcept,
+                });
+              }
+            });
+          }
+          if (module.submodules) {
+            module.submodules.forEach((submodule) => {
+              if (submodule.concepts) {
+                submodule.concepts.forEach((submoduleConcept) => {
+                  if (
+                    !this.concept ||
+                    this.concept.url !== submoduleConcept.url
+                  ) {
+                    this.targetconcepts.push({
+                      text: submoduleConcept.nameconcept,
+                      value: submoduleConcept,
+                    });
+                  }
+                });
+              }
             });
           }
         });
       }
+
       if (this.concept !== "") {
         if (this.concept.priorknowledge.length > 0) {
           vm.priorKnowledge = 1;
