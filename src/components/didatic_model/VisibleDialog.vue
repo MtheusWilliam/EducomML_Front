@@ -6,7 +6,7 @@
       </span>
     </v-card-title>
     <v-row style="width : 100%">
-      <v-col cols="4">
+      <v-col cols="12">
         <v-card-text>
           <v-row class="ml-2">
             <v-btn
@@ -25,6 +25,22 @@
               small
               @click="selectAll()"
             >Selecionar tudo</v-btn>
+            <v-btn
+              class="ml-1"
+              color="#A5A5A5"
+              height="40px"
+              dark
+              small
+              @click="openDidaticDialog('assessment')"
+            >Parâmetros de avaliação</v-btn>
+            <v-btn
+              class="ml-1"
+              color="green"
+              height="40"
+              dark
+              small
+              @click="openDidaticDialog('prior')"
+            >Conhecimentos Prévios</v-btn>
           </v-row>
 
           <v-treeview
@@ -38,187 +54,6 @@
             open-all
           ></v-treeview>
         </v-card-text>
-      </v-col>
-      <v-col cols="8">
-        <v-row>
-          <h3 class="mt-5">Parâmetros de avaliação</h3>
-          <v-btn icon="icon" class="mb-1">
-            <v-icon large class="mt-9 ml-2" color="primary" @click="addAssessment()">mdi-plus-box</v-icon>
-          </v-btn>
-        </v-row>
-        <v-form ref="form" v-model="valid" lazy-validation>
-          <v-row
-            v-for="(assessment, i) in assessmentControl"
-            :key="i"
-            style="margin-bottom: -20px;"
-          >
-            <v-col cols="2">
-              <v-select
-                v-model="assessmentControl[i].scopo"
-                :items="scopoTypes"
-                :rules="[v => !!v || 'Conceito é requerido']"
-                label="Scopo"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="3">
-              <v-select
-                v-model="assessmentControl[i].fk_element"
-                :items="elementData"
-                :rules="[v => !!v || 'O tipo do conceito é requerido']"
-                label="Elemento"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="3">
-              <v-select
-                v-model="assessmentControl[i].typeThreshold"
-                :items="typesThreshold"
-                :rules="[v => !!v || 'O tipo do conceito é requerido']"
-                label="Tipo de Threshold"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="2">
-              <v-select
-                style="margin-top: -1px;"
-                v-model="assessmentControl[i].valueType"
-                :items="valueTypes"
-                :rules="[v => !!v || 'O tipo de dado é requerido']"
-                label="Tipo de Dado"
-                required
-              ></v-select>
-              <v-text-field
-                style="margin-top: -1px; margin-bottom: -10px;"
-                v-if="assessmentControl[i].valueType==='Single'"
-                v-model="assessmentControl[i].single.threshold"
-                label="Valor"
-                :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-                required
-              ></v-text-field>
-            </v-col>
-
-            <v-col cols="2" class="mt-2">
-              <v-btn icon="icon" class="mb-1" v-if="assessmentControl[i].valueType==='Range'">
-                <v-icon large class="mb-1" color="primary" @click="addRange(i)">mdi-plus-box</v-icon>
-              </v-btn>
-              <v-btn icon="icon" class="mb-1">
-                <v-icon large class="mb-1" color="red" @click="deletaAssessment(i)">mdi-minus-box</v-icon>
-              </v-btn>
-            </v-col>
-            <v-row v-if="assessmentControl[i].valueType === 'Single'" style="margin-top: -40px;">
-              <v-col cols="7"></v-col>
-              <v-col cols="2" class="ml-10"></v-col>
-            </v-row>
-            <div v-else>
-              <v-row
-                v-for="(range, idRange) in assessment.ranges"
-                :key="idRange"
-                style="margin-top: -30px;"
-              >
-                <v-col cols="4"></v-col>
-                <v-col cols="3">
-                  <v-text-field
-                    v-model="assessmentControl[i].ranges[idRange].namerange"
-                    counter="15"
-                    label="Nome do range"
-                    style="margin:0px;"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="assessmentControl[i].ranges[idRange].initialvalue"
-                    label="Valor inicial"
-                    style="margin:0px;"
-                    type="number"
-                    :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="assessmentControl[i].ranges[idRange].limitvalue"
-                    label="Valor Limite"
-                    style="margin:0px;"
-                    type="number"
-                    :suffix=" assessmentControl[i].typeThreshold===1 ? '%' : ''"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="1">
-                  <v-btn icon="icon" class="mt-4">
-                    <v-icon
-                      large
-                      class="mb-1"
-                      color="red"
-                      @click="deletaRange(i, idRange)"
-                    >mdi-minus-box</v-icon>
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </div>
-          </v-row>
-          <v-row>
-            <h3 class="mt-5">Conhecimentos prioritários</h3>
-            <v-btn icon="icon" class="mb-1">
-              <v-icon
-                large
-                class="mt-9 ml-2"
-                color="primary"
-                @click="addPriorKnowledge()"
-              >mdi-plus-box</v-icon>
-            </v-btn>
-          </v-row>
-          <v-row
-            v-for="(prior, idPrior) in priorControl"
-            :key="idPrior"
-            style="margin-bottom: -25px;"
-          >
-            <v-col cols="4">
-              <v-select
-                v-model="priorControl[idPrior].fk_idconcept"
-                :items="conceptsPrior"
-                :rules="[v => !!v || 'Necessário informar o conceito prioritário']"
-                label="Conceito Prioritário"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="3">
-              <v-text-field
-                style="margin-top: -1px; margin-bottom: -10px;"
-                :rules="[v => !!v || 'Necessário informar identificador da prioridade']"
-                v-model="priorControl[idPrior].namepriorknowledge"
-                label="Identificador da prioridade"
-                required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="3">
-              <v-select
-                v-model="priorControl[idPrior].priorlevel"
-                :items="priorLevels"
-                :rules="[v => !!v || 'Necessário informar o nível de prioridade']"
-                label="Nível de prioridade"
-                style="margin:0px;"
-                required
-              ></v-select>
-            </v-col>
-            <v-col cols="1">
-              <v-btn icon="icon" class="mt-4">
-                <v-icon
-                  large
-                  class="mb-1"
-                  color="red"
-                  @click="deletaPriorKnowledge(idPrior)"
-                >mdi-minus-box</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
       </v-col>
     </v-row>
     <v-card-actions>
@@ -1546,6 +1381,9 @@ export default {
           await this.resetVariables();
         }
       }
+    },
+    openDidaticDialog(dialog) {
+      this.$emit("openDidaticDialog", dialog);
     },
     reset() {
       this.$emit("close_or_save", "close");

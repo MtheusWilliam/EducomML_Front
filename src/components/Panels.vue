@@ -252,11 +252,30 @@
                   />
                 </v-dialog>
                 <!--Formulario para edição do modelo didático -->
-                <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1200px">
+                <v-dialog v-model="dialog_visible" persistent="persistent" max-width="1000px">
                   <VisibleDialog
                     :domain="dominio"
                     :dialog="dialog_visible"
+                    @openDidaticDialog="openDidaticDialog"
                     @close_or_save="visibleClose"
+                  />
+                </v-dialog>
+
+                <!--Formulario para edição dos parâmetros de avaliação -->
+                <v-dialog v-model="dialog_assessment" persistent="persistent" max-width="1000px">
+                  <AssessmentParameterDialog
+                    :domain="dominio"
+                    :dialog="dialog_assessment"
+                    @close_or_save="assessmentClose"
+                  />
+                </v-dialog>
+
+                <!--Formulario para edição dos conhecimentos prévios -->
+                <v-dialog v-model="dialog_prior" persistent="persistent" max-width="1000px">
+                  <PriorKnowledgeDialog
+                    :domain="dominio"
+                    :dialog="dialog_prior"
+                    @close_or_save="priorClose"
                   />
                 </v-dialog>
 
@@ -1722,6 +1741,8 @@ import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
 import ExemploDialog from "./instructional_model/ExemploDialog";
 import VisibleDialog from "./didatic_model/VisibleDialog";
+import PriorKnowledgeDialog from "./didatic_model/PriorKnowledgeDialog";
+import AssessmentParameterDialog from "./didatic_model/AssessmentParameterDialog";
 import firebase from "firebase/app";
 import axios from "axios";
 import Cookie from "js-cookie";
@@ -1744,6 +1765,8 @@ export default {
     AtividadeColaborativaDialog,
     ExemploDialog,
     VisibleDialog,
+    PriorKnowledgeDialog,
+    AssessmentParameterDialog,
   },
   props: [
     "dominio",
@@ -1836,6 +1859,8 @@ export default {
     dialog_atividadecolaborativa: false,
     dialog_exemplo: false,
     dialog_visible: false,
+    dialog_assessment: false,
+    dialog_prior: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -2610,6 +2635,33 @@ export default {
       this.getDominio();
       this.dialog_visible = true;
       this.dialogLoadingMessage = this.dialogLoadingMessages[0];
+    },
+    openDidaticDialog(dialog) {
+      if (dialog === "prior") {
+        this.dialog_prior = true;
+      } else if (dialog === "assessment") {
+        this.dialog_assessment = true;
+      }
+    },
+    async assessmentClose(value) {
+      this.readonly_control = false;
+      var vm = this;
+      this.dialog_assessment = false;
+      if (value === "save") {
+        await setTimeout(function () {
+          vm.getDominio();
+        }, 2000);
+      }
+    },
+    async priorClose(value) {
+      this.readonly_control = false;
+      var vm = this;
+      this.dialog_prior = false;
+      if (value === "save") {
+        await setTimeout(function () {
+          vm.getDominio();
+        }, 2000);
+      }
     },
     saveDominio() {
       console.log("");
