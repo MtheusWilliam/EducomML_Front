@@ -66,6 +66,7 @@
     props: [],
     methods: {
       atualizatreeview(value) {
+        console.log(this.dominio);
         this.dominio = value;
       },
       typeOfDialog(value) {
