@@ -46,78 +46,76 @@
 </template>
 
 <script>
-import axios from "axios";
-export default {
-  name: "domainDialog",
-  props: ["domain", "dialog"],
-  data: () => ({
-    domainName: "",
-    domainContentTitle: "",
-    lastversion: "",
-    valid: true,
-    dialog_dominio: false,
-    /*REGRAS PARA VALIDAÇÃO DO FORMULÁRIO DOMÍNIO*/
-    domainNameRules: [
-      (v) => !!v || "É necessário descrever o nome do domínio modelado",
-      (v) =>
-        (v && v.length <= 100) ||
-        "Nome do domínio deve ter no máximo 100 caracteres",
-    ],
-    domains: "",
-  }),
-  mounted() {
-    var vm = this;
-    vm.domainName = vm.domain.nameknowledgedomain;
-    vm.domainContentTitle = vm.domain.subtitle;
-  },
-  watch: {
-    dialog: function () {
+  import Api from "@/services/Api";
+  export default {
+    name: "domainDialog",
+    props: ["domain", "dialog"],
+    data: () => ({
+      domainName: "",
+      domainContentTitle: "",
+      lastversion: "",
+      valid: true,
+      dialog_dominio: false,
+      /*REGRAS PARA VALIDAÇÃO DO FORMULÁRIO DOMÍNIO*/
+      domainNameRules: [
+        (v) => !!v || "É necessário descrever o nome do domínio modelado",
+        (v) =>
+          (v && v.length <= 100) ||
+          "Nome do domínio deve ter no máximo 100 caracteres",
+      ],
+      domains: "",
+    }),
+    mounted() {
       var vm = this;
-      this.$nextTick(function () {
-        vm.domainName = vm.domain.nameknowledgedomain;
-        vm.domainContentTitle = vm.domain.subtitle;
-      });
+      vm.domainName = vm.domain.nameknowledgedomain;
+      vm.domainContentTitle = vm.domain.subtitle;
     },
-  },
-  methods: {
-    putDominio() {
-      var vm = this;
-      axios
-        .put(
-          "https://educomml-back.herokuapp.com/knowledgedomain/" +
-            this.domain.idknowledgedomain +
-            "/",
-          {
-            nameknowledgedomain: this.domainName,
-            subtitle: this.domainContentTitle,
-            lastversion: this.lastversion,
-            fk_iduser: this.domain.fk_iduser,
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin",
-            },
-          }
-        )
-        .then(function (resposta) {
-          vm.$emit("dominio_data", resposta.data);
+    watch: {
+      dialog: function() {
+        var vm = this;
+        this.$nextTick(function() {
+          vm.domainName = vm.domain.nameknowledgedomain;
+          vm.domainContentTitle = vm.domain.subtitle;
         });
+      },
     },
-    validate() {
-      if (this.$refs.form.validate()) {
-        this.$refs.form.validate();
-        this.putDominio();
-        this.$emit("close_or_save", "save");
-      }
+    methods: {
+      putDominio() {
+        var vm = this;
+        Api()
+          .put(
+            "/knowledgedomain/" + this.domain.idknowledgedomain + "/",
+            {
+              nameknowledgedomain: this.domainName,
+              subtitle: this.domainContentTitle,
+              lastversion: this.lastversion,
+              fk_iduser: this.domain.fk_iduser,
+            },
+            {
+              auth: {
+                username: "admin",
+                password: "admin",
+              },
+            }
+          )
+          .then(function(resposta) {
+            vm.$emit("dominio_data", resposta.data);
+          });
+      },
+      validate() {
+        if (this.$refs.form.validate()) {
+          this.$refs.form.validate();
+          this.putDominio();
+          this.$emit("close_or_save", "save");
+        }
+      },
+      reset() {
+        this.$emit("close_or_save", "close");
+        this.$refs.form.reset();
+      },
+      resetValidation() {
+        this.$refs.form.resetValidation();
+      },
     },
-    reset() {
-      this.$emit("close_or_save", "close");
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
-  },
-};
+  };
 </script>
