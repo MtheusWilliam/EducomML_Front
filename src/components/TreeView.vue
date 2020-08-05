@@ -24,14 +24,14 @@
         </v-btn>
       </v-app-bar>
     </div>
-    <v-treeview :items="treeData" :search="search">
+    <v-treeview :items="treeData" :search="search" style="color: white; font-size: 0.1px;">
       <template v-slot:prepend="{item}">
         <v-btn text @click="callScroll({item})" @dblclick="callEdit({item})">
           <v-icon v-if="item.icon">{{item.icon}}</v-icon>
           <v-avatar v-else color="black" size="25" class="mr-2">
             <span class="white--text" style="font-size:0.7em;">{{item.avatar}}</span>
           </v-avatar>
-          <span class="ml-1">{{item.nome}}</span>
+          <span class="ml-1">{{item.name}}</span>
         </v-btn>
       </template>
     </v-treeview>
@@ -43,11 +43,11 @@ export default {
   name: "TreeView",
   props: ["dominio"],
   data: () => ({
+    loading: false,
+    search: null,
     stopDblclick: 0,
     auxAppbarElement: 0,
     auxAppbarIcon: 0,
-    search: null,
-    caseSensitive: true,
     treeData: [],
     elementTypes: {
       dominio: "Domínio",
@@ -86,7 +86,7 @@ export default {
       }
       setTimeout(function () {
         vm.stopDblclick = 0;
-      }, 400);
+      }, 200);
     },
     callScroll(item) {
       var vm = this;
@@ -108,23 +108,24 @@ export default {
             }
           }
         }
-      }, 200);
+      }, 100);
     },
     setDomainVariables() {
       this.treeData = [];
       var indexmodulo = 0;
       this.treeData.push({
         id: this.dominio.url,
-        nome: this.dominio.nameknowledgedomain,
+        name: this.dominio.nameknowledgedomain,
         type: "DOMÍNIO",
         avatar: "DM",
+
         children: [],
       });
       if (this.dominio.mobilemedias.length) {
         this.dominio.mobilemedias.forEach((mobilemedia, imobilemedia) => {
           this.treeData[0].children.push({
             id: mobilemedia.url,
-            nome: this.mobilemediaTypeLabel[
+            name: this.mobilemediaTypeLabel[
               parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
             ],
             type: "MOBILEMEDIA",
@@ -142,7 +143,7 @@ export default {
           (instructionalelement, iinstructionalelement) => {
             this.treeData[0].children.push({
               id: instructionalelement.url,
-              nome: instructionalelement.label,
+              name: instructionalelement.label,
               type: "INSTRUCTIONAL ELEMENT",
               indexPanel: iinstructionalelement,
               panelFather: "domain",
@@ -161,18 +162,17 @@ export default {
             var indexsubmodulo = 0;
             this.treeData[0].children.push({
               id: modulo.url,
-              nome: modulo.namemodule,
+              name: modulo.namemodule,
               type: "MODULO",
               avatar: "MD",
               indexPanel: imodulo,
               children: [],
             });
-
             if (modulo.mobilemedias.length) {
               modulo.mobilemedias.forEach((mobilemedia, imobilemedia) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: mobilemedia.url,
-                  nome: this.mobilemediaTypeLabel[
+                  name: this.mobilemediaTypeLabel[
                     parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
                   ],
                   type: "MOBILEMEDIA",
@@ -191,7 +191,7 @@ export default {
                 (instructionalelement, iinstructionalelement) => {
                   this.treeData[0].children[indexmodulo].children.push({
                     id: instructionalelement.url,
-                    nome: instructionalelement.label,
+                    name: instructionalelement.label,
                     type: "INSTRUCTIONAL ELEMENT",
                     indexPanel: iinstructionalelement,
                     panelFather: "module",
@@ -211,13 +211,12 @@ export default {
               modulo.submodules.forEach((submodulo, isubmodulo) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: submodulo.url + "sub",
-                  nome: submodulo.namemodule,
+                  name: submodulo.namemodule,
                   type: "SUBMODULO",
                   avatar: "SM",
                   indexPanel: isubmodulo,
                   children: [],
                 });
-
                 if (submodulo.mobilemedias.length) {
                   submodulo.mobilemedias.forEach(
                     (mobilemedia, imobilemedia) => {
@@ -225,7 +224,7 @@ export default {
                         indexsubmodulo
                       ].children.push({
                         id: mobilemedia.url,
-                        nome: this.mobilemediaTypeLabel[
+                        name: this.mobilemediaTypeLabel[
                           parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
                         ],
                         type: "MOBILEMEDIA",
@@ -247,7 +246,7 @@ export default {
                         indexsubmodulo
                       ].children.push({
                         id: instructionalelement.url,
-                        nome: instructionalelement.label,
+                        name: instructionalelement.label,
                         type: "INSTRUCTIONAL ELEMENT",
                         indexPanel: iinstructionalelement,
                         panelFather: "submodule",
@@ -257,7 +256,6 @@ export default {
                           )[4] - 1
                         ],
                       });
-
                       indexconceito++;
                     }
                   );
@@ -269,14 +267,13 @@ export default {
                       indexsubmodulo
                     ].children.push({
                       id: conceito.url,
-                      nome: conceito.nameconcept,
+                      name: conceito.nameconcept,
                       type: "CONCEITO",
                       avatar: "CC",
                       indexPanel: iconceito,
                       panelFather: "submodule",
                       children: [],
                     });
-
                     if (conceito.mobilemedias.length) {
                       conceito.mobilemedias.forEach(
                         (mobilemedia, imobilemedia) => {
@@ -284,7 +281,7 @@ export default {
                             indexsubmodulo
                           ].children[indexconceito].children.push({
                             id: mobilemedia.url,
-                            nome: this.mobilemediaTypeLabel[
+                            name: this.mobilemediaTypeLabel[
                               parseInt(
                                 mobilemedia.fk_idmediatype.split("/")[4] - 1
                               )
@@ -307,7 +304,7 @@ export default {
                             indexsubmodulo
                           ].children[indexconceito].children.push({
                             id: instructionalelement.url,
-                            nome: instructionalelement.label,
+                            name: instructionalelement.label,
                             type: "INSTRUCTIONAL ELEMENT",
                             indexPanel: iinstructionalelement,
                             panelFather: "conceptsubmodule",
@@ -332,7 +329,7 @@ export default {
                               indexsubmodulo
                             ].children[indexconceito].children.push({
                               id: procedure.url,
-                              nome: procedure.nomeinformationitem,
+                              name: procedure.nameinformationitem,
                               type: "PROCEDIMENTO",
                               indexPanel: iprocedure,
                               panelFather: "conceptsubmodule",
@@ -341,7 +338,6 @@ export default {
                         }
                       );
                     }
-
                     indexconceito++;
                   });
                 }
@@ -357,7 +353,7 @@ export default {
               modulo.concepts.forEach((conceito, iconceito) => {
                 this.treeData[0].children[indexmodulo].children.push({
                   id: conceito.url,
-                  nome: conceito.nameconcept,
+                  name: conceito.nameconcept,
                   type: "CONCEITO",
                   avatar: "CC",
                   indexPanel: iconceito,
@@ -370,7 +366,7 @@ export default {
                       indexconceito
                     ].children.push({
                       id: mobilemedia.url,
-                      nome: this.mobilemediaTypeLabel[
+                      name: this.mobilemediaTypeLabel[
                         parseInt(mobilemedia.fk_idmediatype.split("/")[4] - 1)
                       ],
                       type: "MOBILEMEDIA",
@@ -390,7 +386,7 @@ export default {
                         indexconceito
                       ].children.push({
                         id: instructionalelement.url,
-                        nome: instructionalelement.label,
+                        name: instructionalelement.label,
                         type: "INSTRUCTIONAL ELEMENT",
                         indexPanel: iinstructionalelement,
                         panelFather: "conceptmodule",
@@ -414,7 +410,7 @@ export default {
                         indexconceito
                       ].children.push({
                         id: procedure.url,
-                        nome: procedure.nomeinformationitem,
+                        name: procedure.nameinformationitem,
                         type: "PROCEDIMENTO",
                         indexPanel: iprocedure,
                         panelFather: "conceptmodule",

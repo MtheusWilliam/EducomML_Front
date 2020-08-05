@@ -58,7 +58,7 @@
             class="ma-8"
             width="20vw"
             dark
-            @click="$router.push({ path: '/login/ ' })"
+            @click="$store.state.jwt ?$router.push({ path: '/home' }) :  $router.push({ path: '/login/ ' })"
           >Acesse aqui</v-btn>
         </v-row>
       </v-tab-item>
@@ -178,24 +178,24 @@ export default {
         {
           title: "Educom Tool!",
           subtitle: "Educational content modelling",
-          img_src: require("@/assets/home/bg1.jpg")
+          img_src: require("@/assets/home/bg1.jpg"),
         },
         {
           title: "Projeto",
           subtitle: "",
-          img_src: require("@/assets/home/bg2.jpg")
+          img_src: require("@/assets/home/bg2.jpg"),
         },
         {
           title: "Equipe",
           subtitle: "",
-          img_src: require("@/assets/home/bg3.jpg")
-        }
-      ]
+          img_src: require("@/assets/home/bg3.jpg"),
+        },
+      ],
     };
   },
-  created: function() {
+  created: function () {
     this.atual_page = this.pages[0];
-  }
+  },
 };
 </script>
 

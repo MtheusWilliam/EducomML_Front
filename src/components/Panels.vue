@@ -70,7 +70,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                      <v-icon>mdi-dots-horizontal</v-icon>
+                      <v-icon>mdi-apps</v-icon>
                     </v-btn>
                   </template>
 
@@ -484,7 +484,7 @@
                       >
                         <template v-slot:activator="{ on }">
                           <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                            <v-icon>mdi-dots-horizontal</v-icon>
+                            <v-icon>mdi-apps</v-icon>
                           </v-btn>
                         </template>
 
@@ -733,7 +733,7 @@
                             >
                               <template v-slot:activator="{ on }">
                                 <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                  <v-icon>mdi-dots-horizontal</v-icon>
+                                  <v-icon>mdi-apps</v-icon>
                                 </v-btn>
                               </template>
 
@@ -973,7 +973,7 @@
                                   >
                                     <template v-slot:activator="{ on }">
                                       <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                        <v-icon>mdi-dots-horizontal</v-icon>
+                                        <v-icon>mdi-apps</v-icon>
                                       </v-btn>
                                     </template>
 
@@ -1328,7 +1328,7 @@
                             >
                               <template v-slot:activator="{ on }">
                                 <v-btn icon="icon" color="white" dark="dark" v-on="on">
-                                  <v-icon>mdi-dots-horizontal</v-icon>
+                                  <v-icon>mdi-apps</v-icon>
                                 </v-btn>
                               </template>
 

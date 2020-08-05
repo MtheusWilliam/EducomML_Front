@@ -12,7 +12,7 @@
           <template v-slot:activator="{ on }">
             <v-btn v-on="on" large color="primary" style="color:white;" class="mb-3">
               <strong>Adicionar MobileMedia</strong>
-              <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
+              <v-icon class="ml-2" large color="white">mdi-apps</v-icon>
             </v-btn>
           </template>
 
@@ -263,7 +263,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon="icon">
-                      <v-icon x-large class="ml-2" large color="primary">mdi-plus-box</v-icon>
+                      <v-icon x-large class="ml-2" large color="primary">mdi-apps</v-icon>
                     </v-btn>
                   </template>
 
@@ -394,7 +394,6 @@ export default {
           phase,
           indexPhase
         ) {
-          console.log("index", indexPhase);
           await vm.phasesControl.push({
             description: phase.description,
             mobileMedias: [],
@@ -406,7 +405,7 @@ export default {
               indexMobile
             ) {
               if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
-                vm.getSrcImageQuestions(
+                vm.getSrcImagePhases(
                   indexPhase,
                   indexMobile,
                   elementMobile.path,
@@ -1125,7 +1124,7 @@ export default {
       var auxPathPhases = "";
       this.phasesControl.forEach(async function (phase) {
         if (phase.mobileMedias.length > 0) {
-          await phase.mobileMedias.forEach((mobilemedia) => {
+          await phase.mobileMedias.forEach(async (mobilemedia) => {
             if (mobilemedia.url) {
               if (mobilemedia.type !== 5) {
                 firebase
@@ -1135,21 +1134,21 @@ export default {
                   .put(mobilemedia.object);
               }
             } else {
-              setTimeout(function () {
-                auxPathPhases =
-                  vm.domain.idknowledgedomain.toString() +
-                  "/" +
-                  Date.now().toString();
-                if (mobilemedia.type !== 5) {
-                  firebase
-                    .storage()
-                    .ref()
-                    .child(auxPathPhases)
-                    .put(mobilemedia.object);
+              auxPathPhases =
+                vm.domain.idknowledgedomain.toString() +
+                "/" +
+                (await setTimeout(async function () {
+                  await Date.now().toString();
+                }, 1));
+              if (mobilemedia.type !== 5) {
+                firebase
+                  .storage()
+                  .ref()
+                  .child(auxPathPhases)
+                  .put(mobilemedia.object);
 
-                  mobilemedia.path = auxPathPhases;
-                }
-              }, 37);
+                mobilemedia.path = auxPathPhases;
+              }
             }
           });
         }
@@ -1676,7 +1675,6 @@ export default {
           url: null,
         });
       }
-      console.log("kkkkk", this.phasesControl);
     },
     async deleteMobileMediaPhase(idPhase, idMobileMedia) {
       if (this.phasesControl[idPhase].mobileMedias[idMobileMedia].url) {
