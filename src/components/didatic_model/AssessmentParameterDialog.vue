@@ -160,7 +160,7 @@
 
 <script>
 export default {
-  name: "VisibleDialog",
+  name: "AssessmentParameterDialog",
   props: ["domain", "dialog"],
   data: () => ({
     valid: true,

@@ -20,35 +20,14 @@
             ></v-text-field>
             <v-row>
               <v-col cols="4">
-                <v-select
-                  v-model="priorKnowledge"
-                  :items="priorKnowledgeItems"
-                  label="Este conceito é prioritário?"
-                  style="margin:0px;"
-                  required="required"
-                ></v-select>
-              </v-col>
-              <v-col cols="4">
-                <v-text-field
-                  v-if="priorKnowledge === 1"
-                  v-model="priorKnowledgeName"
-                  :counter="100"
-                  :rules="priorKnowledgeNameRules"
-                  label="Nome da Prioridade"
-                  style="margin:0px;"
-                  required="required"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="4">
-                <v-select
-                  v-if="priorKnowledge === 1"
-                  v-model="priorLevel"
-                  :items="priorLevelItems"
-                  :rules="[v => !!v || 'Necessário informar o nível de prioridade']"
-                  label="Nível de prioridade"
-                  style="margin:0px;"
-                  required="required"
-                ></v-select>
+                <v-btn
+                  class="ml-1"
+                  color="green"
+                  height="40"
+                  dark
+                  small
+                  @click="openDidaticDialog('priorConcept')"
+                >Conhecimentos Prévios</v-btn>
               </v-col>
             </v-row>
             <div>
@@ -323,91 +302,48 @@ export default {
           )
           .then(async function (resposta) {
             vm.auxConceito = resposta.data.url;
-            if (vm.priorKnowledge === 1) {
-              await axios.post(
-                `http://localhost:8000/priorknowledge/`,
-                {
-                  namepriorknowledge: vm.priorKnowledgeName,
-                  priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: resposta.data.url,
-                },
-                {
-                  auth: {
-                    username: "admin",
-                    password: "admin",
-                  },
-                }
-              );
+            if (vm.$store.state.priorConcepts === []) {
+              vm.$store.state.priorConcepts.forEach(async (prior) => {
+                await axios
+                  .post(
+                    `http://localhost:8000/priorknowledge/`,
+                    {
+                      namepriorknowledge: prior.namepriorknowledge,
+                      priorlevel:
+                        `http://localhost:8000/priorlevel/` +
+                        prior.priorlevel +
+                        `/`,
+                      fk_fksourceconcept: prior.fk_idconcept,
+                      fk_priortargetconcept: resposta.data.url,
+                    },
+                    {
+                      auth: {
+                        username: "admin",
+                        password: "admin",
+                      },
+                    }
+                  )
+                  .then(function () {
+                    vm.$store.dispatch("getPriorConcepts", []);
+                  });
+              });
             }
           });
       } else {
-        await axios
-          .put(
-            "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
-            {
-              nameconcept: this.conceptName,
-              fk_idknowledgedomain: this.domain.url,
-              fk_idmodule: this.module.url,
+        await axios.put(
+          "http://127.0.0.1:8000/concept/" + this.concept.idconcept + "/",
+          {
+            nameconcept: this.conceptName,
+            fk_idknowledgedomain: this.domain.url,
+            fk_idmodule: this.module.url,
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin",
             },
-            {
-              auth: {
-                username: "admin",
-                password: "admin",
-              },
-            }
-          )
-          .then(async function (resposta) {
-            if (
-              vm.concept.priorknowledge.length > 0 &&
-              vm.priorKnowledge === 1
-            ) {
-              await axios.put(
-                vm.concept.priorknowledge[0].url,
-                {
-                  namepriorknowledge: vm.priorKnowledgeName,
-                  priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: resposta.data.url,
-                },
-                {
-                  auth: {
-                    username: "admin",
-                    password: "admin",
-                  },
-                }
-              );
-            } else if (
-              vm.concept.priorknowledge.length > 0 &&
-              vm.priorKnowledge === 2
-            ) {
-              axios.delete(vm.concept.priorknowledge[0].url, {
-                auth: {
-                  username: "admin",
-                  password: "admin",
-                },
-              });
-            } else if (
-              vm.concept.priorknowledge.length === 0 &&
-              vm.priorKnowledge === 1
-            ) {
-              await axios.post(
-                `http://localhost:8000/priorknowledge/`,
-                {
-                  namepriorknowledge: vm.priorKnowledgeName,
-                  priorlevel:
-                    `http://localhost:8000/priorlevel/` + vm.priorLevel + `/`,
-                  fk_idconcept: vm.concept.url,
-                },
-                {
-                  auth: {
-                    username: "admin",
-                    password: "admin",
-                  },
-                }
-              );
-            }
-          });
+          }
+        );
       }
     },
     async altera_Cria_Relacoes() {
@@ -461,6 +397,9 @@ export default {
         }
       });
     },
+    openDidaticDialog(dialog) {
+      this.$emit("openDidaticDialog", dialog);
+    },
     async validate() {
       if (this.$refs.form.validate()) {
         //await this.$refs.form.validate();
@@ -505,9 +444,7 @@ export default {
       }
     },
     resetVariables() {
-      this.priorLevel = "";
-      this.priorKnowledge = 2;
-      this.priorKnowledgeName = "";
+      this.$store.dispatch("getPriorConcepts", []);
     },
   },
 };

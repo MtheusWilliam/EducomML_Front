@@ -41,6 +41,7 @@ var store = new Vuex.Store({
       obtainJWT: 'http://127.0.0.1:8000/api-token-auth/',
       refreshJWT: 'http://127.0.0.1:8000/api-token-refresh/'
     },
+    priorConcepts: []
   },
   mutations: {
     updateToken(state, newToken) {
@@ -57,6 +58,9 @@ var store = new Vuex.Store({
     },
     csrfToken(state, csrfToken) {
       state.csrf = csrfToken;
+    },
+    setPriorConcepts(state, objPriorConcepts) {
+      state.priorConcepts = objPriorConcepts;
     }
   },
   actions: {
@@ -70,6 +74,9 @@ var store = new Vuex.Store({
         .catch((error) => {
           console.log(error);
         })
+    },
+    getPriorConcepts(state, objPriorConcepts) {
+      this.commit('setPriorConcepts', objPriorConcepts);
     },
     refreshToken() {
       const payload = {

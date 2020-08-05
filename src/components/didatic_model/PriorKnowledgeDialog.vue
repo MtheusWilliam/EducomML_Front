@@ -2,13 +2,13 @@
   <v-card>
     <v-card-title style="background-color:purple; color:white;">
       <span class="headline">
-        <p>Defina as informações equivalentes aos conhecimentos prioritários.</p>
+        <p>Defina as informações equivalentes aos conhecimentos prévios.</p>
       </span>
     </v-card-title>
     <v-row class="mx-0 px-0">
       <v-form ref="form" v-model="valid" lazy-validation>
         <v-row class="mx-0 px-0 pl-6">
-          <h3 class="mt-5">Conhecimentos prioritários</h3>
+          <h3 class="mt-5">Conhecimentos prévios</h3>
           <v-btn icon="icon" class="mb-1">
             <v-icon
               large
@@ -24,17 +24,27 @@
           style="margin-bottom: -25px;"
           class="mx-0 px-0 pl-6"
         >
-          <v-col cols="4">
+          <v-col cols="3">
             <v-select
-              v-model="priorControl[idPrior].fk_idconcept"
+              v-model="priorControl[idPrior].fk_priorsourceconcept"
               :items="conceptsPrior"
               :rules="[v => !!v || 'Necessário informar o conceito prioritário']"
-              label="Conceito Prioritário"
+              label="Conceito Prévio"
               style="margin:0px;"
               required
             ></v-select>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="3">
+            <v-select
+              v-model="priorControl[idPrior].fk_priortargetconcept"
+              :items="conceptsPrior"
+              :rules="[v => !!v || 'Necessário informar o conceito prioritário']"
+              label="Conceito Prévio"
+              style="margin:0px;"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="3">
             <v-text-field
               style="margin-top: -1px; margin-bottom: -10px;"
               :rules="[v => !!v || 'Necessário informar identificador da prioridade']"
@@ -43,7 +53,7 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="2">
             <v-select
               v-model="priorControl[idPrior].priorlevel"
               :items="priorLevels"
@@ -95,7 +105,7 @@
 
 <script>
 export default {
-  name: "VisibleDialog",
+  name: "PriorKnowledgeDialog",
   props: ["domain", "dialog"],
   data: () => ({
     valid: true,
@@ -178,7 +188,9 @@ export default {
                     priorlevel: parseInt(
                       moduleConcept.priorknowledge[0].priorlevel.split("/")[4]
                     ),
-                    fk_idconcept: moduleConcept.priorknowledge[0].fk_idconcept,
+                    fk_priorsourceconcept:
+                      moduleConcept.priorknowledge[0].fk_priorsourceconcept,
+                    fk_priortargetconcept: moduleConcept.url,
                     url: moduleConcept.priorknowledge[0].url,
                   });
                 }
@@ -197,8 +209,10 @@ export default {
                             "/"
                           )[4]
                         ),
-                        fk_idconcept:
-                          submoduleConcept.priorknowledge[0].fk_idconcept,
+                        fk_priorsourceconcept:
+                          submoduleConcept.priorknowledge[0]
+                            .fk_priorsourceconcept,
+                        fk_priortargetconcept: submoduleConcept.url,
                         url: submoduleConcept.priorknowledge[0].url,
                       });
                     }
@@ -262,7 +276,8 @@ export default {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
                 `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
-              fk_idconcept: prior.fk_idconcept,
+              fk_priorsourceconcept: prior.fk_idconcept,
+              fk_priortargetconcept: prior.fk_idconcept,
             },
             header
           );
@@ -273,7 +288,8 @@ export default {
               namepriorknowledge: prior.namepriorknowledge,
               priorlevel:
                 `http://127.0.0.1:8000/priorlevel/` + prior.priorlevel + `/`,
-              fk_idconcept: prior.fk_idconcept,
+              fk_priorsourceconcept: prior.fk_idconcept,
+              fk_priortargetconcept: prior.fk_idconcept,
             },
             header
           );
@@ -284,7 +300,8 @@ export default {
       this.priorControl.push({
         namepriorknowledge: "",
         priorlevel: "",
-        fk_idconcept: "",
+        fk_priorsourceconcept: "",
+        fk_priortargetconcept: "",
         url: "",
       });
     },

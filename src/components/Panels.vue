@@ -149,6 +149,7 @@
                     :concept="conceito"
                     :module="modulo"
                     @close_or_save="close_or_save_conceito"
+                    @openDidaticDialog="openDidaticDialog"
                     :domain="dominio"
                     :dialog="dialog_conceito"
                   />
@@ -279,6 +280,17 @@
                   />
                 </v-dialog>
 
+                <!--Formulario para edição dos conhecimentos prévios para o conceito-->
+                <v-dialog v-model="dialog_priorConcept" persistent="persistent" max-width="1000px">
+                  <PriorKnowledgeDialogConcept
+                    :domain="dominio"
+                    :module="modulo"
+                    :concept="conceito"
+                    :dialog="dialog_priorConcept"
+                    @close_or_save="priorCloseConcept"
+                  />
+                </v-dialog>
+
                 <!--Formulário para criação de exemplo-->
                 <v-dialog v-model="dialog_exemplo" persistent="persistent" max-width="1100px">
                   <ExemploDialog
@@ -295,7 +307,7 @@
           </v-row>
         </v-expansion-panel-header>
         <!--FIM DO HEADER DO DOMÍNIO-->
-        <v-expansion-panel-content>
+        <v-expansion-panel-content color="#EFEEEC">
           <!--CONTENT DO DOMÍNIO-->
           <!-- PANELS DOS ARQUIVOS/MOBILEMEDIAS DO DOMÍNIO-->
           <v-expansion-panels
@@ -1742,6 +1754,7 @@ import AtividadeColaborativaDialog from "./instructional_model/AtividadeColabora
 import ExemploDialog from "./instructional_model/ExemploDialog";
 import VisibleDialog from "./didatic_model/VisibleDialog";
 import PriorKnowledgeDialog from "./didatic_model/PriorKnowledgeDialog";
+import PriorKnowledgeDialogConcept from "./didatic_model/PriorKnowledgeDialogConcept";
 import AssessmentParameterDialog from "./didatic_model/AssessmentParameterDialog";
 import firebase from "firebase/app";
 import axios from "axios";
@@ -1766,6 +1779,7 @@ export default {
     ExemploDialog,
     VisibleDialog,
     PriorKnowledgeDialog,
+    PriorKnowledgeDialogConcept,
     AssessmentParameterDialog,
   },
   props: [
@@ -1861,6 +1875,7 @@ export default {
     dialog_visible: false,
     dialog_assessment: false,
     dialog_prior: false,
+    dialog_priorConcept: false,
     select: null,
     checkbox: false,
     /*ATRIBUTOS DO DOMINIO*/
@@ -2641,6 +2656,8 @@ export default {
         this.dialog_prior = true;
       } else if (dialog === "assessment") {
         this.dialog_assessment = true;
+      } else if (dialog === "priorConcept") {
+        this.dialog_priorConcept = true;
       }
     },
     async assessmentClose(value) {
@@ -2657,6 +2674,16 @@ export default {
       this.readonly_control = false;
       var vm = this;
       this.dialog_prior = false;
+      if (value === "save") {
+        await setTimeout(function () {
+          vm.getDominio();
+        }, 2000);
+      }
+    },
+    async priorCloseConcept(value) {
+      this.readonly_control = false;
+      var vm = this;
+      this.dialog_priorConcept = false;
       if (value === "save") {
         await setTimeout(function () {
           vm.getDominio();
