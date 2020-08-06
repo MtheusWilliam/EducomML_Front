@@ -1,7 +1,10 @@
 <template>
   <v-row class="text-center">
     <v-img :src="atual_page.img_src" height="40vh">
-      <v-toolbar class="pt-1" style="box-shadow:none; background-color: rgba(0, 0, 0, .6);">
+      <v-toolbar
+        class="pt-1"
+        style="box-shadow:none; background-color: rgba(0, 0, 0, .6);"
+      >
         <v-toolbar-title dark class="ml-5 pt-1">
           <v-img src="@/assets/logo.png" style="width: 13vw;"></v-img>
         </v-toolbar-title>
@@ -16,26 +19,35 @@
           <v-tab
             @click="atual_page = pages[0]"
             style="background-color: rgba(0, 0, 0, .01); box-shadow:none; color:white;"
-          >Pagina Inicial</v-tab>
+            >Pagina Inicial</v-tab
+          >
           <v-tab
             @click="atual_page = pages[1]"
             style="background-color: rgba(0, 0, 0, .01); box-shadow:none; color:white;"
-          >Projeto</v-tab>
+            >Projeto</v-tab
+          >
           <v-tab
             @click="atual_page = pages[2]"
             style="background-color: rgba(0, 0, 0, .01); box-shadow:none; color:white;"
-          >Equipe</v-tab>
+            >Equipe</v-tab
+          >
         </v-tabs>
       </v-toolbar>
-      <v-row style="height:50%;opacity:0.6;" align="end" class="black" justify="center">
-        <h1 style="color:white; font-size: 4.4em;">{{atual_page.title}}</h1>
+      <v-row
+        style="height:50%;opacity:0.6;"
+        align="end"
+        class="black"
+        justify="center"
+      >
+        <h1 style="color:white; font-size: 4.4em;">{{ atual_page.title }}</h1>
       </v-row>
       <v-row
         style="height:50%;opacity:0.6;font-size: 1.4em"
         align="start"
         class="black white--text"
         justify="center"
-      >{{atual_page.subtitle}}</v-row>
+        >{{ atual_page.subtitle }}</v-row
+      >
     </v-img>
     <v-tabs-items v-model="tab">
       <v-tab-item>
@@ -58,8 +70,13 @@
             class="ma-8"
             width="20vw"
             dark
-            @click="$store.state.jwt ?$router.push({ path: '/home' }) :  $router.push({ path: '/login/ ' })"
-          >Acesse aqui</v-btn>
+            @click="
+              $store.state.jwt
+                ? $router.push({ path: '/home' })
+                : $router.push({ path: '/login/ ' })
+            "
+            >Acesse aqui</v-btn
+          >
         </v-row>
         <v-row
           align="start"
@@ -77,21 +94,40 @@
           justify="center"
         >
           <v-col cols="6">
-            <youtube video-id="FxT6cG9tUPI" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <youtube
+              video-id="FxT6cG9tUPI"
+              player-width="90%"
+              @playing="playing"
+            ></youtube>
             <h2 class="mt-1 mb-3">Diretriz de produção de mídia</h2>
-            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
-              <p
-                style="text-align: left; font-size: 1.15em;"
-              >Um conjunto de diretrizes são apresentadas nesse vídeo que ajudam o autor a produzir um conteúdo educacional mais adequado para uso em dispositivos móveis.</p>
+            <v-row
+              style="max-width: 640px; text-align: center;"
+              class="mx-auto"
+            >
+              <p style="text-align: left; font-size: 1.15em;">
+                Um conjunto de diretrizes são apresentadas nesse vídeo que
+                ajudam o autor a produzir um conteúdo educacional mais adequado
+                para uso em dispositivos móveis.
+              </p>
             </v-row>
           </v-col>
           <v-col cols="6">
-            <youtube video-id="SiuUfNyMyGk" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <youtube
+              video-id="SiuUfNyMyGk"
+              player-width="90%"
+              @playing="playing"
+            ></youtube>
             <h2 class="mt-1 mb-3">Modelo Conceitual</h2>
-            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
-              <p
-                style="text-align: left; font-size:1.15em;"
-              >A Educom.ml é composta por três modelos que estruturam o conteúdo educacional. Esse vídeo apresenta o Modelo Conceitual, que tem a finalidade de modelar um conjunto de conceitos de um domínio do conhecimento.</p>
+            <v-row
+              style="max-width: 640px; text-align: center;"
+              class="mx-auto"
+            >
+              <p style="text-align: left; font-size:1.15em;">
+                A Educom.ml é composta por três modelos que estruturam o
+                conteúdo educacional. Esse vídeo apresenta o Modelo Conceitual,
+                que tem a finalidade de modelar um conjunto de conceitos de um
+                domínio do conhecimento.
+              </p>
             </v-row>
           </v-col>
         </v-row>
@@ -103,21 +139,39 @@
           justify="center"
         >
           <v-col cols="6">
-            <youtube video-id="ggVE8KayWi0" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <youtube
+              video-id="ggVE8KayWi0"
+              player-width="90%"
+              @playing="playing"
+            ></youtube>
             <h2 class="mt-1 mb-3">Modelo Instrucional</h2>
-            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
-              <p
-                style="text-align: left; font-size: 1.15em;"
-              >Modelo Instrucional permite que o autor inclua no Modelo Conteitual informações complementares como descrição de conteitos, imagens, vídeos, exemplos exercícios e atividades avaliativas.</p>
+            <v-row
+              style="max-width: 640px; text-align: center;"
+              class="mx-auto"
+            >
+              <p style="text-align: left; font-size: 1.15em;">
+                Modelo Instrucional permite que o autor inclua no Modelo
+                Conteitual informações complementares como descrição de
+                conteitos, imagens, vídeos, exemplos exercícios e atividades
+                avaliativas.
+              </p>
             </v-row>
           </v-col>
           <v-col cols="6">
-            <youtube video-id="ooiPjc0t3Ts" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <youtube
+              video-id="ooiPjc0t3Ts"
+              player-width="90%"
+              @playing="playing"
+            ></youtube>
             <h2 class="mt-1 mb-3">Modelo Didático</h2>
-            <v-row style="max-width: 640px; text-align: center; " class="mx-auto">
-              <p
-                style="text-align: left; font-size: 1.15em;"
-              >O Modelo Didático tem a finalidade de definir a navegabilidade do aprendiz no conteúdo educacional modelado.</p>
+            <v-row
+              style="max-width: 640px; text-align: center; "
+              class="mx-auto"
+            >
+              <p style="text-align: left; font-size: 1.15em;">
+                O Modelo Didático tem a finalidade de definir a navegabilidade
+                do aprendiz no conteúdo educacional modelado.
+              </p>
             </v-row>
           </v-col>
         </v-row>
@@ -138,7 +192,10 @@
           <v-col cols="4"></v-col>
           <v-col cols="5" class="d-flex justify-start">
             <p style="text-align: left;">
-              <span>Marcus Vinicius Ribeiro de Carvalho - mvcarvalhopi@ctu.uespi.br</span>
+              <span
+                >Marcus Vinicius Ribeiro de Carvalho -
+                mvcarvalhopi@ctu.uespi.br</span
+              >
               <br />
               <span>Ellem Francine Barbosa - francine@usp.br</span>
             </p>
@@ -153,7 +210,9 @@
           <v-col cols="4"></v-col>
           <v-col cols="5" class="d-flex justify-start">
             <p style="text-align: left;">
-              <span>Matheus William Gomes dos Santos - matheuswg99@gmail.com</span>
+              <span
+                >Matheus William Gomes dos Santos - matheuswg99@gmail.com</span
+              >
               <br />
               <span>Vitor Azevedo</span>
             </p>
@@ -224,40 +283,40 @@
 </template>
 
 <script>
-export default {
-  name: "Home",
-  data() {
-    return {
-      dialogMessage: false,
-      messageClass: "",
-      messageTitle: "",
-      message: "",
-      atual_page: "",
-      tab: "",
-      pages: [
-        {
-          title: "Educom Tool!",
-          subtitle: "Educational content modelling",
-          img_src: require("@/assets/home/bg1.jpg"),
-        },
-        {
-          title: "Projeto",
-          subtitle: "",
-          img_src: require("@/assets/home/bg2.jpg"),
-        },
-        {
-          title: "Equipe",
-          subtitle: "",
-          img_src: require("@/assets/home/bg3.jpg"),
-        },
-      ],
-    };
-  },
-  created: function () {
-    this.atual_page = this.pages[0];
-  },
-};
+  export default {
+    name: "Home",
+    data() {
+      return {
+        dialogMessage: false,
+        playing: false,
+        messageClass: "",
+        messageTitle: "",
+        message: "",
+        atual_page: "",
+        tab: "",
+        pages: [
+          {
+            title: "Educom Tool!",
+            subtitle: "Educational content modelling",
+            img_src: require("@/assets/home/bg1.jpg"),
+          },
+          {
+            title: "Projeto",
+            subtitle: "",
+            img_src: require("@/assets/home/bg2.jpg"),
+          },
+          {
+            title: "Equipe",
+            subtitle: "",
+            img_src: require("@/assets/home/bg3.jpg"),
+          },
+        ],
+      };
+    },
+    created: function() {
+      this.atual_page = this.pages[0];
+    },
+  };
 </script>
 
-<style>
-</style>
+<style></style>

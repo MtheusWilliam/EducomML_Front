@@ -17,7 +17,10 @@
             required
           ></v-text-field>
 
-          <v-text-field v-model="moduloSubtitle" label="Subtítulo do módulo"></v-text-field>
+          <v-text-field
+            v-model="moduloSubtitle"
+            label="Subtítulo do módulo"
+          ></v-text-field>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -36,101 +39,93 @@
 </template>
 
 <script>
-import axios from "axios";
-export default {
-  name: "ModuloDialog",
-  props: ["domain", "module", "dialog"],
-  data: () => ({
-    valid: true,
-    moduloTitle: "",
-    moduloTitleRules: [
-      (v) => !!v || "É necessário descrever o título do submódulo",
-      (v) =>
-        (v && v.length <= 100) ||
-        "O título do módulo deve ter no máximo 100 caracteres",
-    ],
-    moduloSubtitle: "",
-    select: null,
-    newItems: [],
-    checkbox: false,
-    modulos: "",
-  }),
-  watch: {
-    dialog: function () {
+  import Api from "@/services/Api";
+  export default {
+    name: "ModuloDialog",
+    props: ["domain", "module", "dialog"],
+    data: () => ({
+      valid: true,
+      moduloTitle: "",
+      moduloTitleRules: [
+        (v) => !!v || "É necessário descrever o título do submódulo",
+        (v) =>
+          (v && v.length <= 100) ||
+          "O título do módulo deve ter no máximo 100 caracteres",
+      ],
+      moduloSubtitle: "",
+      select: null,
+      newItems: [],
+      checkbox: false,
+      modulos: "",
+    }),
+    watch: {
+      dialog: function() {
+        this.getModulo();
+      },
+      module: function() {
+        this.$refs.form.reset();
+        this.getModulo();
+      },
+    },
+    mounted: function() {
       this.getModulo();
+      this.$refs.form.resetValidation();
     },
-    module: function () {
-      this.$refs.form.reset();
-      this.getModulo();
-    },
-  },
-  mounted: function () {
-    this.getModulo();
-    this.$refs.form.resetValidation();
-  },
-  methods: {
-    getModulo() {
-      var vm = this;
-      this.$nextTick(function () {
-        vm.moduloTitle = vm.module.namemodule;
-        vm.moduloSubtitle = vm.module.subtitle;
-      });
-    },
-    async postModulo() {
-      // var vm = this;
-      await axios
-        .post(
-          `http://localhost:8000/module/`,
-          {
+    methods: {
+      getModulo() {
+        var vm = this;
+        this.$nextTick(function() {
+          vm.moduloTitle = vm.module.namemodule;
+          vm.moduloSubtitle = vm.module.subtitle;
+        });
+      },
+      async postModulo() {
+        // var vm = this;
+        await Api()
+          .post(`/module/`, {
             fkidmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
             idknowledgedomain: this.domain.url,
-          },
-          { auth: { username: "admin", password: "admin" } }
-        )
-        .then(function (/*resposta*/) {
-          /*vm.moduloTitle = resposta.data.namemodule;
+          })
+          .then(function(/*resposta*/) {
+            /*vm.moduloTitle = resposta.data.namemodule;
           vm.subTitle = resposta.data.subtitle;*/
-        });
-    },
-    async putModulo() {
-      var vm = this;
-      await axios
-        .put(
-          "http://127.0.0.1:8000/module/" + this.module.idmodule + "/",
-          {
+          });
+      },
+      async putModulo() {
+        var vm = this;
+        await Api()
+          .put("/module/" + this.module.idmodule + "/", {
             fk_idmodule: null,
             namemodule: this.moduloTitle,
             subtitle: this.moduloSubtitle,
             idknowledgedomain: this.domain.url,
-          },
-          { auth: { username: "admin", password: "admin" } }
-        )
-        .then(function (resposta) {
-          vm.moduloTitle = resposta.data.namemodule;
-          vm.moduloSubtitle = resposta.data.subtitle;
-        });
-    },
-    async validate() {
-      if (this.$refs.form.validate()) {
-        this.$refs.form.validate();
-        if (this.module === "") {
-          await this.postModulo();
-        } else {
-          await this.putModulo();
+          })
+          .then(function(resposta) {
+            vm.moduloTitle = resposta.data.namemodule;
+            vm.moduloSubtitle = resposta.data.subtitle;
+          });
+      },
+      async validate() {
+        if (this.$refs.form.validate()) {
+          this.$refs.form.validate();
+          if (this.module === "") {
+            await this.postModulo();
+          } else {
+            await this.putModulo();
+          }
+          this.$emit("close_or_save", "save");
         }
-        this.$emit("close_or_save", "save");
-      }
-      this.$refs.form.reset();
+        this.$refs.form.reset();
+      },
+      reset() {
+        this.$emit("close_or_save", "close");
+        this.$refs.form.reset();
+      },
+      resetValidation() {
+        this.$refs.form.resetValidation();
+      },
     },
-    reset() {
-      this.$emit("close_or_save", "close");
-      this.$refs.form.reset();
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
-  },
-};
+  };
 </script>

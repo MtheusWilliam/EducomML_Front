@@ -2,7 +2,10 @@
   <v-card>
     <v-card-title style="background-color:purple; color:white;">
       <span class="headline">
-        <p>Defina as informações equivalentes aos conhecimentos prioritários desse conceito.</p>
+        <p>
+          Defina as informações equivalentes aos conhecimentos prioritários
+          desse conceito.
+        </p>
       </span>
     </v-card-title>
     <v-row class="mx-0 px-0">
@@ -15,7 +18,8 @@
               class="mt-9 ml-2"
               color="primary"
               @click="addPriorKnowledge()"
-            >mdi-plus-box</v-icon>
+              >mdi-plus-box</v-icon
+            >
           </v-btn>
         </v-row>
         <v-row
@@ -28,7 +32,7 @@
             <v-select
               v-model="priorControl[idPrior].fk_idconcept"
               :items="conceptsPrior"
-              :rules="[v => !!v || 'Necessário informar o conceito prévio']"
+              :rules="[(v) => !!v || 'Necessário informar o conceito prévio']"
               label="Conceito Prévio"
               style="margin:0px;"
               required
@@ -37,7 +41,9 @@
           <v-col cols="4">
             <v-text-field
               style="margin-top: -1px; margin-bottom: -10px;"
-              :rules="[v => !!v || 'Necessário informar identificador da prioridade']"
+              :rules="[
+                (v) => !!v || 'Necessário informar identificador da prioridade',
+              ]"
               v-model="priorControl[idPrior].namepriorknowledge"
               label="Identificador da prioridade"
               required
@@ -47,7 +53,9 @@
             <v-select
               v-model="priorControl[idPrior].priorlevel"
               :items="priorLevels"
-              :rules="[v => !!v || 'Necessário informar o nível de prioridade']"
+              :rules="[
+                (v) => !!v || 'Necessário informar o nível de prioridade',
+              ]"
               label="Nível de prioridade"
               style="margin:0px;"
               required
@@ -60,7 +68,8 @@
                 class="mb-1"
                 color="red"
                 @click="deletaPriorKnowledge(idPrior)"
-              >mdi-minus-box</v-icon>
+                >mdi-minus-box</v-icon
+              >
             </v-btn>
           </v-col>
         </v-row>
@@ -80,8 +89,12 @@
     <div class="text-center">
       <v-dialog v-model="dialogError" width="500">
         <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
-          <v-card-text class="mt-3" style="font-size: 1.3em;">{{messageError}}</v-card-text>
+          <v-card-title class="headline red" primary-title style="color:white;"
+            >ALERTA!</v-card-title
+          >
+          <v-card-text class="mt-3" style="font-size: 1.3em;">{{
+            messageError
+          }}</v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -94,227 +107,216 @@
 </template>
 
 <script>
-export default {
-  name: "PriorKnowledgeDialogConcept",
-  props: ["domain", "dialog", "concept", "module"],
-  data: () => ({
-    valid: true,
-    auxConcept: "",
-    treeData: [],
-    selection: [],
-    elementData: [],
-    typesThreshold: [
-      {
-        text: "Porcentagem",
-        value: 1,
+  import Api from "@/services/Api";
+  export default {
+    name: "PriorKnowledgeDialogConcept",
+    props: ["domain", "dialog", "concept", "module"],
+    data: () => ({
+      valid: true,
+      auxConcept: "",
+      treeData: [],
+      selection: [],
+      elementData: [],
+      typesThreshold: [
+        {
+          text: "Porcentagem",
+          value: 1,
+        },
+        {
+          text: "Literal",
+          value: 2,
+        },
+      ],
+      valueTypes: ["Single", "Range"],
+      conceptsPrior: [],
+      priorControl: [],
+      priorLevels: [
+        {
+          text: "Obrigatório",
+          value: 1,
+        },
+        {
+          text: "Desejável",
+          value: 2,
+        },
+      ],
+      dialogError: false,
+      messageError: "",
+      newItems: [],
+      checkbox: true,
+    }),
+    watch: {
+      dialog: async function() {
+        this.priorControl = [];
+        if (this.concept) {
+          await this.setDomainVariables();
+          await this.getPriors();
+        }
       },
-      {
-        text: "Literal",
-        value: 2,
-      },
-    ],
-    valueTypes: ["Single", "Range"],
-    conceptsPrior: [],
-    priorControl: [],
-    priorLevels: [
-      {
-        text: "Obrigatório",
-        value: 1,
-      },
-      {
-        text: "Desejável",
-        value: 2,
-      },
-    ],
-    dialogError: false,
-    messageError: "",
-    newItems: [],
-    checkbox: true,
-  }),
-  watch: {
-    dialog: async function () {
+    },
+    mounted: async function() {
       this.priorControl = [];
       if (this.concept) {
         await this.setDomainVariables();
         await this.getPriors();
       }
     },
-  },
-  mounted: async function () {
-    this.priorControl = [];
-    if (this.concept) {
-      await this.setDomainVariables();
-      await this.getPriors();
-    }
-  },
-  methods: {
-    getPriors() {
-      var vm = this;
-      if (this.concept) {
-        this.auxConcept = this.domain.modules
-          .filter((m) => {
-            return m.url === this.concept.fk_idmodule;
-          })[0]
-          .concepts.filter((c) => {
-            return c.url === this.concept.url;
-          })[0];
-        if (vm.$store.state.priorConcepts === []) {
-          vm.$store.state.priorConcepts.forEach((prior) => {
-            this.priorControl.push({
-              namepriorknowledge: prior.namepriorknowledge,
-              priorlevel: prior.priorlevel,
-              fk_idconcept: prior.fk_idconcept,
-              url: prior.url,
-            });
-          });
-        } else {
-          if (this.auxConcept.targetpriorknowledge.length > 0) {
-            this.auxConcept.targetpriorknowledge.forEach((prior) => {
+    methods: {
+      getPriors() {
+        var vm = this;
+        if (this.concept) {
+          this.auxConcept = this.domain.modules
+            .filter((m) => {
+              return m.url === this.concept.fk_idmodule;
+            })[0]
+            .concepts.filter((c) => {
+              return c.url === this.concept.url;
+            })[0];
+          if (vm.$store.state.priorConcepts === []) {
+            vm.$store.state.priorConcepts.forEach((prior) => {
               this.priorControl.push({
                 namepriorknowledge: prior.namepriorknowledge,
-                priorlevel: parseInt(prior.priorlevel.split("/")[4]),
-                fk_idconcept: prior.fk_priorsourceconcept,
+                priorlevel: prior.priorlevel,
+                fk_idconcept: prior.fk_idconcept,
+                url: prior.url,
+              });
+            });
+          } else {
+            if (this.auxConcept.targetpriorknowledge.length > 0) {
+              this.auxConcept.targetpriorknowledge.forEach((prior) => {
+                this.priorControl.push({
+                  namepriorknowledge: prior.namepriorknowledge,
+                  priorlevel: parseInt(prior.priorlevel.split("/")[4]),
+                  fk_idconcept: prior.fk_priorsourceconcept,
+                  url: prior.url,
+                });
+              });
+            }
+          }
+        } else {
+          if (vm.$store.state.priorConcepts === []) {
+            vm.$store.state.priorConcepts.forEach((prior) => {
+              this.priorControl.push({
+                namepriorknowledge: prior.namepriorknowledge,
+                priorlevel: prior.priorlevel,
+                fk_idconcept: prior.fk_idconcept,
                 url: prior.url,
               });
             });
           }
         }
-      } else {
-        if (vm.$store.state.priorConcepts === []) {
-          vm.$store.state.priorConcepts.forEach((prior) => {
-            this.priorControl.push({
-              namepriorknowledge: prior.namepriorknowledge,
-              priorlevel: prior.priorlevel,
-              fk_idconcept: prior.fk_idconcept,
-              url: prior.url,
-            });
-          });
-        }
-      }
-    },
-    setDomainVariables() {
-      if (Array.isArray(this.module.concepts) && this.module.concepts.length) {
-        for (var i = 0; i < this.module.concepts.length; i++) {
-          if (
-            !this.concept ||
-            this.module.concepts[i].url != this.concept.url
-          ) {
-            this.conceptsPrior.push({
-              text: this.module.concepts[i].nameconcept,
-              value: this.module.concepts[i].url,
-            });
-          } else {
-            break;
-          }
-        }
-      }
-    },
-    async postPriorKnowledges() {
-      var vm = this;
-      var header = await this.$store.dispatch("getHeader");
-      if (this.concept) {
-        await this.priorControl.forEach(async (prior) => {
-          if (prior.url) {
-            await vm.axios
-              .put(
-                prior.url,
-                {
-                  namepriorknowledge: prior.namepriorknowledge,
-                  priorlevel:
-                    `http://127.0.0.1:8000/priorlevel/` +
-                    prior.priorlevel +
-                    `/`,
-                  fk_priorsourceconcept: prior.fk_idconcept,
-                  fk_priortargetconcept: vm.concept.url,
-                },
-                header
-              )
-              .then(function () {
-                vm.$store.dispatch("getPriorConcepts", []);
-              });
-          } else {
-            await vm.axios
-              .post(
-                `http://127.0.0.1:8000/priorknowledge/`,
-                {
-                  namepriorknowledge: prior.namepriorknowledge,
-                  priorlevel:
-                    `http://127.0.0.1:8000/priorlevel/` +
-                    prior.priorlevel +
-                    `/`,
-                  fk_priorsourceconcept: prior.fk_idconcept,
-                  fk_priortargetconcept: vm.concept.url,
-                },
-                header
-              )
-              .then(function () {
-                vm.$store.dispatch("getPriorConcepts", []);
-              });
-          }
-        });
-      } else {
-        this.$store.dispatch("getPriorConcepts", this.priorControl);
-      }
-    },
-    async addPriorKnowledge() {
-      this.priorControl.push({
-        namepriorknowledge: "",
-        priorlevel: "",
-        fk_idconcept: "",
-        url: "",
-      });
-    },
-    async deletaPriorKnowledge(idPrior) {
-      if (this.priorControl[idPrior].url) {
-        var header = await this.$store.dispatch("getHeader");
-        await this.axios.delete(this.priorControl[idPrior].url, header);
-      }
-      if (idPrior == 0) {
-        this.priorControl.shift();
-      } else {
-        this.priorControl.splice(idPrior, 1);
-      }
-    },
-    async validate() {
-      if (this.$refs.form.validate()) {
-        var auxLoopValidation = 1;
-        for (var m = 0; m < this.priorControl.length; m++) {
-          for (var n = 0; n < this.priorControl.length; n++) {
+      },
+      setDomainVariables() {
+        if (
+          Array.isArray(this.module.concepts) &&
+          this.module.concepts.length
+        ) {
+          for (var i = 0; i < this.module.concepts.length; i++) {
             if (
-              this.priorControl[m].fk_idconcept ===
-                this.priorControl[n].fk_idconcept &&
-              m !== n
+              !this.concept ||
+              this.module.concepts[i].url != this.concept.url
             ) {
-              auxLoopValidation = 0;
-              this.messageError =
-                "Não é possível definir um conhecimento prioritário mais de uma vez. Verifique os conhecimentos prioritários " +
-                (n + 1) +
-                " e " +
-                (m + 1) +
-                ".";
-              this.dialogError = true;
+              this.conceptsPrior.push({
+                text: this.module.concepts[i].nameconcept,
+                value: this.module.concepts[i].url,
+              });
+            } else {
               break;
             }
           }
         }
+      },
+      async postPriorKnowledges() {
+        var vm = this;
 
-        if (auxLoopValidation === 1) {
-          await this.postPriorKnowledges();
-          await this.resetVariables();
-          await this.$emit("close_or_save", "save");
+        if (this.concept) {
+          await this.priorControl.forEach(async (prior) => {
+            if (prior.url) {
+              await Api()
+                .put(prior.url, {
+                  namepriorknowledge: prior.namepriorknowledge,
+                  priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
+                  fk_priorsourceconcept: prior.fk_idconcept,
+                  fk_priortargetconcept: vm.concept.url,
+                })
+                .then(function() {
+                  vm.$store.dispatch("getPriorConcepts", []);
+                });
+            } else {
+              await Api()
+                .post(`/priorknowledge/`, {
+                  namepriorknowledge: prior.namepriorknowledge,
+                  priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
+                  fk_priorsourceconcept: prior.fk_idconcept,
+                  fk_priortargetconcept: vm.concept.url,
+                })
+                .then(function() {
+                  vm.$store.dispatch("getPriorConcepts", []);
+                });
+            }
+          });
+        } else {
+          this.$store.dispatch("getPriorConcepts", this.priorControl);
         }
-      }
+      },
+      async addPriorKnowledge() {
+        this.priorControl.push({
+          namepriorknowledge: "",
+          priorlevel: "",
+          fk_idconcept: "",
+          url: "",
+        });
+      },
+      async deletaPriorKnowledge(idPrior) {
+        if (this.priorControl[idPrior].url) {
+          await Api().delete(this.priorControl[idPrior].url);
+        }
+        if (idPrior == 0) {
+          this.priorControl.shift();
+        } else {
+          this.priorControl.splice(idPrior, 1);
+        }
+      },
+      async validate() {
+        if (this.$refs.form.validate()) {
+          var auxLoopValidation = 1;
+          for (var m = 0; m < this.priorControl.length; m++) {
+            for (var n = 0; n < this.priorControl.length; n++) {
+              if (
+                this.priorControl[m].fk_idconcept ===
+                  this.priorControl[n].fk_idconcept &&
+                m !== n
+              ) {
+                auxLoopValidation = 0;
+                this.messageError =
+                  "Não é possível definir um conhecimento prioritário mais de uma vez. Verifique os conhecimentos prioritários " +
+                  (n + 1) +
+                  " e " +
+                  (m + 1) +
+                  ".";
+                this.dialogError = true;
+                break;
+              }
+            }
+          }
+
+          if (auxLoopValidation === 1) {
+            await this.postPriorKnowledges();
+            await this.resetVariables();
+            await this.$emit("close_or_save", "save");
+          }
+        }
+      },
+      reset() {
+        this.$emit("close_or_save", "close");
+        this.priorControl = [];
+      },
+      resetVariables() {
+        this.priorControl = [];
+      },
+      resetValidation() {
+        this.$refs.form.resetValidation();
+      },
     },
-    reset() {
-      this.$emit("close_or_save", "close");
-      this.priorControl = [];
-    },
-    resetVariables() {
-      this.priorControl = [];
-    },
-    resetValidation() {
-      this.$refs.form.resetValidation();
-    },
-  },
-};
+  };
 </script>
