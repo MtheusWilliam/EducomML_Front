@@ -7,6 +7,7 @@ import VueAxios from 'vue-axios';
 import jwt_decode from 'jwt-decode';
 import Vuex from 'vuex';
 import Cookie from "js-cookie";
+import VueYouTubeEmbed from 'vue-youtube-embed'
 
 /*import ModelTutorial from './components/ModelTutorial';*/
 import UserHome from './components/UserHome';
@@ -30,6 +31,7 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(VueYouTubeEmbed);
 
 Vue.config.productionTip = false;
 

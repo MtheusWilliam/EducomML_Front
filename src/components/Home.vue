@@ -42,7 +42,7 @@
         <v-row
           align="start"
           class="black--text"
-          style="background-color: #E5E7E9 ;padding:4vh;width:101vw;"
+          style="background-color: white ;padding:4vh;width:101vw;"
           justify="center"
         >
           <h3>
@@ -60,6 +60,66 @@
             dark
             @click="$store.state.jwt ?$router.push({ path: '/home' }) :  $router.push({ path: '/login/ ' })"
           >Acesse aqui</v-btn>
+        </v-row>
+        <v-row
+          align="start"
+          class="black--text"
+          style="background-color: #B19114 ;padding:4vh;width:101vw;"
+          justify="center"
+        >
+          <h2>Abordagem de Modelagem de Conteúdo Educacional</h2>
+        </v-row>
+
+        <v-row
+          align="start"
+          class="black--text pb-0"
+          style="background-color: white; padding:4vh;width:101vw;"
+          justify="center"
+        >
+          <v-col cols="6">
+            <youtube video-id="FxT6cG9tUPI" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <h2 class="mt-1 mb-3">Diretriz de produção de mídia</h2>
+            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
+              <p
+                style="text-align: left; font-size: 1.15em;"
+              >Um conjunto de diretrizes são apresentadas nesse vídeo que ajudam o autor a produzir um conteúdo educacional mais adequado para uso em dispositivos móveis.</p>
+            </v-row>
+          </v-col>
+          <v-col cols="6">
+            <youtube video-id="SiuUfNyMyGk" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <h2 class="mt-1 mb-3">Modelo Conceitual</h2>
+            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
+              <p
+                style="text-align: left; font-size:1.15em;"
+              >A Educom.ml é composta por três modelos que estruturam o conteúdo educacional. Esse vídeo apresenta o Modelo Conceitual, que tem a finalidade de modelar um conjunto de conceitos de um domínio do conhecimento.</p>
+            </v-row>
+          </v-col>
+        </v-row>
+
+        <v-row
+          align="start"
+          class="black--text mt-0"
+          style="background-color: white; padding:4vh;width:101vw;"
+          justify="center"
+        >
+          <v-col cols="6">
+            <youtube video-id="ggVE8KayWi0" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <h2 class="mt-1 mb-3">Modelo Instrucional</h2>
+            <v-row style="max-width: 640px; text-align: center;" class="mx-auto">
+              <p
+                style="text-align: left; font-size: 1.15em;"
+              >Modelo Instrucional permite que o autor inclua no Modelo Conteitual informações complementares como descrição de conteitos, imagens, vídeos, exemplos exercícios e atividades avaliativas.</p>
+            </v-row>
+          </v-col>
+          <v-col cols="6">
+            <youtube video-id="ooiPjc0t3Ts" player-width="90%" @ready="ready" @playing="playing"></youtube>
+            <h2 class="mt-1 mb-3">Modelo Didático</h2>
+            <v-row style="max-width: 640px; text-align: center; " class="mx-auto">
+              <p
+                style="text-align: left; font-size: 1.15em;"
+              >O Modelo Didático tem a finalidade de definir a navegabilidade do aprendiz no conteúdo educacional modelado.</p>
+            </v-row>
+          </v-col>
         </v-row>
       </v-tab-item>
       <v-tab-item></v-tab-item>
