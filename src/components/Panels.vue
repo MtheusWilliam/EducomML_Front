@@ -2826,7 +2826,10 @@
       },
       setmobilemedia(valueMobileMedia, valueOptionCall, valueType) {
         this.mobilemedia = valueMobileMedia;
-        console.log(this.mobilemedia, Api().defaults.baseURL + `mediatype/4/`);
+        console.log(
+          valueMobileMedia.fk_idmediatype ===
+            Api().defaults.baseURL + `mediatype/4/`
+        );
         this.objectFile = valueOptionCall;
         this.type = valueType;
 
@@ -3097,7 +3100,6 @@
       },
       mobileMediasInformationItem(concept) {
         var mobilesfinded = [];
-        console.log("função");
         concept.informationitems.forEach((info) => {
           if (
             info.fk_informationitemtype !==
