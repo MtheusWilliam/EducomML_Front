@@ -14,8 +14,6 @@ var store = new Vuex.Store({
       refreshJWT: "/api-token-refresh/",
     },
     priorConcepts: [],
-    baseurl: "http://127.0.0.1:8000",
-    //baseurl: "https://educomml-back.herokuapp.com/",
   },
   mutations: {
     updateToken(state, newToken) {
