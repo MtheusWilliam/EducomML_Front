@@ -86,10 +86,6 @@
       </v-form>
     </v-row>
     <v-card-actions>
-      <v-btn color="yellow" height="49" dark large @click="teste()">
-        Teste
-        <v-icon dark right>mdi-close</v-icon>
-      </v-btn>
       <v-spacer></v-spacer>
       <v-btn color="red" height="49" dark large @click="reset">
         Cancelar
@@ -406,10 +402,6 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    teste() {
-      console.log("teste", this.auxTargetConceptsPrior[0].moduloConcepts);
-    },
-
     alterTargetControl(idPrior, urlConceito) {
       var auxUrlModule = "";
       this.auxTargetConceptsPrior.forEach((element) => {
