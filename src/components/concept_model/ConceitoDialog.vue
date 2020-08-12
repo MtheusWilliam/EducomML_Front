@@ -27,17 +27,11 @@
                   dark
                   small
                   @click="openDidaticDialog('priorConcept')"
-                  >Conhecimentos Prévios</v-btn
-                >
+                >Conhecimentos Prévios</v-btn>
               </v-col>
             </v-row>
             <div>
-              <v-app-bar
-                color="#D2A64D"
-                dense="dense"
-                dark="dark"
-                height="45px"
-              >
+              <v-app-bar color="#D2A64D" dense="dense" dark="dark" height="45px">
                 <v-toolbar-title style="font-size:1.2em;">
                   <strong>Lista de relacionamentos</strong>
                 </v-toolbar-title>
@@ -66,8 +60,7 @@
                     class="mb-1"
                     color="primary"
                     @click="addRelacao()"
-                    >mdi-plus-box</v-icon
-                  >
+                  >mdi-plus-box</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
@@ -112,8 +105,7 @@
                         class="mb-1"
                         color="red"
                         @click="deletaRelacao(i)"
-                        >mdi-minus-box</v-icon
-                      >
+                      >mdi-minus-box</v-icon>
                     </v-btn>
                   </v-col>
                 </v-row>
@@ -123,23 +115,11 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="red"
-            height="49"
-            dark="dark"
-            large="large"
-            @click="reset"
-          >
+          <v-btn color="red" height="49" dark="dark" large="large" @click="reset">
             Cancelar
             <v-icon dark="dark" right="right">mdi-close</v-icon>
           </v-btn>
-          <v-btn
-            color="success"
-            height="49"
-            dark="dark"
-            large="large"
-            @click="validate"
-          >
+          <v-btn color="success" height="49" dark="dark" large="large" @click="validate">
             Salvar
             <v-icon dark="dark" right="right">mdi-content-save</v-icon>
           </v-btn>
@@ -150,267 +130,267 @@
 </template>
 
 <script>
-  import Api from "@/services/Api";
-  export default {
-    name: "ConceitoDialog",
-    props: ["domain", "module", "concept", "dialog"],
-    data: () => ({
-      conceitoDialogHeader1: "Edite o conceito selecionado.",
-      conceitoDialogHeader2:
-        "Defina o conceito do módulo e seu(s) relacionamento(s).",
-      alert: "",
-      auxSelectTeste: "",
-      auxConceito: "",
-      relationForControl: [],
-      valid: true,
-      targetconcepts: [],
-      conceptSelect: [""],
-      conceptName: "",
-      conceptNameRules: [
-        (v) => !!v || "É necessário descrever o nome do conceito",
-        (v) =>
-          (v && v.length <= 100) ||
-          "Nome do conceito deve ter no máximo 100 caracteres",
-      ],
-      relacaoName: [""],
-      relacaoNameRules: [
-        (v) => !!v || "Necessário descrever o nome da relação",
-        (v) =>
-          (v && v.length <= 100) ||
-          "O nome da relação deve ter no máximo 100 caracteres",
-      ],
-      relacaoType: [""],
-      relacaoTypes: ["typeOf", "partOf"],
-      priorKnowledge: 2,
-      priorKnowledgeItems: [
-        {
-          text: "Sim",
-          value: 1,
-        },
-        {
-          text: "Não",
-          value: 2,
-        },
-      ],
-      priorKnowledgeName: "",
-      priorKnowledgeNameRules: [
-        (v) => !!v || "Necessário descrever identificador para a prioridade",
-        (v) =>
-          (v && v.length <= 100) ||
-          "O identificador da prioridade deve ter no máximo 100 caracteres",
-      ],
-      priorLevel: "",
-      priorLevelItems: [
-        {
-          text: "Obrigatório",
-          value: 1,
-        },
-        {
-          text: "Desejável",
-          value: 2,
-        },
-      ],
-    }),
-    watch: {
-      dialog: function() {
-        this.getConceito();
+import Api from "@/services/Api";
+export default {
+  name: "ConceitoDialog",
+  props: ["domain", "module", "concept", "dialog"],
+  data: () => ({
+    conceitoDialogHeader1: "Edite o conceito selecionado.",
+    conceitoDialogHeader2:
+      "Defina o conceito do módulo e seu(s) relacionamento(s).",
+    alert: "",
+    auxSelectTeste: "",
+    auxConceito: "",
+    relationForControl: [],
+    valid: true,
+    targetconcepts: [],
+    conceptSelect: [""],
+    conceptName: "",
+    conceptNameRules: [
+      (v) => !!v || "É necessário descrever o nome do conceito",
+      (v) =>
+        (v && v.length <= 100) ||
+        "Nome do conceito deve ter no máximo 100 caracteres",
+    ],
+    relacaoName: [""],
+    relacaoNameRules: [
+      (v) => !!v || "Necessário descrever o nome da relação",
+      (v) =>
+        (v && v.length <= 100) ||
+        "O nome da relação deve ter no máximo 100 caracteres",
+    ],
+    relacaoType: [""],
+    relacaoTypes: ["typeOf", "partOf"],
+    priorKnowledge: 2,
+    priorKnowledgeItems: [
+      {
+        text: "Sim",
+        value: 1,
       },
-      module: function() {
-        this.getConceito();
+      {
+        text: "Não",
+        value: 2,
       },
-    },
-    mounted: function() {
+    ],
+    priorKnowledgeName: "",
+    priorKnowledgeNameRules: [
+      (v) => !!v || "Necessário descrever identificador para a prioridade",
+      (v) =>
+        (v && v.length <= 100) ||
+        "O identificador da prioridade deve ter no máximo 100 caracteres",
+    ],
+    priorLevel: "",
+    priorLevelItems: [
+      {
+        text: "Obrigatório",
+        value: 1,
+      },
+      {
+        text: "Desejável",
+        value: 2,
+      },
+    ],
+  }),
+  watch: {
+    dialog: function () {
       this.getConceito();
-      this.$refs.form.resetValidation();
     },
-    methods: {
-      getConceito() {
-        var vm = this;
-        this.$nextTick(function() {
-          vm.conceptName = vm.concept.nameconcept;
-        });
-        this.targetconcepts = [];
+    module: function () {
+      this.getConceito();
+    },
+  },
+  mounted: function () {
+    this.getConceito();
+    this.$refs.form.resetValidation();
+  },
+  methods: {
+    getConceito() {
+      var vm = this;
+      this.$nextTick(function () {
+        vm.conceptName = vm.concept.nameconcept;
+      });
+      this.targetconcepts = [];
 
-        if (this.domain.modules) {
-          this.domain.modules.forEach((module) => {
-            if (module.concepts) {
-              module.concepts.forEach((moduleConcept) => {
-                if (!this.concept || this.concept.url !== moduleConcept.url) {
-                  this.targetconcepts.push({
-                    text: moduleConcept.nameconcept,
-                    value: moduleConcept,
-                  });
-                }
-              });
-            }
-            if (module.submodules) {
-              module.submodules.forEach((submodule) => {
-                if (submodule.concepts) {
-                  submodule.concepts.forEach((submoduleConcept) => {
-                    if (
-                      !this.concept ||
-                      this.concept.url !== submoduleConcept.url
-                    ) {
-                      this.targetconcepts.push({
-                        text: submoduleConcept.nameconcept,
-                        value: submoduleConcept,
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-
-        if (this.concept !== "") {
-          if (this.concept.priorknowledge.length > 0) {
-            vm.priorKnowledge = 1;
-            vm.priorKnowledgeName = this.concept.priorknowledge[0].namepriorknowledge;
-            vm.priorLevel = parseInt(
-              this.concept.priorknowledge[0].priorlevel.split("/")[4]
-            );
-          } else {
-            vm.priorKnowledge = 2;
-          }
-          var i = 0;
-          this.concept.sourceconcept.forEach((element) => {
-            var conceptSelect = this.targetconcepts.find(function(conceito) {
-              return conceito.value.url === element.sourceconcept;
-            });
-            var auxConceptTarget = this.targetconcepts.find(function(conceito) {
-              return (
-                conceito.value.url ===
-                conceptSelect.value.sourceconcept[i].targetconcept
-              );
-            });
-            var type = "";
-            if (element.fk_referencetype.split("/")[4] == "1") {
-              type = "typeOf";
-            } else {
-              type = "partOf";
-            }
-            this.relationForControl.push({
-              conceptSelect: auxConceptTarget,
-              relacaoName: element.namereference,
-              relacaoType: type,
-              url: element.url,
-            });
-            i++;
-          });
-        } else {
-          vm.priorKnowledge = 2;
-        }
-      },
-      async altera_Cria_Conceito() {
-        var vm = this;
-        if (this.concept === "") {
-          await Api()
-            .post(`/concept/`, {
-              nameconcept: this.conceptName,
-              fk_idknowledgedomain: this.domain.url,
-              fk_idmodule: this.module.url,
-            })
-            .then(async function(resposta) {
-              vm.auxConceito = resposta.data.url;
-              if (vm.$store.state.priorConcepts === []) {
-                vm.$store.state.priorConcepts.forEach(async (prior) => {
-                  await Api()
-                    .post(`/priorknowledge/`, {
-                      namepriorknowledge: prior.namepriorknowledge,
-                      priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
-                      fk_fksourceconcept: prior.fk_idconcept,
-                      fk_priortargetconcept: resposta.data.url,
-                    })
-                    .then(function() {
-                      vm.$store.dispatch("getPriorConcepts", []);
-                    });
+      if (this.domain.modules) {
+        this.domain.modules.forEach((module) => {
+          if (module.concepts) {
+            module.concepts.forEach((moduleConcept) => {
+              if (!this.concept || this.concept.url !== moduleConcept.url) {
+                this.targetconcepts.push({
+                  text: moduleConcept.nameconcept,
+                  value: moduleConcept,
                 });
               }
             });
-        } else {
-          await Api().put("/concept/" + this.concept.idconcept + "/", {
-            nameconcept: this.conceptName,
-            fk_idknowledgedomain: this.domain.url,
-            fk_idmodule: this.module.url,
-          });
-        }
-      },
-      async altera_Cria_Relacoes() {
-        this.relationForControl.forEach(async (element) => {
-          if (element.url === null) {
-            var auxReferencia = 0;
-            if (element.relacaoType == "typeOf") {
-              auxReferencia = 1;
-            } else if (element.relacaoType == "partOf") {
-              auxReferencia = 2;
-            }
-            await Api().post(`/reference/`, {
-              namereference: element.relacaoName,
-              sourceconcept: this.auxConceito,
-              targetconcept: element.conceptSelect.url,
-              fk_referencetype: `/referencetype/` + auxReferencia + "/",
-            });
-          } else {
-            auxReferencia = 0;
-            if (element.relacaoType == "typeOf") {
-              auxReferencia = 1;
-            } else if (element.relacaoType == "partOf") {
-              auxReferencia = 2;
-            }
-            await Api().put(element.url, {
-              namereference: element.relacaoName,
-              sourceconcept: this.auxConceito,
-              targetconcept: element.conceptSelect.value.url,
-              fk_referencetype: `/referencetype/` + auxReferencia + "/",
+          }
+          if (module.submodules) {
+            module.submodules.forEach((submodule) => {
+              if (submodule.concepts) {
+                submodule.concepts.forEach((submoduleConcept) => {
+                  if (
+                    !this.concept ||
+                    this.concept.url !== submoduleConcept.url
+                  ) {
+                    this.targetconcepts.push({
+                      text: submoduleConcept.nameconcept,
+                      value: submoduleConcept,
+                    });
+                  }
+                });
+              }
             });
           }
         });
-      },
-      openDidaticDialog(dialog) {
-        this.$emit("openDidaticDialog", dialog);
-      },
-      async validate() {
-        if (this.$refs.form.validate()) {
-          //await this.$refs.form.validate();
-          await this.altera_Cria_Conceito();
-          await this.altera_Cria_Relacoes();
-          //await this.$refs.form.reset();
-          this.relationForControl = [];
-          this.resetVariables();
-          this.$emit("close_or_save", "save");
+      }
+
+      if (this.concept !== "") {
+        if (this.concept.targetpriorknowledge.length > 0) {
+          vm.priorKnowledge = 1;
+          vm.priorKnowledgeName = this.concept.targetpriorknowledge[0].namepriorknowledge;
+          vm.priorLevel = parseInt(
+            this.concept.targetpriorknowledge[0].priorlevel.split("/")[4]
+          );
+        } else {
+          vm.priorKnowledge = 2;
         }
-      },
-      reset() {
-        this.$refs.form.reset();
+        var i = 0;
+        this.concept.sourceconcept.forEach((element) => {
+          var conceptSelect = this.targetconcepts.find(function (conceito) {
+            return conceito.value.url === element.sourceconcept;
+          });
+          var auxConceptTarget = this.targetconcepts.find(function (conceito) {
+            return (
+              conceito.value.url ===
+              conceptSelect.value.sourceconcept[i].targetconcept
+            );
+          });
+          var type = "";
+          if (element.fk_referencetype.split("/")[4] == "1") {
+            type = "typeOf";
+          } else {
+            type = "partOf";
+          }
+          this.relationForControl.push({
+            conceptSelect: auxConceptTarget,
+            relacaoName: element.namereference,
+            relacaoType: type,
+            url: element.url,
+          });
+          i++;
+        });
+      } else {
+        vm.priorKnowledge = 2;
+      }
+    },
+    async altera_Cria_Conceito() {
+      var vm = this;
+      if (this.concept === "") {
+        await Api()
+          .post(`/concept/`, {
+            nameconcept: this.conceptName,
+            fk_idknowledgedomain: this.domain.url,
+            fk_idmodule: this.module.url,
+          })
+          .then(async function (resposta) {
+            vm.auxConceito = resposta.data.url;
+            if (vm.$store.state.priorConcepts === []) {
+              vm.$store.state.priorConcepts.forEach(async (prior) => {
+                await Api()
+                  .post(`/priorknowledge/`, {
+                    namepriorknowledge: prior.namepriorknowledge,
+                    priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
+                    fk_fksourceconcept: prior.fk_idconcept,
+                    fk_priortargetconcept: resposta.data.url,
+                  })
+                  .then(function () {
+                    vm.$store.dispatch("getPriorConcepts", []);
+                  });
+              });
+            }
+          });
+      } else {
+        await Api().put("/concept/" + this.concept.idconcept + "/", {
+          nameconcept: this.conceptName,
+          fk_idknowledgedomain: this.domain.url,
+          fk_idmodule: this.module.url,
+        });
+      }
+    },
+    async altera_Cria_Relacoes() {
+      this.relationForControl.forEach(async (element) => {
+        if (element.url === null) {
+          var auxReferencia = 0;
+          if (element.relacaoType == "typeOf") {
+            auxReferencia = 1;
+          } else if (element.relacaoType == "partOf") {
+            auxReferencia = 2;
+          }
+          await Api().post(`/reference/`, {
+            namereference: element.relacaoName,
+            sourceconcept: this.auxConceito,
+            targetconcept: element.conceptSelect.url,
+            fk_referencetype: `/referencetype/` + auxReferencia + "/",
+          });
+        } else {
+          auxReferencia = 0;
+          if (element.relacaoType == "typeOf") {
+            auxReferencia = 1;
+          } else if (element.relacaoType == "partOf") {
+            auxReferencia = 2;
+          }
+          await Api().put(element.url, {
+            namereference: element.relacaoName,
+            sourceconcept: this.auxConceito,
+            targetconcept: element.conceptSelect.value.url,
+            fk_referencetype: `/referencetype/` + auxReferencia + "/",
+          });
+        }
+      });
+    },
+    openDidaticDialog(dialog) {
+      this.$emit("openDidaticDialog", dialog);
+    },
+    async validate() {
+      if (this.$refs.form.validate()) {
+        //await this.$refs.form.validate();
+        await this.altera_Cria_Conceito();
+        await this.altera_Cria_Relacoes();
+        //await this.$refs.form.reset();
         this.relationForControl = [];
         this.resetVariables();
-        this.$emit("close_or_save", "close");
-      },
-      resetValidation() {
-        this.$refs.form.resetValidation();
-      },
-      addRelacao() {
-        this.relationForControl.push({
-          conceptSelect: null,
-          relacaoName: null,
-          relacaoType: null,
-          url: null,
-        });
-      },
-      deletaRelacao(idRelacao) {
-        if (this.relationForControl[idRelacao].url !== null) {
-          Api().delete(this.relationForControl[idRelacao].url);
-        }
-        if (idRelacao == 0) {
-          this.relationForControl.shift();
-        } else {
-          this.relationForControl.splice(idRelacao, 1);
-        }
-      },
-      resetVariables() {
-        this.$store.dispatch("getPriorConcepts", []);
-      },
+        this.$emit("close_or_save", "save");
+      }
     },
-  };
+    reset() {
+      this.$refs.form.reset();
+      this.relationForControl = [];
+      this.resetVariables();
+      this.$emit("close_or_save", "close");
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    },
+    addRelacao() {
+      this.relationForControl.push({
+        conceptSelect: null,
+        relacaoName: null,
+        relacaoType: null,
+        url: null,
+      });
+    },
+    deletaRelacao(idRelacao) {
+      if (this.relationForControl[idRelacao].url !== null) {
+        Api().delete(this.relationForControl[idRelacao].url);
+      }
+      if (idRelacao == 0) {
+        this.relationForControl.shift();
+      } else {
+        this.relationForControl.splice(idRelacao, 1);
+      }
+    },
+    resetVariables() {
+      this.$store.dispatch("getPriorConcepts", []);
+    },
+  },
+};
 </script>
