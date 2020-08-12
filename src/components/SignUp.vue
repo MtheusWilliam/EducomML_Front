@@ -165,14 +165,23 @@
     },
     methods: {
       async postUser() {
-        await Api().post("/users/", {
-          username: this.username.toLowerCase(),
-          email: this.email,
-          first_name: this.name,
-          last_name: this.lastname,
-          password: this.password,
-          is_active: false,
-        });
+        await Api().post(
+          "/users/",
+          {
+            username: this.username.toLowerCase(),
+            email: this.email,
+            first_name: this.name,
+            last_name: this.lastname,
+            password: this.password,
+            is_active: false,
+          },
+          {
+            auth: {
+              username: "admin",
+              password: "admin",
+            },
+          }
+        );
       },
       async validate() {
         if (this.$refs.form.validate()) {
