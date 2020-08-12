@@ -148,6 +148,7 @@ export default {
   props: ["domain", "dialog"],
   data: () => ({
     valid: true,
+    controlsave: 0,
     treeData: [],
     selection: [],
     elementData: [],
@@ -388,6 +389,7 @@ export default {
           1
         );
       }
+      this.controlsave++;
     },
     async addTargetPriorKnowledge() {
       this.priorControl.push({
@@ -409,18 +411,61 @@ export default {
       if (this.$refs.form.validate()) {
         var auxLoopValidation = 1;
         for (var m = 0; m < this.priorControl.length; m++) {
-          for (var n = 0; n < this.priorControl.length; n++) {
+          if (this.priorControl[m].priorknowledges.length === 0) {
+            auxLoopValidation = 0;
+            this.messageError =
+              "Não é possível definir conceitos alvo sem declarar seu(s) respectivo(s) conhecimentos prévios. Verifique o conceito alvo " +
+              +(m + 1) +
+              ".";
+            this.dialogError = true;
+            break;
+          }
+          for (
+            var n = 0;
+            n < this.priorControl[m].priorknowledges.length;
+            n++
+          ) {
+            for (
+              var o = 0;
+              o < this.priorControl[m].priorknowledges.length;
+              o++
+            ) {
+              if (
+                this.priorControl[m].priorknowledges[n]
+                  .fk_priorsourceconcept ===
+                  this.priorControl[m].priorknowledges[o]
+                    .fk_priorsourceconcept &&
+                n !== o
+              ) {
+                auxLoopValidation = 0;
+                this.messageError =
+                  "Não é possível definir conhecimentos prévios iguais para o mesmo conceito. Verifique os conhecimentos prévios " +
+                  (n + 1) +
+                  " e " +
+                  (o + 1) +
+                  " do conceito " +
+                  (m + 1) +
+                  ".";
+                this.dialogError = true;
+                break;
+              }
+            }
+          }
+        }
+
+        for (m = 0; m < this.priorControl.length; m++) {
+          for (n = 0; n < this.priorControl[m].priorknowledges.length; n++) {
             if (
-              this.priorControl[m].fk_idconcept ===
-                this.priorControl[n].fk_idconcept &&
+              this.priorControl[m].fk_priortargetconcept ===
+                this.priorControl[n].fk_priortargetconcept &&
               m !== n
             ) {
               auxLoopValidation = 0;
               this.messageError =
-                "Não é possível definir um conhecimento prioritário mais de uma vez. Verifique os conhecimentos prioritários " +
-                (n + 1) +
-                " e " +
+                "Não é possível repetir conceitos alvo. Verifique os conceitos alvo " +
                 (m + 1) +
+                " e " +
+                (n + 1) +
                 ".";
               this.dialogError = true;
               break;
@@ -436,7 +481,11 @@ export default {
       }
     },
     reset() {
-      this.$emit("close_or_save", "close");
+      if (this.controlsave > 0) {
+        this.$emit("close_or_save", "save");
+      } else {
+        this.$emit("close_or_save", "close");
+      }
       this.priorControl = [];
     },
     resetVariables() {
