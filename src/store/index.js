@@ -13,6 +13,7 @@ var store = new Vuex.Store({
       obtainJWT: "/api-token-auth/",
       refreshJWT: "/api-token-refresh/",
     },
+    actualKnowledge: localStorage.getItem("d"),
     priorConcepts: [],
   },
   mutations: {
@@ -34,8 +35,15 @@ var store = new Vuex.Store({
     setPriorConcepts(state, objPriorConcepts) {
       state.priorConcepts = objPriorConcepts;
     },
+    setActualKnowledge(state, idKnowledge) {
+      localStorage.setItem("d", idKnowledge);
+      state.actualKnowledge = idKnowledge;
+    }
   },
   actions: {
+    getActualKnowledge(state, idKnowledge) {
+      this.commit("setActualKnowledge", idKnowledge);
+    },
     async obtainToken(state, payload) {
       var name = payload.username;
       await Api()

@@ -2321,12 +2321,12 @@ export default {
       }
     },
     elementToScroll: function () {
-      var auxQuerySelector =
-        "#" +
-        this.elementToScroll.url.split("/")[3] +
-        this.elementToScroll.url.split("/")[4];
-
       if (this.elementToScroll) {
+        var auxQuerySelector =
+          "#" +
+          this.elementToScroll.url.split("/")[3] +
+          this.elementToScroll.url.split("/")[4];
+
         if (this.elementToScroll.type === "module") {
           this.vModelPanelModules.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "submodule") {
