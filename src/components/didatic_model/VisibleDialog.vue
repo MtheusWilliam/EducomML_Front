@@ -52,7 +52,18 @@
             selectable
             selected-color="success"
             open-all
-          ></v-treeview>
+          >
+            <template v-slot:prepend="{ item }">
+              <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
+              <v-avatar v-else color="black" size="25" class="mr-2">
+                <span class="white--text" style="font-size:0.7em;">
+                  {{
+                  item.avatar
+                  }}
+                </span>
+              </v-avatar>
+            </template>
+          </v-treeview>
         </v-card-text>
       </v-col>
     </v-row>
@@ -102,6 +113,20 @@ export default {
     messageError: "",
     newItems: [],
     checkbox: true,
+    fileTypesIcon: [
+      "mdi-file-image",
+      "mdi-file-video",
+      "mdi-file-music",
+      "mdi-file-document",
+      "mdi-link-variant",
+    ],
+    instrucTypesIcon: [
+      "mdi-clipboard-text",
+      "mdi-clipboard-check",
+      "mdi-account-switch",
+      "mdi-lightbulb-outline",
+    ],
+    mobilemediaTypeLabel: ["Imagem", "Vídeo", "Áudio", "Texto", "Link"],
   }),
   watch: {
     domain: async function () {
@@ -142,6 +167,9 @@ export default {
             id: mobilemedia.url,
             name: "[MOBILEMEDIA] " + mobilemedia.label,
             visible: mobilemedia.visible,
+            icon: this.fileTypesIcon[
+              mobilemedia.fk_idmediatype.split("/")[4] - 1
+            ],
           };
           this.treeData.push(object);
           if (object.visible) {
@@ -159,6 +187,10 @@ export default {
               id: instructionalelement.url,
               name: "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
               visible: instructionalelement.visible,
+              icon: this.instrucTypesIcon[
+                instructionalelement.fk_instructionalelementtype.split("/")[4] -
+                  1
+              ],
             };
             this.treeData.push(object);
             if (object.visible) {
@@ -176,6 +208,7 @@ export default {
               id: modulo.url,
               name: "[MODULO] " + modulo.namemodule,
               visible: modulo.visible,
+              avatar: "MD",
               children: [],
             };
             this.treeData.push(object);
@@ -192,6 +225,9 @@ export default {
                   id: mobilemedia.url,
                   name: "[MOBILEMEDIA] " + mobilemedia.label,
                   visible: mobilemedia.visible,
+                  icon: this.fileTypesIcon[
+                    mobilemedia.fk_idmediatype.split("/")[4] - 1
+                  ],
                 };
                 this.treeData[indexmodulo].children.push(object);
                 if (object.visible) {
@@ -213,6 +249,11 @@ export default {
                     name:
                       "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
                     visible: instructionalelement.visible,
+                    icon: this.instrucTypesIcon[
+                      instructionalelement.fk_instructionalelementtype.split(
+                        "/"
+                      )[4] - 1
+                    ],
                   };
                   this.treeData[indexmodulo].children.push(object);
                   if (object.visible) {
@@ -230,6 +271,7 @@ export default {
                   id: submodulo.url,
                   name: "[SUBMODULO] " + submodulo.namemodule,
                   visible: submodulo.visible,
+                  avatar: "SM",
                   children: [],
                 };
                 this.treeData[indexmodulo].children.push(object);
@@ -247,6 +289,9 @@ export default {
                       id: mobilemedia.url,
                       name: "[MOBILEMEDIA] " + mobilemedia.label,
                       visible: mobilemedia.visible,
+                      icon: this.fileTypesIcon[
+                        mobilemedia.fk_idmediatype.split("/")[4] - 1
+                      ],
                     };
                     this.treeData[indexmodulo].children[
                       indexsubmodulo
@@ -267,6 +312,11 @@ export default {
                           "[INSTRUCTIONAL ELEMENT] " +
                           instructionalelement.label,
                         visible: instructionalelement.visible,
+                        icon: this.instrucTypesIcon[
+                          instructionalelement.fk_instructionalelementtype.split(
+                            "/"
+                          )[4] - 1
+                        ],
                       };
                       this.treeData[indexmodulo].children[
                         indexsubmodulo
@@ -285,6 +335,7 @@ export default {
                       id: conceito.url,
                       name: "[CONCEITO] " + conceito.nameconcept,
                       visible: conceito.visible,
+                      avatar: "CC",
                       children: [],
                     };
                     this.treeData[indexmodulo].children[
@@ -299,47 +350,37 @@ export default {
                       this.selection.push(object);
                     }
 
-                    if (conceito.mobilemedias.length) {
-                      conceito.mobilemedias.forEach((mobilemedia) => {
-                        var object = {
-                          id: mobilemedia.url,
-                          name: "[MOBILEMEDIA] " + mobilemedia.label,
-                          visible: mobilemedia.visible,
-                        };
-                        this.treeData[indexmodulo].children[
-                          indexsubmodulo
-                        ].children[indexconceito].children.push(object);
-                        if (object.visible) {
-                          this.selection.push(object);
+                    if (conceito.informationitems.length) {
+                      conceito.informationitems.forEach((infoitem) => {
+                        if (
+                          infoitem.fk_informationitemtype !==
+                          Api().defaults.baseURL + "informationitemtype/4/"
+                        ) {
+                          infoitem.mobilemedias.forEach((mobilemedia) => {
+                            var object = {
+                              id: mobilemedia.url,
+                              name: "[MOBILEMEDIA] " + mobilemedia.label,
+                              visible: mobilemedia.visible,
+                              icon: this.fileTypesIcon[
+                                mobilemedia.fk_idmediatype.split("/")[4] - 1
+                              ],
+                            };
+                            this.treeData[indexmodulo].children[
+                              indexsubmodulo
+                            ].children[indexconceito].children.push(object);
+                            if (object.visible) {
+                              this.selection.push(object);
+                            }
+                          });
                         }
                       });
-                    }
-
-                    if (conceito.instructionalelements.length) {
-                      conceito.instructionalelements.forEach(
-                        (instructionalelement) => {
-                          var object = {
-                            id: instructionalelement.url,
-                            name:
-                              "[INSTRUCTIONAL ELEMENT] " +
-                              instructionalelement.label,
-                            visible: instructionalelement.visible,
-                          };
-                          this.treeData[indexmodulo].children[
-                            indexsubmodulo
-                          ].children[indexconceito].children.push(object);
-                          if (object.visible) {
-                            this.selection.push(object);
-                          }
-                        }
-                      );
                     }
 
                     if (conceito.informationitems.length) {
                       conceito.informationitems.forEach((procedure) => {
                         if (
                           procedure.fk_informationitemtype ===
-                          "/informationitemtype/4/"
+                          Api().defaults.baseURL + "informationitemtype/4/"
                         ) {
                           var object = {
                             id: procedure.url,
@@ -355,6 +396,31 @@ export default {
                           }
                         }
                       });
+                    }
+
+                    if (conceito.instructionalelements.length) {
+                      conceito.instructionalelements.forEach(
+                        (instructionalelement) => {
+                          var object = {
+                            id: instructionalelement.url,
+                            name:
+                              "[INSTRUCTIONAL ELEMENT] " +
+                              instructionalelement.label,
+                            visible: instructionalelement.visible,
+                            icon: this.instrucTypesIcon[
+                              instructionalelement.fk_instructionalelementtype.split(
+                                "/"
+                              )[4] - 1
+                            ],
+                          };
+                          this.treeData[indexmodulo].children[
+                            indexsubmodulo
+                          ].children[indexconceito].children.push(object);
+                          if (object.visible) {
+                            this.selection.push(object);
+                          }
+                        }
+                      );
                     }
 
                     indexconceito++;
@@ -374,6 +440,7 @@ export default {
                   id: conceito.url,
                   name: "[CONCEITO] " + conceito.nameconcept,
                   visible: conceito.visible,
+                  avatar: "CC",
                   children: [],
                 };
                 this.treeData[indexmodulo].children.push(object);
@@ -385,47 +452,38 @@ export default {
                 if (object.visible) {
                   this.selection.push(object);
                 }
-                if (conceito.mobilemedias.length) {
-                  conceito.mobilemedias.forEach((mobilemedia) => {
-                    var object = {
-                      id: mobilemedia.url,
-                      name: "[MOBILEMEDIA] " + mobilemedia.label,
-                      visible: mobilemedia.visible,
-                    };
-                    this.treeData[indexmodulo].children[
-                      indexconceito
-                    ].children.push(object);
-                    if (object.visible) {
-                      this.selection.push(object);
+
+                if (conceito.informationitems.length) {
+                  conceito.informationitems.forEach((infoitem) => {
+                    if (
+                      infoitem.fk_informationitemtype !==
+                      Api().defaults.baseURL + "informationitemtype/4/"
+                    ) {
+                      infoitem.mobilemedias.forEach((mobilemedia) => {
+                        var object = {
+                          id: mobilemedia.url,
+                          name: "[MOBILEMEDIA] " + mobilemedia.label,
+                          visible: mobilemedia.visible,
+                          icon: this.fileTypesIcon[
+                            mobilemedia.fk_idmediatype.split("/")[4] - 1
+                          ],
+                        };
+                        this.treeData[indexmodulo].children[
+                          indexconceito
+                        ].children.push(object);
+                        if (object.visible) {
+                          this.selection.push(object);
+                        }
+                      });
                     }
                   });
-                }
-
-                if (conceito.instructionalelements.length) {
-                  conceito.instructionalelements.forEach(
-                    (instructionalelement) => {
-                      var object = {
-                        id: instructionalelement.url,
-                        name:
-                          "[INSTRUCTIONAL ELEMENT] " +
-                          instructionalelement.label,
-                        visible: instructionalelement.visible,
-                      };
-                      this.treeData[indexmodulo].children[
-                        indexconceito
-                      ].children.push(object);
-                      if (object.visible) {
-                        this.selection.push(object);
-                      }
-                    }
-                  );
                 }
 
                 if (conceito.informationitems.length) {
                   conceito.informationitems.forEach((procedure) => {
                     if (
                       procedure.fk_informationitemtype ===
-                      "/informationitemtype/4/"
+                      Api().defaults.baseURL + "informationitemtype/4/"
                     ) {
                       var object = {
                         id: procedure.url,
@@ -440,6 +498,31 @@ export default {
                       }
                     }
                   });
+                }
+
+                if (conceito.instructionalelements.length) {
+                  conceito.instructionalelements.forEach(
+                    (instructionalelement) => {
+                      var object = {
+                        id: instructionalelement.url,
+                        name:
+                          "[INSTRUCTIONAL ELEMENT] " +
+                          instructionalelement.label,
+                        visible: instructionalelement.visible,
+                        icon: this.instrucTypesIcon[
+                          instructionalelement.fk_instructionalelementtype.split(
+                            "/"
+                          )[4] - 1
+                        ],
+                      };
+                      this.treeData[indexmodulo].children[
+                        indexconceito
+                      ].children.push(object);
+                      if (object.visible) {
+                        this.selection.push(object);
+                      }
+                    }
+                  );
                 }
                 indexconceito++;
               });
