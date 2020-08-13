@@ -243,7 +243,6 @@ export default {
     },
     putDominio(idDomain) {
       this.$store.dispatch("getActualKnowledge", idDomain);
-      console.log(this.$store.state.actualKnowledge);
       this.$router.push({
         name: "create",
         params: {
