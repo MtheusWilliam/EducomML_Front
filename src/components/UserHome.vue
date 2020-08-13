@@ -9,7 +9,7 @@
       color="#B19114"
       dark
     >
-      <ListDomain :domains="dominios" />
+      <ListDomain :domains="filteredDomains" @emitDomains="setSearch" />
     </v-navigation-drawer>
     <!-- FORM DO DOMÍNIO -->
     <v-col class="mr-6">
@@ -20,9 +20,9 @@
           >
         </v-app-bar>
         <v-container>
-          <v-row v-if="dominios.length > 0" class="mb-6">
+          <v-row v-if="filteredDomains.length > 0" class="mb-6">
             <v-spacer></v-spacer>
-            <v-col cols="4" v-for="(dominio, i) in dominios" :key="i">
+            <v-col cols="4" v-for="(dominio, i) in filteredDomains" :key="i">
               <v-card>
                 <v-img
                   class="white--text align-end"
@@ -186,6 +186,7 @@
       ListDomain,
     },
     data: () => ({
+      search: "",
       valid: true,
       dialog: false,
       dialogLoading: false,
@@ -227,6 +228,18 @@
     }),
     mounted: function() {
       this.getDominios();
+    },
+    computed: {
+      filteredDomains() {
+        var temp = this.dominios.filter((domain) => {
+          return (
+            domain.nameknowledgedomain
+              .toLowerCase()
+              .indexOf(this.search.toLowerCase()) > -1
+          );
+        });
+        return temp;
+      },
     },
     methods: {
       async getDominios() {
@@ -322,6 +335,9 @@
       },
       resetValidation() {
         this.$refs.form.resetValidation();
+      },
+      setSearch(s) {
+        this.search = s;
       },
     },
   };

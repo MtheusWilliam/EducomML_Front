@@ -23,11 +23,18 @@
         hide-details
       ></v-text-field>
       <v-spacer></v-spacer>
-      <v-btn icon v-if="!searchBool" @click="searchBool = !searchBool">
+      <v-btn
+        icon
+        v-if="!searchBool"
+        @click="
+          searchBool = !searchBool;
+          search = '';
+        "
+      >
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-list-item>
-    <v-list-item v-for="domain in filteredDomains" :key="domain.url">
+    <v-list-item v-for="domain in domains" :key="domain.url">
       <v-list-item-content>
         <v-list-item-title>{{ domain.nameknowledgedomain }}</v-list-item-title>
         <v-list-item-subtitle>{{ domain.subtitle }}</v-list-item-subtitle>
@@ -44,20 +51,9 @@
       searchBool: true,
       search: "",
     }),
-    computed: {
-      filteredDomains() {
-        return this.domains.filter((domain) => {
-          return (
-            domain.nameknowledgedomain
-              .toLowerCase()
-              .indexOf(this.search.toLowerCase()) > -1
-          );
-        });
-      },
-    },
     watch: {
       search() {
-        this.filteredDomains();
+        this.$emit("emitDomains", this.search);
       },
     },
   };
