@@ -53,11 +53,22 @@ export default {
   beforeCreate() {
     var vm = this;
 
-    Api()
-      .patch("/knowledgedomain/" + this.$route.params.idDomain + "/", {})
-      .then(function (resposta) {
-        vm.dominio = resposta.data;
-      });
+    if (this.$route.params.idDomain) {
+      Api()
+        .patch("/knowledgedomain/" + this.$route.params.idDomain + "/", {})
+        .then(function (resposta) {
+          vm.dominio = resposta.data;
+        });
+    } else {
+      Api()
+        .patch(
+          "/knowledgedomain/" + this.$store.state.actualKnowledge + "/",
+          {}
+        )
+        .then(function (resposta) {
+          vm.dominio = resposta.data;
+        });
+    }
   },
   props: [],
   methods: {

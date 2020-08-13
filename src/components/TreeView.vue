@@ -47,6 +47,8 @@
       :search="search"
       style="color: white; font-size: 0.1px; background-color: #EFEEEC;"
       class="ml-4"
+      :open="open"
+      item-key="id"
     >
       <template v-slot:prepend="{ item }">
         <v-btn text @click="callScroll({ item })" @dblclick="callEdit({ item })">
@@ -72,6 +74,7 @@ export default {
   name: "TreeView",
   props: ["dominio"],
   data: () => ({
+    open: [],
     loading: false,
     search: null,
     stopDblclick: 0,
@@ -149,6 +152,7 @@ export default {
         avatar: "DM",
         children: [],
       });
+      this.open.push(this.dominio.url);
       if (this.dominio.mobilemedias.length) {
         this.dominio.mobilemedias.forEach((mobilemedia, imobilemedia) => {
           this.treeData[0].children.push({
@@ -196,6 +200,7 @@ export default {
               indexPanel: imodulo,
               children: [],
             });
+            this.open.push(modulo.url);
             if (modulo.mobilemedias.length) {
               modulo.mobilemedias.forEach((mobilemedia, imobilemedia) => {
                 this.treeData[0].children[indexmodulo].children.push({
@@ -245,6 +250,7 @@ export default {
                   indexPanel: isubmodulo,
                   children: [],
                 });
+                this.open.push(submodulo.url + "sub");
                 if (submodulo.mobilemedias.length) {
                   submodulo.mobilemedias.forEach(
                     (mobilemedia, imobilemedia) => {
@@ -302,7 +308,7 @@ export default {
                       panelFather: "submodule",
                       children: [],
                     });
-
+                    this.open.push(conceito.url);
                     if (conceito.informationitems.length) {
                       conceito.informationitems.forEach((infoitem) => {
                         if (
@@ -397,7 +403,7 @@ export default {
                   panelFather: "module",
                   children: [],
                 });
-
+                this.open.push(conceito.url);
                 if (conceito.informationitems.length) {
                   conceito.informationitems.forEach((infoitem) => {
                     if (
