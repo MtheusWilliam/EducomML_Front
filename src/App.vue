@@ -22,27 +22,24 @@
           outlined
           color="#B19114"
           dark
-          @click="$router.push({ path: '/signup'})"
-        >CADASTRE-SE</v-btn>
+          @click="$router.push({ path: '/signup' })"
+          >CADASTRE-SE</v-btn
+        >
         <v-btn
           v-if="!$store.state.jwt"
           class="ml-2"
           outlined
           color="#B19114"
           dark
-          @click="$router.push({ path: '/login/ '})"
-        >Entrar</v-btn>
-        <v-btn
-          v-else
-          outlined
-          color="#B19114"
-          dark
-          @click="
-            $store.dispatch('logout');
-            $router.push({ path: '/' });
-          "
-        >Sair</v-btn>
-        <v-img class="ml-5" src="@/assets/logoblack.png" style="width: 150px;"></v-img>
+          @click="$router.push({ path: '/login/ ' })"
+          >Entrar</v-btn
+        >
+        <UserMenu class="ma-2" />
+        <v-img
+          class="ml-5"
+          src="@/assets/logoblack.png"
+          style="width: 150px;"
+        ></v-img>
       </div>
     </v-app-bar>
 
@@ -53,8 +50,12 @@
 </template>
 
 <script>
-export default {
-  name: "App",
-  data: () => ({}),
-};
+  import UserMenu from "@/components/UserMenu";
+  export default {
+    name: "App",
+    components: {
+      UserMenu,
+    },
+    data: () => ({}),
+  };
 </script>

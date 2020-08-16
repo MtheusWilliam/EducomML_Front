@@ -7,26 +7,26 @@ Vue.use(Vuex);
 
 var store = new Vuex.Store({
   state: {
-    jwt: localStorage.getItem("t"),
-    username: localStorage.getItem("u"),
+    jwt: sessionStorage.getItem("t"),
+    username: sessionStorage.getItem("u"),
     endpoints: {
       obtainJWT: "/api-token-auth/",
       refreshJWT: "/api-token-refresh/",
     },
-    actualKnowledge: localStorage.getItem("d"),
+    actualKnowledge: sessionStorage.getItem("d"),
     priorConcepts: [],
   },
   mutations: {
     updateToken(state, newToken) {
-      localStorage.setItem("t", newToken);
+      sessionStorage.setItem("t", newToken);
       state.jwt = newToken;
     },
     updateUsername(state, username) {
-      localStorage.setItem("u", username);
+      sessionStorage.setItem("u", username);
       state.username = username;
     },
     removeToken(state) {
-      localStorage.removeItem("t");
+      sessionStorage.removeItem("t");
       state.jwt = null;
     },
     csrfToken(state, csrfToken) {
@@ -36,9 +36,9 @@ var store = new Vuex.Store({
       state.priorConcepts = objPriorConcepts;
     },
     setActualKnowledge(state, idKnowledge) {
-      localStorage.setItem("d", idKnowledge);
+      sessionStorage.setItem("d", idKnowledge);
       state.actualKnowledge = idKnowledge;
-    }
+    },
   },
   actions: {
     getActualKnowledge(state, idKnowledge) {
