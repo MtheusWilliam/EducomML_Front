@@ -60,7 +60,7 @@
               }}
             </span>
           </v-avatar>
-          <span class="ml-1">{{ item.name }}</span>
+          <span class="ml-1" style="font-size:0.9em;">{{ item.name }}</span>
         </v-btn>
       </template>
     </v-treeview>

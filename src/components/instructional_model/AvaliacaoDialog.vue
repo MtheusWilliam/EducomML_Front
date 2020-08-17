@@ -17,13 +17,7 @@
             transition="scale-transition"
           >
             <template v-slot:activator="{ on }">
-              <v-btn
-                v-on="on"
-                large
-                color="primary"
-                style="color:white;"
-                class="mb-3"
-              >
+              <v-btn v-on="on" large color="primary" style="color:white;" class="mb-3">
                 <strong>Adicionar MobileMedia</strong>
                 <v-icon class="ml-2" large color="white">mdi-plus-box</v-icon>
               </v-btn>
@@ -36,10 +30,7 @@
                 @click="addMobileMedia(i + 1)"
               >
                 <v-icon x-large color="blue">{{ item.icon }}</v-icon>
-                <v-list-item-title
-                  style="font-size: 1.2em; color:#2196F3;"
-                  class="ml-1"
-                >
+                <v-list-item-title style="font-size: 1.2em; color:#2196F3;" class="ml-1">
                   <strong>{{ item.name }}</strong>
                 </v-list-item-title>
               </v-list-item>
@@ -49,13 +40,7 @@
             Cancelar
             <v-icon dark right>mdi-close</v-icon>
           </v-btn>
-          <v-btn
-            color="success"
-            dark
-            large
-            @click="validate()"
-            class="ml-2 mb-3"
-          >
+          <v-btn color="success" dark large @click="validate()" class="ml-2 mb-3">
             Salvar
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
@@ -64,9 +49,7 @@
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation class="mt-3">
           <label class="pt-2" style="font-size:1.3em;" for="avaliacaoNameArea">
-            <strong
-              >Identificador d{{ labelMessage2[instrucValueType - 1] }}:</strong
-            >
+            <strong>Identificador d{{ labelMessage2[instrucValueType - 1] }}:</strong>
           </label>
           <v-text-field
             id="avaliacaoNameArea"
@@ -78,11 +61,11 @@
           ></v-text-field>
           <div v-if="mobileMediasControl.length > 0">
             <label class="mb-6 pt-2" style="font-size:1.3em;">
-              <strong
-                >MobileMedias d{{
-                  labelMessage2[instrucValueType - 1]
-                }}:</strong
-              >
+              <strong>
+                MobileMedias d{{
+                labelMessage2[instrucValueType - 1]
+                }}:
+              </strong>
             </label>
             <div class="mt-8"></div>
             <div v-for="(mobilemedia, i) in mobileMediasControl" :key="i">
@@ -98,9 +81,7 @@
                   prepend-icon="mdi-camera"
                 ></v-file-input>
                 <v-btn icon="icon" class="mt-2 ml-3">
-                  <v-icon x-large color="red" @click="deleteMobileMedia(i)"
-                    >mdi-minus-box</v-icon
-                  >
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-row>
@@ -116,9 +97,7 @@
                   prepend-icon="mdi-video"
                 ></v-file-input>
                 <v-btn icon="icon" class="mt-2 ml-3">
-                  <v-icon x-large color="red" @click="deleteMobileMedia(i)"
-                    >mdi-minus-box</v-icon
-                  >
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-row>
@@ -133,9 +112,7 @@
                   prepend-icon="mdi-file-music"
                 ></v-file-input>
                 <v-btn icon="icon" class="mt-2 ml-3">
-                  <v-icon x-large color="red" @click="deleteMobileMedia(i)"
-                    >mdi-minus-box</v-icon
-                  >
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-row>
@@ -148,28 +125,20 @@
                   required
                 ></v-text-field>
                 <v-btn icon="icon" class="mt-2 ml-3">
-                  <v-icon x-large color="red" @click="deleteMobileMedia(i)"
-                    >mdi-minus-box</v-icon
-                  >
+                  <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-row>
             </div>
           </div>
-          <v-app-bar
-            color="#D2A64D"
-            dense
-            dark
-            height="45px"
-            style="margin-bottom: -15px;"
-          >
+          <v-app-bar color="#D2A64D" dense dark height="45px" style="margin-bottom: -15px;">
             <v-col cols="8">
               <v-toolbar-title style="font-size:1.2em;">
-                <strong
-                  >Lista de questões d{{
-                    labelMessage2[instrucValueType - 1]
-                  }}</strong
-                >
+                <strong>
+                  Lista de questões d{{
+                  labelMessage2[instrucValueType - 1]
+                  }}
+                </strong>
               </v-toolbar-title>
             </v-col>
             <v-col cols="2" class="ml-8">
@@ -181,15 +150,9 @@
                 transition="scale-transition"
               >
                 <template v-slot:activator="{ on }">
-                  <v-btn
-                    v-on="on"
-                    color="white"
-                    style="color:black; font-size: 1.2em;"
-                  >
+                  <v-btn v-on="on" color="white" style="color:black; font-size: 1.2em;">
                     <strong>Adicionar Questão</strong>
-                    <v-icon class="ml-2" large color="black"
-                      >mdi-plus-box</v-icon
-                    >
+                    <v-icon class="ml-2" large color="black">mdi-plus-box</v-icon>
                   </v-btn>
                 </template>
 
@@ -206,11 +169,7 @@
           </v-app-bar>
           <v-container>
             <v-row v-for="(item, i) in questionsControl" :key="i">
-              <v-col
-                cols="10"
-                style="background-color:grey;color:white;"
-                class="mt-5"
-              >
+              <v-col cols="10" style="background-color:grey;color:white;" class="mt-5">
                 <h3>Questão {{ i + 1 }}</h3>
               </v-col>
               <v-col cols="2">
@@ -223,9 +182,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-btn icon v-on="on" class="ml-5">
-                      <v-icon class="mt-6" x-large color="primary"
-                        >mdi-plus-box</v-icon
-                      >
+                      <v-icon class="mt-6" x-large color="primary">mdi-plus-box</v-icon>
                     </v-btn>
                   </template>
 
@@ -236,19 +193,14 @@
                       @click="addMobileMediaQuestion(i, idItemType + 1)"
                     >
                       <v-icon x-large color="blue">{{ itemType.icon }}</v-icon>
-                      <v-list-item-title
-                        style="font-size: 1.2em; color:#2196F3;"
-                        class="ml-1"
-                      >
+                      <v-list-item-title style="font-size: 1.2em; color:#2196F3;" class="ml-1">
                         <strong>{{ itemType.name }}</strong>
                       </v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
                 <v-btn icon @click="deleteQuestion(i)">
-                  <v-icon class="ml-8 mt-6" x-large color="red"
-                    >mdi-close-box</v-icon
-                  >
+                  <v-icon class="ml-8 mt-6" x-large color="red">mdi-close-box</v-icon>
                 </v-btn>
               </v-col>
               <v-row>
@@ -264,8 +216,7 @@
                     color="primary"
                     style="color:white;"
                     @click="addAlternative(i)"
-                    >Adicionar Alternativa</v-btn
-                  >
+                  >Adicionar Alternativa</v-btn>
                 </v-col>
               </v-row>
               <div
@@ -294,8 +245,7 @@
                           x-large
                           color="red"
                           @click="deleteMobileMediaQuestion(i, idmobile)"
-                          >mdi-minus-box</v-icon
-                        >
+                        >mdi-minus-box</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                     </v-row>
@@ -315,8 +265,7 @@
                           x-large
                           color="red"
                           @click="deleteMobileMediaQuestion(i, idmobile)"
-                          >mdi-minus-box</v-icon
-                        >
+                        >mdi-minus-box</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                     </v-row>
@@ -335,8 +284,7 @@
                           x-large
                           color="red"
                           @click="deleteMobileMediaQuestion(i, idmobile)"
-                          >mdi-minus-box</v-icon
-                        >
+                        >mdi-minus-box</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                     </v-row>
@@ -353,8 +301,7 @@
                           x-large
                           color="red"
                           @click="deleteMobileMediaQuestion(i, idmobile)"
-                          >mdi-minus-box</v-icon
-                        >
+                        >mdi-minus-box</v-icon>
                       </v-btn>
                       <v-spacer></v-spacer>
                     </v-row>
@@ -375,11 +322,7 @@
                   indexAlternative) in questionsControl[i].answersAlternatives"
                   :key="indexAlternative"
                 >
-                  <v-col
-                    cols="1"
-                    class="mt-5"
-                    style=" margin-right: -40px;font-size:1.3em;"
-                  >
+                  <v-col cols="1" class="mt-5" style=" margin-right: -40px;font-size:1.3em;">
                     <strong>{{ idObjAnswerItems[indexAlternative] }})</strong>
                   </v-col>
                   <v-col cols="7">
@@ -404,13 +347,8 @@
                     ></v-checkbox>
                   </v-col>
                   <v-col cols="1">
-                    <v-btn
-                      icon="icon"
-                      @click="deleteAlternative(i, indexAlternative)"
-                    >
-                      <v-icon large class="mt-7" color="red"
-                        >mdi-minus-box</v-icon
-                      >
+                    <v-btn icon="icon" @click="deleteAlternative(i, indexAlternative)">
+                      <v-icon large class="mt-7" color="red">mdi-minus-box</v-icon>
                     </v-btn>
                   </v-col>
                 </div>
@@ -477,13 +415,11 @@
     <div class="text-center">
       <v-dialog v-model="dialog_alert" width="500">
         <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;"
-            >ALERTA!</v-card-title
-          >
-          <v-card-text class="mt-3" style="font-size: 1.3em;"
-            >Para criar uma avaliação, é necessário criar pelo uma
-            questão.</v-card-text
-          >
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">
+            Para criar uma avaliação, é necessário criar pelo uma
+            questão.
+          </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -495,9 +431,7 @@
     <div class="text-center">
       <v-dialog v-model="dialog_alert2" width="500">
         <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;"
-            >ALERTA!</v-card-title
-          >
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
           <v-card-text class="mt-3" style="font-size: 1.3em;">
             Questões objetivas necessitam de pelo menos uma alternativa correta.
             <br />
@@ -506,9 +440,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog_alert2 = false"
-              >Ok</v-btn
-            >
+            <v-btn color="primary" text @click="dialog_alert2 = false">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -516,9 +448,7 @@
     <div class="text-center">
       <v-dialog v-model="dialog_alert3" width="500">
         <v-card>
-          <v-card-title class="headline red" primary-title style="color:white;"
-            >ALERTA!</v-card-title
-          >
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
           <v-card-text class="mt-3" style="font-size: 1.3em;">
             Questões objetivas necessitam de pelo menos uma alternativa.
             <br />
@@ -527,9 +457,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary" text @click="dialog_alert3 = false"
-              >Ok</v-btn
-            >
+            <v-btn color="primary" text @click="dialog_alert3 = false">Ok</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -538,313 +466,317 @@
 </template>
 
 <script>
-  import Api from "@/services/Api";
-  import * as firebase from "firebase";
-  export default {
-    name: "AvaliacaoDialog",
-    props: [
-      "instrucOptionCall",
-      "instrucType",
-      "instrucValueType",
-      "domain",
-      "dialog",
-      "concept",
-      "module",
-      "instructionalelement",
+import Api from "@/services/Api";
+import * as firebase from "firebase";
+export default {
+  name: "AvaliacaoDialog",
+  props: [
+    "instrucOptionCall",
+    "instrucType",
+    "instrucValueType",
+    "domain",
+    "dialog",
+    "concept",
+    "module",
+    "instructionalelement",
+  ],
+  data: () => ({
+    valid: true,
+    dialog_alert: false,
+    dialog_alert2: false,
+    dialog_alert3: false,
+    labelMessage: [
+      "Descreva o exercício a ser criado.",
+      "Descreva a avaliação a ser criada.",
     ],
-    data: () => ({
-      valid: true,
-      dialog_alert: false,
-      dialog_alert2: false,
-      dialog_alert3: false,
-      labelMessage: [
-        "Descreva o exercício a ser criado.",
-        "Descreva a avaliação a ser criada.",
-      ],
-      labelMessage2: ["o exercício", "a avaliação"],
-      labelType: ["Exercício", "Avaliação"],
-      questionAjust: "",
-      itemsMobileMedia: [
-        {
-          icon: "mdi-file-image",
-          name: "Imagem",
-        },
-        {
-          icon: "mdi-file-video",
-          name: "Video",
-        },
-        {
-          icon: "mdi-file-music",
-          name: "Audio",
-        },
-        {
-          icon: "mdi-link-variant",
-          name: "Link",
-        },
-      ],
-      linkUrlRules: [(v) => !!v || "É necessário inserir a url do seu link"],
-      idObjAnswerItems: [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        "H",
-        "I",
-        "J",
-        "K",
-        "L",
-        "M",
-        "N",
-        "O",
-        "P",
-        "Q",
-        "R",
-        "S",
-        "T",
-        "U",
-        "V",
-        "W",
-        "X",
-        "Y",
-        "Z",
-      ],
-      avaliacaoName: "",
-      avaliacaoNameRules: [
-        (v) =>
-          !!v || "É necessário descrever um identificador para a avaliação",
-        (v) =>
-          (v && v.length <= 100) ||
-          "Nome do identificador da avaliação deve ter no máximo 100 caracteres",
-      ],
-      questionTypes: ["Questão Objetiva", "Questão Discussiva"],
-      alternativeDescriptionRules: [
-        (v) => !!v || "É necessário descrever a alternativa.",
-      ],
-      mobileMediasControl: [],
-      questionsControl: [],
-    }),
-    watch: {
-      dialog: async function() {
-        this.getAvaliacao();
+    labelMessage2: ["o exercício", "a avaliação"],
+    labelType: ["Exercício", "Avaliação"],
+    questionAjust: "",
+    itemsMobileMedia: [
+      {
+        icon: "mdi-file-image",
+        name: "Imagem",
       },
-    },
-    mounted: function() {
+      {
+        icon: "mdi-file-video",
+        name: "Video",
+      },
+      {
+        icon: "mdi-file-music",
+        name: "Audio",
+      },
+      {
+        icon: "mdi-link-variant",
+        name: "Link",
+      },
+    ],
+    linkUrlRules: [(v) => !!v || "É necessário inserir a url do seu link"],
+    idObjAnswerItems: [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ],
+    avaliacaoName: "",
+    avaliacaoNameRules: [
+      (v) => !!v || "É necessário descrever um identificador para a avaliação",
+      (v) =>
+        (v && v.length <= 100) ||
+        "Nome do identificador da avaliação deve ter no máximo 100 caracteres",
+    ],
+    questionTypes: ["Questão Objetiva", "Questão Discussiva"],
+    alternativeDescriptionRules: [
+      (v) => !!v || "É necessário descrever a alternativa.",
+    ],
+    mobileMediasControl: [],
+    questionsControl: [],
+  }),
+  watch: {
+    dialog: async function () {
       this.getAvaliacao();
-      this.$refs.form.resetValidation();
     },
-    methods: {
-      async getAvaliacao() {
-        if (this.instructionalelement) {
-          var vm = this;
-          this.$nextTick(function() {
-            this.avaliacaoName = this.instructionalelement.label;
-          });
-          this.questionsControl = [];
-          this.mobileMediasControl = [];
-          if (this.instructionalelement !== "") {
-            if (this.instructionalelement.mobilemedias.length > 0) {
-              await this.instructionalelement.mobilemedias.forEach(
-                async function(elementMobile, indexMobile) {
-                  if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
-                    vm.getSrcImage(
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.mobileMediasControl.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      resolution: elementMobile.resolution,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "2"
-                  ) {
-                    vm.getSrcVideo(
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.mobileMediasControl.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      resolution: elementMobile.resolution,
-                      time: elementMobile.time,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "3"
-                  ) {
-                    vm.getSrcAudio(
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.mobileMediasControl.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "5"
-                  ) {
-                    await vm.mobileMediasControl.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: elementMobile.urllink,
-                      url: elementMobile.url,
-                    });
-                  }
-                }
-              );
-            }
-
-            await this.instructionalelement.questions.forEach(async function(
-              elementQuestion,
-              indexQuestion
-            ) {
-              if (elementQuestion.typequestion === `/questiontype/1/`) {
-                await vm.questionsControl.push({
-                  typeQuestion: parseInt(
-                    elementQuestion.typequestion.split("/")[4]
-                  ),
-                  descriptionQuestion: elementQuestion.descriptionquestion,
-                  answersAlternatives: [],
-                  mobileMedias: [],
-                  url: elementQuestion.url,
-                });
-                await elementQuestion.answersalternatives.forEach(
-                  async function(elementAlternative) {
-                    await vm.questionsControl[
-                      indexQuestion
-                    ].answersAlternatives.push({
-                      isTrue: elementAlternative.istrue,
-                      answers: elementAlternative.answers,
-                      url: elementAlternative.url,
-                    });
-                  }
-                );
-              } else if (elementQuestion.typequestion === `/questiontype/2/`) {
-                await vm.questionsControl.push({
-                  typeQuestion: parseInt(
-                    elementQuestion.typequestion.split("/")[4]
-                  ),
-                  descriptionQuestion: elementQuestion.descriptionquestion,
-                  correctAnswer:
-                    elementQuestion.resolutionquestion[0].correctanswer,
-                  mobileMedias: [],
-                  url: elementQuestion.url,
-                  urlCorrectAnswer: elementQuestion.resolutionquestion[0].url,
-                });
-              }
-              if (elementQuestion.mobilemedias) {
-                await elementQuestion.mobilemedias.forEach(async function(
-                  elementMobile,
-                  indexMobile
-                ) {
-                  if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
-                    vm.getSrcImageQuestions(
-                      indexQuestion,
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.questionsControl[indexQuestion].mobileMedias.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      resolution: elementMobile.resolution,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "2"
-                  ) {
-                    vm.getSrcVideoQuestions(
-                      indexQuestion,
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.questionsControl[indexQuestion].mobileMedias.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      resolution: elementMobile.resolution,
-                      time: elementMobile.time,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "3"
-                  ) {
-                    vm.getSrcAudioQuestions(
-                      indexQuestion,
-                      indexMobile,
-                      elementMobile.path,
-                      elementMobile.namefile
-                    );
-                    await vm.questionsControl[indexQuestion].mobileMedias.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: null,
-                      path: elementMobile.path,
-                      namefile: elementMobile.namefile,
-                      url: elementMobile.url,
-                    });
-                  } else if (
-                    elementMobile.fk_idmediatype.split("/")[4] === "5"
-                  ) {
-                    await vm.questionsControl[indexQuestion].mobileMedias.push({
-                      type: parseInt(
-                        elementMobile.fk_idmediatype.split("/")[4]
-                      ),
-                      object: elementMobile.urllink,
-                      url: elementMobile.url,
-                    });
-                  }
-                });
-              }
-            });
-          }
-        } else {
-          this.questionsControl = [];
-          this.mobileMediasControl = [];
-          this.resetValidation();
-          this.resetVariables();
-        }
-      },
-      async postQuestions() {
-        var instructionalelement = {
-          label: this.avaliacaoName,
-          fk_instructionalelementtype:
-            `/instrucelementtype/` + this.instrucValueType + `/`,
-        };
+  },
+  mounted: function () {
+    this.getAvaliacao();
+    this.$refs.form.resetValidation();
+  },
+  methods: {
+    async getAvaliacao() {
+      if (this.instructionalelement) {
         var vm = this;
-        var auxPath = "";
-        if (this.mobileMediasControl) {
-          this.mobileMediasControl.forEach(async (mobilemedia) => {
+        this.$nextTick(function () {
+          this.avaliacaoName = this.instructionalelement.label;
+        });
+        this.questionsControl = [];
+        this.mobileMediasControl = [];
+        if (this.instructionalelement !== "") {
+          if (this.instructionalelement.mobilemedias.length > 0) {
+            await this.instructionalelement.mobilemedias.forEach(
+              async function (elementMobile, indexMobile) {
+                if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                  vm.getSrcImage(
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.mobileMediasControl.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                  vm.getSrcVideo(
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.mobileMediasControl.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    time: elementMobile.time,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                  vm.getSrcAudio(
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.mobileMediasControl.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                  await vm.mobileMediasControl.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: elementMobile.urllink,
+                    url: elementMobile.url,
+                  });
+                }
+              }
+            );
+          }
+
+          await this.instructionalelement.questions.forEach(async function (
+            elementQuestion,
+            indexQuestion
+          ) {
+            if (
+              elementQuestion.typequestion ===
+              Api().defaults.baseURL + `questiontype/1/`
+            ) {
+              await vm.questionsControl.push({
+                typeQuestion: parseInt(
+                  elementQuestion.typequestion.split("/")[4]
+                ),
+                descriptionQuestion: elementQuestion.descriptionquestion,
+                answersAlternatives: [],
+                mobileMedias: [],
+                url: elementQuestion.url,
+              });
+              await elementQuestion.answersalternatives.forEach(async function (
+                elementAlternative
+              ) {
+                await vm.questionsControl[
+                  indexQuestion
+                ].answersAlternatives.push({
+                  isTrue: elementAlternative.istrue,
+                  answers: elementAlternative.answers,
+                  url: elementAlternative.url,
+                });
+              });
+            } else if (
+              elementQuestion.typequestion ===
+              Api().defaults.baseURL + `questiontype/2/`
+            ) {
+              await vm.questionsControl.push({
+                typeQuestion: parseInt(
+                  elementQuestion.typequestion.split("/")[4]
+                ),
+                descriptionQuestion: elementQuestion.descriptionquestion,
+                correctAnswer:
+                  elementQuestion.resolutionquestion[0].correctanswer,
+                mobileMedias: [],
+                url: elementQuestion.url,
+                urlCorrectAnswer: elementQuestion.resolutionquestion[0].url,
+              });
+            }
+            if (elementQuestion.mobilemedias) {
+              await elementQuestion.mobilemedias.forEach(async function (
+                elementMobile,
+                indexMobile
+              ) {
+                if (elementMobile.fk_idmediatype.split("/")[4] === "1") {
+                  vm.getSrcImageQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "2") {
+                  vm.getSrcVideoQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    resolution: elementMobile.resolution,
+                    time: elementMobile.time,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "3") {
+                  vm.getSrcAudioQuestions(
+                    indexQuestion,
+                    indexMobile,
+                    elementMobile.path,
+                    elementMobile.namefile
+                  );
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    path: elementMobile.path,
+                    namefile: elementMobile.namefile,
+                    url: elementMobile.url,
+                  });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
+                  await vm.questionsControl[indexQuestion].mobileMedias.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: elementMobile.urllink,
+                    url: elementMobile.url,
+                  });
+                }
+              });
+            }
+          });
+        }
+      } else {
+        this.questionsControl = [];
+        this.mobileMediasControl = [];
+        this.resetValidation();
+        this.resetVariables();
+      }
+    },
+    async postQuestions() {
+      var instructionalelement = {
+        label: this.avaliacaoName,
+        fk_instructionalelementtype:
+          `/instrucelementtype/` + this.instrucValueType + `/`,
+      };
+      var vm = this;
+      var auxPath = "";
+      if (this.mobileMediasControl) {
+        this.mobileMediasControl.forEach(async (mobilemedia) => {
+          if (mobilemedia.url) {
+            if (mobilemedia.type !== 5) {
+              firebase
+                .storage()
+                .ref()
+                .child(mobilemedia.path)
+                .put(mobilemedia.object);
+            }
+          } else {
+            auxPath =
+              vm.domain.idknowledgedomain.toString() +
+              "/" +
+              (await setTimeout(async function () {
+                await Date.now().toString();
+              }, 1));
+            if (mobilemedia.type !== 5) {
+              firebase.storage().ref().child(auxPath).put(mobilemedia.object);
+
+              mobilemedia.path = auxPath;
+            }
+          }
+        });
+      }
+      var auxPathQuestions = "";
+      this.questionsControl.forEach(async function (question) {
+        if (question.mobileMedias) {
+          await question.mobileMedias.forEach(async (mobilemedia) => {
             if (mobilemedia.url) {
               if (mobilemedia.type !== 5) {
                 firebase
@@ -854,471 +786,122 @@
                   .put(mobilemedia.object);
               }
             } else {
-              auxPath =
+              auxPathQuestions =
                 vm.domain.idknowledgedomain.toString() +
                 "/" +
-                (await setTimeout(async function() {
+                (await setTimeout(async function () {
                   await Date.now().toString();
                 }, 1));
               if (mobilemedia.type !== 5) {
                 firebase
                   .storage()
                   .ref()
-                  .child(auxPath)
+                  .child(auxPathQuestions)
                   .put(mobilemedia.object);
 
-                mobilemedia.path = auxPath;
+                mobilemedia.path = auxPathQuestions;
               }
             }
           });
         }
-        var auxPathQuestions = "";
-        this.questionsControl.forEach(async function(question) {
-          if (question.mobileMedias) {
-            await question.mobileMedias.forEach(async (mobilemedia) => {
-              if (mobilemedia.url) {
-                if (mobilemedia.type !== 5) {
-                  firebase
-                    .storage()
-                    .ref()
-                    .child(mobilemedia.path)
-                    .put(mobilemedia.object);
-                }
-              } else {
-                auxPathQuestions =
-                  vm.domain.idknowledgedomain.toString() +
-                  "/" +
-                  (await setTimeout(async function() {
-                    await Date.now().toString();
-                  }, 1));
-                if (mobilemedia.type !== 5) {
-                  firebase
-                    .storage()
-                    .ref()
-                    .child(auxPathQuestions)
-                    .put(mobilemedia.object);
+      });
 
-                  mobilemedia.path = auxPathQuestions;
-                }
-              }
-            });
-          }
+      if (this.instrucType === "dominio") {
+        Object.assign(instructionalelement, {
+          fk_idknowledgedomain: this.instrucOptionCall.url,
         });
-
-        if (this.instrucType === "dominio") {
-          Object.assign(instructionalelement, {
-            fk_idknowledgedomain: this.instrucOptionCall.url,
-          });
-        } else if (this.instrucType === "modulo") {
-          Object.assign(instructionalelement, {
-            fk_idmodule: this.instrucOptionCall.url,
-          });
-        } else if (this.instrucType === "conceito") {
-          Object.assign(instructionalelement, {
-            fk_idconcept: this.instrucOptionCall.url,
-          });
-        }
-        if (this.instructionalelement) {
-          /* CÓDIGO PARA EDIÇÃO DA AVALIAÇÃO/EXERCÍCIO */
-          await Api()
-            .put(vm.instructionalelement.url, instructionalelement)
-            .then(async function(resposta) {
-              if (vm.mobileMediasControl) {
-                await vm.mobileMediasControl.forEach(async function(
-                  mobilemedia,
-                  indexmobile
-                ) {
-                  /* DANDO PUT NOS MOBILEMEDIAS QUE POSSUEM URL*/
-                  if (mobilemedia.url) {
-                    if (mobilemedia.type === 1) {
-                      await Api().put(mobilemedia.url, {
-                        label: "Imagem " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: mobilemedia.resolution,
-                        namefile: mobilemedia.namefile,
-                        description:
-                          "Imagem " +
-                          (indexmobile + 1) +
-                          " " +
-                          resposta.data.label,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 2) {
-                      await Api().put(mobilemedia.url, {
-                        label: "Video " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: mobilemedia.resolution,
-                        namefile: mobilemedia.namefile,
-                        description: null,
-                        time: mobilemedia.time,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 3) {
-                      await Api().put(mobilemedia.url, {
-                        label: "Audio " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: null,
-                        namefile: mobilemedia.namefile,
-                        description: null,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 5) {
-                      await Api().put(mobilemedia.url, {
-                        label: "Link " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: null,
-                        resolution: null,
-                        namefile: null,
-                        description: null,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: mobilemedia.object,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    }
-                  } else {
-                    /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
-                    if (mobilemedia.type === 1) {
-                      await Api().post(`/mobilemedia/`, {
-                        label: "Imagem " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: mobilemedia.resolution,
-                        namefile: mobilemedia.path.split("/")[1],
-                        description:
-                          "Imagem " +
-                          (indexmobile + 1) +
-                          " " +
-                          resposta.data.label,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 2) {
-                      await Api().post(`/mobilemedia/`, {
-                        label: "Video " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: mobilemedia.resolution,
-                        namefile: mobilemedia.path.split("/")[1],
-                        description: null,
-                        time: mobilemedia.time,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 3) {
-                      await Api().post(`/mobilemedia/`, {
-                        label: "Audio " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: mobilemedia.path,
-                        resolution: null,
-                        namefile: mobilemedia.path.split("/")[1],
-                        description: null,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: null,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    } else if (mobilemedia.type === 5) {
-                      await Api().post(`/mobilemedia/`, {
-                        label: "Link " + (indexmobile + 1),
-                        fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
-                        path: null,
-                        resolution: null,
-                        namefile: null,
-                        description: null,
-                        time: null,
-                        textfull: null,
-                        textshort: null,
-                        urllink: mobilemedia.object,
-                        difficultyLevel: null,
-                        learningStyle: null,
-                        fk_idinstructionalelement: resposta.data.url,
-                      });
-                    }
-                  }
-                });
-              }
-
-              await vm.questionsControl.forEach(async function(
-                elementQuestion,
-                indexQuestion
+      } else if (this.instrucType === "modulo") {
+        Object.assign(instructionalelement, {
+          fk_idmodule: this.instrucOptionCall.url,
+        });
+      } else if (this.instrucType === "conceito") {
+        Object.assign(instructionalelement, {
+          fk_idconcept: this.instrucOptionCall.url,
+        });
+      }
+      if (this.instructionalelement) {
+        /* CÓDIGO PARA EDIÇÃO DA AVALIAÇÃO/EXERCÍCIO */
+        await Api()
+          .put(vm.instructionalelement.url, instructionalelement)
+          .then(async function (resposta) {
+            if (vm.mobileMediasControl) {
+              await vm.mobileMediasControl.forEach(async function (
+                mobilemedia,
+                indexmobile
               ) {
-                if (elementQuestion.url) {
-                  await Api()
-                    .put(elementQuestion.url, {
-                      orderquestion: indexQuestion,
-                      descriptionquestion: elementQuestion.descriptionQuestion,
-                      typequestion:
-                        `/questiontype/` + elementQuestion.typeQuestion + `/`,
-                      fk_idinstructionalelement: vm.instructionalelement.url,
-                    })
-                    .then(async function(resposta2) {
-                      /*DANDO PUT NOS MOBILEMEDIAS DAS QUESTÕES COM URL*/
-
-                      await elementQuestion.mobileMedias.forEach(async function(
-                        elementMobile,
-                        indexMobile
-                      ) {
-                        if (elementMobile.url) {
-                          if (elementMobile.type === 1) {
-                            await Api().put(elementMobile.url, {
-                              label: "Imagem " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: elementMobile.resolution,
-                              namefile: elementMobile.namefile,
-                              description:
-                                "Imagem " +
-                                (indexMobile + 1) +
-                                " Questão" +
-                                resposta2.data.orderquestion,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 2) {
-                            await Api().put(elementMobile.url, {
-                              label: "Video " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: elementMobile.resolution,
-                              namefile: elementMobile.namefile,
-                              description: null,
-                              time: elementMobile.time,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 3) {
-                            await Api().put(elementMobile.url, {
-                              label: "Audio " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: null,
-                              namefile: elementMobile.namefile,
-                              description: null,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 5) {
-                            await Api().put(elementMobile.url, {
-                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: null,
-                              resolution: null,
-                              namefile: null,
-                              description: null,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: elementMobile.object,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          }
-                        } else {
-                          if (elementMobile.type === 1) {
-                            await Api().post(`/mobilemedia/`, {
-                              label: "Imagem " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: elementMobile.resolution,
-                              namefile: elementMobile.path.split("/")[1],
-                              description:
-                                "Imagem " +
-                                (indexMobile + 1) +
-                                " Questão" +
-                                resposta2.data.orderquestion,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 2) {
-                            await Api().post(`/mobilemedia/`, {
-                              label: "Video " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: elementMobile.resolution,
-                              namefile: elementMobile.path.split("/")[1],
-                              description: null,
-                              time: elementMobile.time,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 3) {
-                            await Api().post(`/mobilemedia/`, {
-                              label: "Audio " + (indexMobile + 1),
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: elementMobile.path,
-                              resolution: null,
-                              namefile: elementMobile.path.split("/")[1],
-                              description: null,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: null,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          } else if (elementMobile.type === 5) {
-                            await Api().post(`/mobilemedia/`, {
-                              label: "Link " + (indexMobile + 1) + vm.i++ * 0,
-                              fk_idmediatype:
-                                "/mediatype/" + elementMobile.type + "/",
-                              path: null,
-                              resolution: null,
-                              namefile: null,
-                              description: null,
-                              time: null,
-                              textfull: null,
-                              textshort: null,
-                              urllink: elementMobile.object,
-                              difficultyLevel: null,
-                              learningStyle: null,
-                              fk_idquestion: resposta2.data.url,
-                            });
-                          }
-                        }
-                      });
-
-                      if (elementQuestion.typeQuestion === 1) {
-                        await elementQuestion.answersAlternatives.forEach(
-                          async function(elementAlternative, indexAlternative) {
-                            if (elementAlternative.url) {
-                              await Api().put(elementAlternative.url, {
-                                idobjanswer:
-                                  vm.idObjAnswerItems[indexAlternative],
-                                answers: elementAlternative.answers,
-                                istrue: elementAlternative.isTrue,
-                                fk_idquestion: resposta2.data.url,
-                                orderansweralternatives: indexAlternative,
-                              });
-                            } else {
-                              await Api().post(`/answersalternatives/`, {
-                                idobjanswer:
-                                  vm.idObjAnswerItems[indexAlternative],
-                                answers: elementAlternative.answers,
-                                istrue: elementAlternative.isTrue,
-                                fk_idquestion: resposta2.data.url,
-                                orderansweralternatives: indexAlternative,
-                              });
-                            }
-                          }
-                        );
-                      } else if (elementQuestion.typeQuestion === 2) {
-                        await Api().put(elementQuestion.urlCorrectAnswer, {
-                          correctanswer: elementQuestion.correctAnswer,
-                        });
-                      }
-                    });
-                } else {
-                  await Api()
-                    .post(`/question/`, {
-                      orderquestion: indexQuestion + 1,
-                      descriptionquestion: elementQuestion.descriptionQuestion,
+                /* DANDO PUT NOS MOBILEMEDIAS QUE POSSUEM URL*/
+                if (mobilemedia.url) {
+                  if (mobilemedia.type === 1) {
+                    await Api().put(mobilemedia.url, {
+                      label: "Imagem " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: mobilemedia.path,
+                      resolution: mobilemedia.resolution,
+                      namefile: mobilemedia.namefile,
+                      description:
+                        "Imagem " +
+                        (indexmobile + 1) +
+                        " " +
+                        resposta.data.label,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
                       fk_idinstructionalelement: resposta.data.url,
-                      typequestion:
-                        `/questiontype/` + elementQuestion.typeQuestion + `/`,
-                    })
-                    .then(async function(resposta2) {
-                      if (elementQuestion.typeQuestion === 1) {
-                        await elementQuestion.answersAlternatives.forEach(
-                          async function(elementAlternative, indexAlternative) {
-                            await Api().post(`/answersalternatives/`, {
-                              idobjanswer:
-                                vm.idObjAnswerItems[indexAlternative],
-                              answers: elementAlternative.answers,
-                              istrue: elementAlternative.isTrue,
-                              fk_idquestion: resposta2.data.url,
-                              orderansweralternatives: indexAlternative,
-                            });
-                          }
-                        );
-                      } else if (elementQuestion.typeQuestion === 2) {
-                        await Api().post(`/resolutionquestion/`, {
-                          correctanswer: elementQuestion.correctAnswer,
-                          fk_idquestion: resposta2.data.url,
-                        });
-                      }
                     });
-                }
-              });
-            });
-        } else {
-          /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
-          await Api()
-            .post(`/instructionalelement/`, instructionalelement)
-            .then(async function(resposta) {
-              if (vm.mobileMediasControl) {
-                /* INSERÇÃO DOS MOBILEMEDIAS DA AVALIAÇÃO/EXERCÍCIO */
-                await vm.mobileMediasControl.forEach(async function(
-                  mobilemedia,
-                  indexmobile
-                ) {
+                  } else if (mobilemedia.type === 2) {
+                    await Api().put(mobilemedia.url, {
+                      label: "Video " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: mobilemedia.path,
+                      resolution: mobilemedia.resolution,
+                      namefile: mobilemedia.namefile,
+                      description: null,
+                      time: mobilemedia.time,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url,
+                    });
+                  } else if (mobilemedia.type === 3) {
+                    await Api().put(mobilemedia.url, {
+                      label: "Audio " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: mobilemedia.path,
+                      resolution: null,
+                      namefile: mobilemedia.namefile,
+                      description: null,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url,
+                    });
+                  } else if (mobilemedia.type === 5) {
+                    await Api().put(mobilemedia.url, {
+                      label: "Link " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: null,
+                      resolution: null,
+                      namefile: null,
+                      description: null,
+                      time: null,
+                      textfull: null,
+                      textshort: null,
+                      urllink: mobilemedia.object,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url,
+                    });
+                  }
+                } else {
+                  /* DANDO POST NOS MOBILEMEDIAS QUE NÃO POSSUEM URL*/
                   if (mobilemedia.type === 1) {
                     await Api().post(`/mobilemedia/`, {
                       label: "Imagem " + (indexmobile + 1),
@@ -1388,105 +971,224 @@
                       fk_idinstructionalelement: resposta.data.url,
                     });
                   }
-                });
-              }
+                }
+              });
+            }
 
-              await vm.questionsControl.forEach(async function(
-                elementQuestion,
-                indexQuestion
-              ) {
+            await vm.questionsControl.forEach(async function (
+              elementQuestion,
+              indexQuestion
+            ) {
+              if (elementQuestion.url) {
                 await Api()
-                  .post(`/question/`, {
-                    descriptionquestion: elementQuestion.descriptionQuestion,
+                  .put(elementQuestion.url, {
                     orderquestion: indexQuestion,
-                    fk_idinstructionalelement: resposta.data.url,
+                    descriptionquestion: elementQuestion.descriptionQuestion,
                     typequestion:
                       `/questiontype/` + elementQuestion.typeQuestion + `/`,
+                    fk_idinstructionalelement: vm.instructionalelement.url,
                   })
-                  .then(async function(resposta2) {
-                    /* INSERÇÃO DOS MOBILEMEDIAS DAS QUESTÕES DA AVALIAÇÃO/EXERCICIO */
-                    await elementQuestion.mobileMedias.forEach(async function(
+                  .then(async function (resposta2) {
+                    /*DANDO PUT NOS MOBILEMEDIAS DAS QUESTÕES COM URL*/
+
+                    await elementQuestion.mobileMedias.forEach(async function (
                       elementMobile,
                       indexMobile
                     ) {
-                      if (elementMobile.type === 1) {
-                        await Api().post(`/mobilemedia/`, {
-                          label: "Imagem " + (indexMobile + 1),
-                          fk_idmediatype:
-                            "/mediatype/" + elementMobile.type + "/",
-                          path: elementMobile.path,
-                          resolution: elementMobile.resolution,
-                          namefile: elementMobile.path.split("/")[1],
-                          description:
-                            "Imagem " +
-                            (indexMobile + 1) +
-                            " Questão" +
-                            resposta2.data.orderquestion,
-                          time: null,
-                          textfull: null,
-                          textshort: null,
-                          urllink: null,
-                          difficultyLevel: null,
-                          learningStyle: null,
-                          fk_idquestion: resposta2.data.url,
-                        });
-                      } else if (elementMobile.type === 2) {
-                        await Api().post(`/mobilemedia/`, {
-                          label: "Video " + (indexMobile + 1),
-                          fk_idmediatype:
-                            "/mediatype/" + elementMobile.type + "/",
-                          path: elementMobile.path,
-                          resolution: elementMobile.resolution,
-                          namefile: elementMobile.path.split("/")[1],
-                          description: null,
-                          time: elementMobile.time,
-                          textfull: null,
-                          textshort: null,
-                          urllink: null,
-                          difficultyLevel: null,
-                          learningStyle: null,
-                          fk_idquestion: resposta2.data.url,
-                        });
-                      } else if (elementMobile.type === 3) {
-                        await Api().post(`/mobilemedia/`, {
-                          label: "Audio " + (indexMobile + 1),
-                          fk_idmediatype:
-                            "/mediatype/" + elementMobile.type + "/",
-                          path: elementMobile.path,
-                          resolution: null,
-                          namefile: elementMobile.path.split("/")[1],
-                          description: null,
-                          time: null,
-                          textfull: null,
-                          textshort: null,
-                          urllink: null,
-                          difficultyLevel: null,
-                          learningStyle: null,
-                          fk_idquestion: resposta2.data.url,
-                        });
-                      } else if (elementMobile.type === 5) {
-                        await Api().post(`/mobilemedia/`, {
-                          label: "Link " + (indexMobile + 1) + vm.i++ * 0,
-                          fk_idmediatype:
-                            "/mediatype/" + elementMobile.type + "/",
-                          path: null,
-                          resolution: null,
-                          namefile: null,
-                          description: null,
-                          time: null,
-                          textfull: null,
-                          textshort: null,
-                          urllink: elementMobile.object,
-                          difficultyLevel: null,
-                          learningStyle: null,
-                          fk_idquestion: resposta2.data.url,
-                        });
+                      if (elementMobile.url) {
+                        if (elementMobile.type === 1) {
+                          await Api().put(elementMobile.url, {
+                            label: "Imagem " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: elementMobile.resolution,
+                            namefile: elementMobile.namefile,
+                            description:
+                              "Imagem " +
+                              (indexMobile + 1) +
+                              " Questão" +
+                              resposta2.data.orderquestion,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 2) {
+                          await Api().put(elementMobile.url, {
+                            label: "Video " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: elementMobile.resolution,
+                            namefile: elementMobile.namefile,
+                            description: null,
+                            time: elementMobile.time,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 3) {
+                          await Api().put(elementMobile.url, {
+                            label: "Audio " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: null,
+                            namefile: elementMobile.namefile,
+                            description: null,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 5) {
+                          await Api().put(elementMobile.url, {
+                            label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: null,
+                            resolution: null,
+                            namefile: null,
+                            description: null,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: elementMobile.object,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        }
+                      } else {
+                        if (elementMobile.type === 1) {
+                          await Api().post(`/mobilemedia/`, {
+                            label: "Imagem " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: elementMobile.resolution,
+                            namefile: elementMobile.path.split("/")[1],
+                            description:
+                              "Imagem " +
+                              (indexMobile + 1) +
+                              " Questão" +
+                              resposta2.data.orderquestion,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 2) {
+                          await Api().post(`/mobilemedia/`, {
+                            label: "Video " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: elementMobile.resolution,
+                            namefile: elementMobile.path.split("/")[1],
+                            description: null,
+                            time: elementMobile.time,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 3) {
+                          await Api().post(`/mobilemedia/`, {
+                            label: "Audio " + (indexMobile + 1),
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: elementMobile.path,
+                            resolution: null,
+                            namefile: elementMobile.path.split("/")[1],
+                            description: null,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: null,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        } else if (elementMobile.type === 5) {
+                          await Api().post(`/mobilemedia/`, {
+                            label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                            fk_idmediatype:
+                              "/mediatype/" + elementMobile.type + "/",
+                            path: null,
+                            resolution: null,
+                            namefile: null,
+                            description: null,
+                            time: null,
+                            textfull: null,
+                            textshort: null,
+                            urllink: elementMobile.object,
+                            difficultyLevel: null,
+                            learningStyle: null,
+                            fk_idquestion: resposta2.data.url,
+                          });
+                        }
                       }
                     });
 
                     if (elementQuestion.typeQuestion === 1) {
                       await elementQuestion.answersAlternatives.forEach(
-                        async function(elementAlternative, indexAlternative) {
+                        async function (elementAlternative, indexAlternative) {
+                          if (elementAlternative.url) {
+                            await Api().put(elementAlternative.url, {
+                              idobjanswer:
+                                vm.idObjAnswerItems[indexAlternative],
+                              answers: elementAlternative.answers,
+                              istrue: elementAlternative.isTrue,
+                              fk_idquestion: resposta2.data.url,
+                              orderansweralternatives: indexAlternative,
+                            });
+                          } else {
+                            await Api().post(`/answersalternatives/`, {
+                              idobjanswer:
+                                vm.idObjAnswerItems[indexAlternative],
+                              answers: elementAlternative.answers,
+                              istrue: elementAlternative.isTrue,
+                              fk_idquestion: resposta2.data.url,
+                              orderansweralternatives: indexAlternative,
+                            });
+                          }
+                        }
+                      );
+                    } else if (elementQuestion.typeQuestion === 2) {
+                      await Api().put(elementQuestion.urlCorrectAnswer, {
+                        correctanswer: elementQuestion.correctAnswer,
+                      });
+                    }
+                  });
+              } else {
+                await Api()
+                  .post(`/question/`, {
+                    orderquestion: indexQuestion + 1,
+                    descriptionquestion: elementQuestion.descriptionQuestion,
+                    fk_idinstructionalelement: resposta.data.url,
+                    typequestion:
+                      `/questiontype/` + elementQuestion.typeQuestion + `/`,
+                  })
+                  .then(async function (resposta2) {
+                    if (elementQuestion.typeQuestion === 1) {
+                      await elementQuestion.answersAlternatives.forEach(
+                        async function (elementAlternative, indexAlternative) {
                           await Api().post(`/answersalternatives/`, {
                             idobjanswer: vm.idObjAnswerItems[indexAlternative],
                             answers: elementAlternative.answers,
@@ -1503,467 +1205,653 @@
                       });
                     }
                   });
-              });
-            });
-        }
-      },
-      addMobileMedia(mobileMediaType) {
-        if (mobileMediaType === 1) {
-          this.mobileMediasControl.push({
-            type: mobileMediaType,
-            object: null,
-            resolution: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 2) {
-          this.mobileMediasControl.push({
-            type: mobileMediaType,
-            object: null,
-            resolution: null,
-            time: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 3) {
-          this.mobileMediasControl.push({
-            type: mobileMediaType,
-            object: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 4) {
-          this.mobileMediasControl.push({
-            type: mobileMediaType + 1,
-            object: null,
-            url: null,
-          });
-        }
-      },
-      async deleteMobileMedia(idMobileMedia) {
-        if (this.mobileMediasControl[idMobileMedia].url) {
-          if (this.mobileMediasControl[idMobileMedia].type !== 5) {
-            await firebase
-              .storage()
-              .ref()
-              .child(this.mobileMediasControl[idMobileMedia].path)
-              .delete();
-          }
-          await Api().delete(this.mobileMediasControl[idMobileMedia].url);
-        }
-        if (idMobileMedia == 0) {
-          this.mobileMediasControl.shift();
-        } else {
-          this.mobileMediasControl.splice(idMobileMedia, 1);
-        }
-      },
-      atualizaMeta() {
-        if (this.mobileMediasControl.length > 0) {
-          this.mobileMediasControl.forEach((mobilemedia) => {
-            if (mobilemedia.object && !mobilemedia.url) {
-              if (mobilemedia.type === 1) {
-                var img = new Image();
-                img.src = URL.createObjectURL(mobilemedia.object);
-                img.onload = function() {
-                  mobilemedia.resolution = img.width + "X" + img.height;
-                };
-              } else if (mobilemedia.type === 2) {
-                var video = document.createElement("video");
-                var source = document.createElement("source");
-                source.setAttribute(
-                  "src",
-                  URL.createObjectURL(mobilemedia.object)
-                );
-                video.appendChild(source);
-                video.oncanplay = function() {
-                  mobilemedia.resolution =
-                    video.videoWidth + "X" + video.videoHeight;
-                  mobilemedia.time = video.duration;
-                };
               }
+            });
+          });
+      } else {
+        /* CÓDIGO PARA CRIAÇÃO DA AVALIAÇÃO/EXERCÍCIO */
+        await Api()
+          .post(`/instructionalelement/`, instructionalelement)
+          .then(async function (resposta) {
+            if (vm.mobileMediasControl) {
+              /* INSERÇÃO DOS MOBILEMEDIAS DA AVALIAÇÃO/EXERCÍCIO */
+              await vm.mobileMediasControl.forEach(async function (
+                mobilemedia,
+                indexmobile
+              ) {
+                if (mobilemedia.type === 1) {
+                  await Api().post(`/mobilemedia/`, {
+                    label: "Imagem " + (indexmobile + 1),
+                    fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                    path: mobilemedia.path,
+                    resolution: mobilemedia.resolution,
+                    namefile: mobilemedia.path.split("/")[1],
+                    description:
+                      "Imagem " + (indexmobile + 1) + " " + resposta.data.label,
+                    time: null,
+                    textfull: null,
+                    textshort: null,
+                    urllink: null,
+                    difficultyLevel: null,
+                    learningStyle: null,
+                    fk_idinstructionalelement: resposta.data.url,
+                  });
+                } else if (mobilemedia.type === 2) {
+                  await Api().post(`/mobilemedia/`, {
+                    label: "Video " + (indexmobile + 1),
+                    fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                    path: mobilemedia.path,
+                    resolution: mobilemedia.resolution,
+                    namefile: mobilemedia.path.split("/")[1],
+                    description: null,
+                    time: mobilemedia.time,
+                    textfull: null,
+                    textshort: null,
+                    urllink: null,
+                    difficultyLevel: null,
+                    learningStyle: null,
+                    fk_idinstructionalelement: resposta.data.url,
+                  });
+                } else if (mobilemedia.type === 3) {
+                  await Api().post(`/mobilemedia/`, {
+                    label: "Audio " + (indexmobile + 1),
+                    fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                    path: mobilemedia.path,
+                    resolution: null,
+                    namefile: mobilemedia.path.split("/")[1],
+                    description: null,
+                    time: null,
+                    textfull: null,
+                    textshort: null,
+                    urllink: null,
+                    difficultyLevel: null,
+                    learningStyle: null,
+                    fk_idinstructionalelement: resposta.data.url,
+                  });
+                } else if (mobilemedia.type === 5) {
+                  await Api().post(`/mobilemedia/`, {
+                    label: "Link " + (indexmobile + 1),
+                    fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                    path: null,
+                    resolution: null,
+                    namefile: null,
+                    description: null,
+                    time: null,
+                    textfull: null,
+                    textshort: null,
+                    urllink: mobilemedia.object,
+                    difficultyLevel: null,
+                    learningStyle: null,
+                    fk_idinstructionalelement: resposta.data.url,
+                  });
+                }
+              });
             }
-          });
-        }
-      },
-      async getSrcImage(indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
-          var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewImageSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
+
+            await vm.questionsControl.forEach(async function (
+              elementQuestion,
+              indexQuestion
+            ) {
+              await Api()
+                .post(`/question/`, {
+                  descriptionquestion: elementQuestion.descriptionQuestion,
+                  orderquestion: indexQuestion,
+                  fk_idinstructionalelement: resposta.data.url,
+                  typequestion:
+                    `/questiontype/` + elementQuestion.typeQuestion + `/`,
+                })
+                .then(async function (resposta2) {
+                  /* INSERÇÃO DOS MOBILEMEDIAS DAS QUESTÕES DA AVALIAÇÃO/EXERCICIO */
+                  await elementQuestion.mobileMedias.forEach(async function (
+                    elementMobile,
+                    indexMobile
+                  ) {
+                    if (elementMobile.type === 1) {
+                      await Api().post(`/mobilemedia/`, {
+                        label: "Imagem " + (indexMobile + 1),
+                        fk_idmediatype:
+                          "/mediatype/" + elementMobile.type + "/",
+                        path: elementMobile.path,
+                        resolution: elementMobile.resolution,
+                        namefile: elementMobile.path.split("/")[1],
+                        description:
+                          "Imagem " +
+                          (indexMobile + 1) +
+                          " Questão" +
+                          resposta2.data.orderquestion,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idquestion: resposta2.data.url,
+                      });
+                    } else if (elementMobile.type === 2) {
+                      await Api().post(`/mobilemedia/`, {
+                        label: "Video " + (indexMobile + 1),
+                        fk_idmediatype:
+                          "/mediatype/" + elementMobile.type + "/",
+                        path: elementMobile.path,
+                        resolution: elementMobile.resolution,
+                        namefile: elementMobile.path.split("/")[1],
+                        description: null,
+                        time: elementMobile.time,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idquestion: resposta2.data.url,
+                      });
+                    } else if (elementMobile.type === 3) {
+                      await Api().post(`/mobilemedia/`, {
+                        label: "Audio " + (indexMobile + 1),
+                        fk_idmediatype:
+                          "/mediatype/" + elementMobile.type + "/",
+                        path: elementMobile.path,
+                        resolution: null,
+                        namefile: elementMobile.path.split("/")[1],
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: null,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idquestion: resposta2.data.url,
+                      });
+                    } else if (elementMobile.type === 5) {
+                      await Api().post(`/mobilemedia/`, {
+                        label: "Link " + (indexMobile + 1) + vm.i++ * 0,
+                        fk_idmediatype:
+                          "/mediatype/" + elementMobile.type + "/",
+                        path: null,
+                        resolution: null,
+                        namefile: null,
+                        description: null,
+                        time: null,
+                        textfull: null,
+                        textshort: null,
+                        urllink: elementMobile.object,
+                        difficultyLevel: null,
+                        learningStyle: null,
+                        fk_idquestion: resposta2.data.url,
+                      });
+                    }
+                  });
+
+                  if (elementQuestion.typeQuestion === 1) {
+                    await elementQuestion.answersAlternatives.forEach(
+                      async function (elementAlternative, indexAlternative) {
+                        await Api().post(`/answersalternatives/`, {
+                          idobjanswer: vm.idObjAnswerItems[indexAlternative],
+                          answers: elementAlternative.answers,
+                          istrue: elementAlternative.isTrue,
+                          fk_idquestion: resposta2.data.url,
+                          orderansweralternatives: indexAlternative,
+                        });
+                      }
+                    );
+                  } else if (elementQuestion.typeQuestion === 2) {
+                    await Api().post(`/resolutionquestion/`, {
+                      correctanswer: elementQuestion.correctAnswer,
+                      fk_idquestion: resposta2.data.url,
+                    });
+                  }
                 });
-                // vm.auxGetSrc.push(file);
-                vm.atualizaObj(file, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
             });
-        }
-      },
-      async getSrcVideo(indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
-          var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewVideoSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
-                });
-                // vm.auxGetSrc.push(file);
-                vm.atualizaObj(file, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
-            });
-        }
-      },
-      async getSrcAudio(indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
-          var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewAudioSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
-                });
-                // vm.auxGetSrc.push(file);
-                vm.atualizaObj(file, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
-            });
-        }
-      },
-      atualizaObj(file, indexMobile) {
-        this.mobileMediasControl[indexMobile].object = file;
-      },
-      addQuestion(questionType) {
-        if (questionType === 1) {
-          this.questionsControl.push({
-            typeQuestion: questionType,
-            descriptionQuestion: null,
-            answersAlternatives: [],
-            mobileMedias: [],
-            url: null,
           });
-        } else if (questionType === 2) {
-          this.questionsControl.push({
-            typeQuestion: questionType,
-            descriptionQuestion: null,
-            correctAnswer: null,
-            mobileMedias: [],
-            url: null,
-            urlCorrectAnswer: null,
-          });
-        }
-      },
-      async deleteQuestion(idQuestion) {
-        if (this.questionsControl[idQuestion].url) {
-          await Api().delete(this.questionsControl[idQuestion].url);
-        }
-        if (idQuestion == 0) {
-          this.questionsControl.shift();
-        } else {
-          this.questionsControl.splice(idQuestion, 1);
-        }
-      },
-      addAlternative(idQuestion) {
-        this.questionsControl[idQuestion].answersAlternatives.push({
-          isTrue: false,
-          answers: null,
+      }
+    },
+    addMobileMedia(mobileMediaType) {
+      if (mobileMediaType === 1) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          path: null,
+          namefile: null,
           url: null,
         });
-      },
-      async deleteAlternative(idQuestion, idAlternative) {
-        if (
+      } else if (mobileMediaType === 2) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          time: null,
+          path: null,
+          namefile: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 3) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
+          object: null,
+          path: null,
+          namefile: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 4) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType + 1,
+          object: null,
+          url: null,
+        });
+      }
+    },
+    async deleteMobileMedia(idMobileMedia) {
+      if (this.mobileMediasControl[idMobileMedia].url) {
+        if (this.mobileMediasControl[idMobileMedia].type !== 5) {
+          await firebase
+            .storage()
+            .ref()
+            .child(this.mobileMediasControl[idMobileMedia].path)
+            .delete();
+        }
+        await Api().delete(this.mobileMediasControl[idMobileMedia].url);
+      }
+      if (idMobileMedia == 0) {
+        this.mobileMediasControl.shift();
+      } else {
+        this.mobileMediasControl.splice(idMobileMedia, 1);
+      }
+    },
+    atualizaMeta() {
+      if (this.mobileMediasControl.length > 0) {
+        this.mobileMediasControl.forEach((mobilemedia) => {
+          if (mobilemedia.object && !mobilemedia.url) {
+            if (mobilemedia.type === 1) {
+              var img = new Image();
+              img.src = URL.createObjectURL(mobilemedia.object);
+              img.onload = function () {
+                mobilemedia.resolution = img.width + "X" + img.height;
+              };
+            } else if (mobilemedia.type === 2) {
+              var video = document.createElement("video");
+              var source = document.createElement("source");
+              source.setAttribute(
+                "src",
+                URL.createObjectURL(mobilemedia.object)
+              );
+              video.appendChild(source);
+              video.oncanplay = function () {
+                mobilemedia.resolution =
+                  video.videoWidth + "X" + video.videoHeight;
+                mobilemedia.time = video.duration;
+              };
+            }
+          }
+        });
+      }
+    },
+    async getSrcImage(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewImageSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcVideo(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewVideoSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcAudio(indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewAudioSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
+              });
+              // vm.auxGetSrc.push(file);
+              vm.atualizaObj(file, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    atualizaObj(file, indexMobile) {
+      this.mobileMediasControl[indexMobile].object = file;
+    },
+    addQuestion(questionType) {
+      if (questionType === 1) {
+        this.questionsControl.push({
+          typeQuestion: questionType,
+          descriptionQuestion: null,
+          answersAlternatives: [],
+          mobileMedias: [],
+          url: null,
+        });
+      } else if (questionType === 2) {
+        this.questionsControl.push({
+          typeQuestion: questionType,
+          descriptionQuestion: null,
+          correctAnswer: null,
+          mobileMedias: [],
+          url: null,
+          urlCorrectAnswer: null,
+        });
+      }
+    },
+    async deleteQuestion(idQuestion) {
+      if (this.questionsControl[idQuestion].url) {
+        await Api().delete(this.questionsControl[idQuestion].url);
+      }
+      if (idQuestion == 0) {
+        this.questionsControl.shift();
+      } else {
+        this.questionsControl.splice(idQuestion, 1);
+      }
+    },
+    addAlternative(idQuestion) {
+      this.questionsControl[idQuestion].answersAlternatives.push({
+        isTrue: false,
+        answers: null,
+        url: null,
+      });
+    },
+    async deleteAlternative(idQuestion, idAlternative) {
+      if (
+        this.questionsControl[idQuestion].answersAlternatives[idAlternative].url
+      ) {
+        await Api().delete(
           this.questionsControl[idQuestion].answersAlternatives[idAlternative]
             .url
+        );
+      }
+      if (idAlternative == 0) {
+        this.questionsControl[idQuestion].answersAlternatives.shift();
+      } else {
+        this.questionsControl[idQuestion].answersAlternatives.splice(
+          idAlternative,
+          1
+        );
+      }
+    },
+    addMobileMediaQuestion(idQuestion, mobileMediaType) {
+      if (mobileMediaType === 1) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          path: null,
+          namefile: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 2) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          resolution: null,
+          time: null,
+          path: null,
+          namefile: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 3) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType,
+          object: null,
+          path: null,
+          namefile: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 4) {
+        this.questionsControl[idQuestion].mobileMedias.push({
+          type: mobileMediaType + 1,
+          object: null,
+          url: null,
+        });
+      }
+    },
+    async deleteMobileMediaQuestion(idQuestion, idMobileMedia) {
+      if (this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url) {
+        if (
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].type !==
+          5
         ) {
-          await Api().delete(
-            this.questionsControl[idQuestion].answersAlternatives[idAlternative]
-              .url
-          );
+          await firebase
+            .storage()
+            .ref()
+            .child(
+              this.questionsControl[idQuestion].mobileMedias[idMobileMedia].path
+            )
+            .delete();
         }
-        if (idAlternative == 0) {
-          this.questionsControl[idQuestion].answersAlternatives.shift();
-        } else {
-          this.questionsControl[idQuestion].answersAlternatives.splice(
-            idAlternative,
-            1
-          );
-        }
-      },
-      addMobileMediaQuestion(idQuestion, mobileMediaType) {
-        if (mobileMediaType === 1) {
-          this.questionsControl[idQuestion].mobileMedias.push({
-            type: mobileMediaType,
-            object: null,
-            resolution: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 2) {
-          this.questionsControl[idQuestion].mobileMedias.push({
-            type: mobileMediaType,
-            object: null,
-            resolution: null,
-            time: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 3) {
-          this.questionsControl[idQuestion].mobileMedias.push({
-            type: mobileMediaType,
-            object: null,
-            path: null,
-            namefile: null,
-            url: null,
-          });
-        } else if (mobileMediaType === 4) {
-          this.questionsControl[idQuestion].mobileMedias.push({
-            type: mobileMediaType + 1,
-            object: null,
-            url: null,
-          });
-        }
-      },
-      async deleteMobileMediaQuestion(idQuestion, idMobileMedia) {
-        if (this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url) {
-          if (
-            this.questionsControl[idQuestion].mobileMedias[idMobileMedia]
-              .type !== 5
-          ) {
-            await firebase
-              .storage()
-              .ref()
-              .child(
-                this.questionsControl[idQuestion].mobileMedias[idMobileMedia]
-                  .path
-              )
-              .delete();
-          }
-          await Api().delete(
-            this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url
-          );
-        }
-        if (idMobileMedia == 0) {
-          this.questionsControl[idQuestion].mobileMedias.shift();
-        } else {
-          this.questionsControl[idQuestion].mobileMedias.splice(
-            idMobileMedia,
-            1
-          );
-        }
-      },
-      atualizaMetaQuestions() {
-        if (this.questionsControl.length > 0) {
-          this.questionsControl.forEach((question) => {
-            if (question.mobileMedias) {
-              question.mobileMedias.forEach((mobilemedia) => {
-                if (mobilemedia.object && !mobilemedia.url) {
-                  if (mobilemedia.type === 1) {
-                    var img = new Image();
-                    img.src = URL.createObjectURL(mobilemedia.object);
-                    img.onload = function() {
-                      mobilemedia.resolution = img.width + "X" + img.height;
-                    };
-                  } else if (mobilemedia.type === 2) {
-                    var video = document.createElement("video");
-                    var source = document.createElement("source");
-                    source.setAttribute(
-                      "src",
-                      URL.createObjectURL(mobilemedia.object)
-                    );
-                    video.appendChild(source);
-                    video.oncanplay = function() {
-                      mobilemedia.resolution =
-                        video.videoWidth + "X" + video.videoHeight;
-                      mobilemedia.time = video.duration;
-                    };
-                  }
+        await Api().delete(
+          this.questionsControl[idQuestion].mobileMedias[idMobileMedia].url
+        );
+      }
+      if (idMobileMedia == 0) {
+        this.questionsControl[idQuestion].mobileMedias.shift();
+      } else {
+        this.questionsControl[idQuestion].mobileMedias.splice(idMobileMedia, 1);
+      }
+    },
+    atualizaMetaQuestions() {
+      if (this.questionsControl.length > 0) {
+        this.questionsControl.forEach((question) => {
+          if (question.mobileMedias) {
+            question.mobileMedias.forEach((mobilemedia) => {
+              if (mobilemedia.object && !mobilemedia.url) {
+                if (mobilemedia.type === 1) {
+                  var img = new Image();
+                  img.src = URL.createObjectURL(mobilemedia.object);
+                  img.onload = function () {
+                    mobilemedia.resolution = img.width + "X" + img.height;
+                  };
+                } else if (mobilemedia.type === 2) {
+                  var video = document.createElement("video");
+                  var source = document.createElement("source");
+                  source.setAttribute(
+                    "src",
+                    URL.createObjectURL(mobilemedia.object)
+                  );
+                  video.appendChild(source);
+                  video.oncanplay = function () {
+                    mobilemedia.resolution =
+                      video.videoWidth + "X" + video.videoHeight;
+                    mobilemedia.time = video.duration;
+                  };
                 }
+              }
+            });
+          }
+        });
+      }
+    },
+    atualizaObjQuestions(file, indexQuestion, indexMobile) {
+      this.questionsControl[indexQuestion].mobileMedias[
+        indexMobile
+      ].object = file;
+    },
+    async getSrcImageQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewImageSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
               });
-            }
+              /*vm.auxGetSrcQuestions.push(file);*/
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
           });
-        }
-      },
-      atualizaObjQuestions(file, indexQuestion, indexMobile) {
-        this.questionsControl[indexQuestion].mobileMedias[
-          indexMobile
-        ].object = file;
-      },
-      async getSrcImageQuestions(indexQuestion, indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
+      }
+    },
+    async getSrcVideoQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewVideoSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
+              });
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async getSrcAudioQuestions(indexQuestion, indexMobile, path, namefile) {
+      /*var obj = {};*/
+      if (path) {
+        var vm = this;
+        await firebase
+          .storage()
+          .ref(path)
+          .getDownloadURL()
+          .then(function (url) {
+            /*vm.viewAudioSrc = url;*/
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function () {
+              var blob = xhr.response;
+              var file = new File([blob], namefile, {
+                type: blob.type,
+              });
+              // vm.auxGetSrcQuestions.push(file);
+              vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+          });
+      }
+    },
+    async validate() {
+      if (this.$refs.form.validate()) {
+        if (this.questionsControl.length > 0) {
           var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewImageSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
-                });
-                /*vm.auxGetSrcQuestions.push(file);*/
-                vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
-            });
-        }
-      },
-      async getSrcVideoQuestions(indexQuestion, indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
-          var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewVideoSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
-                });
-                // vm.auxGetSrcQuestions.push(file);
-                vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
-            });
-        }
-      },
-      async getSrcAudioQuestions(indexQuestion, indexMobile, path, namefile) {
-        /*var obj = {};*/
-        if (path) {
-          var vm = this;
-          await firebase
-            .storage()
-            .ref(path)
-            .getDownloadURL()
-            .then(function(url) {
-              /*vm.viewAudioSrc = url;*/
-              var xhr = new XMLHttpRequest();
-              xhr.responseType = "blob";
-              xhr.onload = function() {
-                var blob = xhr.response;
-                var file = new File([blob], namefile, {
-                  type: blob.type,
-                });
-                // vm.auxGetSrcQuestions.push(file);
-                vm.atualizaObjQuestions(file, indexQuestion, indexMobile);
-              };
-              xhr.open("GET", url);
-              xhr.send();
-            });
-        }
-      },
-      async validate() {
-        if (this.$refs.form.validate()) {
-          if (this.questionsControl.length > 0) {
-            var vm = this;
-            var aux = 1;
-            for (var i = 0; i < this.questionsControl.length; i++) {
-              if (aux === 1) {
-                if (this.questionsControl[i].typeQuestion === 1) {
-                  if (
-                    this.questionsControl[i].answersAlternatives.length === 0
-                  ) {
-                    vm.questionAjust = i + 1;
-                    vm.dialog_alert3 = true;
-                    aux = 0;
+          var aux = 1;
+          for (var i = 0; i < this.questionsControl.length; i++) {
+            if (aux === 1) {
+              if (this.questionsControl[i].typeQuestion === 1) {
+                if (this.questionsControl[i].answersAlternatives.length === 0) {
+                  vm.questionAjust = i + 1;
+                  vm.dialog_alert3 = true;
+                  aux = 0;
+                  break;
+                }
+                for (
+                  var j = 0;
+                  j < this.questionsControl[i].answersAlternatives.length;
+                  j++
+                ) {
+                  if (this.questionsControl[i].answersAlternatives[j].isTrue) {
                     break;
                   }
-                  for (
-                    var j = 0;
-                    j < this.questionsControl[i].answersAlternatives.length;
-                    j++
+                  if (
+                    j ===
+                    this.questionsControl[i].answersAlternatives.length - 1
                   ) {
-                    if (
-                      this.questionsControl[i].answersAlternatives[j].isTrue
-                    ) {
-                      break;
-                    }
-                    if (
-                      j ===
-                      this.questionsControl[i].answersAlternatives.length - 1
-                    ) {
-                      vm.questionAjust = i + 1;
-                      vm.dialog_alert2 = true;
-                      aux = 0;
-                    }
+                    vm.questionAjust = i + 1;
+                    vm.dialog_alert2 = true;
+                    aux = 0;
                   }
                 }
-              } else {
-                break;
               }
+            } else {
+              break;
             }
-            if (aux === 1) {
-              var auxNumberQuestions = this.questionsControl.length;
-              await this.postQuestions();
-              this.questionsControl = [];
-              await this.$emit("instrucclose", auxNumberQuestions);
-              await this.resetVariables();
-            }
-          } else {
-            this.dialog_alert = true;
           }
+          if (aux === 1) {
+            var auxNumberQuestions = this.questionsControl.length;
+            await this.postQuestions();
+            this.questionsControl = [];
+            await this.$emit("instrucclose", auxNumberQuestions);
+            await this.resetVariables();
+          }
+        } else {
+          this.dialog_alert = true;
         }
-      },
-      resetVariables() {
-        this.questionsControl = [];
-        this.mobileMediasControl = [];
-        this.avaliacaoName = "";
-      },
-      async reset() {
-        await this.$emit("instrucclose");
-        await this.resetVariables();
-        this.questionsControl = [];
-        this.mobileMediasControl = [];
-      },
-      resetValidation() {
-        this.$refs.form.resetValidation();
-      },
+      }
     },
-  };
+    resetVariables() {
+      this.questionsControl = [];
+      this.mobileMediasControl = [];
+      this.avaliacaoName = "";
+    },
+    async reset() {
+      await this.$emit("instrucclose");
+      await this.resetVariables();
+      this.questionsControl = [];
+      this.mobileMediasControl = [];
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    },
+  },
+};
 </script>
