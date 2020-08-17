@@ -3,7 +3,7 @@
     <v-list-item class="px-2" style="height:65px;">
       <v-list-item-avatar v-if="searchBool">
         <v-img class="white">
-          <h3 class="mx-auto mt-2 black--text">DM</h3>
+          <h3 class="mx-auto mt-2 black--text">D</h3>
         </v-img>
       </v-list-item-avatar>
 

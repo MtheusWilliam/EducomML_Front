@@ -232,21 +232,27 @@ export default {
             }
           }
         }
-      }
-      for (var i1 = 0; i1 < this.domain.modules.length; i1++) {
-        if (
-          Array.isArray(this.domain.modules[i1].concepts) &&
-          this.domain.modules[i1].concepts.length > 0
-        ) {
-          for (var c1 = 0; c1 < this.domain.modules[i1].concepts.length; c1++) {
-            if (this.domain.modules[i1].concepts[c1].url === this.concept.url) {
-              i1 = this.domain.modules.length;
-              break;
-            } else {
-              this.conceptsPrior.push({
-                text: this.domain.modules[i1].concepts[c1].nameconcept,
-                value: this.domain.modules[i1].concepts[c1].url,
-              });
+        for (var i1 = 0; i1 < this.domain.modules.length; i1++) {
+          if (
+            Array.isArray(this.domain.modules[i1].concepts) &&
+            this.domain.modules[i1].concepts.length > 0
+          ) {
+            for (
+              var c1 = 0;
+              c1 < this.domain.modules[i1].concepts.length;
+              c1++
+            ) {
+              if (
+                this.domain.modules[i1].concepts[c1].url === this.concept.url
+              ) {
+                i1 = this.domain.modules.length;
+                break;
+              } else {
+                this.conceptsPrior.push({
+                  text: this.domain.modules[i1].concepts[c1].nameconcept,
+                  value: this.domain.modules[i1].concepts[c1].url,
+                });
+              }
             }
           }
         }
