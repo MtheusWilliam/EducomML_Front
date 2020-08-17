@@ -14,8 +14,7 @@
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Name</v-list-item-title>
-            <v-list-item-subtitle>lastname</v-list-item-subtitle>
+            <v-list-item-title>{{$store.state.username}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -40,8 +39,17 @@ export default {
   name: "UserMenu",
   data: () => ({
     items: [
+<<<<<<< HEAD
       { title: "Home", icon: "mdi-home", path: "/" },
       { title: "Configurações", icon: "mdi-account-settings", path: "/signup" },
+=======
+      { title: "Home", icon: "mdi-home", path: "/home" },
+      {
+        title: "Configurações",
+        icon: "mdi-account-settings",
+        path: "/settings/profile/",
+      },
+>>>>>>> 10fb07531a76ba9f54f68fbbefc17ffe0cfdecc3
       { title: "Sair", icon: "mdi-exit-to-app", path: "logout" },
     ],
   }),
