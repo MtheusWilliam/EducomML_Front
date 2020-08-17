@@ -21,8 +21,9 @@
             <v-row>
               <v-col cols="4">
                 <v-btn
-                  class="ml-1"
-                  color="green"
+                  style="margin-top: -10px;"
+                  class="mb-2"
+                  color="primary"
                   height="40"
                   dark
                   small

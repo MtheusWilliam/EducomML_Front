@@ -205,6 +205,7 @@ export default {
       }
     },
     setDomainVariables() {
+      this.conceptsPrior = [];
       for (var i = 0; i < this.domain.modules.length; i++) {
         if (this.domain.modules[i].submodules.length > 0) {
           for (var s = 0; s < this.domain.modules[i].submodules.length; s++) {
@@ -260,7 +261,6 @@ export default {
     },
     async postPriorKnowledges() {
       var vm = this;
-
       if (this.concept) {
         await this.priorControl.forEach(async (prior) => {
           if (prior.url) {
@@ -342,9 +342,11 @@ export default {
     reset() {
       this.$emit("close_or_save", "close");
       this.priorControl = [];
+      this.conceptsPrior = [];
     },
     resetVariables() {
       this.priorControl = [];
+      this.conceptsPrior = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();
