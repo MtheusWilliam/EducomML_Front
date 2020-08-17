@@ -8,7 +8,7 @@
       </template>
 
       <v-list dense nav class="py-0">
-        <v-list-item two-line :class="miniVariant && 'px-0'">
+        <v-list-item two-line>
           <v-list-item-avatar>
             <img src="https://randomuser.me/api/portraits/men/81.jpg" />
           </v-list-item-avatar>
@@ -21,12 +21,7 @@
 
         <v-divider></v-divider>
 
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          @click="goTo(item.path)"
-          link
-        >
+        <v-list-item v-for="item in items" :key="item.title" @click="goTo(item.path)" link>
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -41,24 +36,24 @@
 </template>
 
 <script>
-  export default {
-    name: "UserMenu",
-    data: () => ({
-      items: [
-        { title: "Home", icon: "mdi-home", path: "/" },
-        { title: "Configurações", icon: "mdi-account-settings", path: "/" },
-        { title: "Sair", icon: "mdi-exit-to-app", path: "logout" },
-      ],
-    }),
-    methods: {
-      goTo(path) {
-        if (path === "logout") {
-          this.$store.dispatch("logout");
-          this.$router.push({ path: "/" });
-        } else {
-          this.$router.push({ path: path });
-        }
-      },
+export default {
+  name: "UserMenu",
+  data: () => ({
+    items: [
+      { title: "Home", icon: "mdi-home", path: "/" },
+      { title: "Configurações", icon: "mdi-account-settings", path: "/signup" },
+      { title: "Sair", icon: "mdi-exit-to-app", path: "logout" },
+    ],
+  }),
+  methods: {
+    goTo(path) {
+      if (path === "logout") {
+        this.$store.dispatch("logout");
+        this.$router.push({ path: "/" });
+      } else {
+        this.$router.push({ path: path });
+      }
     },
-  };
+  },
+};
 </script>
