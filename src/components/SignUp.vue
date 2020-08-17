@@ -1,20 +1,9 @@
 <template>
-  <v-card
-    class="elevation-12 mx-auto"
-    style="position:relative;top:20vh;"
-    width="50vw"
-  >
+  <v-card class="elevation-12 mx-auto" style="position:relative;top:20vh;" width="50vw">
     <v-toolbar color="black" flat>
-      <v-toolbar-title style="color:#FFCC00;"
-        >Crie sua conta no Educom.ML</v-toolbar-title
-      >
+      <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-img
-        class="mt-1"
-        src="../assets/logo.png"
-        style="width: 20px;"
-        max-width="200"
-      ></v-img>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;" max-width="200"></v-img>
       <v-tooltip bottom>
         <span>Source</span>
       </v-tooltip>
@@ -87,22 +76,17 @@
         <span>Já possui uma conta? Faça seu Login</span>
       </a>
       <v-spacer></v-spacer>
-      <v-btn color="primary" @click="validate()" large class="mr-4"
-        >Cadastrar</v-btn
-      >
+      <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
     <div class="text-center">
       <v-dialog v-model="dialogError" width="500">
         <v-card>
-          <v-card-title
-            :class="messageClass"
-            primary-title
-            style="color:white;"
-            >{{ messageTitle }}</v-card-title
-          >
-          <v-card-text class="mt-3" style="font-size: 1.3em;">{{
+          <v-card-title :class="messageClass" primary-title style="color:white;">{{ messageTitle }}</v-card-title>
+          <v-card-text class="mt-3" style="font-size: 1.3em;">
+            {{
             messageError
-          }}</v-card-text>
+            }}
+          </v-card-text>
           <v-divider></v-divider>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -115,107 +99,141 @@
 </template>
 
 <script>
-  import Api from "@/services/Api";
-  export default {
-    name: "SignUp",
-    data() {
-      return {
-        dialog: false,
-        username: "",
-        usernameRules: [
-          (v) => !!v || "É necessário inserir seu username",
-          (v) =>
-            (v && v.length <= 25) ||
-            "Seu username deve possuir menos de 25 caracteres",
-        ],
-        name: "",
-        nameRules: [
-          (v) => !!v || "É necessário inserir seu nome",
-          (v) =>
-            (v && v.length <= 30) ||
-            "Seu nome deve possuir menos de 30 caracteres",
-        ],
-        lastname: "",
-        lastnameRules: [
-          (v) => !!v || "É necessário inserir seu sobrenome",
-          (v) =>
-            (v && v.length <= 30) ||
-            "Seu sobrenome deve possuir menos de 30 caracteres",
-        ],
-        email: "",
-        emailRules: [
-          (v) => !!v || "É necessário inserir seu e-mail",
-          (v) => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido",
-        ],
-        password: "",
-        passwordRules: [(v) => !!v || "É necessário inserir sua senha"],
-        passwordConfirm: "",
-        messageClass: "",
-        messageTitle: "",
-        messageError: "",
-        dialogError: "",
+import Api from "@/services/Api";
+export default {
+  name: "SignUp",
+  data() {
+    return {
+      dialog: false,
+      username: "",
+      usernameRules: [
+        (v) => !!v || "É necessário inserir seu username",
+        (v) =>
+          (v && v.length <= 25) ||
+          "Seu username deve possuir menos de 25 caracteres",
+      ],
+      name: "",
+      nameRules: [
+        (v) => !!v || "É necessário inserir seu nome",
+        (v) =>
+          (v && v.length <= 30) ||
+          "Seu nome deve possuir menos de 30 caracteres",
+      ],
+      lastname: "",
+      lastnameRules: [
+        (v) => !!v || "É necessário inserir seu sobrenome",
+        (v) =>
+          (v && v.length <= 30) ||
+          "Seu sobrenome deve possuir menos de 30 caracteres",
+      ],
+      email: "",
+      emailRules: [
+        (v) => !!v || "É necessário inserir seu e-mail",
+        (v) => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido",
+      ],
+      password: "",
+      passwordRules: [(v) => !!v || "É necessário inserir sua senha"],
+      passwordConfirm: "",
+      user_url: "",
+      messageClass: "",
+      messageTitle: "",
+      messageError: "",
+      dialogError: "",
+    };
+  },
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.passwordConfirm || "As senhas devem ser iguais";
+    },
+  },
+  async mounted() {
+    var usr = await this.getUser();
+    console.log(usr.password);
+    if (usr) {
+      this.user_url = usr.url;
+      this.username = usr.username.toLowerCase();
+      this.email = usr.email;
+      this.first_name = usr.name;
+      this.last_name = usr.lastname;
+      this.password = usr.password;
+    }
+  },
+  methods: {
+    async postOrPutUser() {
+      var usr = {
+        username: this.username.toLowerCase(),
+        email: this.email,
+        first_name: this.name,
+        last_name: this.lastname,
+        password: this.password,
+        is_active: false,
       };
+      var auth = {
+        auth: {
+          username: "admin",
+          password: "admin",
+        },
+      };
+
+      try {
+        if (this.user_url) await Api().put(this.user_url, usr, auth);
+        else await Api().post("/users/", usr, auth);
+      } catch (err) {
+        console.log(err);
+      }
     },
-    computed: {
-      passwordConfirmationRule() {
-        return () =>
-          this.password === this.passwordConfirm ||
-          "As senhas devem ser iguais";
-      },
-    },
-    methods: {
-      async postUser() {
-        await Api().post(
-          "/users/",
-          {
-            username: this.username.toLowerCase(),
-            email: this.email,
-            first_name: this.name,
-            last_name: this.lastname,
-            password: this.password,
-            is_active: false,
-          },
-          {
-            auth: {
-              username: "admin",
-              password: "admin",
-            },
-          }
-        );
-      },
-      async validate() {
-        if (this.$refs.form.validate()) {
-          try {
-            await this.$refs.form.validate();
-            await this.postUser();
-            this.messageClass = "headline green";
-            this.messageTitle = "Email de confirmação enviado com sucesso";
-            this.messageError =
-              "Enviamos um email de confirmação para você. Verifique a caixa de mensagens do seu email para ativar sua conta.";
-            this.dialogError = true;
-          } catch (err) {
-            this.messageClass = "headline red";
-            this.messageTitle = "Erro";
-            this.messageError =
-              "O username ou email já estão sendo utilizados na plataforma";
-            this.dialogError = true;
-          }
+
+    async validate() {
+      if (this.$refs.form.validate()) {
+        try {
+          await this.$refs.form.validate();
+          await this.postOrPutUser();
+          this.messageClass = "headline green";
+          this.messageTitle = "Email de confirmação enviado com sucesso";
+          this.messageError =
+            "Enviamos um email de confirmação para você. Verifique a caixa de mensagens do seu email para ativar sua conta.";
+          this.dialogError = true;
+        } catch (err) {
+          this.messageClass = "headline red";
+          this.messageTitle = "Erro";
+          this.messageError =
+            "O username ou email já estão sendo utilizados na plataforma";
+          this.dialogError = true;
         }
-      },
-      async firstLogin() {
-        await this.$store.dispatch("obtainToken", {
-          username: this.username,
-          password: this.password,
-        });
-        await this.$router.push({
-          name: "home",
-        });
-      },
-      async redirectLogin() {
-        this.$router.push({
-          name: "login",
-        });
-      },
+      }
     },
-  };
+    async firstLogin() {
+      await this.$store.dispatch("obtainToken", {
+        username: this.username,
+        password: this.password,
+      });
+      await this.$router.push({
+        name: "home",
+      });
+    },
+    async redirectLogin() {
+      this.$router.push({
+        name: "login",
+      });
+    },
+    async getUser() {
+      var usr;
+      try {
+        await Api()
+          .post("/userId/", {
+            username: this.$store.state.username,
+          })
+          .then(async (response) => {
+            await Api()
+              .get(response.data.url)
+              .then((response) => (usr = response.data));
+          });
+      } catch (error) {
+        usr = null;
+      }
+      return usr;
+    },
+  },
+};
 </script>
