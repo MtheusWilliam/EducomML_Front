@@ -39,17 +39,12 @@ export default {
   name: "UserMenu",
   data: () => ({
     items: [
-<<<<<<< HEAD
-      { title: "Home", icon: "mdi-home", path: "/" },
-      { title: "Configurações", icon: "mdi-account-settings", path: "/signup" },
-=======
       { title: "Home", icon: "mdi-home", path: "/home" },
       {
         title: "Configurações",
         icon: "mdi-account-settings",
         path: "/settings/profile/",
       },
->>>>>>> 10fb07531a76ba9f54f68fbbefc17ffe0cfdecc3
       { title: "Sair", icon: "mdi-exit-to-app", path: "logout" },
     ],
   }),
