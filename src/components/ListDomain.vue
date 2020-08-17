@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-list-item class="px-2">
+    <v-list-item class="px-2" style="height:65px;">
       <v-list-item-avatar v-if="searchBool">
-        <v-img class="white"
-          ><h3 class="mx-auto mt-2 black--text">DM</h3></v-img
-        >
+        <v-img class="white">
+          <h3 class="mx-auto mt-2 black--text">DM</h3>
+        </v-img>
       </v-list-item-avatar>
 
       <v-list-item-title v-if="searchBool">Dominios</v-list-item-title>
@@ -44,17 +44,17 @@
 </template>
 
 <script>
-  export default {
-    name: "ListDomain",
-    props: ["domains"],
-    data: () => ({
-      searchBool: true,
-      search: "",
-    }),
-    watch: {
-      search() {
-        this.$emit("emitDomains", this.search);
-      },
+export default {
+  name: "ListDomain",
+  props: ["domains"],
+  data: () => ({
+    searchBool: true,
+    search: "",
+  }),
+  watch: {
+    search() {
+      this.$emit("emitDomains", this.search);
     },
-  };
+  },
+};
 </script>
