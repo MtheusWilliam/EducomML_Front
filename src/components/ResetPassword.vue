@@ -1,48 +1,44 @@
 <template>
-  <v-row style="height: 100%;" class="d-flex align-center">
-    <v-spacer></v-spacer>
-    <v-card width="500">
-      <v-toolbar color="black" flat>
-        <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
-        <v-tooltip bottom>
-          <span>Source</span>
-        </v-tooltip>
-      </v-toolbar>
-      <v-card-text>
-        <v-form style="margin-bottom: -20px;" ref="form">
-          <v-text-field
-            id="password"
-            label="Senha"
-            name="password"
-            v-model="password"
-            :rules="passwordRules"
-            type="password"
-            prepend-icon="mdi-lock"
-            required
-          ></v-text-field>
+  <v-card class="elevation-12">
+    <v-toolbar color="black" flat>
+      <v-toolbar-title style="color:#FFCC00;">Crie sua conta no Educom.ML</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-img class="mt-1" src="../assets/logo.png" style="width: 20px;"></v-img>
+      <v-tooltip bottom>
+        <span>Source</span>
+      </v-tooltip>
+    </v-toolbar>
+    <v-card-text>
+      <v-form style="margin-bottom: -20px;" ref="form">
+        <v-text-field
+          id="password"
+          label="Senha"
+          name="password"
+          v-model="password"
+          :rules="passwordRules"
+          type="password"
+          prepend-icon="mdi-lock"
+          required
+        ></v-text-field>
 
-          <v-text-field
-            id="passwordConfirm"
-            label="Confirmação de Senha"
-            name="passwordConfirm"
-            v-model="passwordConfirm"
-            type="password"
-            :rules="[passwordConfirmationRule]"
-            prepend-icon="mdi-lock"
-            required
-          ></v-text-field>
-        </v-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        {{ messageError }}
-        <v-btn color="primary" @click="validate()" large class="mr-4">Resetar Senha</v-btn>
-      </v-card-actions>
-    </v-card>
-    <v-spacer></v-spacer>
-  </v-row>
+        <v-text-field
+          id="passwordConfirm"
+          label="Confirmação de Senha"
+          name="passwordConfirm"
+          v-model="passwordConfirm"
+          type="password"
+          :rules="[passwordConfirmationRule]"
+          prepend-icon="mdi-lock"
+          required
+        ></v-text-field>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      {{ messageError }}
+      <v-btn color="primary" @click="validate()" large class="mr-4">Resetar Senha</v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>

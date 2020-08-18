@@ -146,18 +146,14 @@ export default {
   watch: {
     dialog: async function () {
       this.priorControl = [];
-      if (this.concept) {
-        await this.setDomainVariables();
-        await this.getPriors();
-      }
+      await this.setDomainVariables();
+      await this.getPriors();
     },
   },
   mounted: async function () {
     this.priorControl = [];
-    if (this.concept) {
-      await this.setDomainVariables();
-      await this.getPriors();
-    }
+    await this.setDomainVariables();
+    await this.getPriors();
   },
   methods: {
     getPriors() {
@@ -192,20 +188,19 @@ export default {
           }
         }
       } else {
-        if (vm.$store.state.priorConcepts === []) {
-          vm.$store.state.priorConcepts.forEach((prior) => {
-            this.priorControl.push({
-              namepriorknowledge: prior.namepriorknowledge,
-              priorlevel: prior.priorlevel,
-              fk_idconcept: prior.fk_idconcept,
-              url: prior.url,
-            });
+        vm.$store.state.priorConcepts.forEach((prior) => {
+          this.priorControl.push({
+            namepriorknowledge: prior.namepriorknowledge,
+            priorlevel: prior.priorlevel,
+            fk_idconcept: prior.fk_idconcept,
+            url: prior.url,
           });
-        }
+        });
       }
     },
     setDomainVariables() {
       this.conceptsPrior = [];
+
       for (var i = 0; i < this.domain.modules.length; i++) {
         if (this.domain.modules[i].submodules.length > 0) {
           for (var s = 0; s < this.domain.modules[i].submodules.length; s++) {

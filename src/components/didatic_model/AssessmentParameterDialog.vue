@@ -192,7 +192,7 @@ export default {
         value: 2,
       },
     ],
-    valueTypes: ["Single", "Range"],
+    valueTypes: ["Simples", "Faixa"],
     assessmentControl: [],
     dialogError: false,
     messageError: "",
