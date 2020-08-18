@@ -27,7 +27,7 @@
             >Selecionar tudo</v-btn>
             <v-btn
               class="ml-1"
-              color="#A5A5A5"
+              color="purple"
               height="40px"
               dark
               small

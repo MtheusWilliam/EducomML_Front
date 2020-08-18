@@ -146,18 +146,14 @@ export default {
   watch: {
     dialog: async function () {
       this.priorControl = [];
-      if (this.concept) {
-        await this.setDomainVariables();
-        await this.getPriors();
-      }
+      await this.setDomainVariables();
+      await this.getPriors();
     },
   },
   mounted: async function () {
     this.priorControl = [];
-    if (this.concept) {
-      await this.setDomainVariables();
-      await this.getPriors();
-    }
+    await this.setDomainVariables();
+    await this.getPriors();
   },
   methods: {
     getPriors() {
@@ -192,19 +188,19 @@ export default {
           }
         }
       } else {
-        if (vm.$store.state.priorConcepts === []) {
-          vm.$store.state.priorConcepts.forEach((prior) => {
-            this.priorControl.push({
-              namepriorknowledge: prior.namepriorknowledge,
-              priorlevel: prior.priorlevel,
-              fk_idconcept: prior.fk_idconcept,
-              url: prior.url,
-            });
+        vm.$store.state.priorConcepts.forEach((prior) => {
+          this.priorControl.push({
+            namepriorknowledge: prior.namepriorknowledge,
+            priorlevel: prior.priorlevel,
+            fk_idconcept: prior.fk_idconcept,
+            url: prior.url,
           });
-        }
+        });
       }
     },
     setDomainVariables() {
+      this.conceptsPrior = [];
+
       for (var i = 0; i < this.domain.modules.length; i++) {
         if (this.domain.modules[i].submodules.length > 0) {
           for (var s = 0; s < this.domain.modules[i].submodules.length; s++) {
@@ -232,21 +228,27 @@ export default {
             }
           }
         }
-      }
-      for (var i1 = 0; i1 < this.domain.modules.length; i1++) {
-        if (
-          Array.isArray(this.domain.modules[i1].concepts) &&
-          this.domain.modules[i1].concepts.length > 0
-        ) {
-          for (var c1 = 0; c1 < this.domain.modules[i1].concepts.length; c1++) {
-            if (this.domain.modules[i1].concepts[c1].url === this.concept.url) {
-              i1 = this.domain.modules.length;
-              break;
-            } else {
-              this.conceptsPrior.push({
-                text: this.domain.modules[i1].concepts[c1].nameconcept,
-                value: this.domain.modules[i1].concepts[c1].url,
-              });
+        for (var i1 = 0; i1 < this.domain.modules.length; i1++) {
+          if (
+            Array.isArray(this.domain.modules[i1].concepts) &&
+            this.domain.modules[i1].concepts.length > 0
+          ) {
+            for (
+              var c1 = 0;
+              c1 < this.domain.modules[i1].concepts.length;
+              c1++
+            ) {
+              if (
+                this.domain.modules[i1].concepts[c1].url === this.concept.url
+              ) {
+                i1 = this.domain.modules.length;
+                break;
+              } else {
+                this.conceptsPrior.push({
+                  text: this.domain.modules[i1].concepts[c1].nameconcept,
+                  value: this.domain.modules[i1].concepts[c1].url,
+                });
+              }
             }
           }
         }
@@ -254,7 +256,6 @@ export default {
     },
     async postPriorKnowledges() {
       var vm = this;
-
       if (this.concept) {
         await this.priorControl.forEach(async (prior) => {
           if (prior.url) {
@@ -336,9 +337,11 @@ export default {
     reset() {
       this.$emit("close_or_save", "close");
       this.priorControl = [];
+      this.conceptsPrior = [];
     },
     resetVariables() {
       this.priorControl = [];
+      this.conceptsPrior = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();

@@ -21,8 +21,9 @@
             <v-row>
               <v-col cols="4">
                 <v-btn
-                  class="ml-1"
-                  color="green"
+                  style="margin-top: -10px;"
+                  class="mb-2"
+                  color="primary"
                   height="40"
                   dark
                   small
@@ -293,13 +294,18 @@ export default {
           })
           .then(async function (resposta) {
             vm.auxConceito = resposta.data.url;
-            if (vm.$store.state.priorConcepts === []) {
+            if (vm.$store.state.priorConcepts) {
               vm.$store.state.priorConcepts.forEach(async (prior) => {
+                console.log("vamo quase", prior);
+                console.log(`/priorlevel/` + prior.priorlevel + `/`);
+                console.log(prior.namepriorknowledge);
+                console.log(resposta.data.url);
+
                 await Api()
                   .post(`/priorknowledge/`, {
                     namepriorknowledge: prior.namepriorknowledge,
                     priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
-                    fk_fksourceconcept: prior.fk_idconcept,
+                    fk_priorsourceconcept: prior.fk_idconcept,
                     fk_priortargetconcept: resposta.data.url,
                   })
                   .then(function () {

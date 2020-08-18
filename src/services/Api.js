@@ -7,7 +7,7 @@ export default () => {
   var jwt = store.state.jwt;
   return axios.create({
     baseURL: "http://127.0.0.1:8000/",
-    // baseURL: "https://educomml-back.herokuapp.com/",
+    //baseURL: "https://educomml-back.herokuapp.com/",
     withCredentials: false,
     headers: {
       "x-csrftoken": csrftoken,
