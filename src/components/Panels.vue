@@ -2327,6 +2327,8 @@ export default {
           this.elementToScroll.url.split("/")[3] +
           this.elementToScroll.url.split("/")[4];
 
+        console.log(this.elementToScroll.indexPanel);
+
         if (this.elementToScroll.type === "module") {
           this.vModelPanelModules.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "submodule") {

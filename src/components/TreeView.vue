@@ -40,6 +40,9 @@
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
+        <v-btn icon @click.stop="$emit('expand')">
+          <v-icon>{{mini ? "mdi-chevron-right" : "mdi-chevron-left" }}</v-icon>
+        </v-btn>
       </v-app-bar>
     </div>
     <v-treeview
@@ -72,7 +75,7 @@ import Api from "@/services/Api";
 
 export default {
   name: "TreeView",
-  props: ["dominio"],
+  props: ["dominio", "mini"],
   data: () => ({
     open: [],
     loading: false,

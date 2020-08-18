@@ -1,9 +1,23 @@
 <template>
   <v-row>
-    <v-col cols="4">
-      <TreeView @type="typeOfDialog" @elementToScroll="scrollElement" :dominio="dominio" />
+    <v-col :cols="mini? 2: 4">
+      <v-navigation-drawer
+        v-model="drawer"
+        width="90vw"
+        mini-variant-width="15vw"
+        :mini-variant.sync="mini"
+        permanent
+      >
+        <TreeView
+          @type="typeOfDialog"
+          @elementToScroll="scrollElement"
+          @expand="mini = !mini"
+          :mini="mini"
+          :dominio="dominio"
+        />
+      </v-navigation-drawer>
     </v-col>
-    <v-col cols="8">
+    <v-col :cols="mini? 10: 8">
       <div class="mt-3 mr-8 ml-3 mb-0">
         <!--{{this.dominio.nameknowledgedomain}}-->
         <Panels
@@ -45,6 +59,8 @@ export default {
     dialog_mobilemedia: false,
     dialog_instructionalelement: false,
     elementToScrollUrl: "",
+    mini: true,
+    drawer: true,
   }),
   components: {
     TreeView,
