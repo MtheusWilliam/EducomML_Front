@@ -659,7 +659,7 @@
                               color="white"
                               @click="
                                 readonly_control = true;
-                                setmobilemedia(mobilemedia, dominio, 'dominio');
+                                setmobilemedia(mobilemedia, modulo, 'modulo');
                               "
                             >
                               <v-icon>mdi-pencil</v-icon>
@@ -739,7 +739,7 @@
                         </v-col>
                         <v-col cols="4" class="d-flex align-center justify-end">
                           <div class="d-flex justify-end mr-1 align-center">
-                            <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                            <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                             <v-btn
                               icon="icon"
                               color="white"
@@ -747,14 +747,14 @@
                                 readonly_control = true;
                                 setinstructionalelement(
                                   instrucelement,
-                                  dominio,
-                                  'dominio'
+                                  modulo,
+                                  'modulo'
                                 );
                               "
                             >
                               <v-icon>mdi-pencil</v-icon>
                             </v-btn>
-                            <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                            <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                             <v-btn
                               icon="icon"
                               color="white"
@@ -960,8 +960,8 @@
                                       readonly_control = true;
                                       setmobilemedia(
                                         mobilemedia,
-                                        dominio,
-                                        'dominio'
+                                        submodulo,
+                                        'submodulo'
                                       );
                                     "
                                   >
@@ -1045,7 +1045,7 @@
                               </v-col>
                               <v-col cols="4" class="d-flex align-center justify-end">
                                 <div class="d-flex justify-end mr-1 align-center">
-                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                                   <v-btn
                                     icon="icon"
                                     color="white"
@@ -1053,14 +1053,14 @@
                                       readonly_control = true;
                                       setinstructionalelement(
                                         instrucelement,
-                                        dominio,
-                                        'dominio'
+                                        submodulo,
+                                        'submodulo'
                                       );
                                     "
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
-                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                                   <v-btn
                                     icon="icon"
                                     color="white"
@@ -1317,8 +1317,8 @@
                                             readonly_control = true;
                                             setmobilemedia(
                                               mobilemedia,
-                                              dominio,
-                                              'dominio'
+                                              conceito,
+                                              'conceito'
                                             );
                                           "
                                         >
@@ -1500,7 +1500,7 @@
                                     </v-col>
                                     <v-col cols="4" class="d-flex align-center justify-end">
                                       <div class="d-flex justify-end mr-1 align-center">
-                                        <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                        <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS  DOS CONCEITOS DOS SUBMÓDULOS-->
                                         <v-btn
                                           icon="icon"
                                           color="white"
@@ -1508,14 +1508,14 @@
                                             readonly_control = true;
                                             setinstructionalelement(
                                               instrucelement,
-                                              dominio,
-                                              'dominio'
+                                              conceito,
+                                              'conceito'
                                             );
                                           "
                                         >
                                           <v-icon>mdi-pencil</v-icon>
                                         </v-btn>
-                                        <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                        <!--Função para excluir ELEMENTOS INSTRUCIONAIS  DOS CONCEITOS DOS SUBMÓDULOS-->
                                         <v-btn
                                           icon="icon"
                                           color="white"
@@ -1759,8 +1759,8 @@
                                       readonly_control = true;
                                       setmobilemedia(
                                         mobilemedia,
-                                        dominio,
-                                        'dominio'
+                                        conceito,
+                                        'conceito'
                                       );
                                     "
                                   >
@@ -1933,7 +1933,7 @@
                               </v-col>
                               <v-col cols="4" class="d-flex align-center justify-end">
                                 <div class="d-flex justify-end mr-1 align-center">
-                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <!--Formulario para edição dos ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                                   <v-btn
                                     icon="icon"
                                     color="white"
@@ -1941,14 +1941,14 @@
                                       readonly_control = true;
                                       setinstructionalelement(
                                         instrucelement,
-                                        dominio,
-                                        'dominio'
+                                        conceito,
+                                        'conceito'
                                       );
                                     "
                                   >
                                     <v-icon>mdi-pencil</v-icon>
                                   </v-btn>
-                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS do DOMÍNIO-->
+                                  <!--Função para excluir ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                                   <v-btn
                                     icon="icon"
                                     color="white"

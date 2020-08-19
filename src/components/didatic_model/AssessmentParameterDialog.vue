@@ -86,7 +86,7 @@
               :key="idRange"
               style="margin-top: -30px;"
             >
-              <v-col cols="4"></v-col>
+              <v-col cols="2"></v-col>
               <v-col cols="3">
                 <v-text-field
                   v-model="assessmentControl[i].ranges[idRange].namerange"
@@ -96,7 +96,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="2">
+              <v-col cols="3">
                 <v-text-field
                   v-model="assessmentControl[i].ranges[idRange].initialvalue"
                   label="Valor inicial"
@@ -106,7 +106,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="2">
+              <v-col cols="3">
                 <v-text-field
                   v-model="assessmentControl[i].ranges[idRange].limitvalue"
                   label="Valor Limite"
@@ -192,7 +192,16 @@ export default {
         value: 2,
       },
     ],
-    valueTypes: ["Simples", "Faixa"],
+    valueTypes: [
+      {
+        text: "Simples",
+        value: "Single",
+      },
+      {
+        text: "Faixa",
+        value: "Range",
+      },
+    ],
     assessmentControl: [],
     dialogError: false,
     messageError: "",

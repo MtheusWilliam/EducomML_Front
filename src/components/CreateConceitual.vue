@@ -60,7 +60,7 @@ export default {
     dialog_mobilemedia: false,
     dialog_instructionalelement: false,
     elementToScrollUrl: "",
-    mini: true,
+    mini: false,
     drawer: true,
   }),
   components: {

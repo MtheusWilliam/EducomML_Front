@@ -49,22 +49,27 @@
       v-if="!mini"
       :items="treeData"
       :search="search"
-      style="color: white; font-size: 0.1px; background-color: #EFEEEC;"
+      style="color: white; font-size: 0.1px; background-color: #EFEEEC; overflow: hidden;"
       class="ml-4"
       :open="open"
       item-key="id"
     >
       <template v-slot:prepend="{ item }">
-        <v-btn text @click="callScroll({ item })" @dblclick="callEdit({ item })">
+        <v-btn
+          text
+          @click="callScroll({ item })"
+          @dblclick="callEdit({ item })"
+          style=" overflow: hidden;"
+        >
           <v-icon v-if="item.icon">{{ item.icon }}</v-icon>
           <v-avatar v-else color="black" size="25" class="mr-2">
-            <span class="white--text" style="font-size:0.7em;">
+            <span class="white--text" style="font-size:0.7em; overflow: hidden;">
               {{
               item.avatar
               }}
             </span>
           </v-avatar>
-          <span class="ml-1" style="font-size:0.9em;">{{ item.name }}</span>
+          <span class="ml-1" style="text-transform: capitalize; overflow: hidden;">{{ item.name }}</span>
         </v-btn>
       </template>
     </v-treeview>
