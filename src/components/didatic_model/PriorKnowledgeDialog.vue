@@ -310,9 +310,9 @@ export default {
                     )
                   ) {
                     this.targetConceptsPrior.push({
-                      text: conceito.url,
+                      text: conceito.nameconcept,
                       url_modulo: submodulo.url,
-                      value: conceito.nameconcept,
+                      value: conceito.url,
                     });
                     auxFirstModulo++;
                   }
@@ -398,9 +398,14 @@ export default {
       });
     },
     async deletaTargetPriorKnowledge(idPrior) {
-      if (this.priorControl[idPrior].url) {
-        await Api().delete(this.priorControl[idPrior].url);
-      }
+      this.priorControl[idPrior].priorknowledges.forEach(
+        async (sourcePrior) => {
+          if (sourcePrior.url) {
+            await Api().delete(sourcePrior.url);
+          }
+        }
+      );
+
       if (idPrior == 0) {
         this.priorControl.shift();
       } else {
