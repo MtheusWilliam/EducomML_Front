@@ -9,7 +9,9 @@ import ResetPassword from "@/components/ResetPassword";
 import Login from "@/components/Login";
 import SignUp from "@/components/SignUp";
 import CreateConceitual from "@/components/CreateConceitual";
-import Settings from "@/components/Settings";
+import SettingsProfile from "@/components/SettingsProfile";
+import SettingsAccount from "@/components/SettingsAccount";
+import SettingsPassword from "@/components/SettingsPassword";
 // Componentes das rotas
 
 Vue.use(VueRouter);
@@ -44,8 +46,18 @@ const router = new VueRouter({
     },
     {
       path: "/settings/profile/",
-      name: "settings",
-      component: Settings,
+      name: "settingsprofile",
+      component: SettingsProfile,
+    },
+    {
+      path: "/settings/account/",
+      name: "settingssaccount",
+      component: SettingsAccount,
+    },
+    {
+      path: "/settings/password/",
+      name: "settingspassword",
+      component: SettingsPassword,
     },
     {
       path: "/signup/",

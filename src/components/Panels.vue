@@ -2761,13 +2761,15 @@ export default {
       });
       return mobilesfinded;
     },
-    async visibleClose() {
+    async visibleClose(value) {
       this.readonly_control = false;
       var vm = this;
       this.dialog_visible = false;
-      await setTimeout(function () {
-        vm.getDominio();
-      }, 2000);
+      if (value === "save") {
+        await setTimeout(function () {
+          vm.getDominio();
+        }, 2000);
+      }
     },
     openDidatic() {
       this.dialogLoadingMessage = this.dialogLoadingMessages[3];

@@ -25,7 +25,13 @@
         <v-divider></v-divider>
 
         <v-list dense nav>
-          <v-list-item v-for="item in items" :key="item.title" link>
+          <v-list-item
+            v-for="item in items"
+            :key="item.title"
+            link
+            :style="item.style"
+            @click="routerLink(item.link)"
+          >
             <v-list-item-content>
               <v-list-item-title style="font-size: 0.9em;">{{ item.title }}</v-list-item-title>
             </v-list-item-content>
@@ -58,7 +64,7 @@
 
 <script>
 export default {
-  name: "Settings",
+  name: "SettingsProfile",
   data: () => ({
     search: "",
     valid: true,
@@ -66,17 +72,36 @@ export default {
     dialogLoading: false,
     lastversion: "versao_teste",
     alertDelete: false,
-    userName: "",
+    name: "",
+    lastname: "",
     drawer: true,
     items: [
-      { title: "Perfil", icon: "mdi-view-dashboard" },
-      { title: "Conta", icon: "mdi-image" },
-      { title: "Senha", icon: "mdi-help-box" },
+      {
+        title: "Perfil",
+        icon: "mdi-view-dashboard",
+        style: "background-color: #f6f6f6;",
+        link: "/settings/profile/",
+      },
+      {
+        title: "Conta",
+        icon: "mdi-image",
+        style: "background-color: white;",
+        link: "/settings/account/",
+      },
+      {
+        title: "Senha",
+        icon: "mdi-help-box",
+        style: "background-color: white;",
+        link: "/settings/password/",
+      },
     ],
     right: null,
     mini: false,
   }),
   methods: {
+    routerLink(link) {
+      this.$router.push({ path: link });
+    },
     validate() {
       if (this.$refs.form.validate()) {
         this.$refs.form.validate();
