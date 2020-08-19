@@ -69,11 +69,11 @@
     </v-row>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="red" height="49" dark large @click="reset">
+      <v-btn color="red" height="49" dark large @click="reset()">
         Cancelar
         <v-icon dark right>mdi-close</v-icon>
       </v-btn>
-      <v-btn color="success" height="49" dark large @click="validate">
+      <v-btn color="success" height="49" dark large @click="validate()">
         Salvar
         <v-icon dark right>mdi-content-save</v-icon>
       </v-btn>
@@ -745,7 +745,7 @@ export default {
         }
       });
       await setTimeout(async function () {
-        vm.$emit("close_or_save", "close");
+        vm.$emit("close_or_save", "save");
       }, 300);
     },
 
@@ -775,10 +775,8 @@ export default {
       });
     },
     async validate() {
-      if (this.$refs.form.validate()) {
-        await this.putVisible();
-        await this.resetVariables();
-      }
+      await this.putVisible();
+      await this.resetVariables();
     },
     openDidaticDialog(dialog) {
       this.$emit("openDidaticDialog", dialog);

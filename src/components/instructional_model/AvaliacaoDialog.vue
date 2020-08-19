@@ -1830,7 +1830,7 @@ export default {
             var auxNumberQuestions = this.questionsControl.length;
             await this.postQuestions();
             this.questionsControl = [];
-            await this.$emit("instrucclose", auxNumberQuestions);
+            await this.$emit("instrucclose", "save", auxNumberQuestions);
             await this.resetVariables();
           }
         } else {
@@ -1844,7 +1844,7 @@ export default {
       this.avaliacaoName = "";
     },
     async reset() {
-      await this.$emit("instrucclose");
+      await this.$emit("instrucclose", "close");
       await this.resetVariables();
       this.questionsControl = [];
       this.mobileMediasControl = [];

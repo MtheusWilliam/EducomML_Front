@@ -1712,7 +1712,7 @@ export default {
               await this.resetVariables();
               this.questionsControl = [];
               this.mobileMediasControl = [];
-              await this.$emit("instrucclose", auxNumberQuestions);
+              await this.$emit("instrucclose", "save", auxNumberQuestions);
             }
           } else {
             this.dialog_alert = true;
@@ -1720,7 +1720,7 @@ export default {
         } else {
           await this.postQuestions();
           await this.resetVariables();
-          await this.$emit("instrucclose");
+          await this.$emit("instrucclose", "save");
         }
       }
     },
@@ -1736,7 +1736,7 @@ export default {
       this.viewQuestions = false;
     },
     async reset() {
-      await this.$emit("instrucclose");
+      await this.$emit("instrucclose", "close");
       await this.resetVariables();
       this.questionsControl = [];
       this.mobileMediasControl = [];

@@ -763,7 +763,7 @@ export default {
         } else {
           await this.postMobilesExemplo();
           this.mobileMediasControl = [];
-          await this.$emit("instrucclose");
+          await this.$emit("instrucclose", "save");
           await this.resetVariables();
         }
       }
@@ -773,7 +773,7 @@ export default {
       this.exemploName = "";
     },
     async reset() {
-      await this.$emit("instrucclose");
+      await this.$emit("instrucclose", "close");
       await this.resetVariables();
       this.mobileMediasControl = [];
     },

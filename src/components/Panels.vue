@@ -220,7 +220,7 @@
                 <!--Formulario para criação de procedimento -->
                 <v-dialog v-model="dialog_procedure" persistent="persistent" max-width="800px">
                   <ProcedureDialog
-                    @close="dialogclose"
+                    @procedureclose="dialogclose"
                     :dialog="dialog_procedure"
                     :procedure="procedimento"
                     :concept="conceito"
@@ -2646,7 +2646,7 @@ export default {
       this.objectFile = value.optionCall;
       this.type = value.type;
     },
-    async dialogclose(rounds) {
+    async dialogclose(value, rounds) {
       this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
@@ -2664,16 +2664,18 @@ export default {
       this.objectFile = "";
       this.type = "";
 
-      this.controlTreeView("procedimento");
-      this.controlTreeView("mobilemedia");
+      if (value === "save") {
+        this.controlTreeView("procedimento");
+        this.controlTreeView("mobilemedia");
 
-      await this.$nextTick(function () {
-        vm.getDominio();
-      }, 3 + rounds);
-      if (rounds) {
-        await setTimeout(function () {
+        await this.$nextTick(function () {
           vm.getDominio();
-        }, 1200);
+        }, 3 + rounds);
+        if (rounds) {
+          await setTimeout(function () {
+            vm.getDominio();
+          }, 1200);
+        }
       }
     },
     instrucOpenFileDialog(value) {
@@ -2690,7 +2692,7 @@ export default {
       this.instrucType = value.type;
       this.instrucValueType = value.valueType;
     },
-    async instrucdialogclose(numberQuestions) {
+    async instrucdialogclose(value, numberQuestions) {
       this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
@@ -2705,20 +2707,21 @@ export default {
       this.instrucType = "";
       this.instrucValueType = "";
 
-      this.controlTreeView("elementoinstrucional");
-
-      await setTimeout(function () {
-        vm.getDominio();
-      }, 1200);
-      if (numberQuestions > 5) {
+      if (value === "save") {
+        this.controlTreeView("elementoinstrucional");
         await setTimeout(function () {
           vm.getDominio();
-        }, 1500);
-      }
-      if (numberQuestions > 10) {
-        await setTimeout(function () {
-          vm.getDominio();
-        }, 1800);
+        }, 1200);
+        if (numberQuestions > 5) {
+          await setTimeout(function () {
+            vm.getDominio();
+          }, 1500);
+        }
+        if (numberQuestions > 10) {
+          await setTimeout(function () {
+            vm.getDominio();
+          }, 1800);
+        }
       }
     },
     getNotSubmodules(domain) {
