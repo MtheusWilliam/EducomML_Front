@@ -3,7 +3,7 @@
     <div class="ml-4">
       <v-app-bar color="#B19114" dense dark>
         <v-spacer />
-        <v-toolbar-title v-if="auxAppbarElement === 0">
+        <v-toolbar-title v-if="auxAppbarElement === 0 && !mini">
           {{
           dominio.nameknowledgedomain
           }}
@@ -11,7 +11,7 @@
         <v-text-field
           background-color="#B19114"
           style="color:white;"
-          v-if="auxAppbarElement === 1"
+          v-if="auxAppbarElement === 1 && !mini"
           v-model="search"
           dark
           hide-details
@@ -22,7 +22,7 @@
 
         <v-btn
           icon
-          v-if="auxAppbarIcon === 0"
+          v-if="auxAppbarIcon === 0 && !mini"
           @click="
             auxAppbarIcon = 1;
             auxAppbarElement = 1;
@@ -32,7 +32,7 @@
         </v-btn>
         <v-btn
           icon
-          v-if="auxAppbarIcon === 1"
+          v-if="auxAppbarIcon === 1 && !mini"
           @click="
             auxAppbarIcon = 0;
             auxAppbarElement = 0;
@@ -46,6 +46,7 @@
       </v-app-bar>
     </div>
     <v-treeview
+      v-if="!mini"
       :items="treeData"
       :search="search"
       style="color: white; font-size: 0.1px; background-color: #EFEEEC;"
@@ -75,7 +76,7 @@ import Api from "@/services/Api";
 
 export default {
   name: "TreeView",
-  props: ["dominio", "mini"],
+  props: ["dominio", "mini", ""],
   data: () => ({
     open: [],
     loading: false,

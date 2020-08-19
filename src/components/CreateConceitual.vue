@@ -3,8 +3,8 @@
     <v-col :cols="mini? 2: 4">
       <v-navigation-drawer
         v-model="drawer"
-        width="90vw"
-        mini-variant-width="15vw"
+        width="100%"
+        mini-variant-width="10vw"
         :mini-variant.sync="mini"
         permanent
       >
@@ -18,9 +18,10 @@
       </v-navigation-drawer>
     </v-col>
     <v-col :cols="mini? 10: 8">
-      <div class="mt-3 mr-8 ml-3 mb-0">
+      <div class="mt-3 mr-8">
         <!--{{this.dominio.nameknowledgedomain}}-->
         <Panels
+          width="100%"
           @dominio_data="atualizatreeview"
           @close="closeType"
           :objectTreeView="objectTreeView"
