@@ -9,7 +9,7 @@
           <v-list-item-content>
             <v-row>
               <v-col cols="3">
-                <v-list-item-avatar v-on="on">
+                <v-list-item-avatar>
                   <img src="https://randomuser.me/api/portraits/men/81.jpg" />
                 </v-list-item-avatar>
               </v-col>
@@ -46,13 +46,13 @@
       <v-card>
         <v-card-text>
           <v-form style="margin-bottom: -20px;">
-            <v-text-field id="name" label="Nome" name="name" type="text" required></v-text-field>
-            <v-text-field id="lastname" label="Sobrenome" name="lastname" type="password" required></v-text-field>
+            <v-text-field id="name" label="Nome" v-model="name" required></v-text-field>
+            <v-text-field id="lastname" label="Sobrenome" v-model="lastname" required></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" height="49" dark large class="mr-2">
+          <v-btn color="success" height="49" dark large @click.prevent="submit()" class="mr-2">
             Atualizar perfil
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import Api from "@/services/Api";
 export default {
   name: "SettingsProfile",
   data: () => ({
@@ -116,6 +117,20 @@ export default {
     },
     setSearch(s) {
       this.search = s;
+    },
+    async submit() {
+      await Api()
+        .post("userId/", {
+          username: this.$store.state.username,
+        })
+        .then(async (res) => {
+          await Api().patch(res.data.url, {
+            username: "0",
+            first_name: this.name,
+            last_name: this.lastname,
+            password: "0",
+          });
+        });
     },
   },
 };
