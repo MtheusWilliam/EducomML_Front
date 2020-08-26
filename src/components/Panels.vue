@@ -118,16 +118,21 @@
                   />
                 </v-dialog>
                 <!-- Ícone para criação de modelo didático-->
-                <v-btn
-                  icon="icon"
-                  color="white"
-                  dark
-                  :disabled="disableBtnDidatic"
-                  @click="openDidatic()"
-                  class="mr-1"
+                <v-menu
+                  top="top"
+                  width="350px"
+                  origin="center center"
+                  :offset-y="true"
+                  transition="scale-transition"
                 >
-                  <v-icon>mdi-book-open</v-icon>
-                </v-btn>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                      <v-icon>mdi-book-open</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <DidaticMenuFiles @didaticdialogoption="openDidaticDialog" />
+                </v-menu>
 
                 <!--Ícone para gerar arquivo apk-->
                 <v-btn icon="icon" color="white" dark>
@@ -478,7 +483,7 @@
               class="mt-2 mb-2"
               :id="modulo.url.split('/')[3] + modulo.idmodule"
             >
-              <v-expansion-panel-header color="#666644" style="color:white; height: 55px;">
+              <v-expansion-panel-header color="#2F4F4F" style="color:white; height: 55px;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
@@ -1095,7 +1100,7 @@
                           :id="conceito.url.split('/')[3] + conceito.idconcept"
                         >
                           <v-expansion-panel-header
-                            color="#3B83FF"
+                            color="#778899"
                             style="color:white; height: 55px;"
                           >
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
@@ -1383,7 +1388,7 @@
                                   <v-row>
                                     <v-col>
                                       <p class="mt-3">
-                                        [Procedimento]
+                                        <v-icon color="white" large>mdi-format-list-bulleted</v-icon>
                                         {{ procedure.nameinformationitem }}
                                       </p>
                                     </v-col>
@@ -1558,7 +1563,7 @@
                     class="mt-2 mb-2"
                     :id="conceito.url.split('/')[3] + conceito.idconcept"
                   >
-                    <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
+                    <v-expansion-panel-header color="#778899" style="color:white; height: 55px;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col class="d-flex align-center" style="width: 100%;">
@@ -1826,7 +1831,7 @@
                             <v-row>
                               <v-col>
                                 <p class="mt-3">
-                                  [Procedimento]
+                                  <v-icon color="white" large>mdi-format-list-bulleted</v-icon>
                                   {{ procedure.nameinformationitem }}
                                 </p>
                               </v-col>
@@ -2043,6 +2048,7 @@ import InstrucMenuFiles from "./InstrucMenuFiles";
 import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
 import ExemploDialog from "./instructional_model/ExemploDialog";
+import DidaticMenuFiles from "./DidaticMenuFiles";
 import VisibleDialog from "./didatic_model/VisibleDialog";
 import PriorKnowledgeDialog from "./didatic_model/PriorKnowledgeDialog";
 import PriorKnowledgeDialogConcept from "./didatic_model/PriorKnowledgeDialogConcept";
@@ -2068,6 +2074,7 @@ export default {
     AvaliacaoDialog,
     AtividadeColaborativaDialog,
     ExemploDialog,
+    DidaticMenuFiles,
     VisibleDialog,
     PriorKnowledgeDialog,
     PriorKnowledgeDialogConcept,
@@ -2771,18 +2778,14 @@ export default {
         }, 2000);
       }
     },
-    openDidatic() {
-      this.dialogLoadingMessage = this.dialogLoadingMessages[3];
-      this.getDominio();
-      this.dialog_visible = true;
-      this.dialogLoadingMessage = this.dialogLoadingMessages[0];
-    },
-    openDidaticDialog(dialog) {
-      if (dialog === "prior") {
-        this.dialog_prior = true;
-      } else if (dialog === "assessment") {
+    openDidaticDialog(value) {
+      if (value.type === 1) {
+        this.dialog_visible = true;
+      } else if (value.type === 2) {
         this.dialog_assessment = true;
-      } else if (dialog === "priorConcept") {
+      } else if (value.type === 3) {
+        this.dialog_prior = true;
+      } else if (value.type === 4) {
         this.dialog_priorConcept = true;
       }
     },

@@ -79,7 +79,7 @@
       <v-btn color="primary" @click="validate()" large class="mr-4">Cadastrar</v-btn>
     </v-card-actions>
     <div class="text-center">
-      <v-dialog v-model="dialogError" width="500">
+      <v-dialog v-model="dialogError" width="550">
         <v-card>
           <v-card-title :class="messageClass" primary-title style="color:white;">{{ messageTitle }}</v-card-title>
           <v-card-text class="mt-3" style="font-size: 1.3em;">
@@ -95,6 +95,25 @@
         </v-card>
       </v-dialog>
     </div>
+    <div class="text-center">
+      <v-dialog v-model="dialogLoading" max-width="290" persistent="persistent">
+        <v-card color="primary" dark>
+          <v-card-text style="color:white;">
+            <v-row class="pt-2 pb-3">
+              <br />
+              <v-spacer></v-spacer>
+              <span style="font-size: 1.3em; color:white;">{{ dialogLoadingMessage }}</span>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-progress-circular indeterminate color="white" class="mb-0"></v-progress-circular>
+              <v-spacer></v-spacer>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-card>
 </template>
 
@@ -105,6 +124,8 @@ export default {
   data() {
     return {
       dialog: false,
+      dialogLoading: false,
+      dialogLoadingMessage: "Enviando e-mail de confirmação",
       username: "",
       usernameRules: [
         (v) => !!v || "É necessário inserir seu username",
@@ -132,7 +153,12 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "É necessário inserir um e-mail válido",
       ],
       password: "",
-      passwordRules: [(v) => !!v || "É necessário inserir sua senha"],
+      passwordRules: [
+        (v) => !!v || "É necessário inserir sua senha",
+        (v) =>
+          (v && v.length <= 8) ||
+          "Sua senha deve possuir no mínimo 8 caracteres",
+      ],
       passwordConfirm: "",
       user_url: "",
       messageClass: "",
@@ -186,6 +212,7 @@ export default {
 
     async validate() {
       if (this.$refs.form.validate()) {
+        this.dialogLoading = true;
         try {
           await this.$refs.form.validate();
           await this.postOrPutUser();
@@ -193,12 +220,14 @@ export default {
           this.messageTitle = "Email de confirmação enviado com sucesso";
           this.messageError =
             "Enviamos um email de confirmação para você. Verifique a caixa de mensagens do seu email para ativar sua conta.";
+          this.dialogLoading = false;
           this.dialogError = true;
         } catch (err) {
           this.messageClass = "headline red";
           this.messageTitle = "Erro";
           this.messageError =
             "O username ou email já estão sendo utilizados na plataforma";
+          this.dialogLoading = false;
           this.dialogError = true;
         }
       }

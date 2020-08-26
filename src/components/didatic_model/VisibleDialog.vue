@@ -25,22 +25,6 @@
               small
               @click="selectAll()"
             >Selecionar tudo</v-btn>
-            <v-btn
-              class="ml-1"
-              color="purple"
-              height="40px"
-              dark
-              small
-              @click="openDidaticDialog('assessment')"
-            >Parâmetros de avaliação</v-btn>
-            <v-btn
-              class="ml-1"
-              color="green"
-              height="40"
-              dark
-              small
-              @click="openDidaticDialog('prior')"
-            >Conhecimentos Prévios</v-btn>
           </v-row>
 
           <v-treeview
@@ -113,6 +97,7 @@ export default {
     messageError: "",
     newItems: [],
     checkbox: true,
+    informationItemsIcon: ["mdi-format-list-bulleted"],
     fileTypesIcon: [
       "mdi-file-image",
       "mdi-file-video",
@@ -157,7 +142,7 @@ export default {
     setDomainVariables() {
       this.treeData = [];
       this.elementData.push({
-        text: "[DOMINIO] " + this.domain.nameknowledgedomain,
+        text: this.domain.nameknowledgedomain,
         value: this.domain.url,
       });
       var indexmodulo = 0;
@@ -165,7 +150,7 @@ export default {
         this.domain.mobilemedias.forEach((mobilemedia) => {
           var object = {
             id: mobilemedia.url,
-            name: "[MOBILEMEDIA] " + mobilemedia.label,
+            name: mobilemedia.label,
             visible: mobilemedia.visible,
             icon: this.fileTypesIcon[
               mobilemedia.fk_idmediatype.split("/")[4] - 1
@@ -185,7 +170,7 @@ export default {
           ) {
             var object = {
               id: instructionalelement.url,
-              name: "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
+              name: instructionalelement.label,
               visible: instructionalelement.visible,
               icon: this.instrucTypesIcon[
                 instructionalelement.fk_instructionalelementtype.split("/")[4] -
@@ -206,9 +191,9 @@ export default {
             var indexsubmodulo = 0;
             var object = {
               id: modulo.url,
-              name: "[MODULO] " + modulo.namemodule,
+              name: modulo.namemodule,
               visible: modulo.visible,
-              avatar: "MD",
+              avatar: "M",
               children: [],
             };
             this.treeData.push(object);
@@ -223,7 +208,7 @@ export default {
               modulo.mobilemedias.forEach((mobilemedia) => {
                 var object = {
                   id: mobilemedia.url,
-                  name: "[MOBILEMEDIA] " + mobilemedia.label,
+                  name: mobilemedia.label,
                   visible: mobilemedia.visible,
                   icon: this.fileTypesIcon[
                     mobilemedia.fk_idmediatype.split("/")[4] - 1
@@ -246,8 +231,7 @@ export default {
                 ) {
                   var object = {
                     id: instructionalelement.url,
-                    name:
-                      "[INSTRUCTIONAL ELEMENT] " + instructionalelement.label,
+                    name: instructionalelement.label,
                     visible: instructionalelement.visible,
                     icon: this.instrucTypesIcon[
                       instructionalelement.fk_instructionalelementtype.split(
@@ -269,9 +253,9 @@ export default {
               modulo.submodules.forEach((submodulo) => {
                 var object = {
                   id: submodulo.url,
-                  name: "[SUBMODULO] " + submodulo.namemodule,
+                  name: submodulo.namemodule,
                   visible: submodulo.visible,
-                  avatar: "SM",
+                  avatar: "S",
                   children: [],
                 };
                 this.treeData[indexmodulo].children.push(object);
@@ -287,7 +271,7 @@ export default {
                   submodulo.mobilemedias.forEach((mobilemedia) => {
                     var object = {
                       id: mobilemedia.url,
-                      name: "[MOBILEMEDIA] " + mobilemedia.label,
+                      name: mobilemedia.label,
                       visible: mobilemedia.visible,
                       icon: this.fileTypesIcon[
                         mobilemedia.fk_idmediatype.split("/")[4] - 1
@@ -308,9 +292,7 @@ export default {
                     (instructionalelement) => {
                       var object = {
                         id: instructionalelement.url,
-                        name:
-                          "[INSTRUCTIONAL ELEMENT] " +
-                          instructionalelement.label,
+                        name: instructionalelement.label,
                         visible: instructionalelement.visible,
                         icon: this.instrucTypesIcon[
                           instructionalelement.fk_instructionalelementtype.split(
@@ -333,9 +315,9 @@ export default {
                   submodulo.concepts.forEach((conceito) => {
                     var object = {
                       id: conceito.url,
-                      name: "[CONCEITO] " + conceito.nameconcept,
+                      name: conceito.nameconcept,
                       visible: conceito.visible,
-                      avatar: "CC",
+                      avatar: "C",
                       children: [],
                     };
                     this.treeData[indexmodulo].children[
@@ -359,7 +341,7 @@ export default {
                           infoitem.mobilemedias.forEach((mobilemedia) => {
                             var object = {
                               id: mobilemedia.url,
-                              name: "[MOBILEMEDIA] " + mobilemedia.label,
+                              name: mobilemedia.label,
                               visible: mobilemedia.visible,
                               icon: this.fileTypesIcon[
                                 mobilemedia.fk_idmediatype.split("/")[4] - 1
@@ -384,9 +366,9 @@ export default {
                         ) {
                           var object = {
                             id: procedure.url,
-                            name:
-                              "[PROCEDIMENTO] " + procedure.nameinformationitem,
+                            name: procedure.nameinformationitem,
                             visible: procedure.visible,
+                            icon: this.informationItemsIcon[0],
                           };
                           this.treeData[indexmodulo].children[
                             indexsubmodulo
@@ -403,9 +385,7 @@ export default {
                         (instructionalelement) => {
                           var object = {
                             id: instructionalelement.url,
-                            name:
-                              "[INSTRUCTIONAL ELEMENT] " +
-                              instructionalelement.label,
+                            name: instructionalelement.label,
                             visible: instructionalelement.visible,
                             icon: this.instrucTypesIcon[
                               instructionalelement.fk_instructionalelementtype.split(
@@ -438,7 +418,7 @@ export default {
               modulo.concepts.forEach((conceito) => {
                 var object = {
                   id: conceito.url,
-                  name: "[CONCEITO] " + conceito.nameconcept,
+                  name: conceito.nameconcept,
                   visible: conceito.visible,
                   avatar: "CC",
                   children: [],
@@ -462,7 +442,7 @@ export default {
                       infoitem.mobilemedias.forEach((mobilemedia) => {
                         var object = {
                           id: mobilemedia.url,
-                          name: "[MOBILEMEDIA] " + mobilemedia.label,
+                          name: mobilemedia.label,
                           visible: mobilemedia.visible,
                           icon: this.fileTypesIcon[
                             mobilemedia.fk_idmediatype.split("/")[4] - 1
@@ -487,8 +467,9 @@ export default {
                     ) {
                       var object = {
                         id: procedure.url,
-                        name: "[PROCEDIMENTO] " + procedure.nameinformationitem,
+                        name: procedure.nameinformationitem,
                         visible: procedure.visible,
+                        icon: this.informationItemsIcon[0],
                       };
                       this.treeData[indexmodulo].children[
                         indexconceito
@@ -505,9 +486,7 @@ export default {
                     (instructionalelement) => {
                       var object = {
                         id: instructionalelement.url,
-                        name:
-                          "[INSTRUCTIONAL ELEMENT] " +
-                          instructionalelement.label,
+                        name: instructionalelement.label,
                         visible: instructionalelement.visible,
                         icon: this.instrucTypesIcon[
                           instructionalelement.fk_instructionalelementtype.split(
@@ -777,9 +756,6 @@ export default {
     async validate() {
       await this.putVisible();
       await this.resetVariables();
-    },
-    openDidaticDialog(dialog) {
-      this.$emit("openDidaticDialog", dialog);
     },
     reset() {
       this.$emit("close_or_save", "close");
