@@ -12,6 +12,7 @@
             <v-col cols="4" v-if="type === 'conceito'">
               <label for="infoItemClassesSelect">Classifique o item de informação</label>
               <v-select
+                class="mt-5"
                 id="infoItemClassesSelect"
                 v-model="infoClasse"
                 :items="infoItemClasses"
