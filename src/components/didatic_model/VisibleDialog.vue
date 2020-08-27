@@ -97,7 +97,6 @@ export default {
     messageError: "",
     newItems: [],
     checkbox: true,
-    informationItemsIcon: ["mdi-format-list-bulleted"],
     fileTypesIcon: [
       "mdi-file-image",
       "mdi-file-video",
@@ -368,7 +367,7 @@ export default {
                             id: procedure.url,
                             name: procedure.nameinformationitem,
                             visible: procedure.visible,
-                            icon: this.informationItemsIcon[0],
+                            icon: "mdi-format-list-bulleted",
                           };
                           this.treeData[indexmodulo].children[
                             indexsubmodulo
@@ -469,7 +468,7 @@ export default {
                         id: procedure.url,
                         name: procedure.nameinformationitem,
                         visible: procedure.visible,
-                        icon: this.informationItemsIcon[0],
+                        icon: "mdi-format-list-bulleted",
                       };
                       this.treeData[indexmodulo].children[
                         indexconceito

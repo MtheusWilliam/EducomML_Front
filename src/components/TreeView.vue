@@ -2,7 +2,6 @@
   <v-container>
     <div class="ml-4">
       <v-app-bar color="#B19114" dense dark>
-        <v-btn color="red" @click="teste()">teste</v-btn>
         <v-spacer />
         <v-toolbar-title v-if="auxAppbarElement === 0 && !mini">
           {{
@@ -79,7 +78,6 @@
 
 <script>
 import Api from "@/services/Api";
-
 export default {
   name: "TreeView",
   props: ["dominio", "mini", ""],
@@ -154,7 +152,6 @@ export default {
     },
     setDomainVariables() {
       this.treeData = [];
-
       this.treeData.push({
         id: this.dominio.url,
         name: this.dominio.nameknowledgedomain,
@@ -227,7 +224,6 @@ export default {
                 });
               });
             }
-
             if (modulo.instructionalelements.length) {
               modulo.instructionalelements.forEach(
                 (instructionalelement, iinstructionalelement) => {
@@ -248,7 +244,6 @@ export default {
                 }
               );
             }
-
             if (modulo.submodules.length) {
               var indexconceito = 0;
               modulo.submodules.forEach((submodulo, isubmodulo) => {
@@ -287,7 +282,6 @@ export default {
                     }
                   );
                 }
-
                 if (submodulo.instructionalelements.length) {
                   submodulo.instructionalelements.forEach(
                     (instructionalelement, iinstructionalelement) => {
@@ -312,7 +306,6 @@ export default {
                     }
                   );
                 }
-
                 if (submodulo.concepts.length) {
                   submodulo.concepts.forEach((conceito, iconceito) => {
                     console.log("i sub", indexsubmodulo);
@@ -374,7 +367,6 @@ export default {
                         }
                       });
                     }
-
                     if (conceito.informationitems.length) {
                       console.log("i cc", indexconceito);
                       conceito.informationitems.forEach(
@@ -409,7 +401,6 @@ export default {
                         }
                       );
                     }
-
                     if (conceito.instructionalelements.length) {
                       console.log("i cc", indexconceito);
                       conceito.instructionalelements.forEach(
@@ -499,7 +490,6 @@ export default {
                     }
                   });
                 }
-
                 if (conceito.informationitems.length) {
                   conceito.informationitems.forEach((procedure, iprocedure) => {
                     if (
@@ -523,7 +513,6 @@ export default {
                     }
                   });
                 }
-
                 if (conceito.instructionalelements.length) {
                   conceito.instructionalelements.forEach(
                     (instructionalelement, iinstructionalelement) => {
