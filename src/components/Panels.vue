@@ -877,7 +877,7 @@
                     class="mt-2 mb-2"
                     :id="submodulo.url.split('/')[3] + submodulo.idmodule"
                   >
-                    <v-expansion-panel-header color="#71CB97" style="color:white; height: 55px;">
+                    <v-expansion-panel-header color="#5F9EA0" style="color:white; height: 55px;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
