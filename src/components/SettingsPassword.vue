@@ -9,7 +9,7 @@
           <v-list-item-content>
             <v-row>
               <v-col cols="3">
-                <v-list-item-avatar v-on="on">
+                <v-list-item-avatar>
                   <img src="https://randomuser.me/api/portraits/men/81.jpg" />
                 </v-list-item-avatar>
               </v-col>
@@ -49,21 +49,21 @@
             <v-text-field
               id="oldpassword"
               label="Senha Atual"
-              name="oldpassword"
+              v-model="oldpassword"
               type="password"
               required
             ></v-text-field>
             <v-text-field
               id="newpassword"
               label="Nova Senha"
-              name="newpassword"
+              v-model="newpassword"
               type="password"
               required
             ></v-text-field>
             <v-text-field
               id="confirmnewpassword"
               label="Confirme a Nova Senha"
-              name="confirmnewpassword"
+              v-model="confirmnewpassword"
               type="password"
               required
             ></v-text-field>
@@ -71,7 +71,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" height="49" dark large class="mr-2">
+          <v-btn color="success" height="49" @click="submit()" dark large class="mr-2">
             Atualizar perfil
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import Api from "@/services/Api";
 export default {
   name: "SettingsPassword",
   data: () => ({
@@ -105,13 +106,13 @@ export default {
       {
         title: "Conta",
         icon: "mdi-image",
-        style: "background-color: #f6f6f6;",
+        style: "background-color: white;",
         link: "/settings/account/",
       },
       {
         title: "Senha",
         icon: "mdi-help-box",
-        style: "background-color: white;",
+        style: "background-color: #f6f6f6;",
         link: "/settings/password/",
       },
     ],
@@ -136,6 +137,18 @@ export default {
     },
     setSearch(s) {
       this.search = s;
+    },
+    async submit() {
+      await Api()
+        .post("userId/", {
+          username: this.$store.state.username,
+        })
+        .then(async (res) => {
+          await Api().put(res.data.url, {
+            username: "0",
+            password: this.oldpassword + "º" + this.newpassword,
+          });
+        });
     },
   },
 };

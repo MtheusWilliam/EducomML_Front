@@ -9,7 +9,7 @@
           <v-list-item-content>
             <v-row>
               <v-col cols="3">
-                <v-list-item-avatar v-on="on">
+                <v-list-item-avatar>
                   <img src="https://randomuser.me/api/portraits/men/81.jpg" />
                 </v-list-item-avatar>
               </v-col>
@@ -46,12 +46,12 @@
       <v-card>
         <v-card-text>
           <v-form style="margin-bottom: -20px;">
-            <v-text-field id="username" label="Username" name="username" type="text" required></v-text-field>
+            <v-text-field id="username" label="Username" v-model="username" type="text" required></v-text-field>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" height="49" dark large class="mr-2">
+          <v-btn color="success" height="49" dark @click.prevent="submit()" large class="mr-2">
             Atualizar perfil
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import Api from "@/services/Api";
 export default {
   name: "SettingsAccount",
   data: () => ({
@@ -83,7 +84,7 @@ export default {
       {
         title: "Conta",
         icon: "mdi-image",
-        style: "background-color: #f6f6f6;",
+        style: "background-color: white;",
         link: "/settings/account/",
       },
       {
@@ -114,6 +115,18 @@ export default {
     },
     setSearch(s) {
       this.search = s;
+    },
+    async submit() {
+      await Api()
+        .post("userId/", {
+          username: this.$store.state.username,
+        })
+        .then(async (res) => {
+          await Api().patch(res.data.url, {
+            username: this.username,
+            password: "0",
+          });
+        });
     },
   },
 };

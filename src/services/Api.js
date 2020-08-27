@@ -13,6 +13,7 @@ export default () => {
       "x-csrftoken": csrftoken,
       Authorization: "JWT " + jwt,
       Accept: "application/json",
+      "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/json",
     },
   });
