@@ -27,7 +27,7 @@
                   height="40"
                   dark
                   small
-                  @click="openDidaticDialog('priorConcept')"
+                  @click="openDidaticDialog(4)"
                 >Conhecimentos Prévios</v-btn>
               </v-col>
             </v-row>
@@ -353,8 +353,10 @@ export default {
         }
       });
     },
-    openDidaticDialog(dialog) {
-      this.$emit("openDidaticDialog", dialog);
+    openDidaticDialog(value) {
+      this.$emit("openDidaticDialog", {
+        type: value,
+      });
     },
     async validate() {
       if (this.$refs.form.validate()) {

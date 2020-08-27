@@ -118,16 +118,21 @@
                   />
                 </v-dialog>
                 <!-- Ícone para criação de modelo didático-->
-                <v-btn
-                  icon="icon"
-                  color="white"
-                  dark
-                  :disabled="disableBtnDidatic"
-                  @click="openDidatic()"
-                  class="mr-1"
+                <v-menu
+                  top="top"
+                  width="350px"
+                  origin="center center"
+                  :offset-y="true"
+                  transition="scale-transition"
                 >
-                  <v-icon>mdi-book-open</v-icon>
-                </v-btn>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon="icon" color="white" dark="dark" v-on="on">
+                      <v-icon>mdi-book-open</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <DidaticMenuFiles @didaticdialogoption="openDidaticDialog" />
+                </v-menu>
 
                 <!--Ícone para gerar arquivo apk-->
                 <v-btn icon="icon" color="white" dark>
@@ -466,7 +471,48 @@
                 </v-row>
               </v-expansion-panel-header>
 
-              <v-expansion-panel-content></v-expansion-panel-content>
+              <v-expansion-panel-content class="mt-2">
+                <span
+                  v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                >
+                  <strong>Descrição da atividade</strong>
+                  <br />
+                  {{instrucelement.description}}
+                </span>
+                <hr
+                  v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                />
+                <span
+                  v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                >
+                  <strong>Questões:</strong>
+                  <br />
+                </span>
+                <hr class="mb-4" />
+                <div v-for="(question, iquestion) in instrucelement.questions" :key="iquestion">
+                  <span>
+                    <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
+                  </span>
+                  <p
+                    v-if="question.typequestion.split(
+                          '/'
+                          )[4] == 1"
+                  >
+                    <span
+                      class="ml-3"
+                      v-for="(answer, ianswer) in question.answersalternatives"
+                      :key="ianswer"
+                    >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                  </p>
+                  <p v-else>
+                    <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                  </p>
+                </div>
+              </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
           <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DO DOMÍNIO-->
@@ -478,7 +524,7 @@
               class="mt-2 mb-2"
               :id="modulo.url.split('/')[3] + modulo.idmodule"
             >
-              <v-expansion-panel-header color="#666644" style="color:white; height: 55px;">
+              <v-expansion-panel-header color="#2F4F4F" style="color:white; height: 55px;">
                 <!--HEADER DO MÓDULO-->
                 <v-row>
                   <v-col class="d-flex align-center" style="height:100%;">
@@ -771,7 +817,51 @@
                       </v-row>
                     </v-expansion-panel-header>
 
-                    <v-expansion-panel-content></v-expansion-panel-content>
+                    <v-expansion-panel-content class="mt-2">
+                      <span
+                        v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                      >
+                        <strong>Descrição da atividade</strong>
+                        <br />
+                        {{instrucelement.description}}
+                      </span>
+                      <hr
+                        v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                      />
+                      <span
+                        v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                      >
+                        <strong>Questões:</strong>
+                        <br />
+                      </span>
+                      <hr class="mb-4" />
+                      <div
+                        v-for="(question, iquestion) in instrucelement.questions"
+                        :key="iquestion"
+                      >
+                        <span>
+                          <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
+                        </span>
+                        <p
+                          v-if="question.typequestion.split(
+                          '/'
+                          )[4] == 1"
+                        >
+                          <span
+                            class="ml-3"
+                            v-for="(answer, ianswer) in question.answersalternatives"
+                            :key="ianswer"
+                          >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                        </p>
+                        <p v-else>
+                          <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                        </p>
+                      </div>
+                    </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
                 <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
@@ -787,7 +877,7 @@
                     class="mt-2 mb-2"
                     :id="submodulo.url.split('/')[3] + submodulo.idmodule"
                   >
-                    <v-expansion-panel-header color="#71CB97" style="color:white; height: 55px;">
+                    <v-expansion-panel-header color="#5F9EA0" style="color:white; height: 55px;">
                       <!--HEADER DO SUBMÓDULO-->
                       <v-row>
                         <v-col class="d-flex align-center" style="height:100%;">
@@ -1077,7 +1167,51 @@
                             </v-row>
                           </v-expansion-panel-header>
 
-                          <v-expansion-panel-content></v-expansion-panel-content>
+                          <v-expansion-panel-content class="mt-2">
+                            <span
+                              v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                            >
+                              <strong>Descrição da atividade</strong>
+                              <br />
+                              {{instrucelement.description}}
+                            </span>
+                            <hr
+                              v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                            />
+                            <span
+                              v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                            >
+                              <strong>Questões:</strong>
+                              <br />
+                            </span>
+                            <hr class="mb-4" />
+                            <div
+                              v-for="(question, iquestion) in instrucelement.questions"
+                              :key="iquestion"
+                            >
+                              <span>
+                                <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
+                              </span>
+                              <p
+                                v-if="question.typequestion.split(
+                          '/'
+                          )[4] == 1"
+                              >
+                                <span
+                                  class="ml-3"
+                                  v-for="(answer, ianswer) in question.answersalternatives"
+                                  :key="ianswer"
+                                >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                              </p>
+                              <p v-else>
+                                <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                              </p>
+                            </div>
+                          </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
@@ -1095,7 +1229,7 @@
                           :id="conceito.url.split('/')[3] + conceito.idconcept"
                         >
                           <v-expansion-panel-header
-                            color="#3B83FF"
+                            color="#778899"
                             style="color:white; height: 55px;"
                           >
                             <!--HEADER DOS CONCEITOS DOS SUBMÓDULOS-->
@@ -1383,7 +1517,7 @@
                                   <v-row>
                                     <v-col>
                                       <p class="mt-3">
-                                        [Procedimento]
+                                        <v-icon color="white" large>mdi-format-list-bulleted</v-icon>
                                         {{ procedure.nameinformationitem }}
                                       </p>
                                     </v-col>
@@ -1532,7 +1666,51 @@
                                   </v-row>
                                 </v-expansion-panel-header>
 
-                                <v-expansion-panel-content></v-expansion-panel-content>
+                                <v-expansion-panel-content class="mt-2">
+                                  <span
+                                    v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                                  >
+                                    <strong>Descrição da atividade</strong>
+                                    <br />
+                                    {{instrucelement.description}}
+                                  </span>
+                                  <hr
+                                    v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                                  />
+                                  <span
+                                    v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                                  >
+                                    <strong>Questões:</strong>
+                                    <br />
+                                  </span>
+                                  <hr class="mb-4" />
+                                  <div
+                                    v-for="(question, iquestion) in instrucelement.questions"
+                                    :key="iquestion"
+                                  >
+                                    <span>
+                                      <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
+                                    </span>
+                                    <p
+                                      v-if="question.typequestion.split(
+                          '/'
+                          )[4] == 1"
+                                    >
+                                      <span
+                                        class="ml-3"
+                                        v-for="(answer, ianswer) in question.answersalternatives"
+                                        :key="ianswer"
+                                      >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                                    </p>
+                                    <p v-else>
+                                      <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                                    </p>
+                                  </div>
+                                </v-expansion-panel-content>
                               </v-expansion-panel>
                             </v-expansion-panels>
                             <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
@@ -1558,7 +1736,7 @@
                     class="mt-2 mb-2"
                     :id="conceito.url.split('/')[3] + conceito.idconcept"
                   >
-                    <v-expansion-panel-header color="#3B83FF" style="color:white; height: 55px;">
+                    <v-expansion-panel-header color="#778899" style="color:white; height: 55px;">
                       <!--HEADER DOS CONCEITOS DOS MÓDULOS-->
                       <v-row>
                         <v-col class="d-flex align-center" style="width: 100%;">
@@ -1826,7 +2004,7 @@
                             <v-row>
                               <v-col>
                                 <p class="mt-3">
-                                  [Procedimento]
+                                  <v-icon color="white" large>mdi-format-list-bulleted</v-icon>
                                   {{ procedure.nameinformationitem }}
                                 </p>
                               </v-col>
@@ -1965,7 +2143,51 @@
                             </v-row>
                           </v-expansion-panel-header>
 
-                          <v-expansion-panel-content></v-expansion-panel-content>
+                          <v-expansion-panel-content class="mt-2">
+                            <span
+                              v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                            >
+                              <strong>Descrição da atividade</strong>
+                              <br />
+                              {{instrucelement.description}}
+                            </span>
+                            <hr
+                              v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 3"
+                            />
+                            <span
+                              v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                            >
+                              <strong>Questões:</strong>
+                              <br />
+                            </span>
+                            <hr class="mb-4" />
+                            <div
+                              v-for="(question, iquestion) in instrucelement.questions"
+                              :key="iquestion"
+                            >
+                              <span>
+                                <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
+                              </span>
+                              <p
+                                v-if="question.typequestion.split(
+                          '/'
+                          )[4] == 1"
+                              >
+                                <span
+                                  class="ml-3"
+                                  v-for="(answer, ianswer) in question.answersalternatives"
+                                  :key="ianswer"
+                                >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                              </p>
+                              <p v-else>
+                                <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                              </p>
+                            </div>
+                          </v-expansion-panel-content>
                         </v-expansion-panel>
                       </v-expansion-panels>
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS  DOS CONCEITOS DOS MÓDULOS-->
@@ -2043,13 +2265,13 @@ import InstrucMenuFiles from "./InstrucMenuFiles";
 import AvaliacaoDialog from "./instructional_model/AvaliacaoDialog";
 import AtividadeColaborativaDialog from "./instructional_model/AtividadeColaborativaDialog";
 import ExemploDialog from "./instructional_model/ExemploDialog";
+import DidaticMenuFiles from "./DidaticMenuFiles";
 import VisibleDialog from "./didatic_model/VisibleDialog";
 import PriorKnowledgeDialog from "./didatic_model/PriorKnowledgeDialog";
 import PriorKnowledgeDialogConcept from "./didatic_model/PriorKnowledgeDialogConcept";
 import AssessmentParameterDialog from "./didatic_model/AssessmentParameterDialog";
 import firebase from "firebase/app";
 import Api from "@/services/Api";
-
 export default {
   name: "Panels",
   components: {
@@ -2068,6 +2290,7 @@ export default {
     AvaliacaoDialog,
     AtividadeColaborativaDialog,
     ExemploDialog,
+    DidaticMenuFiles,
     VisibleDialog,
     PriorKnowledgeDialog,
     PriorKnowledgeDialogConcept,
@@ -2196,7 +2419,6 @@ export default {
     dialog_module: function () {
       if (this.dialog_module === true) {
         var vm = this;
-
         this.dialog_modulo = this.dialog_module;
         Api()
           .patch(this.objectTreeView.url, {})
@@ -2208,7 +2430,6 @@ export default {
     dialog_submodule: function () {
       if (this.dialog_submodule === true) {
         var vm = this;
-
         this.dialog_submodulo = this.dialog_submodule;
         Api()
           .patch(
@@ -2226,7 +2447,6 @@ export default {
     dialog_concept: function () {
       if (this.dialog_concept === true) {
         var vm = this;
-
         this.dialog_conceito = this.dialog_concept;
         Api()
           .patch(this.objectTreeView.url, {})
@@ -2243,7 +2463,6 @@ export default {
     dialog_proceduretree: function () {
       if (this.dialog_proceduretree === true) {
         var vm = this;
-
         this.dialog_procedure = this.dialog_proceduretree;
         Api()
           .patch(this.objectTreeView.url, {})
@@ -2265,7 +2484,6 @@ export default {
     dialog_mobilemediatree: function () {
       if (this.dialog_mobilemediatree === true) {
         var vm = this;
-
         Api()
           .patch(this.objectTreeView.url, {})
           .then(function (resposta) {
@@ -2290,7 +2508,6 @@ export default {
     dialog_instructionalelementtree: function () {
       if (this.dialog_instructionalelementtree === true) {
         var vm = this;
-
         Api()
           .patch(this.objectTreeView.url, {})
           .then(function (resposta) {
@@ -2326,8 +2543,6 @@ export default {
           "#" +
           this.elementToScroll.url.split("/")[3] +
           this.elementToScroll.url.split("/")[4];
-
-        console.log(this.elementToScroll);
 
         if (this.elementToScroll.type === "module") {
           this.vModelPanelModules.push(this.elementToScroll.indexPanel);
@@ -2410,7 +2625,6 @@ export default {
             );
           }
         }
-
         this.$vuetify.goTo(auxQuerySelector, {
           duration: 1000,
           offset: 0,
@@ -2450,7 +2664,6 @@ export default {
       this.readonly_control = false;
       this.dialogLoading = true;
       var vm = this;
-
       Api()
         .patch(
           "/knowledgedomain/" + this.dominio_data.idknowledgedomain + "/",
@@ -2461,7 +2674,6 @@ export default {
           vm.dialogLoading = false;
         });
     },
-
     close_or_save_dominio() {
       this.readonly_control = false;
       this.dialog_dominio = !this.dialog_dominio;
@@ -2486,7 +2698,6 @@ export default {
       this.mobilemedia = valueMobileMedia;
       this.objectFile = valueOptionCall;
       this.type = valueType;
-
       if (
         valueMobileMedia.fk_idmediatype ===
         Api().defaults.baseURL + `mediatype/1/`
@@ -2514,7 +2725,6 @@ export default {
         this.dialog_link = true;
       }
     },
-
     setinstructionalelement(
       valueInstructionalElement,
       instrucValueOptionCall,
@@ -2526,7 +2736,6 @@ export default {
       this.instrucValueType = valueInstructionalElement.fk_instructionalelementtype.split(
         "/"
       )[4];
-
       if (
         valueInstructionalElement.fk_instructionalelementtype ===
         Api().defaults.baseURL + `instrucelementtype/1/`
@@ -2610,18 +2819,15 @@ export default {
           vm.auxElementDelete = "";
         });
     },
-
     controlTreeView(value) {
       this.readonly_control = false;
       this.$emit("close", value);
     },
-
     findNameTarget(conceitos, relacao) {
       var targetconcept = relacao.targetconcept;
       var conceptSelect = conceitos.find(function (conceitofinded) {
         return conceitofinded.url === targetconcept;
       });
-
       return conceptSelect.nameconcept;
     },
     findTipoRelation(typeUrl) {
@@ -2663,11 +2869,9 @@ export default {
       this.procedimento = "";
       this.objectFile = "";
       this.type = "";
-
       if (value === "save") {
         this.controlTreeView("procedimento");
         this.controlTreeView("mobilemedia");
-
         await this.$nextTick(function () {
           vm.getDominio();
         }, 3 + rounds);
@@ -2706,7 +2910,6 @@ export default {
       this.instrucObjectFile = "";
       this.instrucType = "";
       this.instrucValueType = "";
-
       if (value === "save") {
         this.controlTreeView("elementoinstrucional");
         await setTimeout(function () {
@@ -2732,7 +2935,6 @@ export default {
       if (typeof domain.modules !== "undefined" && domain.modules.length > 0) {
         modulesfinded = domain.modules.filter(checkModules);
       }
-
       return modulesfinded;
     },
     proceduresUnderConcept(concept) {
@@ -2742,9 +2944,7 @@ export default {
           Api().defaults.baseURL + "informationitemtype/4/"
         );
       }
-
       var proceduresfinded = concept.informationitems.filter(checkProcedure);
-
       return proceduresfinded;
     },
     mobileMediasInformationItem(concept) {
@@ -2771,18 +2971,14 @@ export default {
         }, 2000);
       }
     },
-    openDidatic() {
-      this.dialogLoadingMessage = this.dialogLoadingMessages[3];
-      this.getDominio();
-      this.dialog_visible = true;
-      this.dialogLoadingMessage = this.dialogLoadingMessages[0];
-    },
-    openDidaticDialog(dialog) {
-      if (dialog === "prior") {
-        this.dialog_prior = true;
-      } else if (dialog === "assessment") {
+    openDidaticDialog(value) {
+      if (value.type === 1) {
+        this.dialog_visible = true;
+      } else if (value.type === 2) {
         this.dialog_assessment = true;
-      } else if (dialog === "priorConcept") {
+      } else if (value.type === 3) {
+        this.dialog_prior = true;
+      } else if (value.type === 4) {
         this.dialog_priorConcept = true;
       }
     },

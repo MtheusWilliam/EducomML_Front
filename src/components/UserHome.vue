@@ -21,7 +21,7 @@
           <v-row v-if="filteredDomains.length > 0" class="mb-6">
             <v-spacer></v-spacer>
             <v-col cols="4" v-for="(dominio, i) in filteredDomains" :key="i">
-              <v-card>
+              <v-card height="350px">
                 <v-img
                   class="white--text align-end"
                   height="200px"
@@ -29,15 +29,19 @@
                 >
                   <v-card-title>{{ dominio.nameknowledgedomain }}</v-card-title>
                 </v-img>
-
-                <v-card-subtitle class="pb-0 mb-6" style="color:black;">{{ dominio.subtitle }}</v-card-subtitle>
-
+                <v-row style="height: 100px;">
+                  <v-card-subtitle class="pb-0 ml-3" style="color:black;">{{ dominio.subtitle }}</v-card-subtitle>
+                </v-row>
                 <v-card-actions>
-                  <v-btn color="red" dark @click="getAlertDelete(dominio.url)">
+                  <v-btn class="ml-2" color="red" dark @click="getAlertDelete(dominio.url)">
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" @click="putDominio(dominio.idknowledgedomain)">
+                  <v-btn
+                    class="mr-2"
+                    color="primary"
+                    @click="putDominio(dominio.idknowledgedomain)"
+                  >
                     Editar
                     <v-icon class="ml-2" small>mdi-pencil</v-icon>
                   </v-btn>
@@ -81,7 +85,11 @@
                       required
                     ></v-text-field>
 
-                    <v-text-field v-model="subtitle" label="Subítulo para o conteúdo modelado"></v-text-field>
+                    <v-text-field
+                      v-model="subtitle"
+                      :rules="subtitleRules"
+                      label="Subítulo para o conteúdo modelado"
+                    ></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -188,6 +196,11 @@ export default {
         "Nome do domínio deve ter no máximo 100 caracteres",
     ],
     subtitle: "",
+    subtitleRules: [
+      (v) =>
+        v.length <= 100 ||
+        "Subtítulo do domínio deve ter no máximo 100 caracteres",
+    ],
     dominios: [],
     drawer: true,
     items: [

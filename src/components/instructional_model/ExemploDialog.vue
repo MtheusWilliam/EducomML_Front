@@ -112,6 +112,43 @@
                 </v-btn>
                 <v-spacer></v-spacer>
               </v-row>
+              <v-row style="margin-bottom: -35px;" v-if="mobilemedia.type === 4" class="mb-2">
+                <v-col cols="12">
+                  <v-row>
+                    <label for="textFullArea" class="ml-4">Seu texto na forma não-resumida:</label>
+                    <v-spacer></v-spacer>
+                    <v-btn icon="icon" class="mb-4 mr-5">
+                      <v-icon x-large color="red" @click="deleteMobileMedia(i)">mdi-minus-box</v-icon>
+                    </v-btn>
+                  </v-row>
+                  <v-textarea
+                    id="textFullArea"
+                    background-color="#F2F3F3"
+                    clearable
+                    clear-icon="mdi-close-circle"
+                    rows="12"
+                    filled
+                    auto-grow
+                    v-model="mobilemedia.textfull"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
+              <v-row style="margin-bottom: -30px;" v-if="mobilemedia.type === 4">
+                <v-col cols="12">
+                  <label for="textShortArea">Seu texto na forma resumida:</label>
+                  <v-textarea
+                    id="textShortArea"
+                    background-color="#F2F3F3"
+                    clearable
+                    clear-icon="mdi-close-circle"
+                    class="mt-2"
+                    rows="5"
+                    filled
+                    auto-grow
+                    v-model="mobilemedia.textshort"
+                  ></v-textarea>
+                </v-col>
+              </v-row>
               <v-row v-if="mobilemedia.type === 5" class="mb-2">
                 <v-spacer></v-spacer>
                 <v-text-field
@@ -219,6 +256,10 @@ export default {
         name: "Audio",
       },
       {
+        icon: "mdi-file-document",
+        name: "Texto",
+      },
+      {
         icon: "mdi-link-variant",
         name: "Link",
       },
@@ -296,6 +337,14 @@ export default {
                     namefile: elementMobile.namefile,
                     url: elementMobile.url,
                   });
+                } else if (elementMobile.fk_idmediatype.split("/")[4] === "4") {
+                  await vm.mobileMediasControl.push({
+                    type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
+                    object: null,
+                    textfull: elementMobile.textfull,
+                    textshort: elementMobile.textshort,
+                    url: elementMobile.url,
+                  });
                 } else if (elementMobile.fk_idmediatype.split("/")[4] === "5") {
                   await vm.mobileMediasControl.push({
                     type: parseInt(elementMobile.fk_idmediatype.split("/")[4]),
@@ -316,7 +365,8 @@ export default {
     async postMobilesExemplo() {
       var instructionalelement = {
         label: this.exemploName,
-        fk_instructionalelementtype: `/instrucelementtype/4/`,
+        fk_instructionalelementtype:
+          Api().defaults.baseURL + `instrucelementtype/4/`,
       };
       var vm = this;
       var auxPath = "";
@@ -377,11 +427,7 @@ export default {
                       path: mobilemedia.path,
                       resolution: mobilemedia.resolution,
                       namefile: mobilemedia.namefile,
-                      description:
-                        "Imagem " +
-                        (indexmobile + 1) +
-                        " " +
-                        resposta.data.label,
+                      description: resposta.data.label,
                       time: null,
                       textfull: null,
                       textshort: null,
@@ -417,6 +463,22 @@ export default {
                       time: null,
                       textfull: null,
                       textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url,
+                    });
+                  } else if (mobilemedia.type === 4) {
+                    await Api().put(mobilemedia.url, {
+                      label: "Texto " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: null,
+                      resolution: null,
+                      namefile: null,
+                      description: null,
+                      time: null,
+                      textfull: mobilemedia.textfull,
+                      textshort: mobilemedia.textshort,
                       urllink: null,
                       difficultyLevel: null,
                       learningStyle: null,
@@ -488,6 +550,22 @@ export default {
                       time: null,
                       textfull: null,
                       textshort: null,
+                      urllink: null,
+                      difficultyLevel: null,
+                      learningStyle: null,
+                      fk_idinstructionalelement: resposta.data.url,
+                    });
+                  } else if (mobilemedia.type === 4) {
+                    await Api().post(`/mobilemedia/`, {
+                      label: "Texto " + (indexmobile + 1),
+                      fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                      path: null,
+                      resolution: null,
+                      namefile: null,
+                      description: null,
+                      time: null,
+                      textfull: mobilemedia.textfull,
+                      textshort: mobilemedia.textshort,
                       urllink: null,
                       difficultyLevel: null,
                       learningStyle: null,
@@ -574,6 +652,22 @@ export default {
                     learningStyle: null,
                     fk_idinstructionalelement: resposta.data.url,
                   });
+                } else if (mobilemedia.type === 4) {
+                  await Api().post(`/mobilemedia/`, {
+                    label: "Texto " + (indexmobile + 1),
+                    fk_idmediatype: "/mediatype/" + mobilemedia.type + "/",
+                    path: null,
+                    resolution: null,
+                    namefile: null,
+                    description: null,
+                    time: null,
+                    textfull: mobilemedia.textfull,
+                    textshort: mobilemedia.textshort,
+                    urllink: null,
+                    difficultyLevel: null,
+                    learningStyle: null,
+                    fk_idinstructionalelement: resposta.data.url,
+                  });
                 } else if (mobilemedia.type === 5) {
                   await Api().post(`/mobilemedia/`, {
                     label: "Link " + (indexmobile + 1),
@@ -626,7 +720,15 @@ export default {
         });
       } else if (mobileMediaType === 4) {
         this.mobileMediasControl.push({
-          type: mobileMediaType + 1,
+          type: mobileMediaType,
+          textshort: null,
+          textfull: null,
+          object: null,
+          url: null,
+        });
+      } else if (mobileMediaType === 5) {
+        this.mobileMediasControl.push({
+          type: mobileMediaType,
           object: null,
           url: null,
         });
@@ -634,7 +736,10 @@ export default {
     },
     async deleteMobileMedia(idMobileMedia) {
       if (this.mobileMediasControl[idMobileMedia].url) {
-        if (this.mobileMediasControl[idMobileMedia].type !== 5) {
+        if (
+          this.mobileMediasControl[idMobileMedia].type !== 4 &&
+          this.mobileMediasControl[idMobileMedia].type !== 5
+        ) {
           await firebase
             .storage()
             .ref()
