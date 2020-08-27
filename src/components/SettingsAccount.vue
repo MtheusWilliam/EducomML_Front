@@ -97,6 +97,9 @@ export default {
     right: null,
     mini: false,
   }),
+  mounted() {
+    this.getUserParameters();
+  },
   methods: {
     routerLink(link) {
       this.$router.push({ path: link });
@@ -117,16 +120,28 @@ export default {
       this.search = s;
     },
     async submit() {
-      await Api()
-        .post("userId/", {
-          username: this.$store.state.username,
-        })
-        .then(async (res) => {
-          await Api().patch(res.data.url, {
-            username: this.username,
-            password: "0",
-          });
+      await this.getUser().then(async (res) => {
+        await Api().put(res.data.url, {
+          username: this.username,
+          password: "º",
         });
+      });
+    },
+    async getUser() {
+      return await Api().post("userId/", {
+        username: this.$store.state.username,
+      });
+    },
+    async getUserParameters() {
+      var vm = this;
+      await this.getUser().then(
+        async (res) =>
+          await Api()
+            .get(res.data.url)
+            .then((response) => {
+              vm.username = response.data.username;
+            })
+      );
     },
   },
 };

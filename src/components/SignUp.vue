@@ -160,7 +160,7 @@ export default {
     }
   },
   methods: {
-    async postOrPutUser() {
+    async postUser() {
       var usr = {
         username: this.username.toLowerCase(),
         email: this.email,
@@ -182,13 +182,17 @@ export default {
       } catch (err) {
         console.log(err);
       }
+      await this.$store.commit("setLoading", {
+        dialog: false,
+        message: "",
+      });
     },
 
     async validate() {
       if (this.$refs.form.validate()) {
         try {
           await this.$refs.form.validate();
-          await this.postOrPutUser();
+          await this.postUser();
           this.messageClass = "headline green";
           this.messageTitle = "Email de confirmação enviado com sucesso";
           this.messageError =

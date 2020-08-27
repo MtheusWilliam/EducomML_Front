@@ -113,6 +113,11 @@ export default {
   methods: {
     async login() {
       if (this.resetPassword) {
+        await this.$store.commit("setLoading", {
+          dialog: true,
+          message:
+            "Estamos enviando um email de redefinição de senha para você...",
+        });
         await Api()
           .post(
             "/reset-password/",
@@ -137,6 +142,10 @@ export default {
             this.message = response.data.message;
             this.dialogMessage = true;
           });
+        await this.$store.commit("setLoading", {
+          dialog: false,
+          message: "",
+        });
       } else {
         await this.$store
           .dispatch("obtainToken", {

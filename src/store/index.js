@@ -13,6 +13,10 @@ var store = new Vuex.Store({
       obtainJWT: "/api-token-auth/",
       refreshJWT: "/api-token-refresh/",
     },
+    loading: {
+      dialog: false,
+      message: "",
+    },
     actualKnowledge: sessionStorage.getItem("d"),
     priorConcepts: [],
   },
@@ -31,6 +35,10 @@ var store = new Vuex.Store({
     },
     csrfToken(state, csrfToken) {
       state.csrf = csrfToken;
+    },
+    setLoading(state, loading) {
+      state.loading.dialog = loading.dialog;
+      state.loading.message = loading.message;
     },
     setPriorConcepts(state, objPriorConcepts) {
       state.priorConcepts = objPriorConcepts;
@@ -86,7 +94,7 @@ var store = new Vuex.Store({
         } else if (exp - Date.now() / 1000 < 1800) {
           // DO NOTHING, DO NOT REFRESH
         } else {
-          // PROMPT USER TO RE-LOGIN, THIS ELSE CLAUSE COVERS THE CONDITION WHERE A TOKEN IS EXPIRED AS WELL
+          this.commit("removeToken");
         }
       }
     },

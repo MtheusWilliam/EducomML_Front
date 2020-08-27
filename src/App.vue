@@ -23,8 +23,7 @@
           color="#B19114"
           dark
           @click="$router.push({ path: '/signup' })"
-          >CADASTRE-SE</v-btn
-        >
+        >CADASTRE-SE</v-btn>
         <v-btn
           v-if="!$store.state.jwt"
           class="ml-2"
@@ -32,16 +31,13 @@
           color="#B19114"
           dark
           @click="$router.push({ path: '/login/ ' })"
-          >Entrar</v-btn
-        >
+        >Entrar</v-btn>
         <UserMenu class="ma-2" />
-        <v-img
-          class="ml-5"
-          src="@/assets/logoblack.png"
-          style="width: 150px;"
-        ></v-img>
+        <v-img class="ml-5" src="@/assets/logoblack.png" style="width: 150px;"></v-img>
       </div>
     </v-app-bar>
+
+    <Loading />
 
     <v-content class="px-0 mx-0" style="width:200%;">
       <router-view />
@@ -50,12 +46,14 @@
 </template>
 
 <script>
-  import UserMenu from "@/components/UserMenu";
-  export default {
-    name: "App",
-    components: {
-      UserMenu,
-    },
-    data: () => ({}),
-  };
+import UserMenu from "@/components/UserMenu";
+import Loading from "@/components/Loading";
+export default {
+  name: "App",
+  components: {
+    UserMenu,
+    Loading,
+  },
+  data: () => ({}),
+};
 </script>

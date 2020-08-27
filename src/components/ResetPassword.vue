@@ -62,18 +62,10 @@ export default {
   methods: {
     async validate() {
       await Api()
-        .post(
-          "/update-password/",
-          {
-            username: this.$route.params.username,
-            password: this.password,
-          },
-          {
-            headers: {
-              Authorization: "JWT " + this.$route.params.token,
-            },
-          }
-        )
+        .post("/update-password/", {
+          username: this.$route.params.username,
+          password: this.password,
+        })
         .then((response) => {
           this.$store.commit("updateToken", response.data.token);
           this.$store.commit("updateUsername", response.data.username);
