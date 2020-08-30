@@ -663,7 +663,7 @@
                 <!--CONTENT DO MÓDULO-->
                 <!-- PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-model="vModelPanelMobilemediasModule"
+                  v-model="vModelPanelArray[imodulo].mobilemedias"
                   multiple
                   :readonly="readonly_control"
                 >
@@ -748,7 +748,7 @@
                 <!-- FIM DOS PANELS DOS ARQUIVOS DOS MÓDULOS-->
                 <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <v-expansion-panels
-                  v-model="vModelPanelInstrucsModule"
+                  v-model="vModelPanelArray[imodulo].elementosinstrucionais"
                   multiple
                   :readonly="readonly_control"
                 >
@@ -867,7 +867,7 @@
                 <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS MÓDULOS-->
                 <!--Panels dos SubMódulos-->
                 <v-expansion-panels
-                  v-model="vModelPanelSubmodules"
+                  v-model="vModelPanelArray[imodulo].submodulos"
                   multiple
                   :readonly="readonly_control"
                 >
@@ -997,7 +997,7 @@
                       <!--CONTENT DO SUBMODULO-->
                       <!--LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-model="vModelPanelMobilemediasSubmodule"
+                        v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].mobilemedias"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -1095,7 +1095,7 @@
                       <!--FIM DA LISTAGEM DOS ARQUIVOS DOS SUBMÓULOS-->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <v-expansion-panels
-                        v-model="vModelPanelInstrucsSubmodule"
+                        v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].elementosinstrucionais"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -1217,7 +1217,7 @@
                       <!-- FIM DA LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS SUBMÓULOS-->
                       <!--Panels dos conceitos adicionados dentro de submódulos-->
                       <v-expansion-panels
-                        v-model="vModelPanelConceptsSubmodule"
+                        v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -1395,7 +1395,7 @@
                             </v-simple-table>
                             <!-- Listagem dos arquivos dos conceitos DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-model="vModelPanelMobilemediasConceptSubmodule"
+                              v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos[iconceitosubmodulo].mobilemedias"
                               multiple
                               :readonly="readonly_control"
                             >
@@ -1417,6 +1417,7 @@
                                   style="color:white; height: 55px;"
                                 >
                                   <v-row>
+                                    {{vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos[iconceitosubmodulo].mobilemedias}}
                                     <v-col class="d-flex align-center" style="height:100%;">
                                       <div style="vertical-align:middle;" class="mt-3">
                                         <p>
@@ -1496,7 +1497,7 @@
                             <!--FIM DA LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS SUBMODULOS -->
                             <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-model="vModelPanelProceduresConceptSubmodule"
+                              v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos[iconceitosubmodulo].procedimentos"
                               multiple
                               :readonly="readonly_control"
                             >
@@ -1588,7 +1589,7 @@
                             <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS SUBMÓDULOS -->
                             <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS SUBMÓDULOS-->
                             <v-expansion-panels
-                              v-model="vModelPanelInstrucsConceptSubmodule"
+                              v-model="vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos[iconceitosubmodulo].elementosinstrucionais"
                               multiple
                               :readonly="readonly_control"
                             >
@@ -1726,7 +1727,7 @@
 
                 <!-- Panels dos Conceitos dos Módulos-->
                 <v-expansion-panels
-                  v-model="vModelPanelConceptsModule"
+                  v-model="vModelPanelArray[imodulo].conceitos"
                   multiple
                   :readonly="readonly_control"
                 >
@@ -1882,7 +1883,7 @@
 
                       <!--LISTAGEM DOS ARQUIVOS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-model="vModelPanelMobilemediasConceptModule"
+                        v-model="vModelPanelArray[imodulo].conceitos[iconceitomodulo].mobilemedias"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -1983,7 +1984,7 @@
 
                       <!--LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-model="vModelPanelProceduresConceptModule"
+                        v-model="vModelPanelArray[imodulo].conceitos[iconceitomodulo].procedimentos"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -2071,7 +2072,7 @@
                       <!-- FIM DA LISTAGEM DOS PROCEDURES DOS CONCEITOS DOS MÓDULOS -->
                       <!--LISTAGEM DOS ELEMENTOS INSTRUCIONAIS DOS CONCEITOS DOS MÓDULOS-->
                       <v-expansion-panels
-                        v-model="vModelPanelInstrucsConceptSubmodule"
+                        v-model="vModelPanelArray[imodulo].conceitos[iconceitomodulo].elementosinstrucionais"
                         multiple
                         :readonly="readonly_control"
                       >
@@ -2320,22 +2321,10 @@ export default {
     ],
     readonly_control: false,
     vModelPanelDomain: [0],
+    vModelPanelArray: [],
     vModelPanelModules: [],
-    vModelPanelSubmodules: [],
-    vModelPanelConceptsModule: [],
-    vModelPanelConceptsSubmodule: [],
     vModelPanelMobilemediasDomain: [],
-    vModelPanelMobilemediasModule: [],
-    vModelPanelMobilemediasSubmodule: [],
-    vModelPanelMobilemediasConceptModule: [],
-    vModelPanelMobilemediasConceptSubmodule: [],
     vModelPanelInstrucsDomain: [],
-    vModelPanelInstrucsModule: [],
-    vModelPanelInstrucsSubmodule: [],
-    vModelPanelInstrucsConceptModule: [],
-    vModelPanelInstrucsConceptSubmodule: [],
-    vModelPanelProceduresConceptModule: [],
-    vModelPanelProceduresConceptSubmodule: [],
     itemsMenuNewModulo: [
       {
         type: "Conceito",
@@ -2405,6 +2394,7 @@ export default {
   watch: {
     dominio: function () {
       this.setDomainVariables(this.dominio);
+      this.getVModelsPanelsArrays(this.dominio);
       if (this.dominio.modules.length > 0) {
         this.disableBtnDidatic = false;
       } else {
@@ -2543,20 +2533,23 @@ export default {
           "#" +
           this.elementToScroll.url.split("/")[3] +
           this.elementToScroll.url.split("/")[4];
-
         if (this.elementToScroll.type === "module") {
           this.vModelPanelModules.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "submodule") {
-          this.vModelPanelSubmodules.push(this.elementToScroll.indexPanel);
+          this.vModelPanelArray[
+            this.elementToScroll.fatherObj.modulo
+          ].submodulos.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "concept") {
           if (this.elementToScroll.panelFather === "module") {
-            this.vModelPanelConceptsModule.push(
-              this.elementToScroll.indexPanel
-            );
-          } else if (this.elementToScroll.panelFather === "submodulo") {
-            this.vModelPanelConceptsSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos.push(this.elementToScroll.indexPanel);
+          } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[
+              this.elementToScroll.fatherObj.submodulo
+            ].conceitos.push(this.elementToScroll.indexPanel);
           }
         } else if (this.elementToScroll.type === "mobilemedia") {
           if (this.elementToScroll.panelFather === "domain") {
@@ -2564,21 +2557,27 @@ export default {
               this.elementToScroll.indexPanel
             );
           } else if (this.elementToScroll.panelFather === "module") {
-            this.vModelPanelMobilemediasModule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "submodule") {
-            this.vModelPanelMobilemediasSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[
+              this.elementToScroll.fatherObj.submodulo
+            ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptmodule") {
-            this.vModelPanelMobilemediasConceptModule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
-            this.vModelPanelMobilemediasConceptSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].mobilemedias.push(this.elementToScroll.indexPanel);
           }
         } else if (this.elementToScroll.type === "instructionalelement") {
           if (this.elementToScroll.panelFather === "domain") {
@@ -2586,43 +2585,41 @@ export default {
               this.elementToScroll.indexPanel
             );
           } else if (this.elementToScroll.panelFather === "module") {
-            this.vModelPanelInstrucsModule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "submodule") {
-            this.vModelPanelInstrucsSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[
+              this.elementToScroll.fatherObj.submodulo
+            ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptmodule") {
-            this.vModelPanelInstrucsConceptModule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
-            this.vModelPanelInstrucsConceptSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           }
         } else if (this.elementToScroll.type === "informationitem") {
-          if (this.elementToScroll.panelFather === "domain") {
-            this.vModelPanelProceduresDomain.push(
-              this.elementToScroll.indexPanel
-            );
-          } else if (this.elementToScroll.panelFather === "module") {
-            this.vModelPanelProceduresModule.push(
-              this.elementToScroll.indexPanel
-            );
-          } else if (this.elementToScroll.panelFather === "submodule") {
-            this.vModelPanelProceduresSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
-          } else if (this.elementToScroll.panelFather === "conceptmodule") {
-            this.vModelPanelProceduresConceptModule.push(
-              this.elementToScroll.indexPanel
-            );
+          if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].procedimentos.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
-            this.vModelPanelProceduresConceptSubmodule.push(
-              this.elementToScroll.indexPanel
-            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[
+              this.elementToScroll.fatherObj.conceito
+            ].procedimentos.push(this.elementToScroll.indexPanel);
           }
         }
         this.$vuetify.goTo(auxQuerySelector, {
@@ -2639,6 +2636,45 @@ export default {
     },
   },
   methods: {
+    getVModelsPanelsArrays(dominio) {
+      console.log("dom", dominio);
+      var auxmodulo = -1;
+      dominio.modules.forEach((modulo) => {
+        if (modulo.fk_idmodule === null) {
+          auxmodulo++;
+          this.vModelPanelArray.push({
+            submodulos: [],
+            conceitos: [],
+            mobilemedias: [],
+            elementosinstrucionais: [],
+          });
+          modulo.submodules.forEach((submodulo, isubmodulo) => {
+            this.vModelPanelArray[auxmodulo].submodulos.push({
+              conceitos: [],
+              mobilemedias: [],
+              elementosinstrucionais: [],
+            });
+            submodulo.concepts.forEach(() => {
+              this.vModelPanelArray[auxmodulo].submodulos[
+                isubmodulo
+              ].conceitos.push({
+                procedimentos: [],
+                mobilemedias: [],
+                elementosinstrucionais: [],
+              });
+            });
+          });
+          modulo.concepts.forEach(() => {
+            this.vModelPanelArray[auxmodulo].conceitos.push({
+              procedimentos: [],
+              mobilemedias: [],
+              elementosinstrucionais: [],
+            });
+          });
+        }
+      });
+      console.log("arr", this.vModelPanelArray);
+    },
     validate() {
       if (
         this.domainName &&

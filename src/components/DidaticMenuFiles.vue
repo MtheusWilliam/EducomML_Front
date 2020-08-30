@@ -32,12 +32,12 @@ export default {
       {
         // icon: "mdi-clipboard-check",
         name: "Conhecimentos Prévios",
-        valueType: 2,
+        valueType: 3,
       },
       {
         // icon: "mdi-account-switch",
         name: "Parâmetros de Avaliação",
-        valueType: 3,
+        valueType: 2,
       },
     ],
   }),
