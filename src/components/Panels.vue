@@ -302,7 +302,7 @@
                 </v-dialog>
 
                 <!--Formulário para criação de exemplo-->
-                <v-dialog v-model="dialog_exemplo" persistent="persistent" max-width="1100px">
+                <v-dialog v-model="dialog_exemplo" persistent="persistent" max-width="1200px">
                   <ExemploDialog
                     @instrucclose="instrucdialogclose"
                     :instrucOptionCall="instrucObjectFile"
@@ -472,6 +472,35 @@
               </v-expansion-panel-header>
 
               <v-expansion-panel-content class="mt-2">
+                <!-- Conteúdo mostrado caso o elemento instrucional seja de tipo Exemplo e contenha mobilemedias do tipo Texto e Url-->
+                <div
+                  v-if="instrucelement.fk_instructionalelementtype.split(
+                          '/'
+                          )[4] == 4"
+                >
+                  <div v-for="(mobile, imobile) in instrucelement.mobilemedias" :key="imobile">
+                    <span v-if="mobile.urllink">
+                      <strong>Link:</strong>
+                      <br />
+                    </span>
+                    <span v-if="mobile.urllink">{{ mobile.urllink }}</span>
+                    <span v-if="mobile.textfull" style="white-space: pre-line">
+                      <strong>Texto completo:</strong>
+                      <br />
+                      {{mobile.textfull}}
+                      <br />
+                    </span>
+
+                    <span v-if="mobile.textshort" style="white-space: pre-line">
+                      <strong>Texto resumido:</strong>
+                      <br />
+                      {{mobile.textshort}}
+                    </span>
+                    <hr v-if="mobile.urllink || mobile.textshort || mobilemedia.textfull" />
+                  </div>
+                </div>
+
+                <!-- Conteúdo mostrado caso o elemento instrucional seja de tipo Atividade Colaborativa, Avaliação ou Exercício-->
                 <span
                   v-if="instrucelement.fk_instructionalelementtype.split(
                           '/'
@@ -482,9 +511,7 @@
                   {{instrucelement.description}}
                 </span>
                 <hr
-                  v-if="instrucelement.fk_instructionalelementtype.split(
-                          '/'
-                          )[4] == 3"
+                  v-if="instrucelement.fk_instructionalelementtype.split('/')[4] == 3 && instrucelement.questions.length > 0"
                 />
                 <span
                   v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
@@ -492,7 +519,10 @@
                   <strong>Questões:</strong>
                   <br />
                 </span>
-                <hr class="mb-4" />
+                <hr
+                  class="mb-4"
+                  v-if="instrucelement.fk_instructionalelementtype.split('/')[4] !== 4 && instrucelement.questions.length > 0"
+                />
                 <div v-for="(question, iquestion) in instrucelement.questions" :key="iquestion">
                   <span>
                     <strong>{{question.orderquestion + 1}}) {{question.descriptionquestion}}</strong>
@@ -506,10 +536,13 @@
                       class="ml-3"
                       v-for="(answer, ianswer) in question.answersalternatives"
                       :key="ianswer"
-                    >{{answer.idobjanswer}}) {{answer.answers}}</span>
+                    >
+                      {{answer.idobjanswer}}) {{answer.answers}}
+                      <br />
+                    </span>
                   </p>
                   <p v-else>
-                    <span>{{question.descriptionquestion[0].correctanswer}}</span>
+                    <span>{{question.resolutionquestion[0].correctanswer}}</span>
                   </p>
                 </div>
               </v-expansion-panel-content>
@@ -1481,14 +1514,14 @@
                                   <span v-if="mobilemedia.textfull" style="white-space: pre-line">
                                     <strong>Texto completo:</strong>
                                     <br />
-                                    {{ mobilemedia.textfull }}
+                                    {{mobilemedia.textfull}}
                                     <br />
                                   </span>
 
                                   <span v-if="mobilemedia.textshort" style="white-space: pre-line">
                                     <strong>Texto resumido:</strong>
                                     <br />
-                                    {{ mobilemedia.textshort }}
+                                    {{mobilemedia.textshort}}
                                   </span>
                                 </v-expansion-panel-content>
                               </v-expansion-panel>
@@ -2527,6 +2560,8 @@ export default {
       }
     },
     elementToScroll: function () {
+      //Função criada para inserir key do panel do elemento acionado pela treeview dentro de seu respectivo v-model panel
+      //Após isso é acionado um scroll movendo a tela até a posição do elemento
       if (this.elementToScroll) {
         var auxQuerySelector =
           "#" +
@@ -2535,15 +2570,23 @@ export default {
         if (this.elementToScroll.type === "module") {
           this.vModelPanelModules.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "submodule") {
+          this.vModelPanelArray.push(this.elementToScroll.fatherObj.modulo);
           this.vModelPanelArray[
             this.elementToScroll.fatherObj.modulo
           ].submodulos.push(this.elementToScroll.indexPanel);
         } else if (this.elementToScroll.type === "concept") {
           if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].conceitos.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vvModelPanelModules.push(
+              this.elementToScroll.fatherObj.modulo
+            );
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[
@@ -2556,22 +2599,32 @@ export default {
               this.elementToScroll.indexPanel
             );
           } else if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[
               this.elementToScroll.fatherObj.submodulo
             ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].conceitos[
               this.elementToScroll.fatherObj.conceito
             ].mobilemedias.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[
@@ -2584,22 +2637,42 @@ export default {
               this.elementToScroll.indexPanel
             );
           } else if (this.elementToScroll.panelFather === "module") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "submodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[
               this.elementToScroll.fatherObj.submodulo
             ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos.push(this.elementToScroll.fatherObj.conceito);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].conceitos[
               this.elementToScroll.fatherObj.conceito
             ].elementosinstrucionais.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelModules.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
+
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[
+              this.elementToScroll.fatherObj.submodulo
+            ].conceitos.push(this.elementToScroll.fatherObj.conceito);
+
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[
@@ -2608,12 +2681,25 @@ export default {
           }
         } else if (this.elementToScroll.type === "informationitem") {
           if (this.elementToScroll.panelFather === "conceptmodule") {
+            this.vModelPanelArray.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].conceitos.push(this.elementToScroll.fatherObj.conceito);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].conceitos[
               this.elementToScroll.fatherObj.conceito
             ].procedimentos.push(this.elementToScroll.indexPanel);
           } else if (this.elementToScroll.panelFather === "conceptsubmodule") {
+            this.vModelPanelArray.push(this.elementToScroll.fatherObj.modulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos.push(this.elementToScroll.fatherObj.submodulo);
+            this.vModelPanelArray[
+              this.elementToScroll.fatherObj.modulo
+            ].submodulos[
+              this.elementToScroll.fatherObj.submodulo
+            ].conceitos.push(this.elementToScroll.fatherObj.conceito);
             this.vModelPanelArray[
               this.elementToScroll.fatherObj.modulo
             ].submodulos[this.elementToScroll.fatherObj.submodulo].conceitos[

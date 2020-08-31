@@ -60,10 +60,9 @@
             class="mt-2 mb-4"
           ></v-text-field>
           <div v-if="mobileMediasControl.length > 0">
-            <label class="mb-6 pt-2" style="font-size:1.3em;">
+            <label class="pt-2" style="font-size:1.3em;">
               <strong>MobileMedias do exemplo:</strong>
             </label>
-            <div class="mt-8"></div>
             <div v-for="(mobilemedia, i) in mobileMediasControl" :key="i">
               <v-row v-if="mobilemedia.type === 1">
                 <v-spacer></v-spacer>
