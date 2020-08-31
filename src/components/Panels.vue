@@ -1417,7 +1417,6 @@
                                   style="color:white; height: 55px;"
                                 >
                                   <v-row>
-                                    {{vModelPanelArray[imodulo].submodulos[isubmodulo].conceitos[iconceitosubmodulo].mobilemedias}}
                                     <v-col class="d-flex align-center" style="height:100%;">
                                       <div style="vertical-align:middle;" class="mt-3">
                                         <p>
@@ -2636,13 +2635,60 @@ export default {
     },
   },
   methods: {
+    addVModelsPanels(panelType, element, fatherType, father) {
+      var index = "";
+      if (panelType === "modulo") {
+        this.vModelPanelArray.push({
+          submodulos: [],
+          conceitos: [],
+          mobilemedias: [],
+          elementosinstrucionais: [],
+        });
+      } else if (panelType === "submodulo") {
+        index = this.vModelPanelArray.findIndex(
+          (x) => x.url === element.fk_idmodule
+        );
+        this.vModelPanelArray[index].submodulos.push({
+          url: element.url,
+          conceitos: [],
+          mobilemedias: [],
+          elementosinstrucionais: [],
+        });
+      } else if (panelType === "conceito") {
+        if (fatherType === "submodulo") {
+          index = this.vModelPanelArray.findIndex(
+            (x) => x.url === father.fk_idmodule
+          );
+          var index2 = this.vModelPanelArray[index].submodulos.findIndex(
+            (x) => x.url === father.url
+          );
+          this.vModelPanelArray[index].submodulos[index2].conceitos.push({
+            url: element.url,
+            conceitos: [],
+            mobilemedias: [],
+            elementosinstrucionais: [],
+          });
+        } else if (fatherType === "modulo") {
+          index = this.vModelPanelArray.findIndex(
+            (x) => x.url === element.fk_idmodule
+          );
+          this.vModelPanelArray[index].conceitos.push({
+            url: element.url,
+            conceitos: [],
+            mobilemedias: [],
+            elementosinstrucionais: [],
+          });
+        }
+      }
+    },
     getVModelsPanelsArrays(dominio) {
-      console.log("dom", dominio);
+      //Função para criação de arrays dos v-models de todos os panels
       var auxmodulo = -1;
       dominio.modules.forEach((modulo) => {
         if (modulo.fk_idmodule === null) {
           auxmodulo++;
           this.vModelPanelArray.push({
+            url: modulo.url,
             submodulos: [],
             conceitos: [],
             mobilemedias: [],
@@ -2650,22 +2696,25 @@ export default {
           });
           modulo.submodules.forEach((submodulo, isubmodulo) => {
             this.vModelPanelArray[auxmodulo].submodulos.push({
+              url: submodulo.url,
               conceitos: [],
               mobilemedias: [],
               elementosinstrucionais: [],
             });
-            submodulo.concepts.forEach(() => {
+            submodulo.concepts.forEach((conceito) => {
               this.vModelPanelArray[auxmodulo].submodulos[
                 isubmodulo
               ].conceitos.push({
+                url: conceito.url,
                 procedimentos: [],
                 mobilemedias: [],
                 elementosinstrucionais: [],
               });
             });
           });
-          modulo.concepts.forEach(() => {
+          modulo.concepts.forEach((conceito) => {
             this.vModelPanelArray[auxmodulo].conceitos.push({
+              url: conceito.url,
               procedimentos: [],
               mobilemedias: [],
               elementosinstrucionais: [],
@@ -2673,7 +2722,6 @@ export default {
           });
         }
       });
-      console.log("arr", this.vModelPanelArray);
     },
     validate() {
       if (
@@ -2800,6 +2848,7 @@ export default {
       var vm = this;
       if (value === "save") {
         vm.getDominio();
+        this.addVModelsPanels("modulo");
         this.dialog_modulo = false;
       } else if (value === "close") {
         this.dialog_modulo = false;
@@ -2807,12 +2856,13 @@ export default {
       this.modulo = "";
       this.controlTreeView("modulo");
     },
-    close_or_save_submodulo(value) {
+    close_or_save_submodulo(value, newSubModulo) {
       this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
         vm.getDominio();
+        this.addVModelsPanels("submodulo", newSubModulo);
         this.dialog_submodulo = false;
       } else if (value === "close") {
         this.dialog_submodulo = false;
@@ -2821,12 +2871,13 @@ export default {
       this.submodulo = "";
       this.controlTreeView("submodulo");
     },
-    close_or_save_conceito(value) {
+    close_or_save_conceito(value, newConceito, fatherType, father) {
       this.readonly_control = false;
       this.dialogLoadingMessage = this.dialogLoadingMessages[1];
       var vm = this;
       if (value === "save") {
         vm.getDominio();
+        this.addVModelsPanels("conceito", newConceito, fatherType, father);
         this.dialog_conceito = false;
       } else if (value === "close") {
         this.dialog_conceito = false;
@@ -2836,6 +2887,57 @@ export default {
       this.controlTreeView("conceito");
     },
     async deleteelemento(value) {
+      if (value.url.split("/")[3] === "module" && value.fk_idmodule === null) {
+        for (var i = this.vModelPanelArray.length - 1; i >= 0; --i) {
+          if (this.vModelPanelArray[i].url === value.url) {
+            this.vModelPanelArray.splice(i, 1);
+          }
+        }
+      } else if (
+        value.url.split("/")[3] === "module" &&
+        value.fk_idmodule !== null
+      ) {
+        for (i = this.vModelPanelArray.length - 1; i >= 0; --i) {
+          for (
+            var j = this.vModelPanelArray[i].submodulos.length - 1;
+            j >= 0;
+            j--
+          ) {
+            if (this.vModelPanelArray[i].submodulos[j].url === value.url) {
+              this.vModelPanelArray[i].submodulos.splice(i, 1);
+            }
+          }
+        }
+      } else if (value.url.split("/")[3] === "concept") {
+        for (i = this.vModelPanelArray.length - 1; i >= 0; --i) {
+          for (
+            j = this.vModelPanelArray[i].submodulos.length - 1;
+            j >= 0;
+            j--
+          ) {
+            if (this.vModelPanelArray[i].submodulos[j].url === value.url) {
+              this.vModelPanelArray[i].submodulos.splice(i, 1);
+            }
+            for (
+              var k = this.vModelPanelArray[i].conceitos.length - 1;
+              k >= 0;
+              k--
+            ) {
+              if (
+                this.vModelPanelArray[i].submodulos[j].conceitos[k].url ===
+                value.url
+              ) {
+                this.vModelPanelArray[i].submodulos[j].conceitos.splice(k, 1);
+              }
+            }
+          }
+          for (k = this.vModelPanelArray[i].conceitos.length - 1; k >= 0; k--) {
+            if (this.vModelPanelArray[i].conceitos[k].url === value.url) {
+              this.vModelPanelArray[i].conceitos.splice(k, 1);
+            }
+          }
+        }
+      }
       this.dialogLoadingMessage = this.dialogLoadingMessages[2];
       var vm = this;
       if (

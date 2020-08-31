@@ -140,6 +140,8 @@ export default {
     conceitoDialogHeader2:
       "Defina o conceito do módulo e seu(s) relacionamento(s).",
     alert: "",
+    newConceitoUrl: "",
+    newConceitoFatherType: "",
     auxSelectTeste: "",
     auxConceito: "",
     relationForControl: [],
@@ -294,13 +296,14 @@ export default {
           })
           .then(async function (resposta) {
             vm.auxConceito = resposta.data.url;
+            vm.newConceitoUrl = resposta.data;
+            if (vm.module.fk_idmodule) {
+              vm.newConceitoFatherType === "submodulo";
+            } else {
+              vm.newConceitoFatherType === "modulo";
+            }
             if (vm.$store.state.priorConcepts) {
               vm.$store.state.priorConcepts.forEach(async (prior) => {
-                console.log("vamo quase", prior);
-                console.log(`/priorlevel/` + prior.priorlevel + `/`);
-                console.log(prior.namepriorknowledge);
-                console.log(resposta.data.url);
-
                 await Api()
                   .post(`/priorknowledge/`, {
                     namepriorknowledge: prior.namepriorknowledge,
@@ -366,7 +369,13 @@ export default {
         //await this.$refs.form.reset();
         this.relationForControl = [];
         this.resetVariables();
-        this.$emit("close_or_save", "save");
+        this.$emit(
+          "close_or_save",
+          "save",
+          this.newConceitoUrl,
+          this.newConceitoFatherType,
+          this.module
+        );
       }
     },
     reset() {
