@@ -55,7 +55,17 @@
             <v-col cols="4">
               <label for="imagem">Foto de perfil</label>
               <v-card class="mx-auto" max-width="300">
-                <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc"></v-img>
+                <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc">
+                  <v-btn
+                    v-if="profile_image[0]"
+                    class="ml-2 mt-2"
+                    color="red"
+                    dark
+                    @click="alertDelete = true"
+                  >
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+                </v-img>
                 <v-card-actions>
                   <v-file-input
                     class="mt-3"
@@ -96,6 +106,29 @@
               <v-spacer></v-spacer>
             </v-row>
           </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
+    <div class="text-center">
+      <v-dialog v-model="alertDelete" width="500" persistent="persistent">
+        <v-card>
+          <v-card-title class="headline red" primary-title style="color:white;">ALERTA!</v-card-title>
+          <v-card-text
+            class="mt-3"
+            style="font-size: 1.3em;"
+          >Tem certeza que deseja apagar a sua atual foto de perfil?</v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-btn color="primary" @click="deleteProfileImage()">Sim</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="red"
+              dark
+              @click="
+                alertDelete = false;
+              "
+            >Não</v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </div>
@@ -148,6 +181,31 @@ export default {
   mounted() {
     this.getUserParameters();
   },
+  watch: {
+    imagemObject: function () {
+      var vm = this;
+      if (this.imagemObject) {
+        var img = new Image();
+        img.src = URL.createObjectURL(this.imagemObject);
+        img.onload = function () {
+          vm.viewImageSrc = img.src;
+        };
+      } else {
+        if (typeof this.profile_image !== "undefined") {
+          firebase
+            .storage()
+            .ref(this.profile_image[0].path)
+            .getDownloadURL()
+            .then(function (url) {
+              vm.viewImageSrc = url;
+            });
+        } else {
+          this.viewImageSrc =
+            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+        }
+      }
+    },
+  },
   methods: {
     routerLink(link) {
       this.$router.push({ path: link });
@@ -168,7 +226,7 @@ export default {
       this.search = s;
     },
     getSrcImage() {
-      if (typeof this.profile_image !== "undefined") {
+      if (typeof this.profile_image[0] !== "undefined") {
         var vm = this;
         firebase
           .storage()
@@ -211,7 +269,7 @@ export default {
         textshort: null,
         urllink: null,
       };
-      if (typeof this.profile_image !== "undefined") {
+      if (typeof this.profile_image[0] !== "undefined") {
         await Api()
           .put(vm.profile_image[0].url, mobilemedia)
           .then(function (resposta) {
@@ -279,6 +337,16 @@ export default {
               vm.getSrcImage();
             })
       );
+    },
+    async deleteProfileImage() {
+      var vm = this;
+      await Api()
+        .delete(this.profile_image[0].url)
+        .then(function () {
+          vm.viewImageSrc =
+            "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+          vm.alertDelete = false;
+        });
     },
   },
 };
