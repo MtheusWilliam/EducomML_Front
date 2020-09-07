@@ -10,7 +10,7 @@
             <v-row>
               <v-col cols="3">
                 <v-list-item-avatar>
-                  <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+                  <img v-bind:src="viewImageSrc" />
                 </v-list-item-avatar>
               </v-col>
               <v-col cols="8" class="d-flex align-center">
@@ -87,6 +87,7 @@ export default {
   name: "SettingsPassword",
   data: () => ({
     search: "",
+    viewImageSrc: "",
     valid: true,
     dialog: false,
     dialogLoading: false,
@@ -119,6 +120,14 @@ export default {
     right: null,
     mini: false,
   }),
+  mounted() {
+    this.viewImageSrc = this.$store.state.actualProfileImage;
+  },
+  watch: {
+    "$store.state.actualProfileImage": function () {
+      this.viewImageSrc = this.$store.state.actualProfileImage;
+    },
+  },
   methods: {
     routerLink(link) {
       this.$router.push({ path: link });

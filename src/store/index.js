@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import Api from "@/services/Api";
 import jwt_decode from "jwt-decode";
+import * as firebase from "firebase";
 
 Vue.use(Vuex);
 
@@ -9,6 +10,7 @@ var store = new Vuex.Store({
   state: {
     jwt: sessionStorage.getItem("t"),
     username: sessionStorage.getItem("u"),
+    actualProfileImage: '',
     endpoints: {
       obtainJWT: "/api-token-auth/",
       refreshJWT: "/api-token-refresh/",
@@ -47,10 +49,27 @@ var store = new Vuex.Store({
       sessionStorage.setItem("d", idKnowledge);
       state.actualKnowledge = idKnowledge;
     },
+    setActualProfileImage(state, profile_image) {
+      state.actualProfileImage = profile_image;
+    }
   },
   actions: {
     getActualKnowledge(state, idKnowledge) {
       this.commit("setActualKnowledge", idKnowledge);
+    },
+    getProfileImage(state, profile_image) {
+      var vm = this;
+      if (typeof profile_image === 'undefined') {
+        vm.commit("setActualProfileImage", "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png");
+      } else {
+        firebase
+          .storage()
+          .ref(profile_image[0].path)
+          .getDownloadURL()
+          .then(function (url) {
+            vm.commit("setActualProfileImage", url);
+          });
+      }
     },
     async obtainToken(state, payload) {
       var name = payload.username;

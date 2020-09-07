@@ -3,14 +3,14 @@
     <v-menu bottom origin="center center" transition="slide-x-transition">
       <template v-slot:activator="{ on }">
         <v-list-item-avatar v-on="on">
-          <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+          <img v-bind:src="viewImageSrc" />
         </v-list-item-avatar>
       </template>
 
       <v-list dense nav class="py-0">
         <v-list-item two-line>
           <v-list-item-avatar>
-            <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+            <img v-bind:src="viewImageSrc" />
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -38,6 +38,7 @@
 export default {
   name: "UserMenu",
   data: () => ({
+    viewImageSrc: "",
     items: [
       { title: "Home", icon: "mdi-home", path: "/home" },
       {
@@ -48,6 +49,14 @@ export default {
       { title: "Sair", icon: "mdi-exit-to-app", path: "logout" },
     ],
   }),
+  mounted() {
+    this.viewImageSrc = this.$store.state.actualProfileImage;
+  },
+  watch: {
+    "$store.state.actualProfileImage": function () {
+      this.viewImageSrc = this.$store.state.actualProfileImage;
+    },
+  },
   methods: {
     goTo(path) {
       if (path === "logout") {

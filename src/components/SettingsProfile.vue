@@ -10,7 +10,7 @@
             <v-row>
               <v-col cols="3">
                 <v-list-item-avatar>
-                  <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+                  <img v-bind:src="viewImageSrc" />
                 </v-list-item-avatar>
               </v-col>
               <v-col cols="8" class="d-flex align-center">
@@ -45,24 +45,65 @@
       </v-app-bar>
       <v-card>
         <v-card-text>
-          <v-form style="margin-bottom: -20px;">
-            <v-text-field id="name" label="Nome" v-model="name" required></v-text-field>
-            <v-text-field id="lastname" label="Sobrenome" v-model="lastname" required></v-text-field>
-          </v-form>
+          <v-row>
+            <v-col cols="8">
+              <v-form style="margin-bottom: -20px;">
+                <v-text-field id="name" label="Nome" v-model="name" required></v-text-field>
+                <v-text-field id="lastname" label="Sobrenome" v-model="lastname" required></v-text-field>
+              </v-form>
+            </v-col>
+            <v-col cols="4">
+              <label for="imagem">Foto de perfil</label>
+              <v-card class="mx-auto" max-width="300">
+                <v-img id="imagem" class="mt-3" v-bind:src="viewImageSrc"></v-img>
+                <v-card-actions>
+                  <v-file-input
+                    class="mt-3"
+                    style="margin-bottom: -15px;"
+                    label="EDITAR FOTO"
+                    filled
+                    v-model="imagemObject"
+                    accept="image/*"
+                    prepend-icon="mdi-camera"
+                  ></v-file-input>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="success" height="49" dark large @click.prevent="submit()" class="mr-2">
+          <v-btn color="success" height="49" dark large @click.prevent="submit()" class="mr-4 mb-2">
             Atualizar perfil
             <v-icon dark right>mdi-content-save</v-icon>
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
+    <div class="text-center">
+      <v-dialog v-model="dialogLoading" max-width="290" persistent="persistent">
+        <v-card color="primary" dark>
+          <v-card-text style="color:white;">
+            <v-row class="pt-2 pb-3">
+              <br />
+              <v-spacer></v-spacer>
+              <span style="font-size: 1.3em; color:white;">Salvando alterações...</span>
+              <v-spacer></v-spacer>
+            </v-row>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-progress-circular indeterminate color="white" class="mb-0"></v-progress-circular>
+              <v-spacer></v-spacer>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-row>
 </template>
 
 <script>
+import * as firebase from "firebase";
 import Api from "@/services/Api";
 export default {
   name: "SettingsProfile",
@@ -73,8 +114,13 @@ export default {
     dialogLoading: false,
     lastversion: "versao_teste",
     alertDelete: false,
+    id_user: "",
+    url_user: "",
     name: "",
     lastname: "",
+    profile_image: "",
+    viewImageSrc: "",
+    imagemObject: null,
     drawer: true,
     items: [
       {
@@ -101,7 +147,6 @@ export default {
   }),
   mounted() {
     this.getUserParameters();
-    console.log("ds");
   },
   methods: {
     routerLink(link) {
@@ -122,14 +167,96 @@ export default {
     setSearch(s) {
       this.search = s;
     },
-    async submit() {
-      await this.getUser().then(async (res) => {
-        await Api().put(res.data.url, {
-          username: "0",
-          first_name: this.name,
-          last_name: this.lastname,
-          password: "º",
+    getSrcImage() {
+      if (typeof this.profile_image !== "undefined") {
+        var vm = this;
+        firebase
+          .storage()
+          .ref(this.profile_image[0].path)
+          .getDownloadURL()
+          .then(function (url) {
+            vm.viewImageSrc = url;
+          });
+      } else {
+        this.viewImageSrc =
+          "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
+      }
+    },
+    async postOrPutProfileImage() {
+      var vm = this;
+      var path =
+        "users/" +
+        this.id_user.toString() +
+        "/" +
+        "profile_image_user_" +
+        this.id_user.toString();
+      await firebase
+        .storage()
+        .ref()
+        .child(path)
+        .put(this.imagemObject)
+        .then(function (url) {
+          console.log("foi", url);
         });
+      var mobilemedia = {
+        label: path.split("/")[1],
+        fk_idmediatype: "/mediatype/1/",
+        path: path,
+        resolution: null,
+        namefile: "profile_image_user_" + this.id_user.toString(),
+        fk_iduser: this.url_user,
+        description: null,
+        time: null,
+        textfull: null,
+        textshort: null,
+        urllink: null,
+      };
+      if (typeof this.profile_image !== "undefined") {
+        await Api()
+          .put(vm.profile_image[0].url, mobilemedia)
+          .then(function (resposta) {
+            firebase
+              .storage()
+              .ref(resposta.data.path)
+              .getDownloadURL()
+              .then(function (url) {
+                vm.$store.dispatch("getProfileImage", url);
+              });
+          });
+      } else {
+        await Api()
+          .post(`/mobilemedia/`, mobilemedia)
+          .then(function (resposta) {
+            firebase
+              .storage()
+              .ref(resposta.data.path)
+              .getDownloadURL()
+              .then(function (url) {
+                vm.$store.dispatch("getProfileImage", url);
+              });
+          });
+      }
+    },
+    async submit() {
+      var vm = this;
+      this.dialogLoading = true;
+      if (this.imagemObject) {
+        await this.postOrPutProfileImage();
+      }
+      await this.getUser().then(async (res) => {
+        await Api()
+          .put(res.data.url, {
+            username: "0",
+            first_name: this.name,
+            last_name: this.lastname,
+            password: "º",
+          })
+          .then(() => {
+            vm.dialogLoading = false;
+            vm.$router.push({
+              path: "/home/",
+            });
+          });
       });
     },
     async getUser() {
@@ -144,9 +271,12 @@ export default {
           await Api()
             .get(res.data.url)
             .then((response) => {
+              vm.id_user = response.data.id;
+              vm.url_user = response.data.url;
               vm.name = response.data.first_name;
               vm.lastname = response.data.last_name;
-              console.log(response);
+              vm.profile_image = response.data.profileimage;
+              vm.getSrcImage();
             })
       );
     },

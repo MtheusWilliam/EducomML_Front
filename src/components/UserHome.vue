@@ -238,6 +238,7 @@ export default {
         .get(response.data.url)
         .then((response2) => {
           vm.dominios = response2.data.knowledgedomains;
+          vm.$store.dispatch("getProfileImage", response2.data.profileimage);
           vm.userName = response2.data.username;
           vm.dialogLoading = false;
           vm.getDomainCardColors();
