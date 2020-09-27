@@ -147,15 +147,27 @@ export default {
           message: "",
         });
       } else {
+        await this.$store.commit("setLoading", {
+          dialog: true,
+          message: "Fazendo login...",
+        });
         await this.$store
           .dispatch("obtainToken", {
             username: this.username,
             password: this.password,
           })
-          .then(() => {
+          .then(async () => {
             if (this.$store.state.jwt) {
               this.$router.push({ path: "/home" });
+              await this.$store.commit("setLoading", {
+                dialog: false,
+                message: "",
+              });
             } else {
+              await this.$store.commit("setLoading", {
+                dialog: false,
+                message: "",
+              });
               this.messageClass = "headline red";
               this.messageTitle = "Erro no Login!";
               this.message =
