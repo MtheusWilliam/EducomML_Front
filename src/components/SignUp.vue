@@ -156,7 +156,7 @@ export default {
       passwordRules: [
         (v) => !!v || "É necessário inserir sua senha",
         (v) =>
-          (v && v.length <= 8) ||
+          (v && v.length >= 8) ||
           "Sua senha deve possuir no mínimo 8 caracteres",
       ],
       passwordConfirm: "",
@@ -256,6 +256,9 @@ export default {
         await Api()
           .post("/userId/", {
             username: this.$store.state.username,
+          },{
+            username: "admin",
+            password: "admin"
           })
           .then(async (response) => {
             await Api()

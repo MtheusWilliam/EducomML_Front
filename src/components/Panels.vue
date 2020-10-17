@@ -348,8 +348,8 @@
                         parseInt(
                         mobilemedia.fk_idmediatype.split("/")[4] - 1
                         )
-                        ]
-                        }}
+                        ] 
+                        }} - {{ mobilemedia.namefile }}
                       </p>
                     </div>
                   </v-col>

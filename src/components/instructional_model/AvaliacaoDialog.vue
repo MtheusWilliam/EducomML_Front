@@ -1306,6 +1306,7 @@ export default {
                     elementMobile,
                     indexMobile
                   ) {
+                    console.log(elementMobile);
                     if (elementMobile.type === 1) {
                       await Api().post(`/mobilemedia/`, {
                         label: "Imagem " + (indexMobile + 1),

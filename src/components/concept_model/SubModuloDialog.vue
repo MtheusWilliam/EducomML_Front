@@ -75,6 +75,7 @@ export default {
       });
     },
     async postSubModulo() {
+      var vm = this;
       await Api()
         .post(`/module/`, {
           fk_idmodule: this.module.url,
@@ -83,7 +84,7 @@ export default {
           idknowledgedomain: this.domain.url,
         })
         .then(function (resposta) {
-          this.newModuloUrl = resposta.data;
+          vm.newModuloUrl = resposta.data;
         });
     },
     async putSubModulo() {

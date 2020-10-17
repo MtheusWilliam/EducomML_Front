@@ -15,6 +15,10 @@
             label="Utilize uma descrição para a imagem"
             required
           ></v-text-field>
+          <v-text-field
+           label="Nome do Arquivo"
+           v-model="nameFile"
+          ></v-text-field>
         </v-form>
         <v-row>
           <v-col cols="3" v-if="type === 'conceito'">
@@ -106,9 +110,10 @@ export default {
   name: "ImageDialog",
   props: ["optionCall", "type", "domain", "dialog", "mobilemedia"],
   data: () => ({
+    nameFile: "",
     valid: true,
     dialog_alert: false,
-    viewImage: false,
+    viewImage: false,  
     viewImageSrc: "",
     iconViewImageColor: "blue",
     urlDownload: "",
@@ -163,6 +168,9 @@ export default {
             vm.infoLearning =
               vm.infoItemLearningStyles[vm.mobilemedia.learningStyle];
           }
+          if(vm.mobilemedia.name  !== null){
+            vm.nameFile = vm.mobilemedia.namefile;
+          }
           if (vm.mobilemedia.fk_informationitem) {
             Api()
               .patch(vm.mobilemedia.fk_informationitem, {})
@@ -181,10 +189,11 @@ export default {
       }
     },
     async postOrPutMobilemedia() {
+      var vm = this;
       var auxinformationitem = {
         auxinfo: `/informationitemtype/` + (this.infoClasse + 1) + "/",
       };
-      var vm = this;
+      
       var path = "";
       if (this.mobilemedia) {
         path = this.mobilemedia.path;
@@ -199,7 +208,7 @@ export default {
         fk_idmediatype: "/mediatype/1/",
         path: path,
         resolution: this.resolution,
-        namefile: path.split("/")[1],
+        namefile: this.nameFile,
         description: this.imagemDescription,
         time: null,
         textfull: null,
