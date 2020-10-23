@@ -2,92 +2,65 @@
   <v-card>
     <v-card-title style="background-color:purple; color:white;">
       <span class="headline">
-        <p>Defina as informações equivalentes aos conhecimentos prévios.</p>
+        <p>
+          Defina as informações equivalentes aos conhecimentos prioritários
+          desse conceito.
+        </p>
       </span>
     </v-card-title>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-row class="mx-0 px-0 pl-6 mb-6">
-        <h3 class="mt-5">Conhecimentos prévios</h3>
-        <v-btn icon="icon" class="mb-1">
-          <v-icon
-            large
-            class="mt-9 ml-2"
-            color="primary"
-            @click="addTargetPriorKnowledge()"
-          >mdi-plus-box</v-icon>
-        </v-btn>
-      </v-row>
-      <v-row
-        v-for="(prior, idPrior) in priorControl"
-        :key="idPrior"
-        class="mx-0 px-0 pl-10"
-        style="margin-top: -20px;"
-      >
-        <v-row>
-          <v-col cols="3">
+    <v-row class="mx-0 px-0">
+      <v-form ref="form" v-model="valid" lazy-validation>
+        <v-row class="mx-0 px-0 pl-6">
+          <h3 class="mt-5">Conhecimentos prioritários</h3>
+          <v-btn icon="icon" class="mb-1">
+            <v-icon
+              large
+              class="mt-9 ml-2"
+              color="primary"
+              @click="addPriorKnowledge()"
+            >mdi-plus-box</v-icon>
+          </v-btn>
+        </v-row>
+        <v-row
+          v-for="(prior, idPrior) in priorControl"
+          :key="idPrior"
+          style="margin-bottom: -25px;"
+          class="mx-0 px-0 pl-6"
+        >
+        <v-col cols="3" >
             <v-select
-              v-model="priorControl[idPrior].fk_priortargetconcept"
-              @change="alterTargetControl('alter', priorControl[idPrior].fk_priortargetconcept, idPrior)"
-              :items="targetConceptsPrior"
-              :rules="[
-                (v) => !!v || 'Necessário informar o conceito alvo',
-              ]"
-              label="Conceito Alvo"
+              v-model="priorControl[idPrior].url"
+              :items="conceptsPrior"
+              :rules="[(v) => !!v || 'Necessário informar o conceito prévio']"
+              label="Conceito prioritario"
               style="margin:0px;"
               required
             ></v-select>
           </v-col>
-          <v-col cols="2">
-            <v-btn icon="icon" class="mt-4">
-              <v-icon
-                large
-                class="mb-1"
-                color="primary"
-                @click="addSourcePriorKnowledge(idPrior)"
-              >mdi-plus-box</v-icon>
-            </v-btn>
-            <v-btn icon="icon" class="mt-4">
-              <v-icon
-                large
-                class="mb-1"
-                color="red"
-                @click="deletaTargetPriorKnowledge(idPrior)"
-              >mdi-minus-box</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row
-          v-for="(sourceprior, idsourceprior) in prior.priorknowledges"
-          :key="idsourceprior"
-          style="margin-top: -30px;"
-        >
-          <v-spacer></v-spacer>
           <v-col cols="3">
             <v-select
-              v-model="priorControl[idPrior].priorknowledges[idsourceprior].fk_priorsourceconcept"
-              :items="sourceConceptsPrior[idPrior]"
-              :rules="[
-                (v) => !!v || 'Necessário informar o conceito prévio',
-              ]"
+              v-model="priorControl[idPrior].fk_idconcept"
+              :items="conceptsPrior"
+              :rules="[(v) => !!v || 'Necessário informar o conceito prévio']"
               label="Conceito Prévio"
               style="margin:0px;"
               required
             ></v-select>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="3">
             <v-text-field
               style="margin-top: -1px; margin-bottom: -10px;"
               :rules="[
                 (v) => !!v || 'Necessário informar identificador da prioridade',
               ]"
-              v-model="priorControl[idPrior].priorknowledges[idsourceprior].namepriorknowledge"
+              v-model="priorControl[idPrior].namepriorknowledge"
               label="Identificador da prioridade"
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="2">
             <v-select
-              v-model="priorControl[idPrior].priorknowledges[idsourceprior].priorlevel"
+              v-model="priorControl[idPrior].priorlevel"
               :items="priorLevels"
               :rules="[
                 (v) => !!v || 'Necessário informar o nível de prioridade',
@@ -103,13 +76,13 @@
                 large
                 class="mb-1"
                 color="red"
-                @click="deletaSourcePriorKnowledge(idPrior, idsourceprior)"
+                @click="deletaPriorKnowledge(idPrior)"
               >mdi-minus-box</v-icon>
             </v-btn>
           </v-col>
         </v-row>
-      </v-row>
-    </v-form>
+      </v-form>
+    </v-row>
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="red" height="49" dark large @click="reset">
@@ -144,24 +117,14 @@
 <script>
 import Api from "@/services/Api";
 export default {
-  name: "PriorKnowledgeDialog",
-  props: ["domain", "dialog"],
+  name: "PriorKnowledgeDialogConcept",
+  props: ["domain", "dialog", "concept", "module"],
   data: () => ({
     valid: true,
-    controlsave: 0,
+    auxConcept: "",
     treeData: [],
     selection: [],
     elementData: [],
-    scopoTypes: [
-      {
-        text: "Avaliação",
-        value: 1,
-      },
-      {
-        text: "Domínio",
-        value: 2,
-      },
-    ],
     typesThreshold: [
       {
         text: "Porcentagem",
@@ -173,9 +136,7 @@ export default {
       },
     ],
     valueTypes: ["Single", "Range"],
-    targetConceptsPrior: [],
-    sourceConceptsPrior: [],
-    auxSourceConceptsPrior: [],
+    conceptsPrior: [],
     priorControl: [],
     priorLevels: [
       {
@@ -193,219 +154,116 @@ export default {
     checkbox: true,
   }),
   watch: {
-    domain: async function () {
-      this.priorControl = [];
-      if (this.domain) {
-        await this.setDomainVariables();
-        await this.getPriors();
-      }
-    },
     dialog: async function () {
       this.priorControl = [];
-      if (this.domain) {
-        await this.setDomainVariables();
-        await this.getPriors();
-      }
+      await this.setDomainVariables();
+      await this.getPriors();
     },
   },
   mounted: async function () {
     this.priorControl = [];
-    if (this.domain) {
-      await this.setDomainVariables();
-      await this.getPriors();
-    }
+    await this.setDomainVariables();
+    await this.getPriors();
   },
   methods: {
-    atualizaControl() {
-      console.log("atualiza", this.sourceConceptsPrior);
-    },
     getPriors() {
-      // var vm = this;
-      if (this.domain) {
-        if (this.domain.modules) {
-          this.domain.modules.forEach((module) => {
-            if (
-              Array.isArray(module.submodules) &&
-              module.submodules.length > 0
-            ) {
-              module.submodules.forEach((submodule) => {
-                if (
-                  Array.isArray(submodule.concepts) &&
-                  submodule.concepts.length > 0
-                ) {
-                  submodule.concepts.forEach((submoduleConcept) => {
-                    if (submoduleConcept.targetpriorknowledge.length > 0) {
-                      var auxSourcePrior = {
-                        fk_priortargetconcept: submoduleConcept.url,
-                        priorknowledges: [],
-                      };
-
-                      this.sourceConceptsPrior.push(
-                        this.alterTargetControl(
-                          "watch",
-                          submoduleConcept.url,
-                          ""
-                        )
-                      );
-                      submoduleConcept.targetpriorknowledge.forEach((prior) => {
-                        Object.assign(auxSourcePrior.priorknowledges, {
-                          namepriorknowledge: prior.namepriorknowledge,
-                          priorlevel: parseInt(prior.priorlevel.split("/")[4]),
-                          fk_priorsourceconcept: prior.fk_priorsourceconcept,
-                          fk_module: module.url,
-                          url: prior.url,
-                        });
-                      });
-                      this.priorControl.push(auxSourcePrior);
-                    }
-                  });
-                }
-              });
-            }
-            if (Array.isArray(module.concepts) && module.concepts.length > 0) {
-              module.concepts.forEach((moduleConcept) => {
-                if (moduleConcept.targetpriorknowledge.length > 0) {
-                  var auxSourcePrior = {
-                    fk_priortargetconcept: moduleConcept.url,
-                    priorknowledges: [],
-                  };
-
-                  this.sourceConceptsPrior.push(
-                    this.alterTargetControl("watch", moduleConcept.url, "")
-                  );
-                  moduleConcept.targetpriorknowledge.forEach((prior) => {
-                    auxSourcePrior.priorknowledges.push({
-                      namepriorknowledge: prior.namepriorknowledge,
-                      priorlevel: parseInt(prior.priorlevel.split("/")[4]),
-                      fk_priorsourceconcept: prior.fk_priorsourceconcept,
-                      fk_module: module.url,
-                      url: prior.url,
-                    });
-                  });
-                  this.priorControl.push(auxSourcePrior);
-                }
-              });
-            }
+      var vm = this;
+      if (this.concept) {
+        this.auxConcept = this.domain.modules
+          .filter((m) => {
+            return m.url === this.concept.fk_idmodule;
+          })[0]
+          .concepts.filter((c) => {
+            return c.url === this.concept.url;
+          })[0];
+        if (vm.$store.state.priorConcepts === []) {
+          vm.$store.state.priorConcepts.forEach((prior) => {
+            this.priorControl.push({
+              namepriorknowledge: prior.namepriorknowledge,
+              priorlevel: prior.priorlevel,
+              fk_idconcept: prior.fk_idconcept,
+              url: prior.url,
+            });
           });
+        } else {
+          if (this.auxConcept.targetpriorknowledge.length > 0) {
+            this.auxConcept.targetpriorknowledge.forEach((prior) => {
+              this.priorControl.push({
+                namepriorknowledge: prior.namepriorknowledge,
+                priorlevel: parseInt(prior.priorlevel.split("/")[4]),
+                fk_idconcept: prior.fk_priorsourceconcept,
+                url: prior.url,
+              });
+            });
+          }
         }
-      }
-    },
-    setDomainVariables() {
-      var auxFirstModulo = 0;
-      var auxFirstSubmodulo = 0;
-      this.targetConceptsPrior = [];
-      this.auxTargetConceptsPrior = [];
-
-      if (Array.isArray(this.domain.modules) && this.domain.modules.length) {
-        this.domain.modules.forEach((modulo) => {
-          if (modulo.submodules.length) {
-            modulo.submodules.forEach((submodulo) => {
-              if (submodulo.concepts.length) {
-                submodulo.concepts.forEach((conceito, iconceito) => {
-                  if (
-                    !(
-                      auxFirstModulo === 0 &&
-                      auxFirstSubmodulo === 0 &&
-                      iconceito === 0
-                    )
-                  ) {
-                    this.targetConceptsPrior.push({
-                      text: conceito.nameconcept,
-                      url_modulo: submodulo.url,
-                      value: conceito.url,
-                    });
-                    auxFirstModulo++;
-                  }
-                });
-                auxFirstModulo++;
-                auxFirstSubmodulo++;
-              }
-            });
-          }
-          if (modulo.concepts.length) {
-            modulo.concepts.forEach((conceito, iconceito) => {
-              if (!(auxFirstModulo === 0 && iconceito === 0)) {
-                this.targetConceptsPrior.push({
-                  text: conceito.nameconcept,
-                  url_modulo: modulo.url,
-                  value: conceito.url,
-                });
-              }
-            });
-            auxFirstModulo++;
-          }
+      } else {
+        vm.$store.state.priorConcepts.forEach((prior) => {
+          this.priorControl.push({
+            namepriorknowledge: prior.namepriorknowledge,
+            priorlevel: prior.priorlevel,
+            fk_idconcept: prior.fk_idconcept,
+            url: prior.url,
+          });
         });
       }
     },
+    async setDomainVariables() {
+        this.conceptsPrior = [];
+        var response = await Api().get("/concept/");
+        console.log(response);
+        response.data.forEach((element) => {
+          console.log(element);
+          this.conceptsPrior.push({
+            text: element.nameconcept,
+            value: element.url,
+          });
+        });
+      },
     async postPriorKnowledges() {
-      await this.priorControl.forEach(async (targetprior) => {
-        await targetprior.priorknowledges.forEach(async (sourceprior) => {
-          if (sourceprior.url) {
-            await Api().put(sourceprior.url, {
-              namepriorknowledge: sourceprior.namepriorknowledge,
-              priorlevel: `/priorlevel/` + sourceprior.priorlevel + `/`,
-              fk_priorsourceconcept: sourceprior.fk_priorsourceconcept,
-              fk_priortargetconcept: targetprior.fk_priortargetconcept,
-            });
+      var vm = this;
+      if (this.concept) {
+        await this.priorControl.forEach(async (prior) => {
+          if (prior.url) {
+            await Api()
+              .put(prior.url, {
+                namepriorknowledge: prior.namepriorknowledge,
+                priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
+                fk_priorsourceconcept: prior.fk_idconcept,
+                fk_priortargetconcept: vm.concept.url,
+              })
+              .then(function () {
+                vm.$store.dispatch("getPriorConcepts", []);
+              });
           } else {
-            await Api().post(`/priorknowledge/`, {
-              namepriorknowledge: sourceprior.namepriorknowledge,
-              priorlevel: `/priorlevel/` + sourceprior.priorlevel + `/`,
-              fk_priorsourceconcept: sourceprior.fk_priorsourceconcept,
-              fk_priortargetconcept: targetprior.fk_priortargetconcept,
-            });
+            await Api()
+              .post(`/priorknowledge/`, {
+                namepriorknowledge: prior.namepriorknowledge,
+                priorlevel: `/priorlevel/` + prior.priorlevel + `/`,
+                fk_priorsourceconcept: prior.fk_idconcept,
+                fk_priortargetconcept: vm.concept.url,
+              })
+              .then(function () {
+                vm.$store.dispatch("getPriorConcepts", []);
+              });
           }
         });
-      });
+      } else {
+        this.$store.dispatch("getPriorConcepts", this.priorControl);
+      }
     },
-    async addSourcePriorKnowledge(idTargetPriorKnowledge) {
-      this.priorControl[idTargetPriorKnowledge].priorknowledges.push({
-        fk_priorsourceconcept: "",
+    async addPriorKnowledge() {
+      this.priorControl.push({
         namepriorknowledge: "",
         priorlevel: "",
+        fk_idconcept: "",
         url: "",
       });
     },
-    async deletaSourcePriorKnowledge(
-      idTargetPriorKnowledge,
-      idSourcePriorKnowledge
-    ) {
-      if (
-        this.priorControl[idTargetPriorKnowledge].priorknowledges[
-          idSourcePriorKnowledge
-        ].url
-      ) {
-        Api().delete(
-          this.priorControl[idTargetPriorKnowledge].priorknowledges[
-            idSourcePriorKnowledge
-          ].url
-        );
+    async deletaPriorKnowledge(idPrior) {
+      if (this.priorControl[idPrior].url) {
+        await Api().delete(this.priorControl[idPrior].url);
       }
-      if (idSourcePriorKnowledge == 0) {
-        this.priorControl[idTargetPriorKnowledge].priorknowledges.shift();
-      } else {
-        this.priorControl[idTargetPriorKnowledge].priorknowledges.splice(
-          idSourcePriorKnowledge,
-          1
-        );
-      }
-      this.controlsave++;
-    },
-    async addTargetPriorKnowledge() {
-      this.priorControl.push({
-        fk_priortargetconcept: "",
-        priorknowledges: [],
-      });
-    },
-    async deletaTargetPriorKnowledge(idPrior) {
-      this.priorControl[idPrior].priorknowledges.forEach(
-        async (sourcePrior) => {
-          if (sourcePrior.url) {
-            await Api().delete(sourcePrior.url);
-          }
-        }
-      );
-
       if (idPrior == 0) {
         this.priorControl.shift();
       } else {
@@ -416,68 +274,24 @@ export default {
       if (this.$refs.form.validate()) {
         var auxLoopValidation = 1;
         for (var m = 0; m < this.priorControl.length; m++) {
-          if (this.priorControl[m].priorknowledges.length === 0) {
-            auxLoopValidation = 0;
-            this.messageError =
-              "Não é possível definir conceitos alvo sem declarar seu(s) respectivo(s) conhecimentos prévios. Verifique o conceito alvo " +
-              +(m + 1) +
-              ".";
-            this.dialogError = true;
-            break;
-          }
-          for (
-            var n = 0;
-            n < this.priorControl[m].priorknowledges.length;
-            n++
-          ) {
-            for (
-              var o = 0;
-              o < this.priorControl[m].priorknowledges.length;
-              o++
-            ) {
-              if (
-                this.priorControl[m].priorknowledges[n]
-                  .fk_priorsourceconcept ===
-                  this.priorControl[m].priorknowledges[o]
-                    .fk_priorsourceconcept &&
-                n !== o
-              ) {
-                auxLoopValidation = 0;
-                this.messageError =
-                  "Não é possível definir conhecimentos prévios iguais para o mesmo conceito. Verifique os conhecimentos prévios " +
-                  (n + 1) +
-                  " e " +
-                  (o + 1) +
-                  " do conceito " +
-                  (m + 1) +
-                  ".";
-                this.dialogError = true;
-                break;
-              }
-            }
-          }
-        }
-
-        for (m = 0; m < this.priorControl.length; m++) {
-          for (n = 0; n < this.priorControl[m].priorknowledges.length; n++) {
+          for (var n = 0; n < this.priorControl.length; n++) {
             if (
-              this.priorControl[m].fk_priortargetconcept ===
-                this.priorControl[n].fk_priortargetconcept &&
+              this.priorControl[m].fk_idconcept ===
+                this.priorControl[n].fk_idconcept &&
               m !== n
             ) {
               auxLoopValidation = 0;
               this.messageError =
-                "Não é possível repetir conceitos alvo. Verifique os conceitos alvo " +
-                (m + 1) +
-                " e " +
+                "Não é possível definir um conhecimento prioritário mais de uma vez. Verifique os conhecimentos prioritários " +
                 (n + 1) +
+                " e " +
+                (m + 1) +
                 ".";
               this.dialogError = true;
               break;
             }
           }
         }
-
         if (auxLoopValidation === 1) {
           await this.postPriorKnowledges();
           await this.resetVariables();
@@ -486,76 +300,16 @@ export default {
       }
     },
     reset() {
-      if (this.controlsave > 0) {
-        this.$emit("close_or_save", "save");
-      } else {
-        this.$emit("close_or_save", "close");
-      }
+      this.$emit("close_or_save", "close");
       this.priorControl = [];
+      this.conceptsPrior = [];
     },
     resetVariables() {
       this.priorControl = [];
-      this.targetConceptsPrior = [];
+      this.conceptsPrior = [];
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },
-    alterTargetControl(type, urlConceito, idPrior) {
-      var auxSources = [];
-      for (var i = 0; i < this.domain.modules.length; i++) {
-        if (this.domain.modules[i].submodules.length > 0) {
-          for (var s = 0; s < this.domain.modules[i].submodules.length; s++) {
-            if (this.domain.modules[i].submodules[s].concepts.length > 0) {
-              for (
-                var c = 0;
-                c < this.domain.modules[i].submodules[s].concepts.length;
-                c++
-              ) {
-                if (
-                  this.domain.modules[i].submodules[s].concepts[c].url ===
-                  urlConceito
-                ) {
-                  i = this.domain.modules.length;
-                  s = this.domain.modules[i].submodules.length;
-                  break;
-                } else {
-                  auxSources.push({
-                    text: this.domain.modules[i].submodules[s].concepts[c]
-                      .nameconcept,
-                    url_modulo: this.domain.modules[i].submodules[s].url,
-                    value: this.domain.modules[i].submodules[s].concepts[c].url,
-                  });
-                }
-              }
-            }
-          }
-        }
-      }
-      for (var i1 = 0; i1 < this.domain.modules.length; i1++) {
-        if (
-          Array.isArray(this.domain.modules[i1].concepts) &&
-          this.domain.modules[i1].concepts.length > 0
-        ) {
-          for (var c1 = 0; c1 < this.domain.modules[i1].concepts.length; c1++) {
-            if (this.domain.modules[i1].concepts[c1].url === urlConceito) {
-              i1 = this.domain.modules.length;
-              break;
-            } else {
-              auxSources.push({
-                text: this.domain.modules[i1].concepts[c1].nameconcept,
-                url_modulo: this.domain.modules[i1].url,
-                value: this.domain.modules[i1].concepts[c1].url,
-              });
-            }
-          }
-        }
-      }
-
-      if (type === "alter") {
-        this.sourceConceptsPrior[idPrior] = auxSources;
-      } else if (type === "watch") {
-        return auxSources;
-      }
     },
   },
 };

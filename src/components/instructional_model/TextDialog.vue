@@ -185,7 +185,7 @@ export default {
         auxinfo: `/informationitemtype/` + (this.infoClasse + 1) + "/",
       };
       var mobilemedia = {
-        label: "",
+        label: "Texto",
         fk_idmediatype: "/mediatype/4/",
         path: null,
         namefile: null,

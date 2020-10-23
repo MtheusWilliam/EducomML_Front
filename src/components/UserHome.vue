@@ -237,12 +237,14 @@ export default {
       await Api()
         .get(response.data.url)
         .then((response2) => {
+          console.log(response2.data);
           vm.dominios = response2.data.knowledgedomains;
           vm.$store.dispatch("getProfileImage", response2.data.profileimage);
           vm.userName = response2.data.username;
           vm.dialogLoading = false;
           vm.getDomainCardColors();
         });
+        console.log("seas");
     },
     putDominio(idDomain) {
       this.$store.dispatch("getActualKnowledge", idDomain);

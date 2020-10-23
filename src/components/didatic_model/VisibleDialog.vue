@@ -145,7 +145,7 @@ export default {
         value: this.domain.url,
       });
       var indexmodulo = 0;
-      if (this.domain.mobilemedias.length) {
+      if (this.domain.mobilemedias.length+1) {
         this.domain.mobilemedias.forEach((mobilemedia) => {
           var object = {
             id: mobilemedia.url,
@@ -162,7 +162,7 @@ export default {
           indexmodulo++;
         });
       }
-      if (this.domain.instructionalelements.length) {
+      if (this.domain.instructionalelements.length+1) {
         this.domain.instructionalelements.forEach((instructionalelement) => {
           if (
             instructionalelement.fk_instructionalelementtype.split("/")[4] !== 4
@@ -184,10 +184,12 @@ export default {
           }
         });
       }
-      if (Array.isArray(this.domain.modules) && this.domain.modules.length) {
+      if (Array.isArray(this.domain.modules) && this.domain.modules.length+1) {
         this.domain.modules.forEach((modulo) => {
+          var indexsubmodulo = 0;
+          
           if (modulo.fk_idmodule === null) {
-            var indexsubmodulo = 0;
+            
             var object = {
               id: modulo.url,
               name: modulo.namemodule,
@@ -319,6 +321,7 @@ export default {
                       avatar: "C",
                       children: [],
                     };
+
                     this.treeData[indexmodulo].children[
                       indexsubmodulo
                     ].children.push(object);
@@ -346,12 +349,19 @@ export default {
                                 mobilemedia.fk_idmediatype.split("/")[4] - 1
                               ],
                             };
-                            this.treeData[indexmodulo].children[
+
+                            if(this.treeData[indexmodulo].children[
+                              indexsubmodulo
+                            ].children[indexconceito]){
+                              this.treeData[indexmodulo].children[
                               indexsubmodulo
                             ].children[indexconceito].children.push(object);
                             if (object.visible) {
                               this.selection.push(object);
                             }
+                            }
+
+                            
                           });
                         }
                       });
@@ -392,14 +402,20 @@ export default {
                               )[4] - 1
                             ],
                           };
-                          this.treeData[indexmodulo].children[
+                          if(this.treeData[indexmodulo].children[
+                            indexsubmodulo
+                          ].children[indexconceito]){
+                            this.treeData[indexmodulo].children[
                             indexsubmodulo
                           ].children[indexconceito].children.push(object);
                           if (object.visible) {
                             this.selection.push(object);
                           }
+                          }
+                          
                         }
                       );
+                      
                     }
 
                     indexconceito++;

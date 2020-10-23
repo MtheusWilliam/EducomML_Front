@@ -173,6 +173,7 @@ export default {
 
       var mobilemedia = {
         fk_idmediatype: "/mediatype/3/",
+        label: "Audio",
         path: path,
         namefile: path.split("/")[1],
         resolution: null,
